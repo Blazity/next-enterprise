@@ -1,0 +1,43 @@
+---
+convention:
+  commitTypes:
+  - feat
+  - fix
+  - perf
+  - refactor
+  - style
+  - test
+  - build
+  - ops
+  - docs
+  - chore
+  - merge
+  - revert
+  commitScopes: []
+  releaseTagGlobPattern: v[0-9]*.[0-9]*.[0-9]*
+changelog:
+  commitTypes:
+  - feat
+  - fix
+  - perf
+  - merge
+  includeInvalidCommits: true
+  commitIgnoreRegexPattern: "^WIP "
+  headlines:
+    feat: Features
+    fix: Bug Fixes
+    perf: Performance Improvements
+    merge: Merges
+    breakingChange: BREAKING CHANGES
+
+  ## GitHub
+  # commitUrl: https://github.com/ACCOUNT/REPOSITORY/commit/%commit%
+  # commitRangeUrl: https://github.com/ACCOUNT/REPOSITORY/compare/%from%...%to%?diff=split
+
+  ## GitHub Issues
+  # issueRegexPattern: "#[0-9]+"
+  # issueUrl: https://github.com/ACCOUNT/REPOSITORY/issues/%issue%
+
+  ## Jira Issues
+  # issueRegexPattern: "[A-Z][A-Z0-9]+-[0-9]+"
+  # issueUrl: https://WORKSPACE.atlassian.net/browse/%issue%
