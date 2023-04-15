@@ -8,7 +8,12 @@
     "eslint-config-next": "13.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-react": "7.31.8",
-    "eslint-config-turbo": "latest"
+    "eslint-config-turbo": "latest",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-storybook": "^0.6.11"
   },
   "devDependencies": {
     "typescript": "^4.7.4"
