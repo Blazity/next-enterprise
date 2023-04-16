@@ -11,6 +11,9 @@
     },
     "dev": {
       "cache": false
+    },
+    "test": {
+      "outputs": ["coverage/**"]
     }
   }
 }

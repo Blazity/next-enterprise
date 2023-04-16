@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "FORCE_COLOR=1 next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "analyze": "ANALYZE=true yarn build",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook": "FORCE_COLOR=1 storybook dev -p 6006",
+    "build-storybook": "FORCE_COLOR=1 storybook build",
+    "test": "FORCE_COLOR=1 jest --passWithNoTests"
   },
   "dependencies": {
     "next": "^13.1.1",
