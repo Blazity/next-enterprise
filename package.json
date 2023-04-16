@@ -18,6 +18,7 @@
     "tailwind-merge": "^1.10.0"
   },
   "devDependencies": {
+    "@total-typescript/ts-reset": "^0.4.2",
     "autoprefixer": "^10.4.14",
     "eslint-config-custom": "*",
     "patch-package": "^6.5.1",
