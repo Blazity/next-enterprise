@@ -10,17 +10,19 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "postinstall": "patch-package"
   },
   "dependencies": {
-    "tailwind-merge": "^1.10.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "tailwind-merge": "^1.10.0"
   },
   "devDependencies": {
-    "patch-package": "^6.5.1",
     "autoprefixer": "^10.4.14",
     "eslint-config-custom": "*",
+    "patch-package": "^6.5.1",
     "postcss": "^8.4.21",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "latest",
     "prettier-plugin-tailwindcss": "^0.2.7",
     "tailwindcss": "^3.2.7",
