@@ -12,15 +12,22 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
+  "dependencies": {
+    "tailwind-merge": "^1.10.0"
+  },
   "devDependencies": {
+    "autoprefixer": "^10.4.14",
     "eslint-config-custom": "*",
+    "postcss": "^8.4.21",
     "prettier": "latest",
     "prettier-plugin-tailwindcss": "^0.2.7",
-    "turbo": "latest"
+    "tailwindcss": "^3.2.7",
+    "turbo": "latest",
+    "typescript": "4.9.5",
+    "vitest": "^0.29.8"
   },
   "engines": {
     "node": ">=14.0.0"
   },
-  "dependencies": {},
   "packageManager": "yarn@1.22.19"
 }
