@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "analyze": "ANALYZE=true yarn build"
+    "analyze": "ANALYZE=true yarn build",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "next": "^13.1.1",
@@ -18,13 +20,22 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@next/bundle-analyzer": "^13.3.0",
+    "@storybook/addon-essentials": "^7.0.5",
+    "@storybook/addon-interactions": "^7.0.5",
+    "@storybook/addon-links": "^7.0.5",
+    "@storybook/blocks": "^7.0.5",
+    "@storybook/nextjs": "^7.0.5",
+    "@storybook/react": "^7.0.5",
+    "@storybook/testing-library": "^0.0.14-next.2",
     "@types/node": "^17.0.12",
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
     "config": "*",
     "eslint": "7.32.0",
     "eslint-config-custom": "*",
+    "eslint-plugin-storybook": "^0.6.11",
     "next-compose-plugins": "^2.2.1",
+    "storybook": "^7.0.5",
     "tsconfig": "*",
     "typescript": "^4.5.3"
   }
