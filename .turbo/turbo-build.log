@@ -1,0 +1,25 @@
+$ next build
+info  - Linting and checking validity of types...
+error - ESLint: Cannot read config file: /Users/bartstefanski/Projects/next-enterprise/packages/eslint-config-custom/index.js Error: fs is not defined Referenced from: /Users/bartstefanski/Projects/next-enterprise/apps/web/.eslintrc.js
+info  - Creating an optimized production build...
+info  - Compiled successfully
+info  - Collecting page data...
+info  - Generating static pages (0/3)
+info  - Generating static pages (3/3)
+info  - Finalizing page optimization...
+
+Route (pages)                              Size     First Load JS
+┌ ○ /                                      2.87 kB          78 kB
+├   /_app                                  0 B            75.1 kB
+├ λ /_app.test                             46.3 kB         121 kB
+└ ○ /404                                   182 B          75.3 kB
++ First Load JS shared by all              77.6 kB
+  ├ chunks/framework-b342986edb64aa35.js   46.9 kB
+  ├ chunks/main-ba4f74e74668d5a9.js        27 kB
+  ├ chunks/pages/_app-5446b4a34caf39cd.js  286 B
+  ├ chunks/webpack-41a084ba32a79f8d.js     965 B
+  └ css/0a2eef075eaa8bc6.css               2.52 kB
+
+λ  (Server)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
+○  (Static)  automatically rendered as static HTML (uses no initial props)
+

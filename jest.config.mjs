@@ -1,6 +1,14 @@
+import nextJest from "next/jest.js"
+
+const createJestConfig = nextJest({
+  dir: "./",
+})
+
 /** @type {import('jest').Config} */
-module.exports = {
+const config = {
   setupFilesAfterEnv: ["@testing-library/jest-dom/extend-expect"],
   testEnvironment: "jest-environment-jsdom",
   modulePathIgnorePatterns: ["<rootDir>/dist/"],
 }
+
+export default createJestConfig(config)

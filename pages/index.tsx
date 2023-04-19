@@ -1,5 +1,3 @@
-import { Button } from "ui"
-
 export default function Web() {
   return (
     <>
@@ -15,7 +13,7 @@ export default function Web() {
             </p>
             <a
               href="#"
-              className="bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-900 mr-3 inline-flex items-center justify-center rounded-lg px-5 py-3 text-center text-base font-medium text-white focus:ring-4"
+              className="mr-3 inline-flex items-center justify-center rounded-lg bg-primary-700 px-5 py-3 text-center text-base font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
             >
               Get started
               <svg
@@ -53,9 +51,9 @@ export default function Web() {
           </div>
           <div className="space-y-8 md:grid md:grid-cols-2 md:gap-12 md:space-y-0 lg:grid-cols-3">
             <div>
-              <div className="bg-primary-100 dark:bg-primary-900 mb-4 flex h-10 w-10 items-center justify-center rounded-full lg:h-12 lg:w-12">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900 lg:h-12 lg:w-12">
                 <svg
-                  className="text-primary-600 dark:text-primary-300 h-5 w-5 lg:h-6 lg:w-6"
+                  className="h-5 w-5 text-primary-600 dark:text-primary-300 lg:h-6 lg:w-6"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -74,9 +72,9 @@ export default function Web() {
               </p>
             </div>
             <div>
-              <div className="bg-primary-100 dark:bg-primary-900 mb-4 flex h-10 w-10 items-center justify-center rounded-full lg:h-12 lg:w-12">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900 lg:h-12 lg:w-12">
                 <svg
-                  className="text-primary-600 dark:text-primary-300 h-5 w-5 lg:h-6 lg:w-6"
+                  className="h-5 w-5 text-primary-600 dark:text-primary-300 lg:h-6 lg:w-6"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -91,9 +89,9 @@ export default function Web() {
               </p>
             </div>
             <div>
-              <div className="bg-primary-100 dark:bg-primary-900 mb-4 flex h-10 w-10 items-center justify-center rounded-full lg:h-12 lg:w-12">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900 lg:h-12 lg:w-12">
                 <svg
-                  className="text-primary-600 dark:text-primary-300 h-5 w-5 lg:h-6 lg:w-6"
+                  className="h-5 w-5 text-primary-600 dark:text-primary-300 lg:h-6 lg:w-6"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -113,9 +111,9 @@ export default function Web() {
               </p>
             </div>
             <div>
-              <div className="bg-primary-100 dark:bg-primary-900 mb-4 flex h-10 w-10 items-center justify-center rounded-full lg:h-12 lg:w-12">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900 lg:h-12 lg:w-12">
                 <svg
-                  className="text-primary-600 dark:text-primary-300 h-5 w-5 lg:h-6 lg:w-6"
+                  className="h-5 w-5 text-primary-600 dark:text-primary-300 lg:h-6 lg:w-6"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -135,9 +133,9 @@ export default function Web() {
               </p>
             </div>
             <div>
-              <div className="bg-primary-100 dark:bg-primary-900 mb-4 flex h-10 w-10 items-center justify-center rounded-full lg:h-12 lg:w-12">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900 lg:h-12 lg:w-12">
                 <svg
-                  className="text-primary-600 dark:text-primary-300 h-5 w-5 lg:h-6 lg:w-6"
+                  className="h-5 w-5 text-primary-600 dark:text-primary-300 lg:h-6 lg:w-6"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -152,9 +150,9 @@ export default function Web() {
               </p>
             </div>
             <div>
-              <div className="bg-primary-100 dark:bg-primary-900 mb-4 flex h-10 w-10 items-center justify-center rounded-full lg:h-12 lg:w-12">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900 lg:h-12 lg:w-12">
                 <svg
-                  className="text-primary-600 dark:text-primary-300 h-5 w-5 lg:h-6 lg:w-6"
+                  className="h-5 w-5 text-primary-600 dark:text-primary-300 lg:h-6 lg:w-6"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
