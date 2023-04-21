@@ -1,8 +1,8 @@
 name: Check
 
 on:
-  pull_request:
-  workflow_dispatch:
+  pull_request: null
+  workflow_dispatch: null
 
 jobs:
   check:
@@ -11,10 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
-      - name: use node ${{ env.node_version }}
+      - name: "use node ${{ env.node_version }}"
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.node_version }}
+          node-version: "${{ env.node_version }}"
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Lint check
@@ -26,6 +26,7 @@ jobs:
       - name: Smoke & Acceptance tests
         run:
           - yarn build-storybook --quiet
-          - npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
-          "npx http-server storybook-static --port 6006 --silent" \
-          "npx wait-on tcp:6006 && yarn test-storybook"
+          - >-
+            npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \ "npx
+            http-server storybook-static --port 6006 --silent" \ "npx wait-on
+            tcp:6006 && yarn test-storybook"

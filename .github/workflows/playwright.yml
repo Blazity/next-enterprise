@@ -1,11 +1,11 @@
 name: Playwright Tests
-
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-  workflow_dispatch:
-
+    branches:
+      - main
+      - master
+  pull_request: null
+  workflow_dispatch: null
 jobs:
   test:
     timeout-minutes: 60
@@ -13,19 +13,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
-      - name: use node ${{ env.node_version }}
+      - name: "use node ${{ env.node_version }}"
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.node_version }}
-    - name: Install dependencies
-      run: yarn install --frozen-lockfile
-    - name: Install Playwright Browsers
-      run: yarn playwright install --with-deps
-    - name: Run Playwright tests
-      run: yarn playwright test
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+          node-version: "${{ env.node_version }}"
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+      - name: Run Playwright tests
+        run: yarn playwright test
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
