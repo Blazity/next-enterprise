@@ -1,0 +1,25 @@
+{
+  "projectName": "next-enterprise",
+  "projectOwner": "Blazity",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "bmstefanski",
+      "name": "Bart Stefanski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28964599?v=4",
+      "profile": "https://bstefanski.com/",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "linkToUsage": true
+}
