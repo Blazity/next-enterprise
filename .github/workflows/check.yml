@@ -1,6 +1,6 @@
 name: Check
 
-on: 
+on:
   pull_request:
   workflow_dispatch:
 
@@ -15,7 +15,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node_version }}
-      - run: yarn install --frozen-lockfile
-      - run: yarn lint
-      - run: yarn prettier
-      - run: yarn test
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Lint check
+        run: yarn lint
+      - name: Format check
+        run: yarn prettier
+      - name: Unit & Integration tests
+        run: yarn test
+      - name: Smoke & Acceptance tests
+        run:
+          - yarn build-storybook --quiet
+          - npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+          "npx http-server storybook-static --port 6006 --silent" \
+          "npx wait-on tcp:6006 && yarn test-storybook"
