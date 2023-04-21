@@ -33,17 +33,26 @@ With this template, you get all the awesomeness you need:
 
 ## Table of Contents
 
-- [Features](#-features)
-- [Getting Started](#-getting-started)
-- [Deployment](#-deployment)
-- [Scripts Overview](#-scripts-overview)
-- [Coupling Graph](#-coupling-graph)
-- [Testing](#-testing)
-- [Styling and Design System](#-styling-and-design-system)
-- [State Management](#-state-management)
-- [ChatGPT Code Review](#-chatgpt-code-review)
-- [Contribution](#-contribution)
-- [License](#-license)
+- [Next.js Enterprise Boilerplate](#nextjs-enterprise-boilerplate)
+  - [📚 Features](#-features)
+  - [Table of Contents](#table-of-contents)
+  - [🎯 Getting Started](#-getting-started)
+  - [🚀 Deployment](#-deployment)
+  - [📃 Scripts Overview](#-scripts-overview)
+  - [🔗 Coupling Graph](#-coupling-graph)
+  - [🧪 Testing](#-testing)
+    - [Running Tests](#running-tests)
+    - [Acceptance Tests](#acceptance-tests)
+    - [Smoke Testing](#smoke-testing)
+  - [🎨 Styling and Design System](#-styling-and-design-system)
+    - [CVA - A New Approach to Variants](#cva---a-new-approach-to-variants)
+  - [💾 State Management](#-state-management)
+    - [Zustand](#zustand)
+    - [Jotai](#jotai)
+    - [Recoil](#recoil)
+  - [🤖 ChatGPT Code Review](#-chatgpt-code-review)
+  - [🤝 Contribution](#-contribution)
+  - [📜 License](#-license)
 
 ## 🎯 Getting Started
 
@@ -70,6 +79,12 @@ yarn dev
 
 4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+5. This project uses a git hook to enforce [conventional commits](https://github.com/qoomon/git-conventional-commits). To install the git hook, run the following command in the root directory of the project:
+
+```sh
+brew install pre-commit
+pre-commit install -t commit-msg
+```
 
 ## 🚀 Deployment
 
