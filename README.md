@@ -31,6 +31,20 @@ With this template, you get all the awesomeness you need:
 - 💯 **Perfect Lighthouse score** - Because performance matters
 - 🚢 **[Semantic Release](https://github.com/semantic-release/semantic-release)** - for automatic changelog
 
+## Table of Contents
+
+- [Features](#-features)
+- [Getting Started](#-getting-started)
+- [Deployment](#-deployment)
+- [Scripts Overview](#-scripts-overview)
+- [Coupling Graph](#-coupling-graph)
+- [Testing](#-testing)
+- [Styling and Design System](#-styling-and-design-system)
+- [State Management](#-state-management)
+- [ChatGPT Code Review](#-chatgpt-code-review)
+- [Contribution](#-contribution)
+- [License](#-license)
+
 ## 🎯 Getting Started
 
 To get started with this boilerplate, follow these steps:
@@ -184,6 +198,12 @@ While this boilerplate doesn't include a specific state management library, we b
 [Recoil](https://recoiljs.org/) is a state management library developed by Facebook, specifically designed for React applications. By utilizing atoms and selectors, Recoil allows you to efficiently manage state and derived state. Its key benefit is the ability to update components only when the state they're subscribed to changes, reducing unnecessary re-renders and keeping your application fast and efficient. Recoil also offers great developer experience with built-in debugging tools.
 
 Choose the library that best fits your requirements and project structure to ensure an efficient state management solution for your application.
+
+## 🤖 ChatGPT Code Review
+
+We've integrated the innovative [ChatGPT Code Review](https://github.com/anc95/ChatGPT-CodeReview) for AI-powered, automated code reviews. This feature provides real-time feedback on your code, helping improve code quality and catch potential issues.
+
+To use ChatGPT Code Review, add an `OPENAI_API_KEY` environment variable with an appropriate key from the OpenAI platform. For setup details, refer to the [Using GitHub Actions](https://github.com/anc95/ChatGPT-CodeReview#using-github-actions) section in the documentation.
 
 ## 🤝 Contribution
 
