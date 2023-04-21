@@ -1,0 +1,21 @@
+name: Check
+
+on: 
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
+      - name: use node ${{ env.node_version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node_version }}
+      - run: yarn install --frozen-lockfile
+      - run: yarn lint
+      - run: yarn prettier
+      - run: yarn test

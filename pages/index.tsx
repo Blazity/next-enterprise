@@ -1,4 +1,5 @@
 import Head from "next/head"
+import { Button } from "components/Button/Button"
 
 export default function Web() {
   return (
@@ -16,10 +17,7 @@ export default function Web() {
               From checkout to global sales tax compliance, companies around the world use Flowbite to simplify their
               payment stack.
             </p>
-            <a
-              href="#"
-              className="mr-3 inline-flex items-center justify-center rounded-lg bg-primary-700 px-5 py-3 text-center text-base font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
-            >
+            <Button className="mr-3">
               Get started
               <svg
                 className="-mr-1 ml-2 h-5 w-5"
@@ -33,13 +31,8 @@ export default function Web() {
                   clip-rule="evenodd"
                 ></path>
               </svg>
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-3 text-center text-base font-medium text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-            >
-              Speak to Sales
-            </a>
+            </Button>
+            <Button intent="secondary">Speak to Sales</Button>
           </div>
         </div>
       </section>
