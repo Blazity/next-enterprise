@@ -1,7 +1,7 @@
 # Next.js Enterprise Boilerplate
 
 ![Project intro image](https://user-images.githubusercontent.com/28964599/233660067-d6e5dfe9-1b7c-4bc6-8c9f-b14062f50d5b.png)
- 
+
 Welcome to the _Next.js Enterprise Boilerplate_, an open-source template for enterprise projects! It's loaded with features that'll help you build a high-performance, maintainable, and enjoyable app. We've done all the heavy lifting for you, so sit back, relax, and get ready to conquer the world with your incredible app! 🌍
 
 ## 📚 Features
@@ -53,6 +53,7 @@ With this template, you get all the awesomeness you need:
   - [🤖 ChatGPT Code Review](#-chatgpt-code-review)
   - [🤝 Contribution](#-contribution)
   - [📜 License](#-license)
+  - [Contributors](#contributors)
 
 ## 🎯 Getting Started
 
@@ -95,7 +96,6 @@ Easily deploy your Next.js app with [Vercel](https://vercel.com/new?utm_medium=d
 or if you prefer netlify:
 
 [![Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Blazity/next-enterprise)
-
 
 ## 📃 Scripts Overview
 
@@ -143,7 +143,6 @@ This boilerplate comes with various testing setups to ensure your application's 
 
 <img width="1392" alt="image" src="https://user-images.githubusercontent.com/28964599/233666655-93b7d08b-2fd8-406a-b43c-44d4d96cf387.png">
 
-
 ### Acceptance Tests
 
 To write acceptance tests, we leverage Storybook's [`play` function](https://storybook.js.org/docs/react/writing-stories/play-function#writing-stories-with-the-play-function). This allows you to interact with your components and test various user flows within Storybook.
@@ -155,29 +154,29 @@ To write acceptance tests, we leverage Storybook's [`play` function](https://sto
  */
 export const FilledForm: Story = {
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    const canvas = within(canvasElement)
 
-    const emailInput = canvas.getByLabelText('email', {
-      selector: 'input',
-    });
+    const emailInput = canvas.getByLabelText("email", {
+      selector: "input",
+    })
 
-    await userEvent.type(emailInput, 'example-email@email.com', {
+    await userEvent.type(emailInput, "example-email@email.com", {
       delay: 100,
-    });
+    })
 
-    const passwordInput = canvas.getByLabelText('password', {
-      selector: 'input',
-    });
+    const passwordInput = canvas.getByLabelText("password", {
+      selector: "input",
+    })
 
-    await userEvent.type(passwordInput, 'ExamplePassword', {
+    await userEvent.type(passwordInput, "ExamplePassword", {
       delay: 100,
-    });
+    })
     // See https://storybook.js.org/docs/react/essentials/actions#automatically-matching-args to learn how to setup logging in the Actions panel
-    const submitButton = canvas.getByRole('button');
+    const submitButton = canvas.getByRole("button")
 
-    await userEvent.click(submitButton);
+    await userEvent.click(submitButton)
   },
-};
+}
 ```
 
 ### Smoke Testing
@@ -233,3 +232,14 @@ Contributions are always welcome! To contribute, please follow these steps:
 ## 📜 License
 
 This project is licensed under the MIT License. For more information, see the [LICENSE](./LICENSE) file.
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
