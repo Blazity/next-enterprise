@@ -14,7 +14,8 @@
     "e2e:headless": "playwright test",
     "e2e:ui": "playwright test --ui",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "postinstall": "patch-package"
+    "postinstall": "npx patch-package -y",
+    "preinstall": "npx only-allow yarn --yes"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.1.1",
