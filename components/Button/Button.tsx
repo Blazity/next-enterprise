@@ -24,7 +24,7 @@ const button = cva(
         sm: ["min-w-20", "h-full", "min-h-10", "text-sm", "py-1.5", "px-4"],
         lg: ["min-w-32", "h-full", "min-h-12", "text-lg", "py-2.5", "px-6"],
       },
-      disabled: { true: ["opacity-30"], false: [] },
+      underline: { true: ["underline"], false: [] },
     },
     defaultVariants: {
       intent: "primary",
@@ -33,16 +33,15 @@ const button = cva(
   }
 )
 
-export interface ButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "disabled">,
-    VariantProps<typeof button> {
-  disabled?: boolean
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLAnchorElement>, VariantProps<typeof button> {
+  underline?: boolean
+  href: string
 }
 
-export function Button({ className, intent, size, disabled, ...props }: ButtonProps) {
+export function Button({ className, intent, size, underline, ...props }: ButtonProps) {
   return (
-    <button className={twMerge(button({ intent, size, className, disabled }))} disabled={disabled} {...props}>
+    <a className={twMerge(button({ intent, size, className, underline }))} {...props}>
       {props.children}
-    </button>
+    </a>
   )
 }

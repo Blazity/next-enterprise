@@ -6,13 +6,13 @@ const meta: Meta<typeof Button> = {
   component: Button,
   args: {
     intent: "primary",
-    disabled: false,
+    underline: false,
     children: "Button",
     size: "lg",
   },
   argTypes: {
     intent: {
-      options: ["primary", "secondary",],
+      options: ["primary", "secondary"],
       control: { type: "select" },
     },
     size: {
