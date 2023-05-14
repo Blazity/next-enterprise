@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
-})
-const withPlugins = require("next-compose-plugins")
+import withBundleAnalyzer from "@next/bundle-analyzer"
+import withPlugins from "next-compose-plugins"
+import { env } from "./env.mjs"
 
 /**
  * @type {import('next').NextConfig}
  */
-module.exports = withPlugins([[withBundleAnalyzer]], {
+const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
   reactStrictMode: true,
   experimental: { instrumentationHook: true },
   rewrites() {
@@ -19,3 +17,5 @@ module.exports = withPlugins([[withBundleAnalyzer]], {
     ]
   },
 })
+
+export default config

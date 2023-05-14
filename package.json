@@ -37,13 +37,15 @@
     "@radix-ui/react-tabs": "^1.0.3",
     "@radix-ui/react-toggle-group": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.5",
+    "@t3-oss/env-nextjs": "^0.2.2",
     "@vercel/otel": "^0.2.0",
     "class-variance-authority": "^0.4.0",
     "lodash": "^4.17.21",
     "next": "^13.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tailwind-merge": "^1.10.0"
+    "tailwind-merge": "^1.10.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
