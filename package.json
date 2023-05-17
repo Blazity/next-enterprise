@@ -44,7 +44,7 @@
     "@semantic-release/github": "^8.0.7",
     "@semantic-release/npm": "^10.0.3",
     "@semantic-release/release-notes-generator": "^11.0.1",
-    "@t3-oss/env-nextjs": "^0.2.2",
+    "@t3-oss/env-nextjs": "^0.3.0",
     "@vercel/otel": "^0.2.0",
     "class-variance-authority": "^0.4.0",
     "lodash": "^4.17.21",
