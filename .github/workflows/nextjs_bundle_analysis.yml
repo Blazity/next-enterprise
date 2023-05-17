@@ -17,7 +17,6 @@ defaults:
 jobs:
   analyze:
     env:
-      NEXT_PUBLIC_BUILDER_API_KEY: ${{ secrets.NEXT_PUBLIC_BUILDER_API_KEY }}
       SKIP_ENV_VALIDATION: true
     runs-on: ubuntu-latest
     steps:
