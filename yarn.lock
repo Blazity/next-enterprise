@@ -4171,10 +4171,10 @@
     tempy "^1.0.1"
     ts-dedent "^2.0.0"
 
-"@storybook/testing-library@^0.0.14-next.2":
-  version "0.0.14-next.2"
-  resolved "https://registry.yarnpkg.com/@storybook/testing-library/-/testing-library-0.0.14-next.2.tgz#458e6c7623118e24826ba73b80db0a887f3f57e8"
-  integrity sha512-i/SLSGm0o978ELok/SB4Qg1sZ3zr+KuuCkzyFqcCD0r/yf+bG35aQGkFqqxfSAdDxuQom0NO02FE+qys5Eapdg==
+"@storybook/testing-library@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@storybook/testing-library/-/testing-library-0.1.0.tgz#1839639765a2de113416d0fa16f9d108dfa6af63"
+  integrity sha512-g947f4LJZw3IluBhysMKLJXByAFiSxnGuooENqU+ZPt/GTrz1I9GDBlhmoTJahuFkVbwHvziAl/8riY2Re921g==
   dependencies:
     "@storybook/client-logger" "^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0"
     "@storybook/instrumenter" "^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0"
