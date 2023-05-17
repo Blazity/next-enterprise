@@ -12,6 +12,7 @@
     "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "analyze": "ANALYZE=true yarn build",
     "storybook": "FORCE_COLOR=1 storybook dev -p 6006",
+    "test-storybook": "FORCE_COLOR=1 test-storybook",
     "build-storybook": "FORCE_COLOR=1 storybook build",
     "test": "FORCE_COLOR=1 jest --passWithNoTests",
     "e2e:headless": "playwright test",
@@ -60,6 +61,7 @@
     "@storybook/nextjs": "^7.0.5",
     "@storybook/react": "^7.0.5",
     "@storybook/testing-library": "^0.0.14-next.2",
+    "@storybook/test-runner": "^0.10.0-next.13",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@total-typescript/ts-reset": "^0.4.2",
@@ -86,6 +88,7 @@
     "postinstall-postinstall": "^2.1.0",
     "prettier": "latest",
     "prettier-plugin-tailwindcss": "^0.2.7",
+    "semantic-release": "^21.0.1",
     "storybook": "^7.0.5",
     "tailwindcss": "^3.2.7",
     "ts-jest": "^29.1.0",
@@ -94,7 +97,7 @@
     "vitest": "^0.29.8"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.16.0"
   },
   "packageManager": "yarn@1.22.19"
 }
