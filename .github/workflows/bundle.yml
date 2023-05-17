@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - main
-      - staging
   workflow_dispatch:
 
 defaults:
