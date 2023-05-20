@@ -78,7 +78,7 @@
     "@typescript-eslint/parser": "^5.54.1",
     "all-contributors-cli": "^6.24.0",
     "autoprefixer": "^10.4.14",
-    "eslint": "8.40.0",
+    "eslint": "8.41.0",
     "eslint-config-next": "13.4.3",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-react-app": "^7.0.1",
