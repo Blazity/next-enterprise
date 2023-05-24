@@ -1,6 +1,6 @@
 # Next.js Enterprise Boilerplate
 
-![Project intro image](https://github.com/Blazity/next-enterprise/assets/28964599/01d736af-4849-40c1-aaff-a95b74ac6c53)
+![Project intro image](https://github.com/Blazity/next-enterprise/assets/28964599/1404f3df-8f50-472d-9063-480594e36bcb)
 
 Welcome to the _Next.js Enterprise Boilerplate_, an open-source template for enterprise projects! It's loaded with features that'll help you build a high-performance, maintainable, and enjoyable app. We've done all the heavy lifting for you, so sit back, relax, and get ready to conquer the world with your incredible app! 🌍
 
