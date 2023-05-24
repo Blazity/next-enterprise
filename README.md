@@ -95,10 +95,6 @@ Easily deploy your Next.js app with [Vercel](https://vercel.com/new?utm_medium=d
 
 [![Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/Blazity/next-enterprise)
 
-or if you prefer netlify:
-
-[![Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Blazity/next-enterprise)
-
 ## 📃 Scripts Overview
 
 The following scripts are available in the `package.json`:
