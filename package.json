@@ -80,7 +80,7 @@
     "autoprefixer": "^10.4.14",
     "cross-env": "^7.0.3",
     "eslint": "8.41.0",
-    "eslint-config-next": "13.4.3",
+    "eslint-config-next": "13.4.4",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-import": "^2.27.5",
