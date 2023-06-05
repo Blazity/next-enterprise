@@ -27,7 +27,7 @@ With this template, you get all the awesomeness you need:
 - 🩹 **[Patch-package](https://www.npmjs.com/package/patch-package)** - Fix external dependencies without losing your mind
 - 📈 **Components coupling and cohesion graph** - A tool for managing component relationships
 - 🚀 **[GitHub Actions](https://github.com/features/actions)** - Pre-configured actions for smooth workflows, including Bundle Size and performance stats
-- 🤖🧠 **[Automated ChatGPT Code Reviews](https://openai.com/research/chatgpt)** - **Stay on the cutting edge with AI-powered code reviews!**
+- 🤖🧠 **[Automated ChatGPT Code Reviews](https://openai.com/chatgpt)** - **Stay on the cutting edge with AI-powered code reviews!**
 - 💯 **Perfect Lighthouse score** - Because performance matters
 - 🚢 **[Semantic Release](https://github.com/semantic-release/semantic-release)** - for automatic changelog
 - 💻 **[T3 Env](https://env.t3.gg/)** - Manage your environment variables with ease
