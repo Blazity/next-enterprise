@@ -54,6 +54,7 @@ With this template, you get all the awesomeness you need:
   - [🤖 ChatGPT Code Review](#-chatgpt-code-review)
   - [💻 Environment Variables handling](#-environment-variables-handling)
   - [🤝 Contribution](#-contribution)
+  - [💌 Support](#support)
   - [📜 License](#-license)
   - [Contributors](#contributors)
 
@@ -258,6 +259,10 @@ Contributions are always welcome! To contribute, please follow these steps:
 3. Make your changes, and commit them using the [Conventional Commits](https://www.conventionalcommits.org/) format.
 4. Push your changes to the forked repository.
 5. Create a pull request, and we'll review your changes.
+
+## Support
+
+If you're looking for help or simply want to share your thoughts about the project, we encourage you to join our Discord community. Here's the link: [https://blazity.com/discord](https://blazity.com/discord). It's a space where we exchange ideas and help one another. Everyone's input is appreciated, and we look forward to welcoming you.
 
 ## 📜 License
 
