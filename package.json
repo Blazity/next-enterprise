@@ -87,6 +87,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-storybook": "^0.6.11",
+    "eslint-plugin-tailwindcss": "^3.12.1",
     "fetch-mock": "^9.11.0",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",

@@ -9,6 +9,7 @@ module.exports = {
     "react-app/jest",
     "plugin:@typescript-eslint/recommended",
     "plugin:storybook/recommended",
+    "plugin:tailwindcss/recommended",
   ],
   parserOptions: {
     babelOptions: {
@@ -32,6 +33,7 @@ module.exports = {
         ignoreDeclarationSort: true,
       },
     ],
+    "tailwindcss/classnames-order": "off",
     "import/order": [
       1,
       {
