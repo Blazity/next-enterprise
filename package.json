@@ -67,7 +67,7 @@
     "@storybook/blocks": "^7.0.5",
     "@storybook/nextjs": "^7.0.5",
     "@storybook/react": "^7.0.5",
-    "@storybook/test-runner": "^0.10.0-next.13",
+    "@storybook/test-runner": "^0.11.0",
     "@storybook/testing-library": "^0.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
