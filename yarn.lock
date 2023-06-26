@@ -8823,9 +8823,9 @@ eslint-plugin-storybook@^0.6.11:
     ts-dedent "^2.2.0"
 
 eslint-plugin-tailwindcss@^3.12.1:
-  version "3.12.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-tailwindcss/-/eslint-plugin-tailwindcss-3.12.1.tgz#ab7fc554b97872208460aac6921f391683c992f1"
-  integrity sha512-LyIRV0rx6prTpJZsSCXSNJ34Yry3Nj9OJwvzh1xTsiG6+UCnAPW1Bx41s7vZzUDKMlwFgpUN9Me+NK12T4DHYg==
+  version "3.13.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-tailwindcss/-/eslint-plugin-tailwindcss-3.13.0.tgz#60858cdc8888da2deda5f200c1b163b211c4b8fa"
+  integrity sha512-Fcep4KDRLWaK3KmkQbdyKHG0P4GdXFmXdDaweTIPcgOP60OOuWFbh1++dufRT28Q4zpKTKaHwTsXPJ4O/EjU2Q==
   dependencies:
     fast-glob "^3.2.5"
     postcss "^8.4.4"
