@@ -3,6 +3,7 @@ import { z } from "zod"
 
 export const env = createEnv({
   server: {
+    MONGODB_URI: z.string(),
     ANALYZE: z
       .enum(["true", "false"])
       .optional()
@@ -11,5 +12,6 @@ export const env = createEnv({
   client: {},
   runtimeEnv: {
     ANALYZE: process.env.ANALYZE,
+    MONGODB_URI: process.env.MONGODB_URI,
   },
 })
