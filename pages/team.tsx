@@ -23,9 +23,17 @@ export default function Dashboard({ allPlayers }) {
               IsaCon
             </h1>
             <h2>Players</h2>
-            {allPlayers.data.map((player) => (
-              <div key={player.id}>{player.name}</div>
-            ))}
+            <div className="flex flex-wrap items-center justify-center">
+              {allPlayers.data.map((player) => (
+                <div className="p-2" key={player.id}>
+                  {player.avatar?._meta.url ? (
+                    <img className="max-w-sm" src={player.avatar?._meta.url} alt="Sunset in the mountains" />
+                  ) : (
+                    player.name
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
