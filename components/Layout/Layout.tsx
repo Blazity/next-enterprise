@@ -13,9 +13,9 @@ export default function Layout({ children }) {
         <meta name="twitter:card" content="summary_large_image" />
         <title>IsaCon</title>
       </Head>
-      <div className="flex h-screen flex-col justify-between">
+      <div className="flex min-h-screen flex-col justify-between">
         <Navbar />
-        <main className="h-screen mb-auto bg-primary-50">{children}</main>
+        <main className="min-h-screen mb-auto bg-primary-50">{children}</main>
         <Footer />
       </div>
     </>

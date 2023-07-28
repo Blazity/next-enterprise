@@ -1,4 +1,4 @@
-export default function Web() {
+export default function Dashboard() {
   return (
     <>
       <section>
@@ -7,6 +7,7 @@ export default function Web() {
             <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-none tracking-tight md:text-5xl xl:text-6xl">
               IsaCon
             </h1>
+            <h2>Dashboard</h2>
           </div>
         </div>
       </section>

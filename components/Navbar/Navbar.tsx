@@ -1,6 +1,8 @@
+import Link from "next/link"
+
 export default function Navbar() {
   return (
-    <nav className="bg-primary-800">
+    <nav className="fixed w-full bg-primary-800">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
@@ -9,18 +11,30 @@ export default function Navbar() {
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
-                <a className="rounded-md px-3 py-2 text-sm font-medium text-primary-50 hover:bg-primary-700 hover:text-white">
+                <Link
+                  href="/dashboard"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-primary-50 hover:bg-primary-700 hover:text-white"
+                >
                   Dashboard
-                </a>
-                <a className="rounded-md px-3 py-2 text-sm font-medium text-primary-50 hover:bg-primary-700 hover:text-white">
+                </Link>
+                <Link
+                  href="/team"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-primary-50 hover:bg-primary-700 hover:text-white"
+                >
                   Team
-                </a>
-                <a className="rounded-md px-3 py-2 text-sm font-medium text-primary-50 hover:bg-primary-700 hover:text-white">
+                </Link>
+                <Link
+                  href="/projects"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-primary-50 hover:bg-primary-700 hover:text-white"
+                >
                   Projects
-                </a>
-                <a className="rounded-md px-3 py-2 text-sm font-medium text-primary-50 hover:bg-primary-700 hover:text-white">
+                </Link>
+                <Link
+                  href="/calendar"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-primary-50 hover:bg-primary-700 hover:text-white"
+                >
                   Calendar
-                </a>
+                </Link>
               </div>
             </div>
           </div>

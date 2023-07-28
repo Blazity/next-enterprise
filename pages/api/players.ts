@@ -4,13 +4,12 @@ export default async function handler(req, res) {
   const db = client.db("SloppyFuckers")
   switch (req.method) {
     case "POST":
-      let bodyObject = JSON.parse(req.body)
-      let myPost = await db.collection("players").insertOne(bodyObject)
-      res.json(myPost.ops[0])
+      const myPlayer = await db.collection("players").insertOne(JSON.parse(req.body))
+      res.json(myPlayer)
       break
     case "GET":
-      const allPosts = await db.collection("players").find({}).toArray()
-      res.json({ status: 200, data: allPosts })
+      const allPlayers = await db.collection("players").find({}).toArray()
+      res.json({ status: 200, data: allPlayers })
       break
   }
 }
