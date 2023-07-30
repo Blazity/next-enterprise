@@ -5423,10 +5423,10 @@
     fs-extra "^11.1.0"
     read-pkg-up "^7.0.1"
 
-"@storybook/test-runner@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@storybook/test-runner/-/test-runner-0.11.0.tgz#d7c1405ae94b7e7e022acc4a30e69141f3a34b72"
-  integrity sha512-US2MFJWU4903yvTv1pQRkaBiBWsQ0Bp62TcJy6Th0tWoLrLHzW5oXiLYugZIZk9Ed//UM+avhq07P5JHsO14eg==
+"@storybook/test-runner@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@storybook/test-runner/-/test-runner-0.12.0.tgz#19562364ef04238735ab493e81c335003d67abd6"
+  integrity sha512-DEvJ/Xp1E26LrUhRGTOq/bXPKpA2MeilZWUt4qblKwn3u9is5rirXuB5RjGDwjO2c74+pD1kjEpXuu4jcX+C/w==
   dependencies:
     "@babel/core" "^7.22.5"
     "@babel/generator" "^7.22.5"
