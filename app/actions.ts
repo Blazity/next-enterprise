@@ -1,4 +1,4 @@
-import client from "@/lib/mongodb";
+import client from "../lib/mongodb";
 
 export async function getTeamPlayers() {
     const db = client.db("SloppyFuckers")
