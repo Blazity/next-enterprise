@@ -1,11 +1,7 @@
-import client from "../lib/mongodb";
+import client from "../lib/mongodb"
 
-export async function getTeamPlayers() {
-    const db = client.db("SloppyFuckers")
-    return  await db.collection("players").find({}).toArray();
-}
+const db = client.db("portfolio")
 
-export async function getEvents() {
-    const db = client.db("SloppyFuckers")
-    return  await db.collection("events").find({}).toArray();
+export async function getProjects() {
+  return await db.collection("projects").find({}).toArray()
 }

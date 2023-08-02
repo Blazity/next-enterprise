@@ -29,12 +29,6 @@ export default function Navbar() {
                 >
                   Projects
                 </Link>
-                <Link
-                  href="/calendar"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-primary-50 hover:bg-primary-700 hover:text-white"
-                >
-                  Calendar
-                </Link>
               </div>
             </div>
           </div>
