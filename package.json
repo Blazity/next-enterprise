@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@next/bundle-analyzer": "^13.3.0",
+    "@nextui-org/react": "^2.0.1",
     "@radix-ui/react-accordion": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.3",
@@ -48,6 +49,7 @@
     "@t3-oss/env-nextjs": "^0.6.0",
     "@vercel/otel": "^0.3.0",
     "class-variance-authority": "^0.6.0",
+    "framer-motion": "^10.15.0",
     "lodash": "^4.17.21",
     "mongodb": "^5.7.0",
     "next": "^13.3.0",

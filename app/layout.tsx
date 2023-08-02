@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 import Footer from "../components/Footer/Footer"
 import Navbar from "../components/Navbar/Navbar"
+import NextUiProvider from "../providers/NextUiProvider"
 
 import "../styles/tailwind.css"
 
@@ -31,11 +32,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="flex min-h-screen flex-col justify-between">
-          <Navbar />
-          <main className="mb-auto min-h-screen bg-primary-50">{children}</main>
-          <Footer />
-        </div>
+        <NextUiProvider>
+          <div className="flex min-h-screen flex-col justify-between bg-primary-50">
+            <Navbar />
+            <main className="mb-auto h-auto">{children}</main>
+            <Footer />
+          </div>
+        </NextUiProvider>
       </body>
     </html>
   )
