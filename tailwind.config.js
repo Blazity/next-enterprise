@@ -2,7 +2,7 @@
 const { pick, omit } = require("lodash")
 const colors = require("tailwindcss/colors")
 const defaultTheme = require("tailwindcss/defaultTheme")
-const {nextui} = require("@nextui-org/react");
+const { nextui } = require("@nextui-org/react")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -85,7 +85,7 @@ module.exports = {
       },
     },
   },
-  plugins: [nextui],
+  plugins: [nextui(), require("@tailwindcss/forms")],
   future: {
     hoverOnlyWhenSupported: true,
   },

@@ -29,6 +29,11 @@ export default function Nav() {
       href: "/projects",
       current: currentRoute === "/projects",
     },
+    {
+      label: "Contact",
+      href: "/contact",
+      current: currentRoute === "/contact",
+    },
   ]
 
   return (

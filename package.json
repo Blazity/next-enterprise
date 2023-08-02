@@ -23,6 +23,7 @@
     "coupling-graph": "npx madge --extensions js,jsx,ts,tsx,css,md,mdx ./ --exclude '.next|tailwind.config.js|reset.d.ts|prettier.config.js|postcss.config.js|playwright.config.ts|next.config.js|next-env.d.ts|instrumentation.ts|e2e/|README.md|.storybook/|.eslintrc.js' --image graph.svg"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.18",
     "@next/bundle-analyzer": "^13.3.0",
     "@nextui-org/react": "^2.0.1",
     "@radix-ui/react-accordion": "^1.1.1",
@@ -47,6 +48,7 @@
     "@semantic-release/npm": "^10.0.3",
     "@semantic-release/release-notes-generator": "^11.0.1",
     "@t3-oss/env-nextjs": "^0.6.0",
+    "@tailwindcss/forms": "^0.5.4",
     "@vercel/otel": "^0.3.0",
     "class-variance-authority": "^0.6.0",
     "framer-motion": "^10.15.0",
@@ -56,6 +58,7 @@
     "next-compose-plugins": "^2.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "resend": "^0.17.2",
     "tailwind-merge": "^1.10.0",
     "zod": "^3.21.4"
   },
