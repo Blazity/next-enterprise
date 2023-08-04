@@ -2,28 +2,10 @@
 import { BuildingOffice2Icon, EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline"
 import { FormEvent } from "react"
 
-interface EmailData {
-  firstName: {
-    value: string
-  }
-  lastName: {
-    value: string
-  }
-  email: {
-    value: string
-  }
-  message: {
-    value: string
-  }
-  phoneNumber: {
-    value: string
-  }
-}
-
 export default function Contact() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const form = event.target as EmailData
+    const form = event.target as HTMLFormElement
 
     fetch("/api/send", {
       method: "POST",
@@ -36,7 +18,6 @@ export default function Contact() {
         email: form.email.value,
         message: form.message.value,
         phoneNumber: form.phoneNumber.value,
-        subject: "Contact Form Submission",
       }),
     })
   }
@@ -48,8 +29,7 @@ export default function Contact() {
           <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
             <h2 className="text-3xl font-bold tracking-tight text-primary-800">Get in touch</h2>
             <p className="mt-6 text-lg leading-8 text-primary-800">
-              Feel free to contact me for any questions or inquiries.
-              we will get back to you as soon as possible.
+              Feel free to contact me for any questions or inquiries. we will get back to you as soon as possible.
             </p>
             <dl className="mt-10 space-y-4 text-base leading-7 text-primary-800">
               <div className="flex gap-x-4">
