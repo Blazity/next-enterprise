@@ -5513,10 +5513,10 @@
     fs-extra "^11.1.0"
     read-pkg-up "^7.0.1"
 
-"@storybook/test-runner@^0.12.0":
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/@storybook/test-runner/-/test-runner-0.12.0.tgz#19562364ef04238735ab493e81c335003d67abd6"
-  integrity sha512-DEvJ/Xp1E26LrUhRGTOq/bXPKpA2MeilZWUt4qblKwn3u9is5rirXuB5RjGDwjO2c74+pD1kjEpXuu4jcX+C/w==
+"@storybook/test-runner@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@storybook/test-runner/-/test-runner-0.13.0.tgz#e22ecfa4842deb7c5248185d77ab7d78b77beab9"
+  integrity sha512-QIbfgia/iBy7PeUIwCYtPcyeZCHd21ebaPoMNIsRfwUW+VC12J4iG8cGDfOE7MGbMVz1Uu0elAEBB8NGP/YBtQ==
   dependencies:
     "@babel/core" "^7.22.5"
     "@babel/generator" "^7.22.5"
