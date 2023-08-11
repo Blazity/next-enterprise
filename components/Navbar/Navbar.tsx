@@ -25,6 +25,11 @@ export default function Nav() {
       current: currentRoute === "/",
     },
     {
+      label: "About",
+      href: "/about",
+      current: currentRoute === "/about",
+    },
+    {
       label: "Projects",
       href: "/projects",
       current: currentRoute === "/projects",
