@@ -69,7 +69,7 @@
     "@storybook/react": "^7.0.5",
     "@storybook/test-runner": "^0.13.0",
     "@storybook/testing-library": "^0.1.0",
-    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.0.0",
     "@total-typescript/ts-reset": "^0.4.2",
     "@types/node": "^18.0.0",
