@@ -1,5 +1,6 @@
 import Head from "next/head"
 import { Button } from "components/Button/Button"
+import { Test } from "components/test_component/TestComponent"
 import { LP_GRID_ITEMS } from "../lp-items"
 
 export default function Web() {
@@ -53,6 +54,7 @@ export default function Web() {
             ))}
           </div>
         </div>
+        <Test/>
       </section>
     </>
   )
