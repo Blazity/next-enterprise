@@ -17,7 +17,7 @@ export default async function Web() {
                     applications, websites and mobile apps for startups and established businesses.
                   </p>
                   <div className="mt-10 flex items-center gap-x-6">
-                    <Link href="/team" className="text-sm font-semibold leading-6 text-primary-800">
+                    <Link href="/services" className="text-sm font-semibold leading-6 text-primary-800">
                       Learn more <span aria-hidden="true">→</span>
                     </Link>
                   </div>
