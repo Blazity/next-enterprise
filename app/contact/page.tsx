@@ -1,13 +1,23 @@
 "use client"
 import { BuildingOffice2Icon, EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline"
-import { FormEvent } from "react"
+import { FormEvent, useState } from "react"
 
 export default function Contact() {
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const [isSent, setIsSent] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const form = event.target as HTMLFormElement
+    const isValid = form.checkValidity()
 
-    fetch("/api/send", {
+    if (!isValid) {
+      return
+    }
+
+    setIsLoading(true)
+
+    await fetch("/api/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,10 +30,25 @@ export default function Contact() {
         phoneNumber: form.phoneNumber.value,
       }),
     })
+
+    form.reset()
+    setIsSent(true)
+    setIsLoading(false)
   }
 
   return (
     <div className="relative isolate bg-primary-50">
+      {isSent && (
+        <div
+          onClick={() => setIsSent(false)}
+          className="cursor-pointer bg-primary-700 py-4 text-center text-primary-800 lg:px-4"
+        >
+          <div className="flex items-center bg-primary-50 p-2 leading-none lg:inline-flex lg:rounded-full" role="alert">
+            <span className="mr-3 flex rounded-full bg-primary-50 px-2 py-1 text-xs font-bold uppercase">Sent</span>
+            <span className="mr-2 flex-auto text-left font-semibold">Your message has been sent.</span>
+          </div>
+        </div>
+      )}
       <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
         <div className="relative px-6 pb-20 pt-24 sm:pt-32 lg:static lg:px-8 lg:py-48">
           <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
@@ -77,6 +102,7 @@ export default function Contact() {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    required
                     type="text"
                     name="firstName"
                     id="firstName"
@@ -91,6 +117,7 @@ export default function Contact() {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    required
                     type="text"
                     name="lastName"
                     id="lastName"
@@ -105,6 +132,7 @@ export default function Contact() {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    required
                     type="email"
                     name="email"
                     id="email"
@@ -119,6 +147,7 @@ export default function Contact() {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    required
                     type="tel"
                     name="phoneNumber"
                     id="phoneNumber"
@@ -133,6 +162,7 @@ export default function Contact() {
                 </label>
                 <div className="mt-2.5">
                   <textarea
+                    required
                     name="message"
                     id="message"
                     rows={4}
@@ -144,6 +174,7 @@ export default function Contact() {
             </div>
             <div className="mt-8 flex justify-end">
               <button
+                disabled={isLoading}
                 type="submit"
                 className="rounded-md bg-primary-800 px-3.5 py-2.5 text-center text-sm font-semibold text-primary-50 shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
               >
