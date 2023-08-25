@@ -9,7 +9,7 @@ export default async function Web() {
             <div className="mx-auto max-w-7xl lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-8">
               <div className="px-6 pb-24 pt-10 sm:pb-32 lg:col-span-7 lg:px-0 lg:pb-56 lg:pt-48 xl:col-span-6">
                 <div className="mx-auto max-w-2xl lg:mx-0">
-                  <h1 className="mt-24 text-4xl font-bold tracking-tight text-primary-800 sm:mt-10 sm:text-6xl">
+                  <h1 className="mt-4 lg:mt-24 text-4xl font-bold tracking-tight text-primary-800 sm:mt-10 sm:text-6xl">
                     Your personal <span className="block xl:inline">web development team</span>
                   </h1>
                   <p className="mt-6 text-lg leading-8 text-primary-800">
@@ -17,7 +17,7 @@ export default async function Web() {
                     applications, websites and mobile apps for startups and established businesses.
                   </p>
                   <div className="mt-10 flex items-center gap-x-6">
-                    <Link href="/about" className="text-sm font-semibold leading-6 text-primary-800">
+                    <Link href="/team" className="text-sm font-semibold leading-6 text-primary-800">
                       Learn more <span aria-hidden="true">→</span>
                     </Link>
                   </div>
