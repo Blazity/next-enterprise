@@ -1,34 +1,37 @@
 const people = [
   {
-    name: "Jane Cooper",
-    role: "Paradigm Representative",
-    imageUrl:
-      "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    linkedinUrl: "#",
+    name: "Sam Antonis",
+    role: "Lead Developer",
+    imageUrl: "/Sam.jpg",
+    linkedinUrl: "https://www.linkedin.com/in/sam-antonis-296144186/",
   },
   {
-    name: "Jane Cooper",
-    role: "Paradigm Representative",
+    name: "Nick Eliaerts",
+    role: "Junior Developer",
     imageUrl:
       "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    linkedinUrl: "#",
+    linkedinUrl: "https://www.linkedin.com/in/nick-eliaerts-76b8574a/",
   },
   {
-    name: "Jane Cooper",
-    role: "Paradigm Representative",
-    imageUrl:
-      "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    linkedinUrl: "#",
+    name: "Britt Van Damme",
+    role: "Ecommerce Specialist",
+    imageUrl: "/Britt.jpg",
+    linkedinUrl: "https://www.linkedin.com/in/britt-van-damme/",
+  },
+  {
+    name: "Silke Joosens",
+    role: "Designer",
+    imageUrl: "/Silke.jpg",
+    linkedinUrl: "https://www.linkedin.com/in/silkejoosens/",
   },
 ]
 
 export default async function About() {
   return (
     <section>
-      <div className="mx-auto grid max-w-screen-xl px-4 py-8 text-center lg:py-16">
+      <div className="p-2 mx-auto grid max-w-screen-xl text-center">
         <div className="mx-auto place-self-center">
-          {" "}
-          <div className="py-24 sm:py-32">
+          <div className="pb-4 pt-24">
             <div className="mx-auto max-w-7xl px-6 text-center lg:px-8">
               <div className="mx-auto max-w-2xl">
                 <h2 className="text-3xl font-bold tracking-tight text-primary-800 sm:text-4xl">Meet our team</h2>
@@ -38,18 +41,16 @@ export default async function About() {
               </div>
               <ul
                 role="list"
-                className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-8"
+                className="l mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 lg:mx-0 lg:max-w-none  lg:grid-cols-4 lg:gap-8"
               >
-                {people.map((person) => (
-                  <li key={person.name} className="rounded-2xl bg-primary-800 px-8 py-10">
-                    <img className="mx-auto h-48 w-48 rounded-full md:h-56 md:w-56" src={person.imageUrl} alt="" />
-                    <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-primary-50">
-                      {person.name}
-                    </h3>
-                    <p className="text-sm leading-6 text-primary-50">{person.role}</p>
+                {people.map(({ name, imageUrl, role, linkedinUrl }) => (
+                  <li key={name} className="rounded-2xl bg-primary-800 px-8 py-10">
+                    <img className="mx-auto h-48 w-48 rounded-full md:h-56 md:w-56" src={imageUrl} alt={name} />
+                    <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-primary-50">{name}</h3>
+                    <p className="text-sm leading-6 text-primary-50">{role}</p>
                     <ul role="list" className="mt-6 flex justify-center gap-x-6">
                       <li>
-                        <a href={person.linkedinUrl} className="text-primary-50 hover:text-primary-50">
+                        <a href={linkedinUrl} className="text-primary-50 hover:text-primary-50">
                           <span className="sr-only">LinkedIn</span>
                           <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                             <path

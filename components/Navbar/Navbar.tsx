@@ -30,9 +30,9 @@ export default function Nav() {
       current: currentRoute === "/about",
     },
     {
-      label: "Projects",
-      href: "/projects",
-      current: currentRoute === "/projects",
+      label: "Services",
+      href: "/services",
+      current: currentRoute === "/services",
     },
     {
       label: "Contact",
@@ -67,7 +67,11 @@ export default function Nav() {
       <NavbarContent className="hidden gap-4 md:flex" justify="center">
         {menuItems.map((item) => (
           <NavbarItem key={item.href} isActive={item.current}>
-            <Link href={item.href} aria-current={item.current ? "page" : undefined}>
+            <Link
+              className={item.current ? "border-b-2 border-b-primary-50" : ""}
+              href={item.href}
+              aria-current={item.current ? "page" : undefined}
+            >
               {item.label}
             </Link>
           </NavbarItem>

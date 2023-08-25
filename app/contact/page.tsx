@@ -38,9 +38,9 @@ export default function Contact() {
                   <BuildingOffice2Icon className="h-7 w-6 text-primary-800" aria-hidden="true" />
                 </dt>
                 <dd>
-                  Ticheltij 16
+                  Kammenstraat 57
                   <br />
-                  Westmalle, 2390, Antwerpen
+                  2000, Antwerpen
                 </dd>
               </div>
               <div className="flex gap-x-4">

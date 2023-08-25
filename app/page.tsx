@@ -3,7 +3,7 @@ import Link from "next/link"
 export default async function Web() {
   return (
     <section>
-      <div className="mx-auto grid max-w-screen-xl px-4 py-8 text-center lg:py-16">
+      <div className="mx-auto grid max-w-screen-xl p-2 pt-8 text-center">
         <div className="mx-auto place-self-center">
           <div className="relative">
             <div className="mx-auto max-w-7xl lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-8">
