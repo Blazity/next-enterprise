@@ -49,7 +49,7 @@ export default function Contact() {
                   <PhoneIcon className="h-7 w-6 text-primary-800" aria-hidden="true" />
                 </dt>
                 <dd>
-                  <a className="hover:text-white" href="tel:+1 (555) 234-5678">
+                  <a className="hover:text-white" href="tel:+32496799751">
                     +32496799751
                   </a>
                 </dd>

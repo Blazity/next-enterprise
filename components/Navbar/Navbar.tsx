@@ -25,9 +25,9 @@ export default function Nav() {
       current: currentRoute === "/",
     },
     {
-      label: "About",
-      href: "/about",
-      current: currentRoute === "/about",
+      label: "Team",
+      href: "/team",
+      current: currentRoute === "/team",
     },
     {
       label: "Services",
