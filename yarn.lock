@@ -5816,17 +5816,17 @@
     "@jest/create-cache-key-function" "^27.4.2"
     jsonc-parser "^3.2.0"
 
-"@t3-oss/env-core@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@t3-oss/env-core/-/env-core-0.6.0.tgz#a2e6a6a2b166aad2df7ecc5e7a72400946a84fbe"
-  integrity sha512-3FkPAba069WRZVVab/sB1m3eSGn/rZeypx5k+sWEu1d+k0OQdRDnvFS+7MtxYgqVrwaRk3b7yVnX2dgSPVmWPQ==
+"@t3-oss/env-core@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@t3-oss/env-core/-/env-core-0.6.1.tgz#24d04c22f3e73732e69ac8ff8b13ed00732d20aa"
+  integrity sha512-KQD7qEDJtkWIWWmTVjNvk0wnHpkvAQ6CRbUxbWMFNG/fiosBQDQvtRpBNu6USxBscJCoC4z6y7P9MN52/mLOzw==
 
 "@t3-oss/env-nextjs@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@t3-oss/env-nextjs/-/env-nextjs-0.6.0.tgz#47b44d4fc6f872f3782c4e1ebfe94a55f09dd1e1"
-  integrity sha512-SpzcGNIbUYcQw4zPPFeRJqCC1560zL7QmB0puIqOnuCsmykPkqHPX+n9CNZLXVQerboHzfvb7Kd+jAdouk72Vw==
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@t3-oss/env-nextjs/-/env-nextjs-0.6.1.tgz#62a7686f91732517cd97300e48a58150ce08f006"
+  integrity sha512-z1dIC++Vxj9kmzX5nSPfcrCSkszy3dTEPC4Ssx7Ap5AqR3c2Qa7S0xf8axn6coy7D/vCXDAAnHYnCMDhtcY3SQ==
   dependencies:
-    "@t3-oss/env-core" "0.6.0"
+    "@t3-oss/env-core" "0.6.1"
 
 "@testing-library/dom@^8.3.0":
   version "8.20.0"
