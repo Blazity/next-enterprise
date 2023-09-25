@@ -60,7 +60,7 @@ export default function Web() {
 }
 
 export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
-  if (req.url?.includes("next-enterprise.vercel.app")) {
+  if (req.headers?.host?.includes("next-enterprise.vercel.app")) {
     return {
       redirect: {
         destination: "https://blazity.com/open-source/nextjs-enterprise-boilerplate",
