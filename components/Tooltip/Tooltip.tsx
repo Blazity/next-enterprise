@@ -13,7 +13,7 @@ const tooltipContent = cva([], {
     },
   },
   defaultVariants: {
-    intent: "primary",
+    intent: "primary",  
     size: "md",
   },
 })
