@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - master
+      - develop
   pull_request: null
   workflow_dispatch: null
 jobs:
