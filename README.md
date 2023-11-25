@@ -14,7 +14,7 @@ Welcome to the _Next.js Enterprise Boilerplate_, an open-source template for ent
 
 With this template, you get all the awesomeness you need:
 
-- 🏎️ **[Next.js](https://nextjs.org/)** - Fast by default, with config optimized for performance
+- 🏎️ **[Next.js](https://nextjs.org/)** - Fast by default, with config optimized for performance (with **App Directory**)
 - 💅 **[Tailwind CSS](https://tailwindcss.com/)** - A utility-first CSS framework for rapid UI development
 - ✨ **[ESlint](https://eslint.org/)** and **[Prettier](https://prettier.io/)** - For clean, consistent, and error-free code
 - 🛠️ **[Extremely strict TypeScript](https://www.typescriptlang.org/)** - With [`ts-reset`](https://github.com/total-typescript/ts-reset) library for ultimate type safety
