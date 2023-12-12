@@ -1,6 +1,6 @@
 "use client"
 import { BuildingOffice2Icon, EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline"
-import { FormEvent, use, useState } from "react"
+import { FormEvent, use, useEffect, useState } from "react"
 
 export default function Contact() {
   const [isSent, setIsSent] = useState(false)
@@ -44,18 +44,26 @@ export default function Contact() {
         setIsLoading(false)
       })
   }
+  useEffect(() => {
+    if(isSent) {
+      const timeout = setTimeout(() => {
+        setIsSent(false)
+      }, 3000000)
+      return () => clearTimeout(timeout)
+    }
+  })
   return (
     <div className="relative isolate bg-primary-50">
       {isSent && (
-        <div
-          onClick={() => setIsSent(false)}
-          className="cursor-pointer bg-primary-700 py-4 text-center text-primary-800 lg:px-4"
+        <div 
+        onClick={() => setIsSent(false)} 
+        className="cursor-pointer absolute inset-0 flex items-center justify-center"
         >
-          <div className="flex items-center bg-primary-50 p-2 leading-none lg:inline-flex lg:rounded-full" role="alert">
-            <span className="mr-3 flex rounded-full bg-primary-50 px-2 py-1 text-xs font-bold uppercase">Sent</span>
-            <span className="mr-2 flex-auto text-left font-semibold">Your message has been sent.</span>
-          </div>
+        <div className="bg-emerald-900 border-2 rounded-lg h-full w-full p-2" role="alert">
+          <span className="mr-2 flex-auto text-left font-semibold">Your message has been sent.</span>
         </div>
+      </div>
+      
       )}
       <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
         <div className="relative px-6 pb-1 pt-12 sm:pt-32 lg:static lg:px-8 lg:py-20">
