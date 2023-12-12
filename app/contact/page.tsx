@@ -1,10 +1,11 @@
 "use client"
 import { BuildingOffice2Icon, EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline"
-import { FormEvent, useState } from "react"
+import { FormEvent, use, useState } from "react"
 
 export default function Contact() {
   const [isSent, setIsSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -16,8 +17,7 @@ export default function Contact() {
     }
 
     setIsLoading(true)
-
-    await fetch("/api/send", {
+    fetch("/api/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,12 +30,20 @@ export default function Contact() {
         phoneNumber: form.phoneNumber.value,
       }),
     })
-
-    form.reset()
-    setIsSent(true)
-    setIsLoading(false)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to send message")
+        }
+        form.reset()
+        setIsSent(true)
+      })
+      .catch((error) => {
+        setError(error.message)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
-
   return (
     <div className="relative isolate bg-primary-50">
       {isSent && (
@@ -50,11 +58,11 @@ export default function Contact() {
         </div>
       )}
       <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
-        <div className="relative px-6 pb-20 pt-24 sm:pt-32 lg:static lg:px-8 lg:py-48">
+        <div className="relative px-6 pb-1 pt-12 sm:pt-32 lg:static lg:px-8 lg:py-20">
           <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
             <h2 className="text-3xl font-bold tracking-tight text-primary-800">Get in touch</h2>
             <p className="mt-6 text-lg leading-8 text-primary-800">
-              Feel free to contact me for any questions or inquiries. we will get back to you as soon as possible.
+              Feel free to contact us for any questions or inquiries. we will get back to you as soon as possible.
             </p>
             <dl className="mt-10 space-y-4 text-base leading-7 text-primary-800">
               <div className="flex gap-x-4">
@@ -93,7 +101,7 @@ export default function Contact() {
             </dl>
           </div>
         </div>
-        <form onSubmit={handleSubmit} className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48">
+        <form onSubmit={handleSubmit} className="px-6 pb-10 pt-20 sm:pb-24 lg:px-10 lg:py-20">
           <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
               <div>
@@ -107,7 +115,7 @@ export default function Contact() {
                     name="firstName"
                     id="firstName"
                     autoComplete="given-name"
-                    className="block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-primary-800 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 px-3.5 py-2 text-primary-800 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -122,7 +130,7 @@ export default function Contact() {
                     name="lastName"
                     id="lastName"
                     autoComplete="family-name"
-                    className="block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-primary-800 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 px-3.5 py-2 text-primary-800 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -137,7 +145,7 @@ export default function Contact() {
                     name="email"
                     id="email"
                     autoComplete="email"
-                    className="block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-primary-800 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 px-3.5 py-2 text-primary-800 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -152,7 +160,7 @@ export default function Contact() {
                     name="phoneNumber"
                     id="phoneNumber"
                     autoComplete="tel"
-                    className="block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-primary-800 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 px-3.5 py-2 text-primary-800 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -166,7 +174,7 @@ export default function Contact() {
                     name="message"
                     id="message"
                     rows={4}
-                    className="block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-primary-800 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 px-3.5 py-2 text-primary-800 shadow-md ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6"
                     defaultValue={""}
                   />
                 </div>

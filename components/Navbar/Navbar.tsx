@@ -65,13 +65,13 @@ export default function Nav() {
         <NavbarMenuToggle className="absolute left-8 flex md:hidden" />
         <NavbarMenu>
           {menuItems.map((item) => (
-            <NavbarMenuItem key={item.href}>
+            <NavbarMenuItem key={item.href} className="text-left">
               <Link
                 href={item.href}
                 aria-current={item.current ? "page" : undefined}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="flex-row items-center flex m-4 space-x-2">
+                <div className="flex-row flex my-6 ml-2 space-x-3">
                 {item.icon}
                 <span>{item.label}</span>
                 </div>

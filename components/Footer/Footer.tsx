@@ -2,7 +2,7 @@ import Image from "next/image"
 
 export default function Footer() {
   return (
-    <footer className="flex flex-col bg-primary-800 p-4 text-primary-100">
+    <footer className="flex flex-col bg-primary-800 p-2 text-primary-100">
       <div className="mx-auto grid gap-1 text-center">
         <Image
           width={250}

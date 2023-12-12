@@ -30,17 +30,19 @@ export default async function About() {
     <section>
       <div className="p-2 mx-auto grid max-w-screen-xl text-center">
         <div className="mx-auto place-self-center">
-          <div className="pb-4 pt-24">
+          <div className="pb-4 pt-8">
             <div className="mx-auto max-w-7xl px-6 text-center lg:px-8">
               <div className="mx-auto max-w-2xl">
                 <h2 className="text-3xl font-bold tracking-tight text-primary-800 sm:text-4xl">Meet our team</h2>
+                
                 <p className="mt-4 text-lg leading-8 text-primary-800">
-                  We’re a dynamic group of individuals who are passionate about what we do.
+                  We are a dynamic group of individuals , passionate about our respective fields of expertise.
+                  {/*We’re a dynamic group of individuals who are passionate about what we do.*/}
                 </p>
               </div>
               <ul
                 role="list"
-                className="l mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 lg:mx-0 lg:max-w-none  lg:grid-cols-4 lg:gap-8"
+                className="l mx-auto mt-8 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 lg:mx-0 lg:max-w-none  lg:grid-cols-4 lg:gap-8"
               >
                 {people.map(({ name, imageUrl, role, linkedinUrl }) => (
                   <li key={name} className="rounded-2xl bg-primary-800 px-8 py-10">

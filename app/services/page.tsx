@@ -4,23 +4,23 @@ const features = [
   {
     name: "Web & E-commerce",
     description:
-      "Elevating businesses online with tailored solutions from basic websites to full custom E-commerce stores and expert Shopify development.",
+      "Elevating businesses online with tailored solutions ranging from basic websites to fully customized E-commerce stores and expert Shopify development.",
     icon: BuildingStorefrontIcon,
   },
   {
     name: "Branding & design",
-    description: "Crafting captivating identities through design, our services breathe life into brands.",
+    description: "With a focus on thoughtful design, our services bring vitality to our clients' brands. We specialize in creating distinctive identities that leave a lasting impression, reflecting the essence of each story.",
     icon: PaintBrushIcon,
   },
   {
     name: "Cloud based setup",
-    description: "Taking software to new heights by placing it all on the cloud's limitless expanse.",
+    description: "Empower your software with our cloud-based services, bringing it to new heights within the boundless expanse of the cloud. We seamlessly integrate cutting-edge technologies, ensuring scalability, security, and unrivaled performance for your digital solutions.",
     icon: CloudArrowUpIcon,
   },
   {
-    name: "Your idea here",
+    name: "Your vision quantified",
     description:
-      "Experience a warm welcome at our place, savor a cup of coffee, and share your vision – together, we'll uncover the perfect solution for you",
+      "Experience a warm welcome at our office, savor a cup of coffee, and share your views on your online presence. Together, we'll uncover the perfect solution for you or your enterprise",
     icon: LightBulbIcon,
   },
 ]
@@ -30,7 +30,7 @@ export default async function Projects() {
     <section>
       <div className="mx-auto grid max-w-screen-xl p-4 text-center">
         <div className="mx-auto place-self-center">
-          <div className="pb-4 pt-24">
+          <div className="pb-4 pt-9">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="mx-auto max-w-2xl lg:text-center">
                 <p className="mt-2 text-3xl font-bold tracking-tight text-primary-800 sm:text-4xl">
