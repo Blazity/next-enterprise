@@ -1,6 +1,7 @@
 "use client"
 import { BuildingOffice2Icon, EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline"
-import { FormEvent, use, useEffect, useState } from "react"
+import Image from "next/image"
+import { FormEvent, useEffect, useState } from "react"
 
 export default function Contact() {
   const [isSent, setIsSent] = useState(false)
@@ -48,25 +49,24 @@ export default function Contact() {
     if(isSent) {
       const timeout = setTimeout(() => {
         setIsSent(false)
-      }, 3000000)
+      }, 3000)
       return () => clearTimeout(timeout)
     }
   })
   return (
     <div className="relative isolate bg-primary-50">
-      {isSent && (
+        {isSent && (
         <div 
         onClick={() => setIsSent(false)} 
-        className="cursor-pointer absolute inset-0 flex items-center justify-center"
+        className="cursor-pointer fixed inset-0 flex items-center justify-center transition-opacity duration-300 ease-in-out"
         >
-        <div className="bg-emerald-900 border-2 rounded-lg h-full w-full p-2" role="alert">
-          <span className="mr-2 flex-auto text-left font-semibold">Your message has been sent.</span>
+          <div className="bg-primary-50/90 border rounded-lg h-auto w-auto p-4" role="alert">
+            <span className="font-semibold">Thank you! Your message was sent successfully</span>
+          </div>
         </div>
-      </div>
-      
       )}
       <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
-        <div className="relative px-6 pb-1 pt-12 sm:pt-32 lg:static lg:px-8 lg:py-20">
+        <div className="relative px-5 pb-1 pt-12 sm:pt-32 lg:static lg:px-8">
           <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
             <h2 className="text-3xl font-bold tracking-tight text-primary-800">Get in touch</h2>
             <p className="mt-6 text-lg leading-8 text-primary-800">
@@ -109,7 +109,7 @@ export default function Contact() {
             </dl>
           </div>
         </div>
-        <form onSubmit={handleSubmit} className="px-6 pb-10 pt-20 sm:pb-24 lg:px-10 lg:py-20">
+        <form onSubmit={handleSubmit} className="px-6 pb-10 pt-20 sm:pb-24 lg:p-10">
           <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
               <div>
@@ -194,7 +194,17 @@ export default function Contact() {
                 type="submit"
                 className="rounded-md bg-primary-800 px-3.5 py-2.5 text-center text-sm font-semibold text-primary-50 shadow-sm hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
               >
-                Send message
+                {isLoading ? (
+                  <Image
+                  src="/loading.png"
+                  alt="loading"
+                  width={18}
+                  height={18}
+                  className="animate-spin grayscale"
+                  />
+                ) : (
+                  "Send message"
+                )}
               </button>
             </div>
           </div>

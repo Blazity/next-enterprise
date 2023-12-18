@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+
 export default async function Web() {
   return (
     <section>
@@ -23,7 +24,7 @@ export default async function Web() {
                   </div>
                 </div>
               </div>
-              <div className="relative lg:col-span-5 lg:-mr-8 xl:absolute xl:inset-0 xl:left-1/2 xl:mr-0">
+              <div className="relative lg:col-span-5 mb-5 lg:-mr-8 xl:absolute xl:inset-0 xl:left-1/2 xl:mr-0">
                 <img
                   className="aspect-[3/2] w-full object-cover sm:mb-10 lg:absolute lg:inset-0 lg:aspect-auto lg:h-full"
                   src="/presentation.svg"

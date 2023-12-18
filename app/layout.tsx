@@ -35,7 +35,7 @@ export default function RootLayout({
         <NextUiProvider>
           <div className="flex min-h-screen flex-col justify-between bg-primary-50">
             <Navbar />
-            <main className="mb-auto h-[calc(100%-160px)]">{children}</main>
+            <main className="h-[calc(100%-160px)]">{children}</main>
             <Footer />
           </div>
         </NextUiProvider>
