@@ -1,6 +1,7 @@
 "use client"
 import {
   BriefcaseIcon,
+  BuildingOfficeIcon,
   EnvelopeIcon, 
   HomeIcon,
   UsersIcon,
@@ -44,6 +45,13 @@ export default function Nav() {
       href: "/services",
       current: currentRoute === "/services",
       icon: <BriefcaseIcon className="h-6 w-6"/>
+    },
+    {
+      label: "Coworking",
+      href: "/coworking",
+      current: currentRoute ==="/coworking",
+      icon: <BuildingOfficeIcon className="h-6 w-6"/>
+
     },
     {
       label: "Contact",
