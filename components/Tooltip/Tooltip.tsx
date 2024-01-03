@@ -1,3 +1,5 @@
+"use client"
+
 import * as RadixTooltip from "@radix-ui/react-tooltip"
 import { cva, VariantProps } from "class-variance-authority"
 import React from "react"
