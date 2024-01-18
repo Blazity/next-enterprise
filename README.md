@@ -10,7 +10,7 @@ Welcome to the _Next.js Enterprise Boilerplate_, an open-source template for ent
 > [!NOTE]
 > **Blazity** is a group of Next.js/Jamstack/Headless experts. Contact us at [contact@blazity.com](https://blazity.com) if you’d like to talk about your project or just to have a chat with us
 
-## 📚 Features
+## Features
 
 With this template, you get all the awesomeness you need:
 
@@ -41,7 +41,7 @@ With this template, you get all the awesomeness you need:
 ## Table of Contents
 
 - [Next.js Enterprise Boilerplate](#nextjs-enterprise-boilerplate)
-  - [Features](#-features)
+  - [Features](#features)
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#-getting-started)
   - [Deployment](#-deployment)
