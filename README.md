@@ -1,11 +1,14 @@
 <img align="right" width="360px" height="410px" src="./.github/assets/project-logo-vertical.png">
 
-# Next.js Enterprise Boilerplate </br>  ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/blazity/next-enterprise/check.yml?label=check) ![GitHub License](https://img.shields.io/github/license/blazity/next-enterprise)  ![GitHub contributors](https://img.shields.io/github/contributors/blazity/next-enterprise) ![Discord](https://img.shields.io/discord/1111676875782234175?color=7b8dcd&link=https%3A%2F%2Fblazity.com%2Fdiscord) ![Blazity](https://img.shields.io/badge/Made_by-Blazity-blue?color=FF782B&link=https%3A%2F%2Fblazity.com%2F%3Futm_source%3Dnextenterprise%26utm_medium%3Dgithub)
+# Next.js Enterprise Boilerplate </br>  ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/blazity/next-enterprise/check.yml?label=check) ![GitHub License](https://img.shields.io/github/license/blazity/next-enterprise)  ![GitHub contributors](https://img.shields.io/github/contributors/blazity/next-enterprise) ![Discord](https://img.shields.io/discord/1111676875782234175?color=7b8dcd&link=https%3A%2F%2Fblazity.com%2Fdiscord) ![Blazity](https://img.shields.io/badge/made_by-Blazity-blue?color=FF782B&link=https%3A%2F%2Fblazity.com%2F%3Futm_source%3Dnextenterprise%26utm_medium%3Dgithub)
 
 
 
 
 Welcome to the _Next.js Enterprise Boilerplate_, an open-source template for enterprise projects! It's loaded with features that'll help you build a high-performance, maintainable, and enjoyable app. We've done all the heavy lifting for you, so sit back, relax, and get ready to conquer the world with your incredible app! 🌍
+
+> [!NOTE]
+> **Blazity** is a group of Next.js/Jamstack/Headless experts. Contact us at [contact@blazity.com](https://blazity.com) if you’d like to talk about your project or just to have a chat with us
 
 ## 📚 Features
 
@@ -17,7 +20,6 @@ With this template, you get all the awesomeness you need:
 - 🛠️ **[Extremely strict TypeScript](https://www.typescriptlang.org/)** - With [`ts-reset`](https://github.com/total-typescript/ts-reset) library for ultimate type safety
 - 🚀 **[GitHub Actions](https://github.com/features/actions)** - Pre-configured actions for smooth workflows, including Bundle Size and performance stats
 - 💯 **Perfect Lighthouse score** - Because performance matters
-
 - **[Bundle analyzer plugin](https://www.npmjs.com/package/@next/bundle-analyzer)** - Keep an eye on your bundle size
 - **[Jest](https://jestjs.io/)** and **[React Testing Library](https://testing-library.com/react)** - For rock-solid unit and integration tests
 - **[Playwright](https://playwright.dev/)** - Write end-to-end tests like a pro
