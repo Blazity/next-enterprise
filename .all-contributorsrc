@@ -27,8 +27,18 @@
       "contributions": [
         "infra"
       ]
+    },
+    {
+      "login": "neg4n",
+      "name": "Igor Klepacki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/57688858?v=4",
+      "profile": "https://neg4n.dev/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
-  "linkToUsage": true
+  "linkToUsage": true,
+  "commitType": "docs"
 }
