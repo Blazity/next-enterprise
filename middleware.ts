@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import NextAuth from "next-auth"
+import { authConfig } from "./auth.config"
 
-export function middleware(request: NextRequest) {
-  // TODO: Feel free to remove this block
-  if (request.headers?.get("host")?.includes("next-enterprise.vercel.app")) {
-    return NextResponse.redirect("https://blazity.com/open-source/nextjs-enterprise-boilerplate", { status: 301 })
-  }
-}
+export default NextAuth(authConfig).auth
+
+export function middleware(request: NextRequest) {}
 
 export const config = {
   matcher: [
