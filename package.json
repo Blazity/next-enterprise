@@ -10,13 +10,9 @@
     "lint:fix": "next lint --fix",
     "prettier": "prettier --check \"**/*.{js,jsx,ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
-    "analyze": "cross-env ANALYZE=true yarn build",
     "test": "cross-env FORCE_COLOR=1 jest ./test",
     "test:watch": "cross-env NODE_ENV=test jest -i --watch",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "preinstall": "npx npm-only-allow@latest --PM yarn",
-    "postinstall": "npx patch-package -y",
-    "coupling-graph": "npx madge --extensions js,jsx,ts,tsx,css,md,mdx ./ --exclude '.next|tailwind.config.js|reset.d.ts|prettier.config.js|postcss.config.js|playwright.config.ts|next.config.js|next-env.d.ts|instrumentation.ts|e2e/|README.md|.storybook/|.eslintrc.js' --image graph.svg"
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",

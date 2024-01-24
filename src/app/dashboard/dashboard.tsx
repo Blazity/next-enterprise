@@ -8,6 +8,7 @@ import CircularProgress from "@mui/material/CircularProgress"
 import Container from "@mui/material/Container"
 import Grid from "@mui/material/Grid"
 import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 import { useSession } from "src/components/SessionProvider"
 import AddUserForm from "./add-user-form"
 import UserTable from "./user-table"
@@ -15,9 +16,12 @@ import UserTable from "./user-table"
 export default function Dashboard() {
   const { session, setSession } = useSession()
   const router = useRouter()
-  if (!session) {
-    router.push("/login")
-  }
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/login")
+    }
+  }, [session, router])
 
   return (
     <>

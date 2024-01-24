@@ -10,7 +10,7 @@ import Container from "@mui/material/Container"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
 import { useSession } from "src/components/SessionProvider"
 import { authenticate } from "src/lib/authentication/authenticate"
@@ -25,9 +25,11 @@ export default function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm()
 
-  if (session) {
-    router.push("/dashboard")
-  }
+  useEffect(() => {
+    if (session) {
+      router.push("/dashboard")
+    }
+  }, [session, router])
 
   const handleFormSubmit = async (data: FieldValues) => {
     try {
