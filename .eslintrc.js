@@ -29,8 +29,11 @@ module.exports = {
     "sort-imports": [
       "error",
       {
-        ignoreCase: true,
-        ignoreDeclarationSort: true,
+        ignoreCase: false,
+        ignoreDeclarationSort: true, // don"t want to sort import lines, use eslint-plugin-import instead
+        ignoreMemberSort: false,
+        memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
+        allowSeparatedGroups: true,
       },
     ],
     "tailwindcss/classnames-order": "off",
@@ -64,6 +67,13 @@ module.exports = {
         },
       },
     ],
+  },
+  settings: {
+    "import/resolver": {
+      typescript: {
+        project: "./tsconfig.json",
+      },
+    },
   },
 }
 

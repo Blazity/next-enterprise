@@ -301,3 +301,10 @@ This project is licensed under the MIT License. For more information, see the [L
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+
+Techniques used
+   CSR - Client side rendering for data 
+        useSWR hook for data fetching
+   SSR - from authorization 
+   

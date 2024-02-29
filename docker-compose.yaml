@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile.nextjs
+    restart: always
+
+  pm2:
+    build:
+      context: .
+      dockerfile: Dockerfile.pm2
+    volumes:
+      - ./pm2.config.js:/pm2/pm2.config.js
+    restart: always
+    depends_on:
+      - nextjs
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - pm2

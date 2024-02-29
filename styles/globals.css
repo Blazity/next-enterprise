@@ -1,0 +1,143 @@
+html,
+body {
+  
+  padding: 0;
+  margin: 0;
+  /* background-color: #1f2833; */
+  
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media all and (min-width: 680px) {
+  .Login {
+    padding: 60px 0;
+  }
+
+
+  .Login form {
+    margin: 0 auto;
+    max-width: 320px;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+ 
+  /* display: flex; */
+  font-weight: 400;
+  font-family: sans-serif;
+  /*background: #12c2e9;  /* fallback for old browsers */
+  /*background: -webkit-linear-gradient(to right, #f64f59, #c471ed, #12c2e9);  /* Chrome 10-25, Safari 5.1-6 */
+  /*background: linear-gradient(to right, #f64f59, #c471ed, #12c2e9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  
+}
+
+body, html, .App, #root, .outer {
+  width: 100%;
+  min-height: 100%;
+ 
+}
+
+.navbar-light {
+  background-color: #ffffff;
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+}
+
+.outer {
+
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: column;
+  /* margin: auto; */
+  text-align: left;
+}
+
+inner {
+  
+  
+  margin: auto;
+  background: #ffffff;
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+  padding: 40px 30px 45px 30px;
+  border-radius: 15px;
+  transition: all .3s;
+
+ 
+}
+
+.outer .form-control:focus {
+  border-color: #167bff;
+  box-shadow: none;
+}
+
+.outer h3 {
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+  padding-bottom: 20px;
+}
+
+.custom-control-label {
+  font-weight: 400;
+}
+
+.forgot-password,
+.forgot-password a {
+  text-align: right;
+  font-size: 13px;
+  padding-top: 10px;
+  color: #7f7d7d;
+  margin: 0;
+}
+
+.forgot-password a {
+  color: #167bff;
+}
+
+
+.nav{
+  border: 1 solid #45a29e  !important;
+}
+.nav-link {
+  color: aqua !important;
+  border-bottom: 1px solid #45a29e  !important;
+}
+
+.nav-link.active {
+  color:#1f2833 !important;
+  border-width: 0 !important;
+}
+
+
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 10px solid #66fcf1; /* Light grey */
+  border-top: 10px solid #45a29e; /* Black */
+  border-radius: 50%;
+  animation: spinner 1.5s linear infinite;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
