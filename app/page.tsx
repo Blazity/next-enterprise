@@ -1,6 +1,6 @@
-import { Metadata } from "next"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Metadata } from "next"
 import Form from "components/Form"
 
 export const metadata: Metadata = {

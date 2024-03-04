@@ -1,44 +1,43 @@
-import { useField, useFormikContext } from "formik";
-import React, { useRef } from "react";
-import ErrorMessage from "./ErrorMessage";
-import RequiredAsterisk from "./RequiredAsterisk";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFile } from "@fortawesome/free-solid-svg-icons";
-
+import { faFile } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useField, useFormikContext } from "formik"
+import React, { useRef } from "react"
+import ErrorMessage from "./ErrorMessage"
+import RequiredAsterisk from "./RequiredAsterisk"
 
 interface FileInputProps {
-  label: string;
-  required?: boolean;
-  name:string;
+  label: string
+  required?: boolean
+  name: string
 }
 
-const FileInput: React.FC<FileInputProps> = ({ label,  ...props }) => {
-  const { required } = props;
-  const [field, meta] = useField(props);
-  const { setFieldValue } = useFormikContext();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+const FileInput: React.FC<FileInputProps> = ({ label, ...props }) => {
+  const { required } = props
+  const [field, meta] = useField(props)
+  const { setFieldValue } = useFormikContext()
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-    const file = files ? files[0] : null;
-    setFieldValue(props.name, file); // Directly use setFieldValue to update Formik's state
-  };
+    const { files } = event.target
+    const file = files ? files[0] : null
+    setFieldValue(props.name, file) // Directly use setFieldValue to update Formik's state
+  }
 
   const handleClick = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.click();
+      fileInputRef.current.click()
     }
-  };
+  }
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const files = event.dataTransfer.files;
+    event.preventDefault()
+    event.stopPropagation()
+    const files = event.dataTransfer.files
     if (files && files.length > 0) {
-      const file = files[0];
-      setFieldValue(props.name, file);
+      const file = files[0]
+      setFieldValue(props.name, file)
     }
-  };
+  }
 
   return (
     <div className="mb-4">
@@ -53,15 +52,10 @@ const FileInput: React.FC<FileInputProps> = ({ label,  ...props }) => {
         </div>
         <button type="button">Upload Manifest</button>
       </div>
-      <input
-        type="file"
-        className="hidden"
-        ref={fileInputRef}
-        onChange={handleChange}
-      />
+      <input type="file" className="hidden" ref={fileInputRef} onChange={handleChange} />
       <ErrorMessage touched={meta.touched} error={meta.error} />
     </div>
-  );
-};
+  )
+}
 
-export default FileInput;
+export default FileInput

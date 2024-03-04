@@ -1,8 +1,8 @@
+import * as RadioGroup from "@radix-ui/react-radio-group"
 import { useField } from "formik"
 import React from "react"
 import ErrorMessage from "./ErrorMessage"
 import RequiredAsterisk from "./RequiredAsterisk"
-import * as RadioGroup from "@radix-ui/react-radio-group"
 
 const RadioGroupField = ({
   name,
@@ -28,12 +28,7 @@ const RadioGroupField = ({
         {label}
       </label>
       <RequiredAsterisk required={required} />
-      <RadioGroup.Root
-        className="flex gap-3"
-        value={field.value}
-        onValueChange={handleChange}
-        aria-label={label}
-      >
+      <RadioGroup.Root className="flex gap-3" value={field.value} onValueChange={handleChange} aria-label={label}>
         {options.map((option) => (
           <div className="flex items-center" key={option}>
             <RadioGroup.Item
