@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 //Dependencies
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
+
 import axios from "axios";
 
 //Input fields
@@ -15,51 +15,9 @@ import ToggleField from "./ToggleField";
 import StatusField from "./StatusField";
 import ClientField from "./ClientField";
 
-interface FormValues {
-    importName: string;
-    manifestFile: File | null;
-    splitSchedule: string;
-    client: string; 
-    testingCenter: string; 
-    toleranceWindow: boolean;
-}
-
-const initialValues: FormValues = {
-    importName: '',
-    manifestFile: null,
-    splitSchedule: '',
-    client: '',
-    testingCenter: '',
-    toleranceWindow: false, 
-};
-
-const validationSchema = Yup.object({
-    importName: Yup.string()
-        .required('Import name is required')
-        .oneOf(["Import ABC", "Import DEF", "Import GHI"], "Invalid Import Name"),
-    manifestFile: Yup.mixed()
-        .required('A file is required')
-        .nullable(), // Allows for null values, adjust based on your logic for file handling
-    splitSchedule: Yup.string()
-        .required('This field is required')
-        .oneOf(["Yes", "No"], "Invalid Option"),
-    client: Yup.string()
-        .required('Client selection is required')
-        .oneOf(["Single", "Multiple"], "Invalid Client Type"),
-    testingCenter: Yup.string()
-        .required('Testing center selection is required'), // Assuming a selection is required
-    toleranceWindow: Yup.boolean()
-        .required('Tolerance window selection is required'), // Assuming this is a boolean represented by a toggle
-});
-
-
-const data = {
-    importNames: ["Import ABC", "Import DEF", "Import GHI"],
-    splitScheduleOptions: ["Yes", "No"],
-    clientOptions: ["Single", "Multiple"],
-    testingCenterOptions: ["testing center 1", "testing center 2", "testing center 3", "testing center 4"],
-    clientsOptions: ["client 1", "client 2", "client 3"],
-};
+import { FormValues } from "./types";
+import { data } from "./data";
+import { initialValues, validationSchema } from "./formSchemas";
 
 const FormComponent: React.FC = () => {
     const [formSubmitted, setFormSubmitted] = useState(false);
