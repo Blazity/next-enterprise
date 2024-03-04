@@ -45,12 +45,12 @@ const FileInput: React.FC<FileInputProps> = ({ label, ...props }) => {
         {label}
         <RequiredAsterisk required={required} />
       </label>
-      <div className="drop-area" onClick={handleClick} onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
-        <div>
-          <FontAwesomeIcon icon={faFile} />
-          <h4>Drag & Drop Here or Browse</h4>
+      <div className="border border-grey-500 rounded-md p-4 flex flex-col items-center gap-4" onClick={handleClick} onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
+        <div className="border border-grey-500 border-dashed flex flex-col gap-4 items-center justify-center rounded-md py-9 w-full">
+          <FontAwesomeIcon icon={faFile} className="text-amber-500 h-5 w-5" />
+          <h4 className="">Drag & Drop Here or <span className="font-bold">Browse</span></h4>
         </div>
-        <button type="button">Upload Manifest</button>
+        <button type="button" className="text-white px-12 py-2 rounded-md bg-blue-950 w-fit">Upload Manifest</button>
       </div>
       <input type="file" className="hidden" ref={fileInputRef} onChange={handleChange} />
       <ErrorMessage touched={meta.touched} error={meta.error} />
