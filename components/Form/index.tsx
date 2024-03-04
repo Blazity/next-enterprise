@@ -69,7 +69,7 @@ const FormComponent: React.FC = () => {
                     </option>
                   ))}
                 </SelectInput>
-                {/* <FileInput label="Select a manifest that you'd like to import" name="manifestFile" required /> */}
+                <FileInput label="Select a manifest that you'd like to import" name="manifestFile" required />
                 <StatusField label="Elapse Data Checking:" statusLabel="No Elapsed Dates!" statusColor="text-green-500" />
                 <ToggleField key="toleranceWindow" name="toleranceWindow" required={true}>
                   Tolerance Window:
