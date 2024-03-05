@@ -130,7 +130,7 @@ const FormComponent: React.FC = () => {
                   <Button 
                   variant="primary"
                   type="submit"
-                  disabled={formik.isSubmitting} >
+                  disabled={!formik.isValid || !formik.dirty || formik.isSubmitting} >
                     Continue Import
                   </Button>
                   <Button 
