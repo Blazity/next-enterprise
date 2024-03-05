@@ -1,45 +1,43 @@
 "use client"
 
-import axios from "axios"
-import { Form, Formik, useFormikContext } from "formik"
-import React, { useState } from "react"
+// React and Formik imports
+import React, { useState } from "react";
+import { Form, Formik } from "formik";
+import axios from "axios";
 
-//Dependencies
+// UI components and utilities
+import { Button } from "./Button";
+import ClientField from "./ClientField";
+import FileInput from "./FileInput";
+import RadioGroup from "./RadioGroup";
+import SelectInput from "./SelectInput";
+import StatusField from "./StatusField";
+import ToggleField from "./ToggleField";
 
-//Input fields
-import ClientField from "./ClientField"
-import { data } from "./data"
-import FileInput from "./FileInput"
-import { initialValues, validationSchema } from "./formSchemas"
-import RadioGroup from "./RadioGroup"
-import SelectInput from "./SelectInput"
-import StatusField from "./StatusField"
-import ToggleField from "./ToggleField"
+// Data and schema and types
+import { FormValues } from "./types";
+import { data } from "./data";
+import { initialValues, validationSchema } from "./formSchemas";
 
-import { FormValues } from "./types"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faXmark } from "@fortawesome/free-solid-svg-icons"
+// Icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-{/* Close button */}
-const CloseButton: React.FC = () => {
-  const { resetForm,setFieldValue } = useFormikContext();
-  const handleReset = () => {
-    resetForm();
-    setFieldValue("manifestFile", "");
-  }
-  
-  return (
-    <button className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-950	text-white" onClick={() => handleReset()}>
-      <FontAwesomeIcon icon={faXmark} className="h-6 w-6" />
-    </button>
-  )
-};
-
+/**
+ * FormComponent: Main form component for document upload.
+ * 
+ * This component handles the document upload form, including input fields for document details,
+ * file upload, and form submission. It uses Formik for form state management and validation,
+ * and Axios for submission to a backend endpoint.
+ */
 
 const FormComponent: React.FC = () => {
+  // State to track if the form has been successfully submitted
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+  // Function to handle form submission
   const submitForm = (values: FormValues) => {
+    //TODO implement form submission
     return axios.post(
       `/api/submitForm`,
       {
@@ -56,7 +54,7 @@ const FormComponent: React.FC = () => {
 
   return (
     <>
-    
+      {/* Formik setup for handling form state, validation, and submission */}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -78,15 +76,18 @@ const FormComponent: React.FC = () => {
 
           return (
             <Form>
-              <CloseButton />
-              {/* Title */}
+              {/* Close button - allows resetting the form to initial state */}
+              <button type="button" className="hidden md:flex h-10 w-10 items-center justify-center rounded-lg bg-blue-950	text-white" onClick={() => formik.resetForm()}>
+                <FontAwesomeIcon icon={faXmark} className="h-6 w-6" />
+              </button>
+              {/* Title - provides context for the form's purpose */}
               <div className="flex justify-center mb-12">
                 <h1 className="border-grey-300 w-fit border-b pb-4 font-bold text-3xl text-indigo-900">Document Upload</h1>
               </div>
               
               <div className="flex flex-col gap-12">
 
-                {/* Form layout */}
+                {/* Form layout - organizes the form fields into logical sections */}
                 <div className="flex flex-col gap-4 lg:flex-row lg:gap-16">
                   {/* Left Column */}
                   <div className="flex w-full flex-col lg:w-[500px] gap-5">
@@ -122,26 +123,25 @@ const FormComponent: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Form Footer */}
+                {/* Form Footer - contains actions for form submission and cancellation */}
                 <div className="flex flex-col gap-6">
                   <p className="text-lg leading-tight text-center">Data in the import file is correct. Please press Continue to import.</p>
                   <div className="flex gap-6 justify-center">
-                    <button
-                        className="flex items-center justify-center rounded-md py-3 px-9 text-center text-sm font-bold transition-all bg-blue-950 text-white min-w-[240px]"
-                        type="submit"
-                        disabled={formik.isSubmitting}
-                    >
-                        Continue Import
-                        {formik.isSubmitting && <div className="ml-3 h-5 w-5 animate-spin rounded-full border-x-2 border-b-2"></div>}
-                    </button>
-                    <button
-                        className="flex items-center justify-center rounded-md py-3 px-9 text-center text-sm font-bold transition-all border-2 border-amber-500 text-amber-500 min-w-[240px]"
-                    >
-                        Cancel
-                    </button>
+                  <Button 
+                  variant="primary"
+                  type="submit"
+                  disabled={formik.isSubmitting} >
+                    Continue Import
+                  </Button>
+                  <Button 
+                  variant="secondary" 
+                  type="button"
+                  onClick={() => formik.resetForm()}>
+                    Cancel
+                  </Button>
                   </div>
-                  
-                  {formSubmitted && <div className="text-center text-green-500">Success</div>}
+                  {/* Success message - Display a success message if the form has been submitted successfully */}
+                  {formSubmitted && <div className="sucess-message text-center text-green-500">Success</div>}
                 </div>
               </div>
 

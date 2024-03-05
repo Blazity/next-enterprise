@@ -1,3 +1,10 @@
+/**
+ * FileInput Component
+ *
+ * Renders a file input with drag-and-drop support. Displays the selected file's name and size,
+ * and simulates file upload progress. Integrates with Formik for form state management.
+ */
+
 import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useField, useFormikContext } from "formik";
@@ -17,10 +24,17 @@ const FileInput: React.FC<FileInputProps> = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   const { setFieldValue } = useFormikContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [dragging, setDragging] = useState(false); // State to handle drag styling
-  const [fileInfo, setFileInfo] = useState<{ name: string; size: number } | null>(null); // State to store file info
+
+  // State to manage drag-over styling
+  const [dragging, setDragging] = useState(false);
+
+  // State to store information about the selected file
+  const [fileInfo, setFileInfo] = useState<{ name: string; size: number } | null>(null);
+
+  // State to simulate and display upload progress
   const [uploadProgress, setUploadProgress] = useState(0);
 
+  // Simulates file upload progress
   const simulateUpload = () => {
     let progress = 0;
     const interval = setInterval(() => {
@@ -32,6 +46,7 @@ const FileInput: React.FC<FileInputProps> = ({ label, ...props }) => {
     }, 20); // Adjust time interval to control speed of the animation
   };
 
+  // Handles file selection via input change event
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
     const file = files ? files[0] : null;
@@ -43,12 +58,14 @@ const FileInput: React.FC<FileInputProps> = ({ label, ...props }) => {
     }
   };
 
+  // Opens the file input dialog
   const handleClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
+  // Handles file drop
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -65,7 +82,7 @@ const FileInput: React.FC<FileInputProps> = ({ label, ...props }) => {
     }
 };
 
-
+// Manages drag-over state for styling
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     if (!dragging) {
@@ -73,6 +90,7 @@ const FileInput: React.FC<FileInputProps> = ({ label, ...props }) => {
     }
   };
 
+  // Resets dragging state when dragging leaves the drop area
   const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setDragging(false);

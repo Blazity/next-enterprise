@@ -1,3 +1,10 @@
+/**
+ * RadioGroupField Component
+ *
+ * Renders a group of radio buttons using Radix UI with Formik integration.
+ * Supports custom options, labels, and an optional separator.
+ */
+
 import * as RadioGroup from "@radix-ui/react-radio-group"
 import { useField } from "formik"
 import React from "react"
@@ -5,22 +12,37 @@ import ErrorMessage from "./ErrorMessage"
 import RequiredAsterisk from "./RequiredAsterisk"
 import Separator from "./Separator"
 
-const RadioGroupField = ({
+/**
+ * Props for RadioGroupField.
+ *
+ * @param name The name attribute for the radio group, used for form submission.
+ * @param label Display label for the radio group.
+ * @param separator Optional boolean to render a visual separator above the radio group.
+ * @param options Array of option strings that the radio group will display.
+ * @param props Additional props passed to the radio group, including `required`.
+ */
+
+interface RadioGroupFieldProps {
+  name: string;
+  label: string;
+  separator?: boolean;
+  options: string[];
+  [key: string]: any; // This allows for additional props not explicitly defined in the interface.
+}
+
+const RadioGroupField: React.FC<RadioGroupFieldProps> = ({
   name,
   label,
   separator,
   options,
   ...props
-}: {
-  name: string
-  label: string
-  separator?: boolean
-  options: string[]
-  [x: string]: any // Allow any other props
 }) => {
   const { required, ...restProps } = props
+
+  // State and helpers from Formik for managing radio group value
   const [field, meta, helpers] = useField({ ...restProps, name })
 
+  // Handles radio option change, updating Formik's state
   const handleChange = (value: string) => {
     helpers.setValue(value)
   }

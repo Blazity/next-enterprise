@@ -4,6 +4,7 @@ import ErrorMessage from "./ErrorMessage"
 import RequiredAsterisk from "./RequiredAsterisk"
 
 const SelectInput = ({ label, ...props }: { label?: string; name: string; [x: string]: any }) => {
+  // Since `useField` only needs `name`, and optionally `type` and `value`, we destruct those from props
   const { required, ...restProps } = props
   const [field, meta] = useField(restProps)
 
