@@ -83,7 +83,7 @@ const FileInput: React.FC<FileInputProps> = ({ label, ...props }) => {
       {/* Title */}
       <div className="flex flex-col gap-4">
         <Separator/>
-        <label className="text-md" htmlFor={props.name}>
+        <label className="font-bold text-sm leading-tight text-indigo-900" htmlFor={props.name}>
           {label}
           <RequiredAsterisk required={required} />
         </label>  
@@ -99,7 +99,7 @@ const FileInput: React.FC<FileInputProps> = ({ label, ...props }) => {
       >
         <div className="border border-grey-500 border-dashed flex flex-col gap-4 items-center justify-center rounded-md py-9 w-full">
           <FontAwesomeIcon icon={faFile} className="text-amber-500 h-5 w-5" />
-          <h4>Drag & Drop Here or <span className="font-bold">Browse</span></h4>
+          <h4 className="text-sm leading-tight">Drag & Drop Here or <span className="font-bold">Browse</span></h4>
         </div>
         <button type="button" className="text-white px-12 py-2 rounded-md bg-blue-950 w-fit">Upload Manifest</button>
       </div>

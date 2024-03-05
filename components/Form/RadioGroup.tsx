@@ -8,11 +8,13 @@ import Separator from "./Separator"
 const RadioGroupField = ({
   name,
   label,
+  separator,
   options,
   ...props
 }: {
   name: string
   label: string
+  separator?: boolean
   options: string[]
   [x: string]: any // Allow any other props
 }) => {
@@ -26,8 +28,8 @@ const RadioGroupField = ({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-4">
-        <Separator/>
-        <label className="text-md" htmlFor={label}>
+        {separator && <Separator/>}
+        <label className="font-bold text-sm leading-tight text-indigo-900" htmlFor={label}>
           {label}
           <RequiredAsterisk required={required} />
         </label>

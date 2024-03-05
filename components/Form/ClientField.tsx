@@ -13,7 +13,7 @@ type ClientFieldProps = {
 // Destructure the props in the function parameter
 const ClientField: React.FC<ClientFieldProps> = ({ testingCenters, clients }) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 text-sm leading-tight">
       {testingCenters.map((testingCenter) => (
         <div key={Utils.camelize(testingCenter)} className="flex items-center gap-14">
           <span>{testingCenter}</span>
