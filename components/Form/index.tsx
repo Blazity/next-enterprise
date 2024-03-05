@@ -19,7 +19,7 @@ import ToggleField from "./ToggleField"
 import { FormValues } from "./types"
 
 const FormComponent: React.FC = () => {
-  const [formSubmitted, setFormSubmitted] = useState(false)
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const submitForm = (values: FormValues) => {
     return axios.post(
@@ -60,8 +60,8 @@ const FormComponent: React.FC = () => {
         return (
           <Form>
             <div className="flex flex-col gap-4 lg:flex-row lg:gap-16">
-              <div className="flex grow flex-col lg:max-w-[500px]">
-                <SelectInput key="importName" name="importName" label="Select Import Name:" required>
+              <div className="flex w-full flex-col lg:w-[500px] gap-5">
+                <SelectInput key="importName" name="importName" required>
                   <option value="">Select Import Name:</option>
                   {data.importNames.map((option) => (
                     <option key={option} value={option}>
@@ -69,13 +69,16 @@ const FormComponent: React.FC = () => {
                     </option>
                   ))}
                 </SelectInput>
+              
                 <FileInput label="Select a manifest that you'd like to import" name="manifestFile" required />
+                
                 <StatusField label="Elapse Data Checking:" statusLabel="No Elapsed Dates!" statusColor="text-green-500" />
-                <ToggleField key="toleranceWindow" name="toleranceWindow" required={true}>
-                  Tolerance Window:
-                </ToggleField>
+                  <ToggleField key="toleranceWindow" name="toleranceWindow" required={true}>
+                    Tolerance Window:
+                  </ToggleField>
+                
               </div>
-              <div className="flex grow flex-col lg:max-w-[350px]">
+              <div className="flex w-full flex-col gap-5 lg:w-[350px]">
                 <RadioGroup
                   key="splitSchedule"
                   name="splitSchedule"
@@ -96,13 +99,13 @@ const FormComponent: React.FC = () => {
                 Continue Import
                 {formik.isSubmitting && <div className="ml-3 h-5 w-5 animate-spin rounded-full border-x-2 border-b-2"></div>}
             </button>
+            {formSubmitted && <div className="text-center text-green-500">Success</div>}
           </Form>
         )
       }
         
       }
     </Formik>
-    {formSubmitted && <div>Success</div>}
     </>
     
   )

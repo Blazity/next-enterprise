@@ -3,6 +3,7 @@ import { useField } from "formik"
 import React from "react"
 import ErrorMessage from "./ErrorMessage"
 import RequiredAsterisk from "./RequiredAsterisk"
+import Separator from "./Separator"
 
 const RadioGroupField = ({
   name,
@@ -23,11 +24,15 @@ const RadioGroupField = ({
   }
 
   return (
-    <div className="mb-4">
-      <label className="text-md" htmlFor={label}>
-        {label}
-      </label>
-      <RequiredAsterisk required={required} />
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
+        <Separator/>
+        <label className="text-md" htmlFor={label}>
+          {label}
+          <RequiredAsterisk required={required} />
+        </label>
+      </div>
+      
       <RadioGroup.Root className="flex gap-3" value={field.value} onValueChange={handleChange} aria-label={label}>
         {options.map((option) => (
           <div className="flex items-center" key={option}>
@@ -36,7 +41,7 @@ const RadioGroupField = ({
               value={option}
               id={`${name}-${option}`}
             >
-              <RadioGroup.Indicator className="relative flex h-full w-full items-center justify-center after:block after:h-[11px] after:w-[11px] after:rounded-[50%] after:bg-violet-400 after:content-['']" />
+              <RadioGroup.Indicator className="relative flex h-full w-full items-center justify-center after:block after:h-[11px] after:w-[11px] after:rounded-[50%] after:bg-blue-950 after:content-['']" />
             </RadioGroup.Item>
             <label className="pl-[15px] text-[15px] leading-none" htmlFor={`${name}-${option}`}>
               {option}

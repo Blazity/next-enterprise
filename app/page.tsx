@@ -17,7 +17,7 @@ export default function Web() {
             <FontAwesomeIcon icon={faXmark} className="h-6 w-6" />
           </div>
           {/* Title */}
-          <div className="flex justify-center">
+          <div className="flex justify-center mb-12">
             <h1 className="border-grey-300 w-fit border-b pb-4 text-3xl text-indigo-900">Document Upload</h1>
           </div>
           {/* Form layout */}
