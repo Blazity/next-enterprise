@@ -1,0 +1,1 @@
+File to be used to test the file upload field
