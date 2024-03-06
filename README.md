@@ -1,5 +1,7 @@
 # Document Upload App with Next.js
 
+[View Live Demo Here](https://next-form-project.netlify.app/)
+
 This project is built on the robust foundation of the Next.js Enterprise Boilerplate by Blazity, tailored for a document upload application. It demonstrates advanced usage of Next.js, Formik for form management, Tailwind CSS for styling, and includes comprehensive testing with Jest and Playwright. This README guides you through the project setup, features, and deployment.
 
 ## Features
@@ -19,8 +21,8 @@ To run this project locally, follow these steps:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/vasquezjesus2710/next-enterprise
-cd next-enterprise
+git clone https://github.com/vasquezjesus2710/next-form-project
+cd next-form-project
 ```
 
 2. Install Dependencies
