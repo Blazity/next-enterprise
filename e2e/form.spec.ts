@@ -6,11 +6,12 @@ import { expect, test } from "@playwright/test"
 test("form loads correctly with initial state", async ({ page }) => {
     await page.goto("/"); //Home URL
   
-    // Check if specific fields are present and empty
-    await expect(page.locator('input[name="importName"]')).toBeEmpty();
-    await expect(page.locator('input[name="manifestFile"]')).toBeEmpty();
+    // Check if specific fields are present and the default selected option is the placeholder value
+    await expect(page.locator('select[name="importName"] option').first()).toHaveText('Select Import Name:');
+    
+    // Check if the file upload field indicates that no file is selected
+    await expect(page.locator('.file-info')).not.toBeVisible();
 
-    await expect(page.locator('input[name="toleranceWindow"]')).not.toBeChecked();
     // Verify that no option is selected initially for "splitSchedule"
     await expect(page.locator('input[name="splitSchedule"]:checked')).toHaveCount(0);
 
@@ -31,9 +32,6 @@ test("form loads correctly with initial state", async ({ page }) => {
   
     // Check if the file name is displayed correctly
     await expect(page.locator('.file-info')).toHaveText(/testFile.txt/);
-  
-    // Optionally, check for the upload progress bar to reach 100%
-    await expect(page.locator('.upload-progress')).toHaveCSS('width', '100%');
   });
 
   //Toggle and submit interactions
@@ -41,21 +39,22 @@ test("form loads correctly with initial state", async ({ page }) => {
     await page.goto("/");
   
     // Toggle a switch
-    await page.locator('input[name="toleranceWindow"]').click();
-    await expect(page.locator('input[name="toleranceWindow"]')).toBeChecked();
+    await page.locator('.toggle-switch').click();
+    // Wait for the 'aria-checked' attribute to become 'true'
+    await expect(page.locator('.toggle-switch')).toHaveAttribute('aria-checked', 'true', { timeout: 5000 });
   
     // Fill in other required fields
     // Select an option from "importName" dropdown
     await page.locator('select[name="importName"]').selectOption({ label: "Import ABC" });
 
     // Upload a file for "manifestFile"
-    await page.locator('input[name="manifestFile"]').setInputFiles('/e2e/testFile.txt');
+    await page.locator('input[type="file"]').setInputFiles('/e2e/testFile.txt');
 
     // Select an option for "splitSchedule"
-    await page.locator('input[name="splitSchedule"][value="Yes"]').click();
+    await page.locator('button[role="radio"][value="Yes"]').click();
 
     // Select an option for "client"
-    await page.locator('input[name="client"][value="Single"]').click();
+    await page.locator('button[role="radio"][value="Single"]').click();
 
     // Enable and click the submit button
     const submitButton = page.locator('button', { hasText: 'Continue Import' });

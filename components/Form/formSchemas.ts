@@ -10,7 +10,7 @@ export const initialValues: FormValues = {
   testingCenter2: "",
   testingCenter3: "",
   testingCenter4: "",
-  toleranceWindow: false,
+  toleranceWindow: false
 }
 
 export const validationSchema = Yup.object({

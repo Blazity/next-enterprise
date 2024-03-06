@@ -141,7 +141,7 @@ const FormComponent: React.FC = () => {
                   </Button>
                   </div>
                   {/* Success message - Display a success message if the form has been submitted successfully */}
-                  {formSubmitted && <div className="sucess-message text-center text-green-500">Success</div>}
+                  {formSubmitted && <div className="success-message text-center text-green-500">Success</div>}
                 </div>
               </div>
 

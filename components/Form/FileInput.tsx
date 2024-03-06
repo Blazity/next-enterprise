@@ -127,7 +127,7 @@ const FileInput: React.FC<FileInputProps> = ({ label, ...props }) => {
 
       {/* File info */}
       {fileInfo && (
-          <div className="flex gap-4 p-4 items-center border-t border-grey-500">
+          <div className="file-info flex gap-4 p-4 items-center border-t border-grey-500">
             <FontAwesomeIcon icon={faFile} className="text-amber-500 h-5 w-5" />
             <div className="grow">
               <div className="flex justify-between text-sm text-slate-500">

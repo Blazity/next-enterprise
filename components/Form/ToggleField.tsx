@@ -54,8 +54,7 @@ const ToggleField = ({
       </div>
       <div className="flex gap-3 itens-center">
         <SwitchPrimitive.Root
-          className="relative h-[25px] w-[42px] cursor-default rounded-full bg-indigo-900 outline-none"
-          checked={checked}
+          className="toggle-switch relative h-[25px] w-[42px] cursor-default rounded-full bg-indigo-900 outline-none"
           onCheckedChange={(isChecked) => handleCheckedChange(isChecked)}
         >
           <SwitchPrimitive.Thumb className="block h-[21px] w-[21px] translate-x-0.5 rounded-full bg-white transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
