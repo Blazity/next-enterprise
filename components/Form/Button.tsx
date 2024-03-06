@@ -18,7 +18,7 @@ import { twMerge } from 'tailwind-merge';
 */
 
 const button = cva(
-  "flex items-center justify-center rounded-md py-3 px-9 text-center text-sm font-bold transition-all md:min-w-[240px]",
+  "flex items-center justify-center rounded-md py-3 px-4 md:px-9 text-center text-xs md:text-sm font-bold transition-all md:min-w-[240px]",
   {
     variants: {
       variant: {

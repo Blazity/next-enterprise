@@ -126,7 +126,7 @@ const FormComponent: React.FC = () => {
                 {/* Form Footer - contains actions for form submission and cancellation */}
                 <div className="flex flex-col gap-6">
                   <p className="text-lg leading-tight text-center">Data in the import file is correct. Please press Continue to import.</p>
-                  <div className="flex gap-6 justify-center">
+                  <div className="flex gap-3 mdgap-6 justify-center">
                   <Button 
                   variant="primary"
                   type="submit"
