@@ -1,6 +1,6 @@
 import withBundleAnalyzer from "@next/bundle-analyzer"
 import withPlugins from "next-compose-plugins"
-import { env } from "./env.mjs"
+import { env } from "./env.js"
 
 /**
  * @type {import('next').NextConfig}
