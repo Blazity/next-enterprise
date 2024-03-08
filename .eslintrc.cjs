@@ -1,7 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const fs = require("fs")
 
-module.exports = {
+const config = {
   extends: [
     "next",
     "prettier",
@@ -77,3 +76,5 @@ function getDirectories(path) {
     return fs.statSync(path + "/" + file).isDirectory()
   })
 }
+
+module.exports = config
