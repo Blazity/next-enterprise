@@ -5,8 +5,7 @@
       {
         "src": "/icon-192x192.png",
         "sizes": "192x192",
-        "type": "image/png",
-        "purpose": "any maskable"
+        "type": "image/png"
       },
       {
         "src": "/icon-384x384.png",
@@ -19,12 +18,25 @@
         "type": "image/png"
       }
     ],
-    "gcm_sender_id": "1084271040061",
     "theme_color": "#007",
     "background_color": "#007",
     "start_url": "/",
     "display": "standalone",
-    "orientation": "portrait"
+    "orientation": "portrait",
+    "screenshots": [
+      {
+        "src": "/images/SMOR-512.png",
+        "type": "image/png",
+        "sizes": "512x495",
+        "form_factor": "narrow"
+      },
+      {
+        "src": "/images/SMOR-512.png",
+        "type": "image/jpg",
+        "sizes": "512x495",
+        "form_factor": "wide"
+      }
+    ]
     
   }
   

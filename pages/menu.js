@@ -26,8 +26,8 @@ function Menubox(props) {
             id={item.id}
             itemid={item.userId}
             title={item.title}
-            summary={item.body}
-            image_url="https://example.com/image1.jpg"
+            summary={item.summary}
+            image_url={"https://i.etsystatic.com/41743066/r/il/51b87b/5227514595/il_1140xN.5227514595_gkk6.jpg"}
           />
         ))}
       </Grid>

@@ -63,7 +63,7 @@ export const issueAccessToken = async (userId) => {
     purpose: "access", // Indicate the purpose of this token
   }
 
-  const accessToken = await generateToken(accessTokenPayload, "1m") // 15 minutes expiry
+  const accessToken = await generateToken(accessTokenPayload, "15m") // 15 minutes expiry
 
   return accessToken
 }

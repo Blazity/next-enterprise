@@ -26,9 +26,9 @@ export default function MenuItem(props) {
   }
 
   return (
-    <Card onClick={handleOnClick}>
+    <Card onClick={handleOnClick} h={["50vh"]}>
       <CardBody>
-        <Image src={props.image_url} alt={props.image_desc} borderRadius="lg" />
+        <Image src={props.image_url} alt={props.image_desc} borderRadius="lg" margin={"auto"} h="50%" w="100%" />
         <Stack mt="6" spacing="3">
           <Heading size="md">{props.title}</Heading>
           <Text>{props.summary}</Text>

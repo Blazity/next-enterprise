@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app"
+import Head from 'next/head'
 import React, { useContext, useEffect, useState } from "react"
 
 //Auth imports
@@ -61,15 +62,28 @@ function MyApp({ Component, pageProps }) {
   }
 
   /////////
+  const [registration, setRegistration] = useState(null)
 
   /**
    * useEffect has been uesd to take actions on the first rendering
    */
   useEffect(() => {
-    const app = initializeApp(firebaseConfig)
+    // const app = initializeApp(firebaseConfig)
 
     if (!loaded) {
-      console.log("1st check", firebaseConfig)
+      // console.log("1st check", firebaseConfig)
+      
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/sw.js").then(
+            function (registration) {
+              setRegistration(registration)
+              console.log("Service Worker registration successful with scope: ", registration.scope)
+            },
+            function (err) {}
+          )
+        })
+      }
 
       setLoaded(true)
     }
@@ -78,7 +92,6 @@ function MyApp({ Component, pageProps }) {
   ///// Manual test with console
   const getLayout = Component.getLayout ?? ((page) => page)
   return (
-    <SSRProvider>
       <ChakraProvider theme={customTheme}>
         <AuthContext.Provider
           value={{
@@ -95,7 +108,6 @@ function MyApp({ Component, pageProps }) {
           {getLayout(<Component {...pageProps} />)}
         </AuthContext.Provider>
       </ChakraProvider>
-    </SSRProvider>
   )
 }
 

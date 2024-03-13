@@ -12,19 +12,16 @@ export default async function handler(req, res) {
   //fetch data from postgres database where we store password as hash
 
   // Here, for demonstration, let's assume a hardcoded user
-  const user = {
-    id: 1,
-    email: "user@example.com",
-    passwordHash: "$2a$10$Zy/TYg6WwOOctCQ6e/KOXebvH3AliSDjdopPxrIUWELVJBf/KE.iq", // hashed password: "password123"
-  }
+  const response = await fetch(`http://localhost:3001/user`)
+  const user_data = await response.json()
 
-  const isValid = await verifyPassword(password, user.passwordHash)
+  const isValid = await verifyPassword(password, user_data.password)
 
   if (!isValid) {
     return res.status(401).json({ message: "Invalid credentials" })
   }
 
-  const token = await createTokens(user.id)
+  const token = await createTokens(user_data.id)
 
   res.setHeader("Set-Cookie", [
     `token=${token.accessToken};  Path=/; HttpOnly`,

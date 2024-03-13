@@ -1,6 +1,5 @@
 import Head from "next/head"
 import React, { useContext, useEffect, useState } from "react"
-import MyButton from "../components/button"
 import Header from "../components/headbar"
 import Logincomponent from "../components/logincomponent"
 import Signupcomponent from "../components/signupcomponent"

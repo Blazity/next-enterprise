@@ -12,6 +12,7 @@ export default async function middleware(req, res) {
   // Extract token from request headers or cookies or wherever it's stored
   const token = req.cookies.get("token")
 
+
   if (!token || token.value == "") {
     if (req.url == "http://localhost:3000/login") {
     } else {
@@ -69,5 +70,5 @@ export default async function middleware(req, res) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|sw.js|manifest.json|test.html|icon*|images/*).*)"],
 }
