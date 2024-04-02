@@ -34,7 +34,7 @@ module.exports = {
         vizoleG2: "#F5887A",
         vizoleG3: "#F5887A",
         homeBg: "#0f172a",
-        homeBg2: "#0c1324"
+        homeBg2: "#111d38"
       },
       fontFamily: {
         body: [
