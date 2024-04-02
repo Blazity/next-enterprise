@@ -12,21 +12,23 @@ import {
   } from "@radix-ui/react-icons";
 
   const LOGOS = [
-    <FigmaLogoIcon width={50} height={50} className="text-white" />,
-    <FramerLogoIcon width={50} height={50} className="text-white" />,
-    <SketchLogoIcon width={50} height={50} className=" text-white" />,
-    <TwitterLogoIcon width={50} height={50} className="text-white" />,
-    <GitHubLogoIcon width={50} height={50} className="text-white" />,
-    <VercelLogoIcon width={50} height={50} className="text-white" />,
-    <NotionLogoIcon width={50} height={50} className="text-white" />,
-    <DiscordLogoIcon width={50} height={50} className="text-white" />,
-    <InstagramLogoIcon width={50} height={50} className="text-white" />,
-    <LinkedInLogoIcon width={50} height={50} className="text-white" />,
+    <FigmaLogoIcon width={50} height={50} className="text-slate-400" />,
+    <FramerLogoIcon width={50} height={50} className="text-slate-400" />,
+    <SketchLogoIcon width={50} height={50} className=" text-slate-400" />,
+    <TwitterLogoIcon width={50} height={50} className="text-slate-400" />,
+    <GitHubLogoIcon width={50} height={50} className="text-slate-400" />,
+    <VercelLogoIcon width={50} height={50} className="text-slate-400" />,
+    <NotionLogoIcon width={50} height={50} className="text-slate-400" />,
+    <DiscordLogoIcon width={50} height={50} className="text-slate-400" />,
+    <InstagramLogoIcon width={50} height={50} className="text-slate-400" />,
+    <LinkedInLogoIcon width={50} height={50} className="text-slate-400" />,
   ];
 
   export const InfiniteSlider = () => {
     return (
-      <div className="relative m-auto w-full overflow-hidden bg-transparent before:absolute before:left-0 before:top-0 before:z-[2] before:h-full before:w-[100px] before:bg-[linear-gradient(to_right,homeBg_0%,rgba(255,255,255,0)_100%)] before:content-[''] after:absolute after:right-0 after:top-0 after:z-[2] after:h-full after:w-[100px] after:-scale-x-100 after:bg-[linear-gradient(to_right,homeBg_0%,rgba(0,0,0,120)_100%)] after:content-['']">
+        // bg-gradient-to-r from-black to-transparent
+    //   <div className="relative m-auto w-full overflow-hidden bg-transparent before:absolute before:left-0 before:top-0 before:z-[2] before:h-full before:w-[100px] before:bg-[linear-gradient(to_right,homeBg_0%,homeBg_100%)] before:content-[''] after:absolute after:right-0 after:top-0 after:z-[2] after:h-full after:w-[100px] after:-scale-x-100 after:bg-[linear-gradient(to_right,homeBg_0%,transparent)] after:content-['']">
+              <div className="relative m-auto w-full overflow-hidden bg-homeBg before:absolute before:opacity before:left-0 before:top-0 before:z-[2] before:h-full before:w-[100px] before:bg-[linear-gradient(to_right,homeBg2,transparent)] before:content-[''] after:absolute after:right-0 after:top-0 after:z-[2] after:h-full after:w-[100px] after:-scale-x-100 after:bg-[linear-gradient(to_right,black,transparent)] bg-blend-screen after:content-['']">
         <div className="animate-infinite-slider flex w-[calc(250px*10)]">
           {LOGOS.map((logo, index) => (
             <div

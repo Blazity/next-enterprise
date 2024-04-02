@@ -32,7 +32,8 @@ module.exports = {
         vizoleG1: "#F0B37D",
         vizoleG2: "#F5887A",
         vizoleG3: "#F5887A",
-        homeBg: "#0f172a"
+        homeBg: "#0f172a",
+        homeBg2: "#0c1324"
       },
       fontFamily: {
         body: [
@@ -92,7 +93,7 @@ module.exports = {
         infiniteSlider: {
           "0%": { transform: "translateX(0)" },
           "100%": {
-            transform: "translateX(calc(-250px * 2))",
+            transform: "translateX(calc(-250px * 5))",
           },
         },
       },
