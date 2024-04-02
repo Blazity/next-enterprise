@@ -62,16 +62,6 @@ export default function Web() {
                   <h2 className="bg-gradient-to-r from-slate-400 via-white to-slate-400 text-transparent bg-clip-text" >Our Mission in Motion</h2>
                 </div>
                 <h3 className="mr-90 text-slate-300">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dignissimos, totam culpa officia ad esse</h3>
-
-                <div className="mt-2">
-                  <Button href="" intent="aboutUs" size="hero1" className="grid pt-2 text-left">Section 01</Button>
-                </div>
-                <div className="mt-2">
-                  <Button href="" intent="aboutUs" size="hero1" className="grid pt-2">Section 01</Button>
-                </div>
-                <div className="mt-2">
-                  <Button href="" intent="aboutUs" size="hero1" className="grid pt-2">Section 01</Button>
-                </div>
               </div>
             </div>
           </div>
