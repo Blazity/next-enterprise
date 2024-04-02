@@ -1,8 +1,9 @@
 .bg-illustration {
-    background-image: url('/images/glow-bottom.svg');
+  background-image: url("/images/glow-bottom.svg");
+}
 
-  }
+.hover-pl-5pct:hover {
+  padding-left: calc(100% + 5%);
+}
 
-  .hover-pl-5pct:hover {
-    padding-left: calc(100% + 5%);
-   }
+/* https://flowbite.com/docs/forms/radio/ */
