@@ -29,6 +29,10 @@ module.exports = {
           800: "#1e40af",
           900: "#1e3a8a",
         },
+        vizoleG1: "#F0B37D",
+        vizoleG2: "#F5887A",
+        vizoleG3: "#F5887A",
+        homeBg: "#0f172a"
       },
       fontFamily: {
         body: [
@@ -80,6 +84,17 @@ module.exports = {
       },
       minWidth: {
         ...defaultTheme.width,
+      },
+      animation: {
+        ["infinite-slider"]: "infiniteSlider 20s linear infinite",
+      },
+      keyframes: {
+        infiniteSlider: {
+          "0%": { transform: "translateX(0)" },
+          "100%": {
+            transform: "translateX(calc(-250px * 2))",
+          },
+        },
       },
     },
   },

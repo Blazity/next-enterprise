@@ -9,8 +9,6 @@ const button = cva(
     "items-center",
     "rounded-xl",
     "text-center",
-    "border",
-    "border-blue-400",
     "transition-colors",
     "delay-50",
   ],
@@ -18,11 +16,13 @@ const button = cva(
     variants: {
       intent: {
         primary: ["bg-blue-400", "text-white", "hover:enabled:bg-blue-700"],
-        secondary: ["bg-transparent", "text-blue-400", "hover:enabled:bg-blue-400", "hover:enabled:text-white"],
+        secondary: ["bg-transparent", "text-white", "hover:bg-slate-100", "rounded-3xl", "hover:text-vizoleG2", "border-solid", "border-2", "border-slate-100"],
+        hero1:["text-white", "bg-gradient-to-br", "from-vizoleG1", "via-vizole-G2", "to-vizoleG3", "hover:bg-gradient-to-bl", "focus:ring-4", "focus:outline-none", "focus:ring-green-200", "dark:focus:ring-green-800", "font-medium", "rounded-3xl", "text-sm", "text-center", "me-2", "mb-2"]
       },
       size: {
         sm: ["min-w-20", "h-full", "min-h-10", "text-sm", "py-1.5", "px-4"],
         lg: ["min-w-32", "h-full", "min-h-12", "text-lg", "py-2.5", "px-6"],
+        hero1:["min-w-15", "h-full", "min-h-5" , "text-sm","px-5", "py-2"]
       },
       underline: { true: ["underline"], false: [] },
     },

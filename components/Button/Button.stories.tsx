@@ -12,11 +12,11 @@ const meta: Meta<typeof Button> = {
   },
   argTypes: {
     intent: {
-      options: ["primary", "secondary"],
+      options: ["primary", "secondary", "hero1"],
       control: { type: "select" },
     },
     size: {
-      options: ["sm", "lg"],
+      options: ["sm", "lg", "hero1"],
       control: { type: "select" },
     },
   },
