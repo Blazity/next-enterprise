@@ -1,6 +1,8 @@
 import withBundleAnalyzer from "@next/bundle-analyzer"
 import withPlugins from "next-compose-plugins"
 import { env } from "./env.mjs"
+import webpack from 'webpack';
+
 
 /**
  * @type {import('next').NextConfig}
@@ -16,6 +18,14 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
       { source: "/ping", destination: "/api/health" },
     ]
   },
+  webpack: (config, { isServer }) => {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"]
+    });
+    return config
+  }
+
 })
 
 export default config

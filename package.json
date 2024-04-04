@@ -46,6 +46,7 @@
     "@semantic-release/github": "^9.2.3",
     "@semantic-release/npm": "^11.0.1",
     "@semantic-release/release-notes-generator": "^12.1.0",
+    "@svgr/webpack": "^8.1.0",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@vercel/otel": "^0.3.0",
     "class-variance-authority": "^0.7.0",

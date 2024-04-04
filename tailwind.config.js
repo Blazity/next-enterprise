@@ -16,7 +16,9 @@ module.exports = {
   ],
   theme: {
     extend: {
-
+      boxShadow: {
+        '3xl': '0 35px 60px -15px rgba(0, 0, 200, 0.3)',
+      },
       colors: {
         primary: {
           50: "#eff6ff",
@@ -33,6 +35,7 @@ module.exports = {
         vizoleG1: "#F0B37D",
         vizoleG2: "#F5887A",
         vizoleG3: "#F5887A",
+        heroBtn: "#f0eded",
         homeBg: "#0f172a",
         homeBg2: "#111d38"
       },

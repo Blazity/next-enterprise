@@ -11,6 +11,7 @@ import {
   LinkedInLogoIcon,
 } from "@radix-ui/react-icons"
 
+
 const LOGOS = [
   <FigmaLogoIcon width={50} height={50} className="text-slate-400" />,
   <FramerLogoIcon width={50} height={50} className="text-slate-400" />,
@@ -22,6 +23,7 @@ const LOGOS = [
   <DiscordLogoIcon width={50} height={50} className="text-slate-400" />,
   <InstagramLogoIcon width={50} height={50} className="text-slate-400" />,
   <LinkedInLogoIcon width={50} height={50} className="text-slate-400" />,
+  
 ]
 
 export const InfiniteSlider = () => {

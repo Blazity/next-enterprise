@@ -17,7 +17,7 @@ const button = cva(
       intent: {
         primary: ["bg-blue-400", "text-white", "hover:enabled:bg-blue-700"],
         secondary: ["bg-transparent", "text-white", "hover:bg-slate-100", "rounded-3xl", "hover:text-vizoleG2", "border-solid", "border-2", "border-slate-100"],
-        hero1: ["text-black", "bg-white", "font-medium", "rounded-3xl", "text-sm", "text-center", "me-2", "mb-2", "border-solid", "border-2", "border-slate-100"],
+        hero1: ["text-black", "bg-heroBtn", "hover:bg-white", "font-medium", "rounded-3xl", "text-sm", "text-center", "me-2", "mb-2", "border-solid", "border-2", "border-slate-100"],
         aboutUs: ["bg-transparent", "w-1/4", "hover:bg-blue-500", "text-white", "font-semibold", "hover:text-white", "py-2", "px-4", "border", "border-blue-500", "hover:border-transparent", "rounded", "flex", "text-left"]
       },
       size: {
