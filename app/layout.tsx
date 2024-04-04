@@ -7,7 +7,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
 
 
-      <body>
+      <body className="bg-[#0f172a] ">
         <Navbar logoSrc="/images/image-removebg-preview (1).png" />
 
         {children}</body>

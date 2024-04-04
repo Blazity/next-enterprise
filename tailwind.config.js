@@ -16,8 +16,8 @@ module.exports = {
   ],
   theme: {
     extend: {
-
       colors: {
+        black: "#0f172a",
         primary: {
           50: "#eff6ff",
           100: "#dbeafe",
@@ -34,7 +34,7 @@ module.exports = {
         vizoleG2: "#F5887A",
         vizoleG3: "#F5887A",
         homeBg: "#0f172a",
-        homeBg2: "#0c1324"
+        homeBg2: "#0c1324",
       },
       fontFamily: {
         body: [
@@ -100,7 +100,9 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+   
+  ],
   future: {
     hoverOnlyWhenSupported: true,
   },
