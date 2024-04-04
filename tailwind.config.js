@@ -2,7 +2,6 @@
 const { pick, omit } = require("lodash")
 const colors = require("tailwindcss/colors")
 const defaultTheme = require("tailwindcss/defaultTheme")
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
@@ -20,6 +19,7 @@ module.exports = {
         '3xl': '0 35px 60px -15px rgba(0, 0, 200, 0.3)',
       },
       colors: {
+        black: "#0f172a",
         primary: {
           50: "#eff6ff",
           100: "#dbeafe",
@@ -37,7 +37,7 @@ module.exports = {
         vizoleG3: "#F5887A",
         heroBtn: "#f0eded",
         homeBg: "#0f172a",
-        homeBg2: "#111d38"
+        homeBg2: "#0c1324",
       },
       fontFamily: {
         body: [
@@ -97,13 +97,15 @@ module.exports = {
         infiniteSlider: {
           "0%": { transform: "translateX(0)" },
           "100%": {
-            transform: "translateX(calc(-250px * 5))",
+            transform: "translateX(calc(-125px * 5))",
           },
         },
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@codaworks/react-glow/tailwind')
+  ],
   future: {
     hoverOnlyWhenSupported: true,
   },

@@ -6,4 +6,11 @@
   padding-left: calc(100% + 5%);
 }
 
+.glowable-text {
+  color: black;
+}
+
+[glow] .glowable-text {
+  color: var(--glow-color);
+}
 /* https://flowbite.com/docs/forms/radio/ */
