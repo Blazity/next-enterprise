@@ -2,6 +2,9 @@
 const { pick, omit } = require("lodash")
 const colors = require("tailwindcss/colors")
 const defaultTheme = require("tailwindcss/defaultTheme")
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
@@ -104,9 +107,21 @@ module.exports = {
     },
   },
   plugins: [
-    require('@codaworks/react-glow/tailwind')
+    require('@codaworks/react-glow/tailwind'),
+    addVariablesForColors
   ],
   future: {
     hoverOnlyWhenSupported: true,
   },
+}
+
+function addVariablesForColors({ addBase, theme }) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+
+  addBase({
+    ":root": newVars,
+  });
 }
