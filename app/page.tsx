@@ -13,6 +13,7 @@ import { MdOutlineAppSettingsAlt } from "react-icons/md"
 import { Glow, GlowCapture } from "@codaworks/react-glow"
 import StarBackground from "components/StarBackground/StarBackground"
 import { Textarea } from "@nextui-org/react"
+import ImageFilter from "components/ImageFilter/ImageFilter"
 
 export default function Web() {
   const [init, setInit] = useState(false)
@@ -25,7 +26,7 @@ export default function Web() {
     <div>
       <section className="bg-[#0f172a] md:pl-0 md:pr-0 lg:pl-[15%] lg:pr-[15%]">
         <div
-          className=" h-[80%] rounded-[3rem] pt-[10%]"
+          className=" h-[80%] rounded-[3rem]  pt-[10%] max-md:rounded-none"
           style={{
             backgroundImage: `url('/images/glow-bottom.svg')`,
             backgroundSize: "fill",
@@ -73,7 +74,7 @@ export default function Web() {
       </section>
       <section className="bg-[#0f172a] md:pl-0 md:pr-0 lg:pl-[15%] lg:pr-[15%]">
         <div
-          className=" h-[60%] rounded-[3rem]"
+          className=" h-[60%] rounded-[3rem] max-md:rounded-none"
           style={{
             backgroundImage: `url('/images/glow-top.svg')`,
             backgroundSize: "cover",
@@ -81,7 +82,7 @@ export default function Web() {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="flex w-[100%] items-center justify-around pb-[10vh] pt-[5vh]">
+          <div className="flex w-[100%] items-center justify-around pb-[10vh] pt-[5vh] max-md:flex-wrap">
             <div className="mx-auto max-w-screen-xl px-4 py-8 lg:py-16">
               <div className="mx-auto text-left text-white">
                 <h4 className="bg-gradient-to-r from-vizoleG1 via-vizoleG2 to-vizoleG3 bg-clip-text pt-20 font-bold text-transparent ">
@@ -127,8 +128,7 @@ export default function Web() {
             </div>
             <div>
               <iframe
-                width="560"
-                height="315"
+                className="h-[315px] w-[560px] max-md:h-[14rem] max-md:w-[25rem]"
                 src="https://www.youtube.com/embed/_vhf0RZg0fg"
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -137,14 +137,16 @@ export default function Web() {
           </div>
         </div>
       </section>
-      <section className="mt-[3%] bg-[#0f172a] md:pl-0 md:pr-0 lg:pl-[10%] lg:pr-[10%]">
+      <section className="mt-[3%] bg-[#0f172a] max-md:p-4 md:pl-0 md:pr-0 lg:pl-[10%] lg:pr-[10%]">
         <div>
           <GlowCapture>
             <div className="flex flex-col items-center justify-around">
               <div className="mb-4 max-w-3xl text-center text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-5xl">
-                <h2 className="">Our Services</h2>
+                <h2 className="bg-gradient-to-r from-slate-400 via-white to-slate-400 bg-clip-text text-transparent">
+                  Our Services
+                </h2>
               </div>
-              <p className="mb-6 max-w-2xl text-center font-light text-gray-200 md:text-lg lg:mb-8 lg:text-xl">
+              <p className="mb-6 max-w-2xl text-center font-light text-[#94a3b8] md:text-lg lg:mb-8 lg:text-xl">
                 Let us transform your vision into reality with cutting-edge VR/AR experiences and custom software
                 solutions powered by AI.
               </p>
@@ -189,7 +191,7 @@ export default function Web() {
                   </div>
                 </div>
               </Glow>
-              <Glow color="#F5887A">
+              <Glow color="#F0B37D">
                 <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow">
                   <div className=" text-center">
                     <div className="mr-3 inline-flex flex-shrink-0 items-center justify-center rounded-full px-5 ">
@@ -228,7 +230,7 @@ export default function Web() {
                   </div>
                 </div>
               </Glow>
-              <Glow color="#C37EB6">
+              <Glow color="#F0B37D">
                 <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow">
                   <div className=" text-center">
                     <div className="mr-3 inline-flex flex-shrink-0 items-center justify-center rounded-full px-5 ">
@@ -267,7 +269,7 @@ export default function Web() {
                   </div>
                 </div>
               </Glow>
-              <Glow color="#D30253">
+              <Glow color="#F0B37D">
                 <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow">
                   <div className=" text-center">
                     <div className="mr-3 inline-flex flex-shrink-0 items-center justify-center rounded-full px-5 ">
@@ -311,36 +313,19 @@ export default function Web() {
         </div>
       </section>
 
-      <section className="h-[150vh] bg-[#0f172a] pl-[10%] pr-[10%] pt-40">
+      <section className="mb-32 h-[150vh] bg-[#0f172a] pl-[10%] pr-[10%] pt-40">
         <div className="mx-auto place-self-center text-center">
           <div className="mb-4 text-center text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-5xl">
-            <h1 className="">Our Portfolio</h1>
+            <h1 className="bg-gradient-to-r from-slate-400 via-white to-slate-400 bg-clip-text text-transparent">
+              Our Portfolio
+            </h1>
           </div>
           <p className="pl-5 pr-5 text-2xl text-white">
             The showcase of our innovations. Dive in to explore our diverse range of projects and see how we’re driving
             digital transformation across industries.”
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          <div className="mt-10 flex max-w-full rounded-xl border border-gray-200 bg-transparent shadow dark:border-gray-700 dark:bg-gray-800">
-            <img className="h-auto max-w-full rounded-lg" src="/images/site01.png" alt="" />
-          </div>
-          <div className="mt-10 flex max-w-full rounded-xl border border-gray-200 bg-transparent shadow dark:border-gray-700 dark:bg-gray-800">
-            <img className="h-auto max-w-full rounded-lg" src="/images/site02.png" alt="" />
-          </div>
-          <div className="mt-10 flex max-w-full rounded-xl border border-gray-200 bg-transparent shadow dark:border-gray-700 dark:bg-gray-800">
-            <img className="h-auto max-w-full rounded-lg" src="/images/site03.png" alt="" />
-          </div>
-          <div className="mt-10 flex max-w-full rounded-xl border border-gray-200 bg-transparent shadow dark:border-gray-700 dark:bg-gray-800">
-            <img className="h-auto max-w-full rounded-lg" src="/images/site01.png" alt="" />
-          </div>
-          <div className="mt-10 flex max-w-full rounded-xl border border-gray-200 bg-transparent shadow dark:border-gray-700 dark:bg-gray-800">
-            <img className="h-auto max-w-full rounded-lg" src="/images/site02.png" alt="" />
-          </div>
-          <div className="flex] mt-10 max-w-full rounded-xl border border-gray-200 bg-transparent shadow dark:border-gray-700 dark:bg-gray-800">
-            <img className="h-auto max-w-full rounded-lg" src="/images/site03.png" alt="" />
-          </div>
-        </div>
+        <ImageFilter />
       </section>
 
       <section className="bg-[#0f172a] dark:bg-gray-900">

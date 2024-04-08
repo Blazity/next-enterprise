@@ -1,7 +1,7 @@
 import "styles/tailwind.css"
 import "styles/custom.css"
 import Navbar from "components/Navbar/Navbar"
-import StarBackground from "components/StarBackground/StarBackground";
+
 import Footer from "components/Footer/Footer"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
