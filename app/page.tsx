@@ -332,7 +332,7 @@ export default function Web() {
         <ImageFilter />
       </section>
 
-      <section className="bg-[#0f172a] dark:bg-gray-900">
+      <section className="bg-[#0f172a] dark:bg-gray-900 md:pt-[8%] lg:pt-[5%]">
         <div className="mx-auto max-w-screen-md px-4 py-8 lg:py-16">
           <h2 className="mb-4 text-center text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-5xl">
             Contact Us

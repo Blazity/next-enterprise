@@ -4,6 +4,7 @@ import { Button } from "components/Button/Button"
 import { useState } from "react"
 import { Image } from "./image"
 import { FilterableData } from "./FilterableData"
+import { CardBody, CardContainer, CardItem } from "components/Ui/Card"
 import { motion } from "framer-motion" // Import motion
 
 const ImageFilter = () => {
@@ -43,12 +44,16 @@ const ImageFilter = () => {
                 : "hidden" /* Hide if not matched */
             }`}
           >
-            <Image
-              className="h-[400px] w-full overflow-hidden rounded-lg"
-              image={item.src}
-              alt={item.name}
-              objectCover="object-cover"
-            />
+            <CardContainer>
+              <CardBody>
+                <Image
+                  className="h-[400px] w-full overflow-hidden rounded-lg"
+                  image={item.src}
+                  alt={item.name}
+                  objectCover="object-cover"
+                />
+              </CardBody>
+            </CardContainer>
           </motion.div>
         ))}
       </main>
