@@ -56,7 +56,6 @@
     "@tsparticles/react": "^3.0.0",
     "@vercel/otel": "^0.3.0",
     "class-variance-authority": "^0.7.0",
-    "framer-motion": "^11.0.25",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.25",
     "lodash": "^4.17.21",
@@ -67,6 +66,7 @@
     "react-icons": "^5.0.1",
     "react-tsparticles": "^2.12.2",
     "tailwind-merge": "^2.2.2",
+    "tailwind-variants": "^0.2.1",
     "tsparticles": "^3.3.0",
     "zod": "^3.22.4"
   },
