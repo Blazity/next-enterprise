@@ -9,6 +9,7 @@ import { TiTick } from "react-icons/ti"
 import { Glow, GlowCapture } from "@codaworks/react-glow"
 import ImageFilter from "components/ImageFilter/ImageFilter"
 import { BsGlobe2, BsAndroid, BsApple, BsHeadsetVr } from "react-icons/bs"
+import { motion } from "framer-motion"
 
 export default function Web() {
   const [init, setInit] = useState(false)
@@ -16,6 +17,10 @@ export default function Web() {
   const imgStyle = {
     transform: hovered ? "translateX(3px)" : "none",
     transition: "transform .2s", // Optional: Smooth transition
+  }
+  const wordVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.9, staggerChildren: 0.1 } },
   }
   return (
     <div>
@@ -32,13 +37,33 @@ export default function Web() {
           >
             <div className="mx-auto grid max-w-screen-xl px-4 py-8 text-center lg:py-16">
               <div className="mx-auto place-self-center">
-                <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-none tracking-tight text-white md:text-5xl xl:text-6xl">
-                  Experience the next dimension
-                </h1>
-                <p className="mb-6 max-w-2xl font-light  text-gray-200 md:text-lg lg:mb-8 lg:text-xl">
-                  Let us transform your vision into reality with cutting-edge VR/AR experiences and custom software
-                  solutions powered by AI.
-                </p>
+                <motion.h1
+                  className="mb-4 max-w-2xl text-4xl font-extrabold leading-none tracking-tight text-white md:text-5xl xl:text-6xl"
+                  initial="hidden"
+                  animate="visible"
+                  variants={wordVariants}
+                >
+                  {" "}
+                  {"Experience the next dimension".split(" ").map((word, index) => (
+                    <motion.span key={index} variants={wordVariants}>
+                      {word}{" "}
+                    </motion.span>
+                  ))}
+                </motion.h1>
+                <motion.p
+                  initial="hidden"
+                  animate="visible"
+                  variants={wordVariants}
+                  className="mb-6 max-w-2xl font-light  text-gray-200 md:text-lg lg:mb-8 lg:text-xl"
+                >
+                  {"Let us transform your vision into reality with cutting-edge VR/AR experiences and custom software solutions powered by AI."
+                    .split(" ")
+                    .map((word, index) => (
+                      <motion.span key={index} variants={wordVariants}>
+                        {word}{" "}
+                      </motion.span>
+                    ))}
+                </motion.p>
                 <Button
                   href="https://github.com/Blazity/next-enterprise"
                   className="mr-3 "
@@ -177,7 +202,7 @@ export default function Web() {
                           stroke="currentColor"
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeWidth="2"
                           className="ml-2 h-4 w-4"
                           viewBox="0 0 24 24"
                         >
@@ -216,7 +241,7 @@ export default function Web() {
                           stroke="currentColor"
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeWidth="2"
                           className="ml-2 h-4 w-4"
                           viewBox="0 0 24 24"
                         >
@@ -254,7 +279,7 @@ export default function Web() {
                           stroke="currentColor"
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeWidth="2"
                           className="ml-2 h-4 w-4"
                           viewBox="0 0 24 24"
                         >
@@ -293,7 +318,7 @@ export default function Web() {
                           stroke="currentColor"
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeWidth="2"
                           className="ml-2 h-4 w-4"
                           viewBox="0 0 24 24"
                         >

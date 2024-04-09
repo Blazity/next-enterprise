@@ -23,4 +23,16 @@ export const FilterableData = [
     title: "Billing App",
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
+  {
+    name: "Web",
+    src: "/images/site05.png",
+    title: "Billing App",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  },
+  {
+    name: "Web",
+    src: "/images/site06.png",
+    title: "Billing App",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  },
 ]
