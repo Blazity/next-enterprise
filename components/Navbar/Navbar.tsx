@@ -1,11 +1,11 @@
 "use client"
-interface NavbarProps {
-  logoSrc: string // Path to your logo image
-}
-
 import { useState, useEffect } from "react"
 import { Button } from "components/Button/Button"
 import { FaArrowRight } from "react-icons/fa"
+
+interface NavbarProps {
+  logoSrc: string // Path to your logo image
+}
 
 const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
   const [showBackground, setShowBackground] = useState(false)
@@ -36,13 +36,18 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
   return (
     <nav
       className={`${
-        showBackground ? "backdrop-blur" : "bg-transparent"
-      } fixed left-0 top-0 z-50 flex h-20 w-full items-center justify-between px-4 text-white`}
+        showBackground ? "backdrop-blur-2xl" : "bg-transparent"
+      } fixed left-0 top-0 z-50 flex h-20 w-full items-center justify-between px-4 px-[8.5rem] py-[1rem] text-white transition-all`}
     >
       <a href="/">
-        <img src={logoSrc} alt="Your Logo" className="h-20 text-white" />
+        <img
+          src={logoSrc}
+          alt="Vizole Labs"
+          className="h-8
+       text-white"
+        />
       </a>
-      <ul className="hidden space-x-4 text-lg font-medium md:flex">
+      <ul className="text-md font-ligth hidden space-x-4 md:flex">
         <li>
           <a href="/" className="hover:text-vizoleG2">
             Home
