@@ -2,7 +2,7 @@
 
 import { Button } from "components/Button/Button"
 import { useState } from "react"
-import { Image } from "./image"
+import { ImageCard } from "./image"
 import { FilterableData } from "./FilterableData"
 import { CardBody, CardContainer, CardItem } from "components/Ui/Card"
 import { motion } from "framer-motion" // Import motion
@@ -33,11 +33,16 @@ const ImageFilter = () => {
         ))}
         {/* filtered cards display */}
       </div>
-      <main className="grid w-full gap-x-5 gap-y-8 md:mt-8 md:grid-cols-2 lg:grid-cols-3">
+      {/* <main className="grid w-full gap-x-5 gap-y-8 md:mt-8 md:grid-cols-2 lg:grid-cols-3"> */}
+      <main className="grid max-w-full grid-cols-1 place-items-center gap-3 p-4 md:max-w-full md:grid-cols-3">
         {FilterableData.map((item, index) => (
           <motion.div
             key={index}
-            layout
+            layout={"position"}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
             className={`w-full cursor-pointer rounded-lg border border-gray-600 bg-gray-800 shadow  ${
               activeFilter === "all" || activeFilter === item.name
                 ? "" /* Show card */
@@ -46,8 +51,8 @@ const ImageFilter = () => {
           >
             <CardContainer>
               <CardBody>
-                <Image
-                  className="h-[400px] w-full overflow-hidden rounded-lg"
+                <ImageCard
+                  className="h-full w-full overflow-hidden rounded-lg"
                   image={item.src}
                   alt={item.name}
                   objectCover="object-cover"

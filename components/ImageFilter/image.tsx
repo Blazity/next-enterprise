@@ -7,8 +7,9 @@ type ImageOwnProps<T extends React.ElementType> = {
 }
 
 type ImageProps<T extends React.ElementType> = ImageOwnProps<T> & Omit<React.ComponentProps<T>, keyof ImageOwnProps<T>>
+import Image from "next/image"
 
-export const Image = <T extends React.ElementType = "div">({
+export const ImageCard = <T extends React.ElementType = "div">({
   className,
   image,
   alt,
@@ -19,7 +20,7 @@ export const Image = <T extends React.ElementType = "div">({
   const Component = as || "div"
   return (
     <Component className={className} {...rest}>
-      <img src={image} alt={alt} className={`h-full w-full ${objectCover}`} />
+      <Image src={image} width={400} height={400} alt={alt} className={`h-full w-full ${objectCover}`} />
     </Component>
   )
 }

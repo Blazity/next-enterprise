@@ -1,20 +1,14 @@
 "use client"
-import { Metadata } from "next"
+
 import { Button } from "components/Button/Button"
 import { InfiniteSlider } from "components/Slider/Slider"
 import { useState } from "react"
-import Navbar from "components/Navbar/Navbar"
-import { LP_GRID_ITEMS } from "lp-items"
 import { FaArrowRight, FaFileCsv, FaNewspaper } from "react-icons/fa"
 import "../styles/custom.css"
-import { MdOutlineWeb } from "react-icons/md"
 import { TiTick } from "react-icons/ti"
-import { MdOutlineAppSettingsAlt } from "react-icons/md"
 import { Glow, GlowCapture } from "@codaworks/react-glow"
-import StarBackground from "components/StarBackground/StarBackground"
-import { Textarea } from "@nextui-org/react"
 import ImageFilter from "components/ImageFilter/ImageFilter"
-import { BackgroundBeams } from "components/Ui/BackgroundBeams"
+import { BsGlobe2, BsAndroid, BsApple, BsHeadsetVr } from "react-icons/bs"
 
 export default function Web() {
   const [init, setInit] = useState(false)
@@ -160,7 +154,7 @@ export default function Web() {
                 <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow">
                   <div className=" text-center">
                     <div className="mr-3 inline-flex flex-shrink-0 items-center justify-center rounded-full px-5 ">
-                      <MdOutlineWeb className="h-[80px] w-[80px] text-white" />
+                      <BsGlobe2 className="h-[50px] w-[50px] text-white" />
                     </div>
                   </div>
                   <div className="flex h-full flex-col rounded-lg ">
@@ -171,8 +165,7 @@ export default function Web() {
                     </div>
                     <div className="flex flex-grow flex-col justify-between">
                       <p className="text-base leading-relaxed text-gray-300">
-                        We specialize in creating modern, user-friendly websites that reflect your brand and drive
-                        business growth.
+                        We craft engaging and responsive websites that captivate users and drive business growth.
                       </p>
                       <a
                         href="#"
@@ -199,19 +192,19 @@ export default function Web() {
                 <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow">
                   <div className=" text-center">
                     <div className="mr-3 inline-flex flex-shrink-0 items-center justify-center rounded-full px-5 ">
-                      <MdOutlineAppSettingsAlt className="h-[80px] w-[80px] text-white" />
+                      <BsApple className="h-[50px] w-[50px] text-white" />
                     </div>
                   </div>
                   <div className="flex h-full flex-col rounded-lg ">
                     <div className="mb-3 flex items-center ">
                       <h2 className="mb-4 max-w-3xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-3xl">
-                        IOS / Android App Development
+                        IOS Application Development
                       </h2>
                     </div>
                     <div className="flex flex-grow flex-col justify-between">
                       <p className="text-base leading-relaxed text-gray-300">
-                        We specialize in creating modern, user-friendly websites that reflect your brand and drive
-                        business growth.
+                        Our skilled team designs and develops intuitive iOS apps that seamlessly integrate with Apple
+                        devices.
                       </p>
                       <a
                         href="#"
@@ -238,19 +231,18 @@ export default function Web() {
                 <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow">
                   <div className=" text-center">
                     <div className="mr-3 inline-flex flex-shrink-0 items-center justify-center rounded-full px-5 ">
-                      <MdOutlineWeb className="h-[80px] w-[80px] text-white" />
+                      <BsAndroid className="h-[50px] w-[50px] text-white" />
                     </div>
                   </div>
                   <div className="flex h-full flex-col rounded-lg ">
                     <div className="mb-3 flex items-center ">
                       <h2 className="mb-4 max-w-3xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-3xl">
-                        Web Devlopment
+                        Android Application Development
                       </h2>
                     </div>
                     <div className="flex flex-grow flex-col justify-between">
                       <p className="text-base leading-relaxed text-gray-300">
-                        We specialize in creating modern, user-friendly websites that reflect your brand and drive
-                        business growth.
+                        From concept to deployment, we create robust Android apps that cater to a diverse user base.
                       </p>
                       <a
                         href="#"
@@ -277,19 +269,19 @@ export default function Web() {
                 <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow">
                   <div className=" text-center">
                     <div className="mr-3 inline-flex flex-shrink-0 items-center justify-center rounded-full px-5 ">
-                      <MdOutlineWeb className="h-[80px] w-[80px] text-white" />
+                      <BsHeadsetVr className="h-[50px] w-[50px] text-white" />
                     </div>
                   </div>
                   <div className="flex h-full flex-col rounded-lg ">
                     <div className="mb-3 flex items-center ">
                       <h2 className="mb-4 max-w-3xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-3xl">
-                        Web Devlopment
+                        Apps for AR Devices
                       </h2>
                     </div>
                     <div className="flex flex-grow flex-col justify-between">
                       <p className="text-base leading-relaxed text-gray-300">
-                        We specialize in creating modern, user-friendly websites that reflect your brand and drive
-                        business growth.
+                        Immerse users in augmented reality experiences with our cutting-edge applications for MetaQuest
+                        and Apple Vision Pro.
                       </p>
                       <a
                         href="#"
@@ -317,7 +309,7 @@ export default function Web() {
         </div>
       </section>
 
-      <section className="mb-32 h-[150vh] bg-[#0f172a] pl-[10%] pr-[10%] pt-40">
+      <section className="mb-10 h-[20%] bg-[#0f172a] pl-[10%] pr-[10%] pt-40">
         <div className="mx-auto place-self-center text-center">
           <div className="mb-4 text-center text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-5xl">
             <h1 className="bg-gradient-to-r from-slate-400 via-white to-slate-400 bg-clip-text text-transparent">
@@ -329,10 +321,12 @@ export default function Web() {
             digital transformation across industries.”
           </p>
         </div>
-        <ImageFilter />
+        <div>
+          <ImageFilter />
+        </div>
       </section>
 
-      <section className="bg-[#0f172a] dark:bg-gray-900 md:pt-[8%] lg:pt-[5%]">
+      <section className="bg-[#0f172a] max-md:p-4 md:pl-0 md:pr-0 lg:pl-[10%] lg:pr-[10%]">
         <div className="mx-auto max-w-screen-md px-4 py-8 lg:py-16">
           <h2 className="mb-4 text-center text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-5xl">
             Contact Us
