@@ -2,9 +2,7 @@
 const { pick, omit } = require("lodash")
 const colors = require("tailwindcss/colors")
 const defaultTheme = require("tailwindcss/defaultTheme")
-const {
-  default: flattenColorPalette,
-} = require("tailwindcss/lib/util/flattenColorPalette");
+const { default: flattenColorPalette } = require("tailwindcss/lib/util/flattenColorPalette")
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
@@ -19,7 +17,7 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        '3xl': '0 35px 60px -15px rgba(0, 0, 200, 0.3)',
+        "3xl": "0 35px 60px -15px rgba(0, 0, 200, 0.3)",
       },
       colors: {
         black: "#0f172a",
@@ -95,6 +93,8 @@ module.exports = {
       },
       animation: {
         ["infinite-slider"]: "infiniteSlider 20s linear infinite",
+        openmenu: "openmenu 1s ease-in",
+        closemenu: "closemenu 1s ease-in",
       },
       keyframes: {
         infiniteSlider: {
@@ -106,22 +106,17 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@codaworks/react-glow/tailwind'),
-    addVariablesForColors
-  ],
+  plugins: [require("@codaworks/react-glow/tailwind"), addVariablesForColors],
   future: {
     hoverOnlyWhenSupported: true,
   },
 }
 
 function addVariablesForColors({ addBase, theme }) {
-  let allColors = flattenColorPalette(theme("colors"));
-  let newVars = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
-  );
+  let allColors = flattenColorPalette(theme("colors"))
+  let newVars = Object.fromEntries(Object.entries(allColors).map(([key, val]) => [`--${key}`, val]))
 
   addBase({
     ":root": newVars,
-  });
+  })
 }

@@ -49,13 +49,13 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
         showBackground ? "backdrop-blur" : "bg-transparent"
       } fixed start-0 top-0 z-20 w-full bg-transparent dark:border-gray-600 dark:bg-gray-900`}
     >
-      <section className="MOBILE-MENU flex hidden" style={mobileNavStyle}>
+      <section className="MOBILE-MENU flex hidden backdrop-blur-lg" style={mobileNavStyle}>
         <div>
           {" "}
           <div className="CROSS-ICON absolute right-0 top-0 px-8 py-8">
             <button onClick={() => setIsNavOpen(!isNavOpen)}>
               <svg
-                className="h-8 w-8 text-gray-600"
+                className="h-8 w-8 text-white"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -68,24 +68,24 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
               </svg>
             </button>
           </div>
-          <ul className="MENU-LINK-MOBILE-OPEN flex min-h-[300px] flex-col items-center justify-center text-white backdrop-blur">
+          <ul className="MENU-LINK-MOBILE-OPEN flex min-h-[300px] flex-col items-center justify-center text-white">
             <li className="my-2 border-b border-gray-400 uppercase">
-              <a href="/about">Home</a>
+              <a href="#">Home</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
-              <a href="/portfolio">Services</a>
+              <a href="#">Services</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
-              <a href="/contact">Portfolio</a>
+              <a href="#">Portfolio</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
-              <a href="/contact">About</a>
+              <a href="#">About</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
-              <a href="/contact">Sign In</a>
+              <a href="#">Sign In</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
-              <a href="/contact">Sign Up</a>
+              <a href="#">Sign Up</a>
             </li>
           </ul>
         </div>
