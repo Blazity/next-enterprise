@@ -12,7 +12,7 @@ export default function AboutUs() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="flex w-[100%] items-center justify-around pb-[10vh] pt-[5vh] max-md:flex-wrap">
+      <div className="flex w-[100%] justify-around pb-[10vh] pt-[5vh] max-md:flex-wrap">
         <div className="mx-auto max-w-screen-xl px-4 py-8 lg:py-16">
           <div className="mx-auto text-left text-white">
             <h4 className="bg-gradient-to-r from-vizoleG1 via-vizoleG2 to-vizoleG3 bg-clip-text pt-20 font-bold text-transparent ">
@@ -28,7 +28,7 @@ export default function AboutUs() {
             </h3>
           </div>
 
-          <div className="mx-auto mt-3 flex flex-col justify-around text-left text-white">
+          <div className=" mt-3 flex flex-col justify-around text-left text-white">
             <Button
               href="https://vercel.com/new/git/external?repository-url=https://github.com/Blazity/next-enterprise"
               intent="aboutUs"
@@ -56,12 +56,12 @@ export default function AboutUs() {
           </div>
         </div>
         <div>
-          <iframe
+          {/* <iframe
             className="h-[315px] w-[560px] max-md:h-[14rem] max-md:w-[25rem]"
             src="https://www.youtube.com/embed/_vhf0RZg0fg"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          ></iframe>
+          ></iframe> */}
         </div>
       </div>
     </div>
