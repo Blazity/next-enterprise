@@ -1,16 +1,3 @@
-import {
-  FigmaLogoIcon,
-  FramerLogoIcon,
-  SketchLogoIcon,
-  TwitterLogoIcon,
-  GitHubLogoIcon,
-  VercelLogoIcon,
-  NotionLogoIcon,
-  DiscordLogoIcon,
-  InstagramLogoIcon,
-  LinkedInLogoIcon,
-} from "@radix-ui/react-icons"
-
 const LOGOS = [
   "/images/Amazon_Web_Services-Logo.wine.svg",
   "/images/Cisco_Systems-Logo.wine.svg",

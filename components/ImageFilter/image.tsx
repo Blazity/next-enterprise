@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 type ImageOwnProps<T extends React.ElementType> = {
   className: string
   image: string
@@ -7,7 +9,6 @@ type ImageOwnProps<T extends React.ElementType> = {
 }
 
 type ImageProps<T extends React.ElementType> = ImageOwnProps<T> & Omit<React.ComponentProps<T>, keyof ImageOwnProps<T>>
-import Image from "next/image"
 
 export const ImageCard = <T extends React.ElementType = "div">({
   className,

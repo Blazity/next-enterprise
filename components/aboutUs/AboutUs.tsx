@@ -24,7 +24,8 @@ export default function AboutUs() {
               </h2>
             </div>
             <h3 className="mr-90 max-w-2xl text-slate-300">
-              we're dedicated to bringing your ideas to life with innovative solutions tailored to your unique needs.
+              we&apos; re dedicated to bringing your ideas to life with innovative solutions tailored to your unique
+              needs.
             </h3>
           </div>
 

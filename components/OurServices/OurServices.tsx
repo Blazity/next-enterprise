@@ -1,4 +1,4 @@
-import { GlowCapture, Glow } from "@codaworks/react-glow"
+import { Glow, GlowCapture } from "@codaworks/react-glow"
 import { BsAndroid, BsApple, BsGlobe2, BsHeadsetVr } from "react-icons/bs"
 
 export default function OurServices() {

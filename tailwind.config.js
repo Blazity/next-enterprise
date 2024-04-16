@@ -104,6 +104,14 @@ module.exports = {
           },
         },
       },
+      openmenu: {
+        "0%": { left: "-224px" },
+        "100%": { left: "0px" },
+      },
+      closemenu: {
+        "0%": { left: "0px" },
+        "100%": { left: "-224px" },
+      },
     },
   },
   plugins: [require("@codaworks/react-glow/tailwind"), addVariablesForColors],

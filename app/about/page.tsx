@@ -1,5 +1,6 @@
 "use client"
-import React, { useRef, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
+import { useRef } from "react"
 
 const MouseTrackingGlowEffect: React.FC = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 })

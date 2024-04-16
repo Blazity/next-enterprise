@@ -1,11 +1,12 @@
 "use client"
+
+import { useEffect, useState } from "react"
+import { Button } from "components/Button/Button"
+import { FaArrowRight } from "react-icons/fa"
+
 interface NavbarProps {
   logoSrc: string // Path to your logo image
 }
-
-import { useState, useEffect } from "react"
-import { Button } from "components/Button/Button"
-import { FaArrowRight } from "react-icons/fa"
 
 const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
   const [showBackground, setShowBackground] = useState(false)
@@ -49,7 +50,10 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
         showBackground ? "backdrop-blur" : "bg-transparent"
       } fixed start-0 top-0 z-20 w-full bg-transparent dark:border-gray-600 dark:bg-gray-900`}
     >
-      <section className="MOBILE-MENU flex hidden backdrop-blur-lg" style={mobileNavStyle}>
+      <section
+        className={`${isNavOpen ? "animate-openmenu" : "animate-closemenu"}  block  backdrop-blur-lg`}
+        style={mobileNavStyle}
+      >
         <div>
           {" "}
           <div className="CROSS-ICON absolute right-0 top-0 px-8 py-8">
@@ -68,7 +72,7 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
               </svg>
             </button>
           </div>
-          <ul className="MENU-LINK-MOBILE-OPEN flex min-h-[300px] flex-col items-center justify-center text-white">
+          <ul className="MENU-LINK-MOBILE-OPEN flex h-full min-h-[300px]  flex-col items-center justify-center text-white">
             <li className="my-2 border-b border-gray-400 uppercase">
               <a href="#">Home</a>
             </li>
