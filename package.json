@@ -57,6 +57,7 @@
     "@vercel/otel": "^0.3.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "flowbite-react": "^0.9.0",
     "framer-motion": "^11.0.25",
     "lodash": "^4.17.21",
     "next": "^14.0.3",

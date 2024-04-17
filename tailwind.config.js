@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { pick, omit } = require("lodash")
+const { pick, omit, max } = require("lodash")
 const colors = require("tailwindcss/colors")
 const defaultTheme = require("tailwindcss/defaultTheme")
 const { default: flattenColorPalette } = require("tailwindcss/lib/util/flattenColorPalette")
@@ -15,6 +15,10 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    // screens: {
+    //   fold: { raw: "(min-width: 280px)" },
+    //   ...defaultTheme.screens,
+    // },
     extend: {
       boxShadow: {
         "3xl": "0 35px 60px -15px rgba(0, 0, 200, 0.3)",

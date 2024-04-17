@@ -5,7 +5,7 @@ export default function OurServices() {
   return (
     <div>
       <GlowCapture>
-        <div className="flex flex-col items-center justify-around">
+        <div className="z_fold:w-[100%] flex flex-col items-center justify-around">
           <div className="mb-4 max-w-3xl text-center text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-5xl">
             <h2 className="bg-gradient-to-r from-slate-400 via-white to-slate-400 bg-clip-text text-transparent">
               Our Services
@@ -16,25 +16,28 @@ export default function OurServices() {
             powered by AI.
           </p>
         </div>
-        <div className="mt-10 grid max-w-full grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2">
+        <div className=" mt-10 grid max-w-full grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2">
           <Glow color="#F0B37D">
-            <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow">
+            <div className="glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow max-md:flex-wrap max-md:items-center max-md:justify-center">
               <div className=" text-center">
                 <div className="mr-3 inline-flex flex-shrink-0 items-center justify-center rounded-full px-5 ">
                   <BsGlobe2 className="h-[50px] w-[50px] text-white" />
                 </div>
               </div>
-              <div className="flex h-full flex-col rounded-lg ">
+              <div className="z_fold:w-[100%] flex h-full flex-col rounded-lg max-md:items-center max-md:justify-center">
                 <div className="mb-3 flex items-center ">
-                  <h2 className="mb-4 max-w-3xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-3xl">
+                  <h2 className="mb-4 max-w-3xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white max-md:text-center md:text-4xl xl:text-3xl">
                     Web Devlopment
                   </h2>
                 </div>
                 <div className="flex flex-grow flex-col justify-between">
-                  <p className="text-base leading-relaxed text-gray-300">
+                  <p className="text-justify text-base leading-relaxed text-gray-300">
                     We craft engaging and responsive websites that captivate users and drive business growth.
                   </p>
-                  <a href="#" className="mt-3 inline-flex items-center text-gray-300 hover:text-white dark:text-white">
+                  <a
+                    href="#"
+                    className="mt-3 inline-flex items-center text-gray-300 hover:text-white dark:text-white max-md:text-center"
+                  >
                     Learn More
                     <svg
                       fill="none"
@@ -53,15 +56,15 @@ export default function OurServices() {
             </div>
           </Glow>
           <Glow color="#F0B37D">
-            <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow">
+            <div className="glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow max-md:flex-wrap max-md:items-center max-md:justify-center">
               <div className=" text-center">
                 <div className="mr-3 inline-flex flex-shrink-0 items-center justify-center rounded-full px-5 ">
                   <BsApple className="h-[50px] w-[50px] text-white" />
                 </div>
               </div>
-              <div className="flex h-full flex-col rounded-lg ">
+              <div className="flex h-full flex-col rounded-lg max-md:flex-wrap max-md:items-center max-md:justify-center">
                 <div className="mb-3 flex items-center ">
-                  <h2 className="mb-4 max-w-3xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-3xl">
+                  <h2 className="mb-4 max-w-3xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white max-md:text-center md:text-4xl xl:text-3xl">
                     IOS Application Development
                   </h2>
                 </div>
@@ -70,7 +73,10 @@ export default function OurServices() {
                     Our skilled team designs and develops intuitive iOS apps that seamlessly integrate with Apple
                     devices.
                   </p>
-                  <a href="#" className="mt-3 inline-flex items-center text-gray-300 hover:text-white dark:text-white">
+                  <a
+                    href="#"
+                    className="mt-3 inline-flex items-center text-gray-300 hover:text-white dark:text-white max-md:text-center"
+                  >
                     Learn More
                     <svg
                       fill="none"
@@ -89,15 +95,15 @@ export default function OurServices() {
             </div>
           </Glow>
           <Glow color="#F0B37D">
-            <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow">
+            <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow max-md:flex-wrap max-md:items-center max-md:justify-center">
               <div className=" text-center">
                 <div className="mr-3 inline-flex flex-shrink-0 items-center justify-center rounded-full px-5 ">
                   <BsAndroid className="h-[50px] w-[50px] text-white" />
                 </div>
               </div>
-              <div className="flex h-full flex-col rounded-lg ">
+              <div className="flex h-full flex-col rounded-lg max-md:flex-wrap max-md:items-center max-md:justify-center ">
                 <div className="mb-3 flex items-center ">
-                  <h2 className="mb-4 max-w-3xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-3xl">
+                  <h2 className="mb-4 max-w-3xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white max-md:text-center md:text-4xl xl:text-3xl">
                     Android Application Development
                   </h2>
                 </div>
@@ -105,7 +111,10 @@ export default function OurServices() {
                   <p className="text-base leading-relaxed text-gray-300">
                     From concept to deployment, we create robust Android apps that cater to a diverse user base.
                   </p>
-                  <a href="#" className="mt-3 inline-flex items-center text-gray-300 hover:text-white dark:text-white">
+                  <a
+                    href="#"
+                    className="mt-3 inline-flex items-center text-gray-300 hover:text-white dark:text-white max-md:text-center"
+                  >
                     Learn More
                     <svg
                       fill="none"
@@ -124,15 +133,15 @@ export default function OurServices() {
             </div>
           </Glow>
           <Glow color="#F0B37D">
-            <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow">
+            <div className=" glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow max-md:flex-wrap max-md:items-center max-md:justify-center">
               <div className=" text-center">
                 <div className="mr-3 inline-flex flex-shrink-0 items-center justify-center rounded-full px-5 ">
                   <BsHeadsetVr className="h-[50px] w-[50px] text-white" />
                 </div>
               </div>
-              <div className="flex h-full flex-col rounded-lg ">
+              <div className="flex h-full flex-col rounded-lg max-md:flex-wrap max-md:items-center max-md:justify-center">
                 <div className="mb-3 flex items-center ">
-                  <h2 className="mb-4 max-w-3xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-3xl">
+                  <h2 className="mb-4 max-w-3xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white max-md:text-center md:text-4xl xl:text-3xl">
                     Apps for AR Devices
                   </h2>
                 </div>
@@ -141,7 +150,10 @@ export default function OurServices() {
                     Immerse users in augmented reality experiences with our cutting-edge applications for MetaQuest and
                     Apple Vision Pro.
                   </p>
-                  <a href="#" className="mt-3 inline-flex items-center text-gray-300 hover:text-white dark:text-white">
+                  <a
+                    href="#"
+                    className="mt-3 inline-flex items-center text-gray-300 hover:text-white dark:text-white max-md:text-center"
+                  >
                     Learn More
                     <svg
                       fill="none"

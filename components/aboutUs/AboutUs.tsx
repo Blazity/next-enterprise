@@ -1,7 +1,11 @@
 import { Button } from "components/Button/Button"
 import { TiTick } from "react-icons/ti"
-
+import { BsPlayCircle } from "react-icons/bs"
+import { Modal } from "components/Modal/Modal"
+import { useState } from "react"
+import { motion } from "framer-motion"
 export default function AboutUs() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   return (
     <div
       className=" h-[60%] rounded-[3rem] max-md:rounded-none"
@@ -12,7 +16,11 @@ export default function AboutUs() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="flex w-[100%] justify-around pb-[10vh] pt-[5vh] max-md:flex-wrap">
+      <motion.div
+        animate={{ y: -50 }}
+        transition={{ delay: 1 }}
+        className="flex w-[100%] justify-around pb-[10vh] pt-[5vh] max-md:flex-wrap"
+      >
         <div className="mx-auto max-w-screen-xl px-4 py-8 lg:py-16">
           <div className="mx-auto text-left text-white">
             <h4 className="bg-gradient-to-r from-vizoleG1 via-vizoleG2 to-vizoleG3 bg-clip-text pt-20 font-bold text-transparent ">
@@ -56,15 +64,24 @@ export default function AboutUs() {
             </Button>
           </div>
         </div>
-        <div>
-          {/* <iframe
-            className="h-[315px] w-[560px] max-md:h-[14rem] max-md:w-[25rem]"
-            src="https://www.youtube.com/embed/_vhf0RZg0fg"
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          ></iframe> */}
+        <div className="flex flex-col justify-around">
+          <div className="flex h-[315px] w-[560px] items-center justify-center bg-white max-md:h-[250px] max-md:w-[375px]">
+            <div className="flex h-full w-full items-center justify-center">
+              <BsPlayCircle
+                className="fold:h-[20%] fold:w-[20%] h-[10%] w-[10%] cursor-pointer self-center"
+                onClick={() => setIsModalOpen(true)}
+              />
+              <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <iframe
+                  className="z_fold:w-[280px] z_fold:h-[170px] h-[315px] w-[560px] max-md:h-[250px] max-md:w-[375px]"
+                  src="https://www.youtube.com/embed/SKIXCPn2xB0?si=tQOw37hJEEzbFKFn"
+                  title="YouTube video player"
+                ></iframe>
+              </Modal>
+            </div>
+          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

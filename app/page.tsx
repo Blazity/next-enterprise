@@ -30,6 +30,7 @@ export default function Web() {
       <section className="bg-[#0f172a] md:pl-0 md:pr-0 lg:pl-[15%] lg:pr-[15%]">
         <AboutUs />
       </section>
+
       <section className="mt-[3%] bg-[#0f172a] max-md:p-4 md:pl-0 md:pr-0 lg:pl-[10%] lg:pr-[10%]">
         <OurServices />
       </section>
