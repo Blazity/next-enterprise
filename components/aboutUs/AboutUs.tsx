@@ -4,8 +4,10 @@ import { BsPlayCircle } from "react-icons/bs"
 import { Modal } from "components/Modal/Modal"
 import { useState } from "react"
 import { motion } from "framer-motion"
+
 export default function AboutUs() {
   const [isModalOpen, setIsModalOpen] = useState(false)
+
   return (
     <div
       className=" h-[60%] rounded-[3rem] max-md:rounded-none"
@@ -16,11 +18,7 @@ export default function AboutUs() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <motion.div
-        animate={{ y: -50 }}
-        transition={{ delay: 1 }}
-        className="flex w-[100%] justify-around pb-[10vh] pt-[5vh] max-md:flex-wrap"
-      >
+      <div className="flex w-[100%] justify-around pb-[10vh] pt-[5vh] max-md:flex-wrap">
         <div className="mx-auto max-w-screen-xl px-4 py-8 lg:py-16">
           <div className="mx-auto text-left text-white">
             <h4 className="bg-gradient-to-r from-vizoleG1 via-vizoleG2 to-vizoleG3 bg-clip-text pt-20 font-bold text-transparent ">
@@ -81,7 +79,7 @@ export default function AboutUs() {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }
