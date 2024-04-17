@@ -63,10 +63,18 @@ export default function AboutUs() {
           </div>
         </div>
         <div className="flex flex-col justify-around">
-          <div className="flex h-[315px] w-[560px] items-center justify-center bg-white max-md:h-[250px] max-md:w-[375px]">
-            <div className="flex h-full w-full items-center justify-center">
+          <div
+            className="flex h-[315px] w-[560px] items-center justify-center bg-white max-md:h-[250px] max-md:w-[375px]"
+            style={{
+              backgroundImage: `url('/images/player_background.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+            <div className="z-50 flex h-full w-full items-center justify-center">
               <BsPlayCircle
-                className="fold:h-[20%] fold:w-[20%] h-[10%] w-[10%] cursor-pointer self-center"
+                className="fold:h-[20%] fold:w-[20%] h-[20%] w-[20%] cursor-pointer self-center text-vizoleG2"
                 onClick={() => setIsModalOpen(true)}
               />
               <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>

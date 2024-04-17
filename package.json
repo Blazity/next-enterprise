@@ -69,6 +69,7 @@
     "react-intersection-observer": "^9.8.2",
     "react-reveal": "^1.2.2",
     "react-scroll-motion": "^0.3.3",
+    "react-starfield-animation": "^1.0.1",
     "react-tsparticles": "^2.12.2",
     "tailwind-merge": "^2.2.2",
     "tailwind-variants": "^0.2.1",
