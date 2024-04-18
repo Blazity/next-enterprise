@@ -33,7 +33,6 @@ const ImageFilter = () => {
         ))}
         {/* filtered cards display */}
       </div>
-      {/* <main className="grid w-full gap-x-5 gap-y-8 md:mt-8 md:grid-cols-2 lg:grid-cols-3"> */}
       <main className="grid max-w-full grid-cols-1 place-items-center gap-3 p-4 md:max-w-full md:grid-cols-3">
         {FilterableData.map((item, index) => (
           <motion.div

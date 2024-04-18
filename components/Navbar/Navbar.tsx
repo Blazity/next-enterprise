@@ -156,7 +156,7 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
               <div className="mt-2 flex flex-col rounded-lg border border-gray-100 bg-transparent font-medium rtl:space-x-reverse dark:border-gray-700 dark:bg-gray-800 md:mt-2 md:flex-row md:space-x-8 md:border-0 md:bg-transparent md:p-0 md:dark:bg-gray-900">
                 <li>
                   <a
-                    href="#"
+                    href="#home"
                     className="block rounded px-3 py-2 text-white hover:text-vizoleG2 md:p-0"
                     aria-current="page"
                   >
@@ -165,7 +165,7 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="#services"
                     className="block rounded px-3 py-2 text-white hover:bg-gray-100 hover:text-vizoleG2 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
                   >
                     Services
@@ -173,7 +173,7 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="#portfolio"
                     className="block rounded px-3 py-2 text-white hover:bg-gray-100 hover:text-vizoleG2 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
                   >
                     Portfolio
@@ -181,7 +181,7 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="#aboutUs"
                     className="block rounded px-3 py-2 text-white hover:bg-gray-100 hover:text-vizoleG2 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
                   >
                     About

@@ -22,7 +22,6 @@ function Footer() {
         <div className="p-5">
           <ul>
             <p className="pb-4 text-2xl font-bold text-white">Services</p>
-            <li className="text-md cursor-pointer pb-2 font-semibold text-gray-500 hover:text-vizoleG2">Stocks</li>
             <li className="text-md cursor-pointer pb-2 font-semibold text-gray-500 hover:text-vizoleG2">
               Web Development
             </li>

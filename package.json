@@ -60,6 +60,7 @@
     "clsx": "^2.1.0",
     "flowbite-react": "^0.9.0",
     "framer-motion": "^11.0.25",
+    "gsap": "^3.12.5",
     "lodash": "^4.17.21",
     "next": "^14.0.3",
     "next-compose-plugins": "^2.2.1",
@@ -71,9 +72,13 @@
     "react-scroll-motion": "^0.3.3",
     "react-starfield-animation": "^1.0.1",
     "react-tsparticles": "^2.12.2",
+    "react-use": "^17.5.0",
+    "react-wow": "^1.0.0",
     "tailwind-merge": "^2.2.2",
     "tailwind-variants": "^0.2.1",
     "tsparticles": "^3.3.0",
+    "wow.js": "^1.2.2",
+    "wowjs": "^1.1.3",
     "zod": "^3.22.4"
   },
   "devDependencies": {
