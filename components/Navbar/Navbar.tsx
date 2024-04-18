@@ -74,16 +74,16 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
           </div>
           <ul className="MENU-LINK-MOBILE-OPEN flex h-full min-h-[300px]  flex-col items-center justify-center text-white">
             <li className="my-2 border-b border-gray-400 uppercase">
-              <a href="#">Home</a>
+              <a href="#home">Home</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
-              <a href="#">Services</a>
+              <a href="#services">Services</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
-              <a href="#">Portfolio</a>
+              <a href="#portfolio">Portfolio</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
-              <a href="#">About</a>
+              <a href="#aboutUs">About</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
               <a href="#">Sign In</a>
