@@ -49,7 +49,7 @@ export default function OurServices() {
                       <svg
                         fill="none"
                         stroke="currentColor"
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                         stroke-linejoin="round"
                         strokeWidth="2"
                         className="ml-2 h-4 w-4"
@@ -90,7 +90,7 @@ export default function OurServices() {
                       <svg
                         fill="none"
                         stroke="currentColor"
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                         stroke-linejoin="round"
                         strokeWidth="2"
                         className="ml-2 h-4 w-4"
@@ -130,7 +130,7 @@ export default function OurServices() {
                       <svg
                         fill="none"
                         stroke="currentColor"
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                         stroke-linejoin="round"
                         strokeWidth="2"
                         className="ml-2 h-4 w-4"
@@ -171,7 +171,7 @@ export default function OurServices() {
                       <svg
                         fill="none"
                         stroke="currentColor"
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                         stroke-linejoin="round"
                         strokeWidth="2"
                         className="ml-2 h-4 w-4"

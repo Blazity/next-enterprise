@@ -101,11 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
           </a>
           <div className="flex space-x-3 rtl:space-x-reverse md:order-3 md:space-x-0">
             <li className="hidden md:block">
-              <Button
-                href="https://vercel.com/new/git/external?repository-url=https://github.com/Blazity/next-enterprise"
-                intent="navSignIn"
-                size="hero1"
-              >
+              <Button href="/auth/SignIn" intent="navSignIn" size="hero1">
                 Sign In
               </Button>
             </li>
@@ -143,7 +139,7 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
+                  strokeLinecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
                   d="M1 1h15M1 7h15M1 13h15"
