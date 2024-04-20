@@ -4,6 +4,7 @@ import "styles/custom.css"
 import Navbar from "components/Navbar/Navbar"
 
 import Footer from "components/Footer/Footer"
+import { FloatingWhatsApp } from "react-floating-whatsapp"
 
 // import SmoothScroll from "utils/ScrollAnimations/SmoothScroll"
 
@@ -13,7 +14,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-[#0f172a] ">
         {/* <SmoothScroll> */}
         <Navbar logoSrc="/images/logo.webp" />
-        {children}
+        {children}{" "}
+        <FloatingWhatsApp
+          phoneNumber="0704235666"
+          accountName="Vizole Labs"
+          allowEsc
+          allowClickAway
+          notification
+          notificationSound
+        />
         <Footer />
         {/* </SmoothScroll> */}
       </body>

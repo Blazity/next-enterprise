@@ -12,6 +12,15 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
   const [showBackground, setShowBackground] = useState(false)
   const TOP_OFFSET = 50
 
+  const navLinks = {
+    home: "#home",
+    services: "#services",
+    portfolio: "#portfolio",
+    aboutUs: "#aboutUs",
+    signIn: "/auth/SignIn",
+    signUp: "/auth/SignUp",
+  }
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= TOP_OFFSET) {
