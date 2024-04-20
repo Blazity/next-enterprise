@@ -69,11 +69,11 @@ export default function SignIn() {
               </div>
             </div>
             <div className="flex w-[80%] items-center justify-around max-md:flex-wrap">
-              <button className=" border-conic-gradient relative m-2 inline-flex h-9 w-full items-center justify-around rounded-full border-[1px]  border-gray-400 border-transparent bg-gradient-to-br from-gray-900 to-gray-800 px-4 py-1 text-white transition-all">
+              <button className=" border-conic-gradient relative m-2 inline-flex h-9 w-full items-center justify-around rounded-full border-[1px]   border-transparent bg-gradient-to-br from-gray-900 to-gray-800 px-4 py-1 text-white transition-all">
                 <AiFillGoogleCircle className="text-lg" />
                 Sign In With Google
               </button>
-              <button className=" border-conic-gradient relative m-2 inline-flex h-9 w-full items-center justify-around rounded-full border-[1px]  border-gray-400 border-transparent bg-gradient-to-br from-gray-900 to-gray-800 px-4 py-1 text-white transition-all">
+              <button className=" border-conic-gradient relative m-2 inline-flex h-9 w-full items-center justify-around rounded-full border-[1px]   border-transparent bg-gradient-to-br from-gray-900 to-gray-800 px-4 py-1 text-white transition-all">
                 <AiFillApple className="text-lg" />
                 Sign In With Icloud
               </button>
