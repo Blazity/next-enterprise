@@ -25,7 +25,7 @@ export default function SignIn() {
             <Image src="/images/logoicon.png" alt="logo" width="100" height="100" />
             <div className="mb-4 max-w-2xl text-4xl font-extrabold capitalize leading-none tracking-tight text-white md:text-4xl xl:text-5xl">
               <h2 className="bg-gradient-to-r from-slate-400 via-white to-slate-400 bg-clip-text p-5 text-center text-transparent">
-                Sign In To Your Account
+                Create your account
               </h2>
             </div>
             <div className="w-[80%]">
@@ -55,7 +55,7 @@ export default function SignIn() {
                   className=" w-full appearance-none rounded  bg-[#1e293b] px-3 py-2 leading-tight text-gray-700 shadow focus:outline-[#F5887A]"
                   id="ConfirmPassword"
                   type="password"
-                  placeholder="ConfirmPassword"
+                  placeholder="Confirm Password"
                 />
                 <button
                   className="focus:shadow-outline focus:shadow-outline hover:shadow-outline mt-4 w-full rounded-full bg-[#F5887A] px-4 py-2 font-bold text-white transition-all hover:bg-[#F0B37D] focus:outline-none"

@@ -57,7 +57,7 @@ export default function SignIn() {
               </form>
 
               <div className="mt-4 flex items-center justify-center text-center">
-                <p className="text-slate-500"> Don't have an account?&nbsp; </p>
+                <p className="text-slate-500"> Don&apos;t have an account?&nbsp; </p>
                 <a className="text-[#F5887A]" href="/auth/SignUp">
                   Sign Up
                 </a>
