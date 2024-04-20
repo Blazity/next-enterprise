@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { loginSchema } from "zodSchema/login"
 import Image from "next/image"
+import { AiFillApple, AiFillGoogleCircle } from "react-icons/ai"
 
 export default function SignIn() {
   return (
@@ -57,7 +58,7 @@ export default function SignIn() {
 
               <div className="mt-4 flex items-center justify-center text-center">
                 <p className="text-slate-500"> Don't have an account?&nbsp; </p>
-                <a className="text-[#F5887A]" href="#">
+                <a className="text-[#F5887A]" href="/auth/SignUp">
                   Sign Up
                 </a>
               </div>
@@ -67,12 +68,14 @@ export default function SignIn() {
                 <div className="h-[1px] w-[40%] bg-slate-500"></div>
               </div>
             </div>
-            <div className="flex items-center justify-between">
-              <button className=" border-conic-gradient relative inline-flex h-9 w-full items-center justify-between rounded-full border-[1px]  border-gray-400 border-transparent bg-gradient-to-br from-gray-900 to-gray-800 px-4 py-1 text-white transition-all">
+            <div className="flex w-[80%] items-center justify-around max-md:flex-wrap">
+              <button className=" border-conic-gradient relative m-2 inline-flex h-9 w-full items-center justify-around rounded-full border-[1px]  border-gray-400 border-transparent bg-gradient-to-br from-gray-900 to-gray-800 px-4 py-1 text-white transition-all">
+                <AiFillGoogleCircle className="text-lg" />
                 Sign In With Google
               </button>
-              <button className="border-conic-gradient h-9 w-full items-center justify-between rounded-full border-[1px] border-gray-400 bg-gradient-to-br from-gray-900  to-gray-800">
-                Sign In With Facebook
+              <button className=" border-conic-gradient relative m-2 inline-flex h-9 w-full items-center justify-around rounded-full border-[1px]  border-gray-400 border-transparent bg-gradient-to-br from-gray-900 to-gray-800 px-4 py-1 text-white transition-all">
+                <AiFillApple className="text-lg" />
+                Sign In With Icloud
               </button>
             </div>
           </div>

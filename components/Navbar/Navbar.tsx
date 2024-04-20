@@ -107,7 +107,7 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
             </li>
             <li className="hidden lg:block">
               <Button
-                href="https://vercel.com/new/git/external?repository-url=https://github.com/Blazity/next-enterprise"
+                href="/auth/SignUp"
                 intent="navSignUp"
                 size="hero2"
                 onMouseEnter={() => setHovered(true)}
