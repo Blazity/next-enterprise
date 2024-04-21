@@ -88,7 +88,7 @@ const button = cva(["inline-flex", "items-center", "rounded-xl", "text-center", 
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLAnchorElement>, VariantProps<typeof button> {
   underline?: boolean
-  href: string
+  href?: string
 }
 
 export function Button({ className, intent, size, underline, ...props }: ButtonProps) {
