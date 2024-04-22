@@ -60,7 +60,7 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
       } fixed start-0 top-0 z-20 w-full bg-transparent dark:border-gray-600 dark:bg-gray-900`}
     >
       <section
-        className={`${isNavOpen ? "animate-openmenu" : "animate-closemenu"}  block  backdrop-blur-lg`}
+        className={`${isNavOpen ? "animate-openmenu" : "animate-closemenu"}  block h-screen backdrop-blur-lg`}
         style={mobileNavStyle}
       >
         <div>
@@ -81,18 +81,18 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
               </svg>
             </button>
           </div>
-          <ul className="MENU-LINK-MOBILE-OPEN flex h-full min-h-[300px]  flex-col items-center justify-center text-white">
+          <ul className="MENU-LINK-MOBILE-OPEN flex h-screen min-h-[300px] flex-col items-center justify-center text-white">
             <li className="my-2 border-b border-gray-400 uppercase">
               <a href="#home">Home</a>
+            </li>
+            <li className="my-2 border-b border-gray-400 uppercase">
+              <a href="#aboutUs">About</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
               <a href="#services">Services</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
               <a href="#portfolio">Portfolio</a>
-            </li>
-            <li className="my-2 border-b border-gray-400 uppercase">
-              <a href="#aboutUs">About</a>
             </li>
             <li className="my-2 border-b border-gray-400 uppercase">
               <a href="#">Sign In</a>
@@ -170,6 +170,14 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
                 </li>
                 <li>
                   <a
+                    href="#aboutUs"
+                    className="block rounded px-3 py-2 text-white hover:bg-gray-100 hover:text-vizoleG2 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
+                  >
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a
                     href="#services"
                     className="block rounded px-3 py-2 text-white hover:bg-gray-100 hover:text-vizoleG2 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
                   >
@@ -182,14 +190,6 @@ const Navbar: React.FC<NavbarProps> = ({ logoSrc }) => {
                     className="block rounded px-3 py-2 text-white hover:bg-gray-100 hover:text-vizoleG2 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
                   >
                     Portfolio
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#aboutUs"
-                    className="block rounded px-3 py-2 text-white hover:bg-gray-100 hover:text-vizoleG2 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-blue-500"
-                  >
-                    About
                   </a>
                 </li>
               </div>

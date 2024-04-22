@@ -11,7 +11,7 @@ import OurBlog from "components/ourblog/OurBlog"
 export default function Web() {
   return (
     <div>
-      <section id="Home" className="bg-[#0f172a] md:pl-0 md:pr-0 lg:pl-[2%] lg:pr-[2%]">
+      <section id="home" className="bg-[#0f172a] md:pl-0 md:pr-0 lg:pl-[2%] lg:pr-[2%]">
         <Hero01 />
       </section>
       <section id="aboutUs" className="bg-[#0f172a] md:pl-0 md:pr-0 ">
