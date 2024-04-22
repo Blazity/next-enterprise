@@ -22,7 +22,7 @@ export default function OurServices() {
           </MoveLeftWhenVisible>
         </div>
 
-        <div className=" mt-10 grid max-w-full grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2">
+        <div className=" mt-10 grid h-full max-w-full grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2">
           <Glow color="#F0B37D">
             <MoveUpWhenVisible>
               <div className="glowable-text flex max-w-[100%] items-center rounded-[20px] border p-4 glow:border-glow glow:bg-glow/[.50] glow:ring-2 glow:ring-glow max-md:flex-wrap max-md:items-center max-md:justify-center">

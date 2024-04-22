@@ -82,6 +82,7 @@
     "react-tsparticles": "^2.12.2",
     "react-use": "^17.5.0",
     "react-wow": "^1.0.0",
+    "sonner": "^1.4.41",
     "tailwind-merge": "^2.2.2",
     "tailwind-variants": "^0.2.1",
     "tsparticles": "^3.3.0",

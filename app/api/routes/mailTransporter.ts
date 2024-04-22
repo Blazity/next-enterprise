@@ -10,12 +10,12 @@ export const transporter = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    user: "keshawa.vizolelabs.com",
-    pass: process.env.ZOHO_PASS,
+    user: "keshawa@vizolelabs.com",
+    pass: process.env.NEXT_PUBLIC_ZOHO_PASS,
   },
 })
 
 export const mailOptions: MailOptions = {
-  from: "Keshawa Anuhas <keshawa.vizolelabs.com>",
-  to: "Keshawa Anuhas <keshawa.vizolelabs.com>",
+  from: "Keshawa Anuhas <keshawa@vizolelabs.com>",
+  to: "Keshawa Anuhas <keshawa@vizolelabs.com>",
 }

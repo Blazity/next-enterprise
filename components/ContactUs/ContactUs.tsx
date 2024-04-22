@@ -3,6 +3,7 @@
 import { Button } from "components/Button/Button"
 import { useState } from "react"
 import MoveUpWhenVisible from "utils/ScrollAnimations/MoveUpOnScroll"
+import { Toaster, toast } from "sonner"
 
 interface ResponseData {
   success: boolean
@@ -28,26 +29,25 @@ export default function ContactUs() {
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log(e)
     e.preventDefault()
     setSubmiting(true)
 
-    const response = await fetch("/api/mail", {
+    const response = await fetch("/api/routes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        accept: "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify(formData),
     })
 
-    //const { success, error }: { success: any; error: any } = await response.json()
-
     const { success, error } = (await response.json()) as ResponseData
 
     if (success) {
-      alert("Message sent!")
+      toast.success("Message sent successfully")
     } else {
-      alert(error)
+      toast.error("Something went wrong. Please try again later")
     }
 
     setSubmiting(false)
@@ -74,7 +74,7 @@ export default function ContactUs() {
             </label>
             <input
               type="email"
-              id="email"
+              name="email"
               onChange={handleInputChange}
               className="dark:shadow-sm-light block w-full rounded-lg border border-gray-300 bg-homeBg2 p-2.5 text-sm text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
               placeholder="name@gmail.com"
@@ -88,7 +88,7 @@ export default function ContactUs() {
             <input
               type="text"
               onChange={handleInputChange}
-              id="subject"
+              name="subject"
               className="dark:shadow-sm-light block w-full rounded-lg border border-gray-300  bg-homeBg2 p-3 text-sm text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
               placeholder="Let us know how we can help you"
               required
@@ -100,18 +100,27 @@ export default function ContactUs() {
             </label>
             <textarea
               onChange={handleInputChange}
-              id="message"
+              name="message"
               rows={6}
               className="block w-full rounded-lg border border-gray-300  bg-homeBg2 p-2.5 text-sm text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
               placeholder="Leave a comment..."
             ></textarea>
           </div>
-          <Button
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              classNames: {
+                toast: "bg-vizoleG2",
+                title: "text-white",
+              },
+            }}
+          />
+          <button
             type="submit"
             className="rounded-lg bg-gradient-to-r from-vizoleG1 via-vizoleG2 to-vizoleG3 px-5 py-3 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 sm:w-fit"
           >
             Send message
-          </Button>
+          </button>
         </form>
       </MoveUpWhenVisible>
     </div>
