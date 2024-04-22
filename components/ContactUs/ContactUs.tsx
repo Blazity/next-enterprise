@@ -1,6 +1,58 @@
+"use client"
+
 import { Button } from "components/Button/Button"
+import { useState } from "react"
 import MoveUpWhenVisible from "utils/ScrollAnimations/MoveUpOnScroll"
+
+interface ResponseData {
+  success: boolean
+  error: string
+}
+
 export default function ContactUs() {
+  const [formData, setFormData] = useState({
+    email: "",
+    subject: "",
+    message: "",
+  })
+
+  const [submiting, setSubmiting] = useState(false)
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setSubmiting(true)
+
+    const response = await fetch("/api/mail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        accept: "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+
+    //const { success, error }: { success: any; error: any } = await response.json()
+
+    const { success, error } = (await response.json()) as ResponseData
+
+    if (success) {
+      alert("Message sent!")
+    } else {
+      alert(error)
+    }
+
+    setSubmiting(false)
+  }
+
   return (
     <div className="mx-auto max-w-screen-md px-4 py-8 lg:py-16">
       <MoveUpWhenVisible>
@@ -15,7 +67,7 @@ export default function ContactUs() {
         </p>
       </MoveUpWhenVisible>
       <MoveUpWhenVisible>
-        <form action="#" className="space-y-8">
+        <form action="#" className="space-y-8" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="mb-2 block text-sm font-medium text-white dark:text-gray-300">
               Your email
@@ -23,6 +75,7 @@ export default function ContactUs() {
             <input
               type="email"
               id="email"
+              onChange={handleInputChange}
               className="dark:shadow-sm-light block w-full rounded-lg border border-gray-300 bg-homeBg2 p-2.5 text-sm text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
               placeholder="name@gmail.com"
               required
@@ -34,6 +87,7 @@ export default function ContactUs() {
             </label>
             <input
               type="text"
+              onChange={handleInputChange}
               id="subject"
               className="dark:shadow-sm-light block w-full rounded-lg border border-gray-300  bg-homeBg2 p-3 text-sm text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
               placeholder="Let us know how we can help you"
@@ -45,6 +99,7 @@ export default function ContactUs() {
               Your message
             </label>
             <textarea
+              onChange={handleInputChange}
               id="message"
               rows={6}
               className="block w-full rounded-lg border border-gray-300  bg-homeBg2 p-2.5 text-sm text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
@@ -53,7 +108,6 @@ export default function ContactUs() {
           </div>
           <Button
             type="submit"
-            href="#"
             className="rounded-lg bg-gradient-to-r from-vizoleG1 via-vizoleG2 to-vizoleG3 px-5 py-3 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 sm:w-fit"
           >
             Send message
