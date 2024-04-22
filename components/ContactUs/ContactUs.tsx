@@ -3,7 +3,7 @@
 import { Button } from "components/Button/Button"
 import { useState } from "react"
 import MoveUpWhenVisible from "utils/ScrollAnimations/MoveUpOnScroll"
-import { Toaster, toast } from "sonner"
+import { toast, Toaster } from "sonner"
 
 interface ResponseData {
   success: boolean
@@ -29,9 +29,16 @@ export default function ContactUs() {
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(e)
     e.preventDefault()
     setSubmiting(true)
+
+    function clearForm() {
+      setFormData({
+        email: "",
+        subject: "",
+        message: "",
+      })
+    }
 
     const response = await fetch("/api/routes", {
       method: "POST",
@@ -46,8 +53,10 @@ export default function ContactUs() {
 
     if (success) {
       toast.success("Message sent successfully")
+      clearForm()
     } else {
       toast.error("Something went wrong. Please try again later")
+      clearForm()
     }
 
     setSubmiting(false)
