@@ -47,6 +47,7 @@
     "@semantic-release/release-notes-generator": "^12.1.0",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@vercel/otel": "^0.3.0",
+    "caniuse-lite": "^1.0.30001612",
     "class-variance-authority": "^0.7.0",
     "lodash": "^4.17.21",
     "next": "^14.0.3",
