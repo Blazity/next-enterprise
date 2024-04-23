@@ -7,9 +7,11 @@ export const env = createEnv({
       .enum(["true", "false"])
       .optional()
       .transform((value) => value === "true"),
+    NEXT_PUBLIC_SITE_BASE_URL: z.string().url().optional(),
   },
   client: {},
   runtimeEnv: {
     ANALYZE: process.env.ANALYZE,
+    NEXT_PUBLIC_SITE_BASE_URL: process.env.NEXT_PUBLIC_SITE_BASE_URL,
   },
 })
