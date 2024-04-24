@@ -20,12 +20,13 @@ export async function POST(req: any) {
   const plainTextContent = stripHTMLTags(htmlContent)
 
   try {
-    await transporter.sendMail({
-      ...mailOptions,
-      subject: `Contact Inquiry - VizoleLabs Web`,
-      text: plainTextContent,
-      html: htmlContent,
-    })
+    console.log(req.headers)
+    // await transporter.sendMail({
+    //   ...mailOptions,
+    //   subject: `Contact Inquiry - VizoleLabs Web`,
+    //   text: plainTextContent,
+    //   html: htmlContent,
+    // })
     return NextResponse.json({ success: true })
   } catch (error: any) {
     console.error(error)
