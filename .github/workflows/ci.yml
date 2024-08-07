@@ -1,4 +1,4 @@
-name: CI
+ame: CI
 
 on:
   push:
@@ -43,4 +43,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build
-        path: .next/
+        path: .next/ 
