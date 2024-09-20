@@ -7,7 +7,11 @@ import { env } from "./env.mjs"
  */
 const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
   reactStrictMode: true,
-  experimental: { instrumentationHook: true },
+  experimental: { instrumentationHook: false },
+  env: {
+    REACT_APP_API_URL: process.env.REACT_APP_API_URL, // Para que esté disponible en el cliente
+  },
+
   rewrites() {
     return [
       { source: "/healthz", destination: "/api/health" },

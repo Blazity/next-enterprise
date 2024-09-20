@@ -1,26 +1,26 @@
 ---
 convention:
   commitTypes:
-  - feat
-  - fix
-  - perf
-  - refactor
-  - style
-  - test
-  - build
-  - ops
-  - docs
-  - chore
-  - merge
-  - revert
+    - feat
+    - fix
+    - perf
+    - refactor
+    - style
+    - test
+    - build
+    - ops
+    - docs
+    - chore
+    - merge
+    - revert
   commitScopes: []
   releaseTagGlobPattern: v[0-9]*.[0-9]*.[0-9]*
 changelog:
   commitTypes:
-  - feat
-  - fix
-  - perf
-  - merge
+    - feat
+    - fix
+    - perf
+    - merge
   includeInvalidCommits: true
   commitIgnoreRegexPattern: "^WIP "
   headlines:

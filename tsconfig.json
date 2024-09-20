@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Next.js",
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -17,14 +17,32 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".",
     "types": ["node", "jest", "@testing-library/jest-dom"],
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@atoms/*": ["./package/components/atoms/*"],
+      "@molecules/*": ["./package/components/molecules/*"],
+      "@organisms/*": ["./package/components/organisms/*"],
+      "@layouts/*": ["./package/components/layouts/*"],
+      "@styles/*": ["./package/styles/*"],
+      "@package/*": ["./package/*"],
+      "@app/*": ["./app/*"],
+      "@public/*": ["./public/*"]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.mjs", "jest.config.js", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mjs",
+    "jest.config.js",
+    ".next/types/**/*.ts",
+    "package/config/FetchData.tsx"
+  ],
   "exclude": ["node_modules"]
 }

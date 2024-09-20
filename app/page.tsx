@@ -1,65 +1,68 @@
-import { Metadata } from "next"
-import { Button } from "components/Button/Button"
-import { LP_GRID_ITEMS } from "lp-items"
+"use client"
+import Grid from "@mui/material/Grid2"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import Button from "@package/components/atoms/Button"
 
-export const metadata: Metadata = {
-  title: "Next.js Enterprise Boilerplate",
-  twitter: {
-    card: "summary_large_image",
-  },
-  openGraph: {
-    url: "https://next-enterprise.vercel.app/",
-    images: [
-      {
-        width: 1200,
-        height: 630,
-        url: "https://raw.githubusercontent.com/Blazity/next-enterprise/main/.github/assets/project-logo.png",
-      },
-    ],
-  },
-}
+const HomePage: React.FC = () => {
+  const router = useRouter()
 
-export default function Web() {
+  const handleLoginClick = () => {
+    router.push("/account/login")
+  }
+
+  const handleFeaturesClick = () => {
+    router.push("/features")
+  }
+
   return (
-    <>
-      <section className="bg-white dark:bg-gray-900">
-        <div className="mx-auto grid max-w-screen-xl px-4 py-8 text-center lg:py-16">
-          <div className="mx-auto place-self-center">
-            <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-none tracking-tight dark:text-white md:text-5xl xl:text-6xl">
-              Next.js Enterprise Boilerplate
-            </h1>
-            <p className="mb-6 max-w-2xl font-light text-gray-500 dark:text-gray-400 md:text-lg lg:mb-8 lg:text-xl">
-              Jumpstart your enterprise project with our feature-packed, high-performance Next.js boilerplate!
-              Experience rapid UI development, AI-powered code reviews, and an extensive suite of tools for a smooth and
-              enjoyable development process.
-            </p>
-            <Button href="https://github.com/Blazity/next-enterprise" className="mr-3">
-              Get started
-            </Button>
+    <Grid
+      container
+      className="min-h-screen"
+      alignItems="center"
+      justifyContent="center"
+      sx={{
+        background: "linear-gradient(to right, black, #2c3e50, #0064dc)",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Grid size={{ xs: 12, md: 6 }} display="flex" justifyContent={{ xs: "center", md: "flex-end" }}>
+        <Image
+          src="/img/selfcheckout.jpg"
+          alt="Checkout"
+          width={500}
+          height={400}
+          style={{ width: 'auto', height: 'auto' }}
+          className="rounded-lg shadow-lg"
+          priority
+        />
+      </Grid>
+
+      <Grid size={{ xs: 12, md: 6 }} textAlign={{ xs: "center", md: "left" }} padding={{ md: "0 24px" }}>
+        <h1 className="mb-4 text-5xl font-bold text-white md:text-6xl">SELF CHECKOUT</h1>
+
+        <p className="mb-6 text-xl text-gray-200 md:text-2xl">Mejorando la experiencia en tienda</p>
+
+        <Grid container justifyContent={{ xs: "center", md: "flex-start" }} spacing={2}>
+          <Grid size={{ xs: 6, md: 6 }}>
             <Button
-              href="https://vercel.com/new/git/external?repository-url=https://github.com/Blazity/next-enterprise"
-              intent="secondary"
-            >
-              Deploy Now
-            </Button>
-          </div>
-        </div>
-      </section>
-      <section className="bg-white dark:bg-gray-900">
-        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-16 lg:px-6">
-          <div className="justify-center space-y-8 md:grid md:grid-cols-2 md:gap-12 md:space-y-0 lg:grid-cols-3">
-            {LP_GRID_ITEMS.map((singleItem) => (
-              <div key={singleItem.title} className="flex flex-col items-center justify-center text-center">
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 p-1.5 text-blue-700 dark:bg-primary-900 lg:h-12 lg:w-12">
-                  {singleItem.icon}
-                </div>
-                <h3 className="mb-2 text-xl font-bold dark:text-white">{singleItem.title}</h3>
-                <p className="text-gray-500 dark:text-gray-400">{singleItem.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
+              label="Iniciar Sesión"
+              onClick={handleLoginClick}
+              className="rounded-lg bg-blue-600 px-6 py-3 text-lg text-white transition hover:bg-blue-700"
+            />
+          </Grid>
+          <Grid size={{ xs: 6, md: 6 }}>
+            <Button
+              label="Ver Funcionalidades"
+              onClick={handleFeaturesClick}
+              className="rounded-lg bg-gray-200 px-6 py-3 text-lg text-blue-600 transition hover:bg-gray-300"
+            />
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   )
 }
+
+export default HomePage
