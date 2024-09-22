@@ -17,6 +17,53 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'color-1': 'red',
+        'color-2': 'rgb(34, 22, 95)',
+        'color-3': 'rgb(34, 22, 95)',
+        'color-4': 'rgb(34, 22, 95)',
+        'color-5': 'rgb(34, 22, 95)',
+        'color-6': 'indigo',
+        'color-7': 'violet',
+        'color-8': 'pink',
+        'color-9': 'rgb(224, 224, 224)',
+        'color-10': 'grey',
+        'color-11': 'cyan',
+        'color-12': 'magenta',
+        'color-13': 'teal',
+        'color-14': 'maroon',
+        'color-15': 'maroon',
+        'color-16': 'maroon',
+        'color-17': 'navy',
+        'color-18': 'gold',
+        'color-19': 'silver',
+        'color-20': 'coral',
+        'color-21': 'salmon',
+        'color-22': 'tomato',
+        'color-23': 'orchid',
+        'color-24': 'sienna',
+        'color-25': 'plum',
+        'color-26': 'turquoise',
+        'color-27': 'peachpuff',
+        'color-28': 'lavender',
+        'color-29': 'beige',
+        'color-30': 'mintcream',
+        'color-31': 'periwinkle',
+        'color-32': 'rosybrown',
+        'color-33': 'ivory',
+        'color-34': 'skyblue',
+        'color-35': 'chartreuse',
+        'color-36': 'salmon',
+        'color-37': 'khaki',
+        'color-38': 'wheat',
+        'color-39': 'blush',
+        'color-40': '#F0E130', // dandelion approximate
+        'color-41': 'fuchsia',
+        'color-42': '#007BA7', // cerulean
+        'color-43': 'emerald',
+        'color-44': 'jade',
+        'color-45': 'azure',
+        'color-46': 'cobalt',
+        'color-47': 'amethyst',
         primary: {
           50: "#eff6ff",
           100: "#dbeafe",
@@ -31,6 +78,7 @@ module.exports = {
         },
       },
       fontFamily: {
+        'caveat-brush': ['"Caveat Brush"', 'cursive'],
         body: [
           "Inter",
           "ui-sans-serif",
@@ -83,6 +131,11 @@ module.exports = {
       },
     },
   },
+  safelist: [
+    {
+      pattern: /text-color-/,
+    },
+  ],
   plugins: [],
   future: {
     hoverOnlyWhenSupported: true,

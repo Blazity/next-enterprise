@@ -1,10 +1,12 @@
 import Link from 'next/link';
+import Image from "next/image";
+
 
 const Header: React.FC = () => {
   return (
     <header className="bg-blue-500 flex justify-between items-center p-4">
       <div className="left">
-        <img src="/plimages/Group1.png" alt="logo" className="w-12" />
+          <Image src="/Group 1.png" alt="logo" width={100} height={100} />
       </div>
       <nav className="right">
         <ul className="flex space-x-4">
