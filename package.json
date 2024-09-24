@@ -56,6 +56,7 @@
     "@t3-oss/env-nextjs": "^0.7.1",
     "@vercel/otel": "^1.10.0",
     "class-variance-authority": "^0.7.0",
+    "crypto-js": "^4.2.0",
     "i18next": "^23.15.1",
     "jaeger-client": "^3.19.0",
     "lodash": "^4.17.21",

@@ -1,6 +1,6 @@
+import React from "react";
 import "@package/styles/tailwind.css";
 import Navbar from "@organisms/Navbar";
-import React from "react";
 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

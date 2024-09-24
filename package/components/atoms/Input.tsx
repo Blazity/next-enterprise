@@ -8,9 +8,10 @@ interface InputProps {
   value: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   autocomplete?: string
+  disabled?: boolean 
 }
 
-const Input: React.FC<InputProps> = ({ type, placeholder, value, onChange, autocomplete }) => {
+const Input: React.FC<InputProps> = ({ type, placeholder, value, onChange, autocomplete, disabled  }) => {
   return (
     <TextField
       type={type}
@@ -20,6 +21,7 @@ const Input: React.FC<InputProps> = ({ type, placeholder, value, onChange, autoc
       autoComplete={autocomplete}
       fullWidth
       variant="outlined"
+      disabled={disabled}
     />
   )
 }

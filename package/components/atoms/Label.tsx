@@ -9,10 +9,13 @@ interface LabelProps {
 
 const Label: React.FC<LabelProps> = ({ htmlFor, text }) => {
   return (
-    <Typography variant="subtitle1" component="label" htmlFor={htmlFor} className="mb-2 block">
-      {text}
-    </Typography>
+    <label htmlFor={htmlFor} className="mb-2 block">
+      <Typography variant="subtitle1">
+        {text}
+      </Typography>
+    </label>
   )
 }
 
 export default Label
+

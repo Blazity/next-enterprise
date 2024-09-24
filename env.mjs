@@ -14,5 +14,6 @@ export const env = createEnv({
   runtimeEnv: {
     ANALYZE: process.env.ANALYZE,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    REACT_APP_API_KEY: process.env.REACT_APP_API_KEY,
   },
 })

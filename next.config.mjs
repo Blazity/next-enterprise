@@ -9,7 +9,10 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
   reactStrictMode: true,
   experimental: { instrumentationHook: false },
   env: {
-    REACT_APP_API_URL: process.env.REACT_APP_API_URL, // Para que esté disponible en el cliente
+    REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+    API_PASS_SERVICE: process.env.REACT_APP_API_PASS_SERVICE,
+    REACT_APP_API_KEY: process.env.REACT_APP_API_KEY,
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
 
   rewrites() {

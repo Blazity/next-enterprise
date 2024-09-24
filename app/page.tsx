@@ -2,10 +2,13 @@
 import Grid from "@mui/material/Grid2"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { useTranslation } from "react-i18next"
 import Button from "@package/components/atoms/Button"
 
 const HomePage: React.FC = () => {
-  const router = useRouter()
+
+  const { t }   = useTranslation()
+  const router  = useRouter()
 
   const handleLoginClick = () => {
     router.push("/account/login")
@@ -40,23 +43,24 @@ const HomePage: React.FC = () => {
       </Grid>
 
       <Grid size={{ xs: 12, md: 6 }} textAlign={{ xs: "center", md: "left" }} padding={{ md: "0 24px" }}>
-        <h1 className="mb-4 text-5xl font-bold text-white md:text-6xl">SELF CHECKOUT</h1>
+        <h1 className="mb-4 text-5xl font-bold text-white md:text-6xl">{t('tle_self_checkout')}</h1>
 
-        <p className="mb-6 text-xl text-gray-200 md:text-2xl">Mejorando la experiencia en tienda</p>
+        <p className="mb-6 text-xl text-gray-200 md:text-2xl">{t('msj_improving_in_store_experience')}</p>
 
         <Grid container justifyContent={{ xs: "center", md: "flex-start" }} spacing={2}>
-          <Grid size={{ xs: 6, md: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Button
-              label="Iniciar Sesión"
+              label={t("lbl_login")}
               onClick={handleLoginClick}
-              className="rounded-lg bg-blue-600 px-6 py-3 text-lg text-white transition hover:bg-blue-700"
+              className="rounded-lg bg-blue-600 px-6 py-3 text-lg text-white transition hover:bg-blue-700 h-16 w-full"
             />
           </Grid>
-          <Grid size={{ xs: 6, md: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Button
-              label="Ver Funcionalidades"
+              label={t("lbl_features")}
               onClick={handleFeaturesClick}
-              className="rounded-lg bg-gray-200 px-6 py-3 text-lg text-blue-600 transition hover:bg-gray-300"
+              className="rounded-lg bg-gray-200 px-6 py-3 text-lg text-blue-600 transition hover:bg-gray-300 h-16 w-full"
+              
             />
           </Grid>
         </Grid>
