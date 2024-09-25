@@ -1,4 +1,4 @@
-import Layout from "components/Layout";
+import Layout from "components/layout";
 
 const Programs: React.FC = () => {
   return (

@@ -1,5 +1,5 @@
-import Footer from 'components/Footer';
-import Header from 'components/Header';
+import Footer from 'components/footer';
+import Header from 'components/header';
 import { ReactNode } from 'react';
 import "styles/tailwind.css"
 
@@ -12,7 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow">
+      <main className="grow">
         {children}
       </main>
       <Footer />
