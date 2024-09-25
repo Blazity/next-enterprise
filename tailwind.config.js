@@ -16,7 +16,20 @@ module.exports = {
   ],
   theme: {
     extend: {
+      // height: {
+      //   '500px': '500px',
+      // },
+      // fontSize: {
+      //   '25px': '25px',
+      // },
+      // maxWidth: {
+      //   '700px': '700px',
+      //   '900px': '900px',
+      // },
       colors: {
+        beige: '#F5F5DC',
+        'custom-blue': '#667BC6',
+        'golden-color': '#F4A500',
         'color-1': 'red',
         'color-2': 'rgb(34, 22, 95)',
         'color-3': 'rgb(34, 22, 95)',
@@ -79,6 +92,7 @@ module.exports = {
       },
       fontFamily: {
         'caveat-brush': ['"Caveat Brush"', 'cursive'],
+        caveat: ['"Caveat Brush"', 'cursive'],
         body: [
           "Inter",
           "ui-sans-serif",
