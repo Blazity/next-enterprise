@@ -1,3 +1,4 @@
+import { LoginResponse } from '@interfaces/ResponseInterfaces/Auth/UserResponseInterface';
 import { GetToken } from '@package/config/api/Admin/auth/GetToken/page';
 import { BASE_URL_ADMINISTRATION } from '@package/config/ApiPath';
 import { FetchData } from '@package/config/FetchData';
@@ -5,12 +6,7 @@ import { ReturnService } from '@package/config/ReturnService';
 import i18n from '@package/utils/language/i18n';
 import { deleteKeyApi, deleteUser, encrypt, setKeyApi, setUser } from '@package/utils/Utilities';
 
-interface LoginResponse {
-  correct?: boolean;
-  success: boolean;
-  message: string;
-  errorCode?: number;
-}
+
 
 /**
  * Authenticates a user by their username and password.
@@ -26,7 +22,7 @@ async function Login(ae_user: string, ae_password: string): Promise<LoginRespons
     const token = await GetToken();
 
     if (!token) {
-      return { success: false, message: i18n.t('errorTokenAPI'), errorCode: 102 };
+      return { correct: false, message: i18n.t('errorTokenAPI'), errorCode: 102, object: null};
     }
 
     ae_password = encrypt(ae_password);
@@ -55,12 +51,12 @@ async function Login(ae_user: string, ae_password: string): Promise<LoginRespons
     } else {
       deleteKeyApi();
       deleteUser();
-      return { success: false, message: data.message || i18n.t('msj_Incorrect_credentials'), errorCode: data.errorCode };
+      return { correct: false, message: data.message || i18n.t('msj_Incorrect_credentials'), errorCode: data.errorCode, object: null };
     }
   } catch (error) {
     deleteKeyApi();
     deleteUser();
-    return { success: false, message: i18n.t('errorUnexpected'), errorCode: 500 };
+    return { correct: false, message: i18n.t('errorUnexpected'), errorCode: 500, object: null };
   }
 }
 

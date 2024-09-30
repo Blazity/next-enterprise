@@ -30,6 +30,9 @@
       "@organisms/*": ["./package/components/organisms/*"],
       "@layouts/*": ["./package/components/layouts/*"],
       "@styles/*": ["./package/styles/*"],
+      "@utils/*": ["./package/utils/*"],
+      "@hooks/*": ["./package/hooks/*"],
+      "@interfaces/*": ["./package/interfaces/*"],
       "@package/*": ["./package/*"],
       "@app/*": ["./app/*"],
       "@public/*": ["./public/*"]
