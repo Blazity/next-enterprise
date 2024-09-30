@@ -1,6 +1,7 @@
 "use client"
 import { Box, Card, CardContent } from "@mui/material"
 import Grid from "@mui/material/Grid2"
+import { useTranslation } from "react-i18next"
 import Button from "@atoms/Button"
 import Label from "@atoms/Label"
 import Title from "@atoms/Title"
@@ -10,6 +11,9 @@ interface AskForAffiliationProps {
 }
 
 const AskForAffiliation: React.FC<AskForAffiliationProps> = ({ onAffiliationSelect }) => {
+
+  const { t } = useTranslation()
+
   const handleYesClick = () => {
     onAffiliationSelect(true)
   }
@@ -31,14 +35,14 @@ const AskForAffiliation: React.FC<AskForAffiliationProps> = ({ onAffiliationSele
             p: 2,
           }}
         >
-          <Title text="Se requiere Información" size="h3" />
-          <Label htmlFor="loyalty" text="¿Está registrado como afiliado?" />
+          <Title text={t("lbl_information_required")} size="h3" />
+          <Label htmlFor="loyalty" text= {t("msj_are_you_registered_as_affiliate")} />
           <Box sx={{ mt: 3, display: "flex", gap: 3 }}>
             <Grid size={{ xs: 6 }} sx={{ minWidth: "200px" }}>
-              <Button label="Sí" onClick={handleYesClick} variant="primary" className="h-16 w-full" />
+              <Button label={t("lbl_yes")} onClick={handleYesClick} variant="primary" className="h-16 w-full" />
             </Grid>
             <Grid size={{ xs: 6 }} sx={{ minWidth: "200px" }}>
-              <Button label="No" onClick={handleNoClick} variant="primary" className="h-16 w-full" />
+              <Button label={t('lbl_no')} onClick={handleNoClick} variant="primary" className="h-16 w-full" />
             </Grid>
           </Box>
         </Box>

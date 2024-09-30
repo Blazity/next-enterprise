@@ -170,14 +170,15 @@ const ButtonPanel: React.FC = () => {
             </Tooltip>
           </Grid>
           <Grid size={{ xs: 4 }}>
-            <Tooltip explainer={t("lbl_bag_fee")} side="top" withArrow>
+            <Tooltip explainer={t("msj_bag_fee")} side="top" withArrow>
               <Box sx={{ width: "100%" }}>
                 <Button
-                  label={t("msj_bag_fee")}
+                  label= {t("lbl_bag_fee")}
                   onClick={() => {}}
                   variant="primary"
                   className="full-size-button"
                   startIcon={<ShoppingBagIcon />}
+                  
                 />
               </Box>
             </Tooltip>

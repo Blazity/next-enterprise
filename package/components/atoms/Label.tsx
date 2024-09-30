@@ -7,15 +7,16 @@ interface LabelProps {
   text: string
 }
 
-const Label: React.FC<LabelProps> = ({ htmlFor, text }) => {
+const Label = React.memo(({ htmlFor, text }: LabelProps) => {
   return (
     <label htmlFor={htmlFor} className="mb-2 block">
-      <Typography variant="subtitle1">
-        {text}
-      </Typography>
+      <Typography 
+        variant="subtitle1">{text}</Typography>
     </label>
-  )
-}
+  );
+});
+
+Label.displayName = "Label";
 
 export default Label
 

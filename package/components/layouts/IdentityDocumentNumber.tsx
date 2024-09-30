@@ -2,6 +2,7 @@
 import { Box, Card, CardContent } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import React, { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import Button from "@atoms/Button"
 import Input from "@atoms/Input"
 import Title from "@atoms/Title"
@@ -15,9 +16,11 @@ const IdentityDocumentNumber: React.FC<IdentityDocumentNumberProps> = ({ documen
   const [inputValue, setInputValue] = useState<string>("")
   const [keyboardMode, setKeyboardMode] = useState<"numeric" | "alpha">("numeric")
   const [isAlphaEnabled, setIsAlphaEnabled] = useState<boolean>(false)
+  const { t } = useTranslation()
+
 
   useEffect(() => {
-    const alphaDocuments = ["PASAPORTE", "CURP", "RFC", "NIE", "RUT"] // Documentos que contienen letras
+    const alphaDocuments = ["PASAPORTE", "CURP", "RFC", "NIE", "RUT"] 
     setIsAlphaEnabled(alphaDocuments.includes(documentType.toUpperCase()))
     setKeyboardMode(isAlphaEnabled ? "alpha" : "numeric")
   }, [documentType, isAlphaEnabled])
@@ -30,7 +33,6 @@ const IdentityDocumentNumber: React.FC<IdentityDocumentNumberProps> = ({ documen
     setInputValue((prev) => prev.slice(0, -1))
   }
 
-  // Renderiza el teclado basado en el modo seleccionado
   const renderKeyboard = () => {
     if (keyboardMode === "numeric") {
       return (
@@ -69,33 +71,32 @@ const IdentityDocumentNumber: React.FC<IdentityDocumentNumberProps> = ({ documen
           }}
         >
           {/* Título */}
-          <Title text={`Ingrese el número de ${documentType}`} size="h4" />
+          <Title text={`${t('msj_enter_number_of')} ${documentType}`} size="h4" />
 
-          {/* Input que muestra el valor actual */}
           <Input
             type="text"
-            placeholder="Ingrese el número de documento"
+            placeholder= {t('msj_enter_document_number')}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
 
           <Grid container spacing={2} justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
             <Grid size={{ xs: 4 }}>
-              <Button label="Borrar" onClick={handleDelete} variant="danger" className="h-16 w-full" />
+              <Button label= {t('lbl_delete')} onClick={handleDelete} variant="danger" className="h-16 w-full" />
             </Grid>
             <Grid size={{ xs: 4 }}>
-              <Button label="Cancelar" onClick={() => setInputValue("")} variant="danger" className="h-16 w-full" />
+              <Button label={t('lbl_cancel')} onClick={() => setInputValue("")} variant="danger" className="h-16 w-full" />
             </Grid>
             {renderKeyboard()}
             <Grid size={{ xs: 4 }}>
-              <Button label="Ingresar" onClick={() => onSubmit(inputValue)} variant="success" className="h-16 w-full" />
+              <Button label={t('lbl_enter')} onClick={() => onSubmit(inputValue)} variant="success" className="h-16 w-full" />
             </Grid>
             {isAlphaEnabled && (
               <Grid size={{ xs: 4 }}>
                 <Button
-                  label={`Cambiar a ${keyboardMode === "numeric" ? "Alfabético" : "Numérico"}`}
+                  label={`${t('msj_change_to')} ${keyboardMode === "numeric" ? t('lbl_alphabetical') : t('lbl_numeric')}`}
                   onClick={() => setKeyboardMode(keyboardMode === "numeric" ? "alpha" : "numeric")}
-                  variant="secondary"
+                  variant="info"
                   className="h-16 w-full"
                 />
               </Grid>
