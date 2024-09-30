@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import ForgotPasswordForm from "@organisms/ForgotPasswordForm";
-import LoginForm from "@organisms/LoginForm";
+import ForgotPasswordForm from "@organisms/Auth/ForgotPasswordForm";
+import LoginForm from "@organisms/Auth/LoginForm";
 
 const LoginPage: React.FC = () => {
   const { t } = useTranslation();

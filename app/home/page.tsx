@@ -1,10 +1,10 @@
 import React from "react"
-import PreCheckoutScreen from "@app/selfcheckout/precheckout/page"
+import PreCheckout from "@app/selfcheckout/precheckout/page"
 
 const HomeAfterLogin: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <PreCheckoutScreen />
+      <PreCheckout />
     </div>
   )
 }

@@ -10,9 +10,13 @@ export const GRID_SIZE = 10
 
 export const DEFAULT_PASSWORD = 'Bopos123'
 
-// Constants for special cases in Dashboard statistics
 export const INFINITY_SYMBOL = '∞'
 
 export const NOT_AVAILABLE = 'N/A'
 
 export const BASE_URL_LANGUAGE = i18n.language
+
+export const PAGE_SIZE_OPTIONS = [6, 10, 20, 50, 100]
+
+export const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
