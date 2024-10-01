@@ -31,7 +31,7 @@ async function GetSale(ae_object: GetSaleOutputInterface) {
         })
     }
 
-    let data: GetSaleResponseInterface  = await FetchData(BASE_URL_SALE, 'addProducts', options)
+    let data: GetSaleResponseInterface  = await FetchData(BASE_URL_SALE, 'getSale', options)
 
     if (data.correct) {
         return data.object

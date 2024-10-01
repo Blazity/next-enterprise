@@ -7,5 +7,5 @@ export interface StartSaleResponseInterface {
     correct: boolean;
     message: string;
     errorCode: number;
-    object: TransactionObject;
+    object: TransactionObject | null;
 }

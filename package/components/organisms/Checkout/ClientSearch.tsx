@@ -1,23 +1,29 @@
 'use client';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useSetAtom } from 'jotai';
-import { useRouter } from 'next/navigation';
+import { useAtom } from 'jotai';
 import React, { useState } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import Button from '@atoms/Button';
 import CustomLoading from '@atoms/CustomLoading';
 import Icon from '@atoms/Icon';
 import Input from '@atoms/Input';
 import Label from '@atoms/Label';
-import CustomerAtom from '@atoms/states/CustomerAtom';
+import { storeNumberAtom, storePosAtom } from '@atoms/states/StoreAtom';
 import Title from '@atoms/Title';
 import { Tooltip } from '@atoms/Tooltip';
 import { useClientSearchLogic } from '@hooks/useClientSearchLogic';
+import { CustomerInterface } from '@interfaces/ResponseInterfaces/Customer/CustomerResponseInterface';
 import { CustomerDniTypeInterface } from '@interfaces/ResponseInterfaces/Customer/DNITypeResponseInterface';
+import { StartSaleResponseInterface } from '@interfaces/ResponseInterfaces/Sale/StartSaleResponseInterface';
+import StartSale from '@package/config/api/Sale/Transaction/StartSale/page';
+import { getUser } from '@utils/Utilities';
 
-const ClientSearch: React.FC = () => {
+interface ClientSearchProps {
+  onTransactionComplete: (transaction: StartSaleResponseInterface, client: CustomerInterface) => void;
+}
+
+const ClientSearch: React.FC<ClientSearchProps> = ({ onTransactionComplete }) => {
   const {
     idTypes,
     loading,
@@ -27,11 +33,15 @@ const ClientSearch: React.FC = () => {
     handleInputChange,
     handleSubmitForm,
     isAffiliated,
+    customer,
   } = useClientSearchLogic();
+  
   const { t } = useTranslation();
   const [openDialog, setOpenDialog] = useState(false);
-  const setCustomer = useSetAtom(CustomerAtom);
-  const router = useRouter();
+  const [idUser] = useState(getUser() && getUser().id ? getUser().id : '');
+
+  const [storeNumber] = useAtom(storeNumberAtom);
+  const [storePos] = useAtom(storePosAtom);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -41,20 +51,20 @@ const ClientSearch: React.FC = () => {
     setOpenDialog(false);
   };
 
-  const handleUseGenericCustomer = () => {
-    setCustomer({
+  const handleUseGenericCustomer = async () => {
+    const genericCustomer  = {
       id: '',
       idCompany: 'default-company',
       companyName: 'default-company-name',
-      idSubsidiary: 0,
+      idSubsidiary: 3,
       nameSubsidiary: 'default-subsidiary',
       externalClientId: null,
       name: 'Cliente',
       secondName: '',
       firstSurname: 'Generico',
       secondSurname: '',
-      idTypeCustomer: 'Tarjeta de identidad',
-      nameTypeCustomer: 'Tarjeta',
+      idTypeCustomer: '12',
+      nameTypeCustomer: 'Tarjeta de identidad',
       dni: '222222222222',
       idGender: '',
       nameGender: '',
@@ -74,14 +84,75 @@ const ClientSearch: React.FC = () => {
       group: [],
       NameSurname: '',
       SurnameName: ''
-    });
+    };
 
-    router.push("/selfcheckout/checkout");
+    const saleData = {
+      storeNumber: storeNumber,
+      idSubsidiary: genericCustomer.idSubsidiary,
+      idClient: genericCustomer.id,
+      clientDni: genericCustomer.dni,
+      idType: genericCustomer.idTypeCustomer,
+      idGroup: '',
+      invoiceName: genericCustomer.name,
+      invoiceTypeNit: genericCustomer.idTypeCustomer,
+      invoiceNit: genericCustomer.dni,
+      invoiceDirection: genericCustomer.address,
+      invoiceCellPhone: genericCustomer.phone,
+      invoiceEmail: genericCustomer.mail,
+      idUser: idUser,
+      localDate: new Date().toISOString(),
+      pos: storePos,
+    };
+
+    const saleResponse = await StartSale(saleData) as StartSaleResponseInterface;
+    
+    if (saleResponse && saleResponse.correct) {
+      if (customer) {
+        onTransactionComplete(saleResponse, customer);
+      } else {
+        console.error("Customer is null");
+      }
+    } else {
+      console.error(saleResponse.message);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // Evita el comportamiento por defecto del formulario
-    handleSubmitForm(); // Ejecuta la función de búsqueda con los datos actuales
+    e.preventDefault();
+    handleSubmitForm();
+  };
+
+  const handleContinue = async () => {
+    if (customer) {
+      const saleData = {
+        storeNumber: storeNumber,
+        idSubsidiary: customer.idSubsidiary || 0,
+        idClient: customer.id,
+        clientDni: customer.dni,
+        idType: customer.idTypeCustomer,
+        idGroup: '',
+        invoiceName: customer.name,
+        invoiceTypeNit: customer.idTypeCustomer,
+        invoiceNit: customer.dni,
+        invoiceDirection: customer.address,
+        invoiceCellPhone: customer.phone,
+        invoiceEmail: customer.mail,
+        idUser: idUser,
+        localDate: new Date().toISOString(),
+        pos: storePos,
+      };
+      console.log("VALOR DE SALEDATA",saleData);
+      const saleResponse = await StartSale(saleData) as StartSaleResponseInterface;
+
+      console.log("VALOR DE SALESRESPONSE",saleResponse);
+      if (saleResponse && saleResponse.correct) {
+        onTransactionComplete(saleResponse, customer);
+      } else {
+        console.error(saleResponse.message);
+      }
+    } else {
+      handleOpenDialog();
+    }
   };
 
   return (
@@ -95,7 +166,7 @@ const ClientSearch: React.FC = () => {
             <select
               name="idType"
               value={formData.idType}
-              onChange={handleInputChange}  // Asegura que el estado del input cambie
+              onChange={handleInputChange}
               className="w-full p-2 border rounded"
               disabled={loading}
             >
@@ -119,7 +190,7 @@ const ClientSearch: React.FC = () => {
               name="idNumber"
               placeholder={t("msj_enter_id_number")}
               value={formData.idNumber}
-              onChange={handleInputChange}  // Actualiza el valor del input al escribir
+              onChange={handleInputChange}
               disabled={loading}
             />
           </Grid>
@@ -166,7 +237,6 @@ const ClientSearch: React.FC = () => {
               label={t("lbl_create_new_customer")}
               variant="primary"
               onClick={() => {
-                // Lógica para crear nuevo cliente
               }}
             />
           </div>
@@ -209,14 +279,12 @@ const ClientSearch: React.FC = () => {
             <Button
               label={t("lbl_continue")}
               variant="primary"
-              onClick={() => {
-                router.push("/selfcheckout/checkout");
-              }}
+              onClick={handleContinue}
             />
           </div>
         </Paper>
       )}
-
+      
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
         <DialogTitle sx={{ textAlign: 'center' }}>
           {t("msj_confirm_generic_customer")}

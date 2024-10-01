@@ -1,6 +1,4 @@
-import { useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
-import CustomerAtom from '@atoms/states/CustomerAtom';
 import { CustomerInterface, CustomerResponseInterface } from '@interfaces/ResponseInterfaces/Customer/CustomerResponseInterface';
 import { CustomerDniTypeInterface, CustomerDniTypeResponseInterface } from '@interfaces/ResponseInterfaces/Customer/DNITypeResponseInterface';
 import { GetCustomer } from '@package/config/api/Customer/Customer/GetCustomer/page';
@@ -17,7 +15,8 @@ export const useClientSearchLogic = () => {
     idNumber: ''
   });
 
-  const setCustomer = useSetAtom(CustomerAtom);
+  // Cliente seleccionado
+  const [customer, setCustomer] = useState<CustomerInterface | null>(null);
 
   const fetchIdTypes = async () => {
     setLoading(true);
@@ -91,6 +90,7 @@ export const useClientSearchLogic = () => {
     formData,
     handleInputChange,
     handleSubmitForm,
-    isAffiliated
+    isAffiliated,
+    customer
   };
 };

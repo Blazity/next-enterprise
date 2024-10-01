@@ -1,4 +1,5 @@
 import { GetTypeDNIOutputInterface } from "@interfaces/OutputInterfaces/Customer/GetTypeDNIOutputInterface";
+import { CustomerDniTypeResponseInterface } from "@interfaces/ResponseInterfaces/Customer/DNITypeResponseInterface";
 import { BASE_URL_CUSTOMER_TYPEDNI } from "@package/config/ApiPath";
 import { FetchData } from "@package/config/FetchData";
 import { ReturnService } from "@package/config/ReturnService"
@@ -36,7 +37,7 @@ async function GetTypeDni(ae_object: GetTypeDNIOutputInterface) {
       })
     }
   
-    const data = await FetchData(BASE_URL_CUSTOMER_TYPEDNI, 'all', options)
+    const data: CustomerDniTypeResponseInterface = await FetchData(BASE_URL_CUSTOMER_TYPEDNI, 'all', options)
   
     if (data.correct) {
       return data.object

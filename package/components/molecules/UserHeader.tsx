@@ -6,10 +6,10 @@ import Typography from '@mui/material/Typography';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import UserAtom from '@atoms/states/UserAtom';
+import CustomerAtom from '@atoms/states/CustomerAtom';
 
-const UserHeader: React.FC = () => {
-  const [user] = useAtom(UserAtom);
+const CustomerHeader: React.FC = () => {
+  const [customer] = useAtom(CustomerAtom);
   const { t } = useTranslation()
 
 
@@ -23,19 +23,19 @@ const UserHeader: React.FC = () => {
       >
         <Grid2>
           <Typography variant="h6" className="font-bold">
-            {user ? `${t("lbl_name_customer")}: ${user.name} ${user.lastName}` : `${t("lbl_name_customer")}: Anónimo`}
+            {customer ? `${t("lbl_name_customer")}: ${customer.name} ${customer.firstSurname}` : `${t("lbl_name_customer")}: Anónimo`}
           </Typography>
         </Grid2>
 
         <Grid2>
           <Typography variant="body2" color="textSecondary" className="text-white">
-            {user ? `${t("lbl_dni_customer")}: ${user.idTypeUser}` : `${t("lbl_dni_customer")}: 222222222222`}
+            {customer ? `${t("lbl_dni_customer")}: ${customer.dni}` : `${t("lbl_dni_customer")}: 222222222222`}
           </Typography>
         </Grid2>
 
         <Grid2>
           <Typography variant="body2" className="text-white">
-            {user ? `${t("lbl_email_customer")}: ${user.email}` : `${t("lbl_email_customer")}: generic@example.com`}
+            {customer ? `${t("lbl_email_customer")}: ${customer.mail}` : `${t("lbl_email_customer")}: generic@example.com`}
           </Typography>
         </Grid2>
       </Grid2>
@@ -43,4 +43,4 @@ const UserHeader: React.FC = () => {
   );
 };
 
-export default UserHeader;
+export default CustomerHeader;

@@ -1,9 +1,16 @@
 "use client";
 import { Box } from "@mui/material";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import MainLayout from "@layouts/MainLayout";
 
-const CheckoutScreen: React.FC = () => {
+interface CheckoutScreenProps {
+  onEndTransaction: () => void; // Callback para finalizar la transacción
+}
+
+const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onEndTransaction }) => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -14,7 +21,7 @@ const CheckoutScreen: React.FC = () => {
         boxShadow: '4'
       }}
     >
-      <MainLayout />
+      <MainLayout onEndTransaction={onEndTransaction} /> 
     </Box>
   );
 };

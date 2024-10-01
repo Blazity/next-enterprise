@@ -1,7 +1,7 @@
 export interface GetSaleOutputInterface {
     idTransaction?: string;
-    storeNumber?: number;
-    idSubsidiary?: string;
+    storeNumber?: string;
+    idSubsidiary?: number;
     idUser?: string;
     pos?: string;
 }

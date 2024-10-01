@@ -1,31 +1,27 @@
 "use client";
 import { Box, Button, Container } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
+import CheckoutScreen from "@app/selfcheckout/checkout/page";
 import Title from "@atoms/Title";
 
 const PreCheckout: React.FC = () => {
   const { t } = useTranslation();
-  const router = useRouter();
+  const [stage, setStage] = useState<"precheckout" | "searching" | "checkout">("precheckout");
 
   const handleStartCheckout = useCallback(() => {
-    router.push("/selfcheckout/verifyAffiliation"); 
-  }, [router]);
+    setStage("checkout");
+  }, []);
 
-  useEffect(() => {
-    const handleKeyPress = () => {
-      handleStartCheckout();
-    };
 
-    document.addEventListener("keydown", handleKeyPress);
+  const handleEndTransaction = () => {
+    setStage("precheckout");
+  };
 
-    // Cleanup the event listener
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [handleStartCheckout]);
+  if (stage === "checkout") {
+    return <CheckoutScreen onEndTransaction={handleEndTransaction} />;
+  }
 
   return (
     <Container maxWidth="md" sx={{ textAlign: "center", marginTop: "20vh" }}>

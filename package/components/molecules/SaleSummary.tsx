@@ -5,15 +5,14 @@ import Grid from '@mui/material/Grid2';
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { ItemObject } from '@interfaces/ResponseInterfaces/Sale/AddProductsResponseInterface';
 
 interface SaleSummaryProps {
-  subtotal: number;
-  discount: number;
-  tax: number;
-  total: number;
+  product: ItemObject;
+
 }
 
-const SaleSummary: React.FC<SaleSummaryProps> = ({ subtotal, discount, tax, total }) => {
+const SaleSummary: React.FC<SaleSummaryProps> = ({ product }) => {
   const { t } = useTranslation()
 
   return (
@@ -30,15 +29,13 @@ const SaleSummary: React.FC<SaleSummaryProps> = ({ subtotal, discount, tax, tota
           <TableHead>
             <TableRow>
               <TableCell sx={{ color: 'primary', borderColor: 'black', fontWeight: 'bold', width: '30%' }}>{t("tle_product")}</TableCell>
-              <TableCell sx={{ color: 'primary', borderColor: 'black', fontWeight: 'bold', width: '50%' }}>{t("tle_description")}</TableCell>
               <TableCell sx={{ color: 'primary', borderColor: 'black', fontWeight: 'bold', width: '20%', textAlign: 'right' }}>{t("tle_amount")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell sx={{ color: 'black', borderColor: 'black' }}>Product R</TableCell>
-              <TableCell sx={{ color: 'black', borderColor: 'black' }}>Producto para r uso</TableCell>
-              <TableCell sx={{ color: 'black', borderColor: 'black', textAlign: 'right' }}>3</TableCell>
+              <TableCell sx={{ color: 'black', borderColor: 'black' }}>{product.name}</TableCell>
+              <TableCell sx={{ color: 'black', borderColor: 'black', textAlign: 'right' }}>1</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -49,31 +46,16 @@ const SaleSummary: React.FC<SaleSummaryProps> = ({ subtotal, discount, tax, tota
                 <Typography variant="body2" align="right">{t("lbl_subtotal")}:</Typography>
               </Grid>
               <Grid size={{xs:5}}>
-                <Typography variant="body2" align="left">$ 1.400</Typography>
+                <Typography variant="body2" align="left">{product.regularUnitPrice}</Typography>
               </Grid>
             </Grid>
-            <Grid container>
-            <Grid size={{xs:7}} sx={{ pr: 10 }}>
-                <Typography variant="body2" align="right">{t("lbl_discount")}:</Typography>
-              </Grid>
-              <Grid size={{xs:5}}>
-                <Typography variant="body2" align="left">$ 12</Typography>
-              </Grid>
-            </Grid>
+
             <Grid container>
               <Grid size={{xs:7}} sx={{ pr: 5.5 }}>
                 <Typography variant="body2" align="right">{t("lbl_tax")}:</Typography>
               </Grid>
               <Grid size={{xs:5}}>
-                <Typography variant="body2" align="left">$ 123</Typography>
-              </Grid>
-            </Grid>
-            <Grid container>
-              <Grid size={{xs:7}} sx={{ pr: 5.5 }}>
-                <Typography variant="body2" align="right">{t("lbl_total")}:</Typography>
-              </Grid>
-              <Grid size={{xs:5}}>
-                <Typography variant="body2" align="left">$ 1.511</Typography>
+                <Typography variant="body2" align="left">{product.totalTaxes}</Typography>
               </Grid>
             </Grid>
           </Box>
@@ -82,7 +64,7 @@ const SaleSummary: React.FC<SaleSummaryProps> = ({ subtotal, discount, tax, tota
       <Box sx={{ p: 3, boxShadow: '2' }}>
         <Typography variant="h6" sx={{ color: 'primary', display: 'flex', justifyContent: 'space-between' }}>
           <span>{t("tle_total")}:</span>
-          <span>$ 12.250</span>
+          <span>{product.extendedPrice}</span>
         </Typography>
       </Box>
     </Box>

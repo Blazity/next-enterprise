@@ -1,5 +1,5 @@
 
-export interface Tax {
+export interface TaxInteface {
     id: string;
     idSaleDetail: string;
     idProduct: string;
@@ -13,7 +13,7 @@ export interface Tax {
     taxIncluded: boolean;
 }
 
-export interface SaleDetail {
+export interface SaleDetailInterface {
     idDetail: string;
     idTransaction: string;
     id: string;
@@ -35,19 +35,19 @@ export interface SaleDetail {
     idUser: string;
     creation: string;
     lastUpdate: string;
-    taxes: Tax[];
+    taxes: TaxInteface[];
     active: boolean;
     weighable: boolean;
     extendedPrice: number;
 }
 
-export interface CustomerPromotion {
+export interface CustomerPromotionInterface {
     groupId: string;
     customerId: string;
     percentageDiscount: number | null;
 }
 
-export interface ItemPromotion {
+export interface ItemPromotionInterface {
     index: number;
     code: string;
     quantity: number;
@@ -58,14 +58,14 @@ export interface ItemPromotion {
     weighable: boolean;
 }
 
-export interface Promotions {
-    customer: CustomerPromotion;
-    items: ItemPromotion[];
+export interface PromotionsInterface {
+    customer: CustomerPromotionInterface;
+    items: ItemPromotionInterface[];
     total: number;
-    listPromotion: any[]; // Assuming this is an empty array, can adjust if more data is provided
+    listPromotion: any[];
 }
 
-export interface SaleTransactionObject {
+export interface SaleTransactionObjectInterface {
     id: string;
     idCompany: string;
     idSubsidiary: number;
@@ -95,13 +95,13 @@ export interface SaleTransactionObject {
     localDateTime: string | null;
     creation: string;
     lastUpdate: string;
-    list: SaleDetail[];
-    promotions: Promotions;
+    list: SaleDetailInterface[];
+    promotions: PromotionsInterface;
 }
 
 export interface GetSaleResponseInterface {
     correct: boolean;
     message: string | null;
     errorCode: number;
-    object: SaleTransactionObject;
+    object: SaleTransactionObjectInterface;
 }

@@ -42,7 +42,7 @@ async function StartSale(ae_object: StartSaleOutputInterface) {
         })
     }
 
-    let data : StartSaleResponseInterface = await FetchData(BASE_URL_SALE, 'addProducts', options)
+    let data : StartSaleResponseInterface = await FetchData(BASE_URL_SALE, 'startSale', options)
 
     if (data.correct) {
         return data.object
