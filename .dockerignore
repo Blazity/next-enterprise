@@ -1,0 +1,80 @@
+# Node modules directory
+node_modules
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output directories
+out
+dist
+build
+
+# Dependency directories
+jspm_packages
+typings
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variable files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Git files
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files and configurations
+e2e
+tests
+coverage
+jest.config.js
+jest.setup.js
+playwright.config.ts
+
+# Documentation and markdown files
+README.md
+LICENSE
+*.md
+
+# Configuration and setup files not needed in the final image
+renovate.json
+git-conventional-commits.yaml
+.eslintrc.js
+.eslintignore
+stylelint.config.js
+babel.config.js
+
+# Scripts and other development utilities
+report-bundle-size.js
+instrumentation.ts
+
+# Ignore all source map files
+*.map
+
+# Ignore any other unwanted files
+npm-debug.log
+
+# Exclude package-lock.json if you're using Yarn
+package-lock.json
