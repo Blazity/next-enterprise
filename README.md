@@ -72,21 +72,27 @@ To get started with this boilerplate, follow these steps:
 git clone https://github.com/<your_username)/next-enterprise.git
 ```
 
-2. Install the dependencies:
+2. Enable Corepack (required for Yarn@4)
+
+```bash
+corepack enable
+```
+
+3. Install the dependencies:
 
 ```bash
 yarn install --frozen-lockfile
 ```
 
-3. Run the development server:
+4. Run the development server:
 
 ```bash
 yarn dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-5. This project uses a git hook to enforce [conventional commits](https://github.com/qoomon/git-conventional-commits). To install the git hook, run the following command in the root directory of the project:
+6. This project uses a git hook to enforce [conventional commits](https://github.com/qoomon/git-conventional-commits). To install the git hook, run the following command in the root directory of the project:
 
 ```sh
 brew install pre-commit

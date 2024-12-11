@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - main
+      - master
       - develop
   pull_request:
     branches:
       - main
+      - master
       - develop
   workflow_dispatch:
 
@@ -24,10 +26,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up node
+      - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: "Set up Node.js ${{ env.node_version }}"
         uses: actions/setup-node@v3
         with:
-          node-version: "20.x"
+          node-version: "${{ env.node_version }}"
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile

@@ -28,8 +28,19 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+
+# playwright
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 /.npm-only-allow
