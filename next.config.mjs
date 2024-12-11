@@ -1,11 +1,14 @@
 import withBundleAnalyzer from "@next/bundle-analyzer"
-import withPlugins from "next-compose-plugins"
 import { env } from "./env.mjs"
+
+const plugins = [
+  withBundleAnalyzer({ enabled: env.ANALYZE }),
+];
 
 /**
  * @type {import('next').NextConfig}
  */
-const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
+const config = {
   reactStrictMode: true,
   logging: {
     fetches: {
@@ -21,6 +24,6 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
       { source: "/ping", destination: "/api/health" },
     ]
   },
-})
+};
 
-export default config
+export default plugins.reduce((acc, next) => next(acc), config);
