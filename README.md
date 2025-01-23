@@ -1,4 +1,3 @@
-<img align="right" width="360px" height="410px" src="./.github/assets/project-logo-vertical.png">
 
 ### Next.js Enterprise Boilerplate 
 
@@ -11,9 +10,19 @@ Welcome to the _Next.js Enterprise Boilerplate_, an open-source template for ent
 > [!NOTE]
 > **Blazity** is a group of Next.js/Headless experts. Contact us at [contact@blazity.com](https://blazity.com) if you’d like to talk about your project or just to have a chat with us
 
-## Features
+### Feature Manager (nefi)
+<a href="https://github.com/blazity/nefi"><img width="250" align="right" alt="nefi-badge" src="https://github.com/user-attachments/assets/37941f8c-944f-44c0-b3c7-b1d322431871" /></a>
 
-With this template, you get all the awesomeness you need:
+**nefi** (next-enterprise feature integrations) is an AI agent that will help configuring the boilerplate to your needs using natural language. It can remove/install dependencies, modify files and manage Git. 
+
+Simply set up the boilerplate, follow guide [in the getting started section](#getting-started) and type `npx nefi` in your terminal!
+
+Leave a ⭐ for [nefi on GitHub](https://github.com/blazity/nefi) and check out the [nefi.ai docs](https://nefi.ai/)!
+
+
+### Integrated features
+
+Don't worry, with this template you will anyways get all the awesomeness you need:
 
 - 🏎️ **[Next.js 15](https://nextjs.org/)** - Fast by default, with config optimized for performance (with **App Directory**)
 - 💅 **[Tailwind CSS](https://tailwindcss.com/)** - A utility-first CSS framework for rapid UI development
@@ -57,7 +66,6 @@ With this template, you get all the awesomeness you need:
     - [Zustand](#zustand)
     - [Jotai](#jotai)
     - [Recoil](#recoil)
-  - [ChatGPT Code Review](#-chatgpt-code-review)
   - [Environment Variables handling](#-environment-variables-handling)
   - [Contribution](#-contribution)
   - [Support](#support)
