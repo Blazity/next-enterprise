@@ -29,8 +29,15 @@ jobs:
         with:
           node-version: "20.x"
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: "Install pnpm & dependencies"
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: |
+            - recursive: true
+            - args: [--frozen-lockfile]
+
+      # - name: Install dependencies
+      #   run: pnpm install --frozen-lockfile
 
       - name: Restore next build
         uses: actions/cache@v3
@@ -46,7 +53,7 @@ jobs:
         env:
           SKIP_BUILD_PRODUCT_REDIRECTS: 1
         # change this if your site requires a custom build command
-        run: yarn build
+        run: pnpm build
 
       # Here's the first place where next-bundle-analysis' own script is used
       # This step pulls the raw bundle stats for the current bundle
