@@ -1,6 +1,10 @@
 <img align="right" width="360px" height="410px" src="./.github/assets/project-logo-vertical.png">
 
-# Next.js Enterprise Boilerplate </br>  [![GitHub Actions Workflow Status][check-workflow-badge]][check-workflow-badge-link] [![GitHub License][github-license-badge]][github-license-badge-link] [![GitHub contributors][github-contributors-badge]][github-contributors-badge-link] [![Discord][discord-badge]][discord-badge-link] [![Blazity][made-by-blazity-badge]][made-by-blazity-badge-link]
+### Next.js Enterprise Boilerplate 
+
+</br>
+
+  [![GitHub Actions Workflow Status][check-workflow-badge]][check-workflow-badge-link] [![GitHub License][github-license-badge]][github-license-badge-link] [![GitHub contributors][github-contributors-badge]][github-contributors-badge-link] [![Discord][discord-badge]][discord-badge-link] [![Blazity][made-by-blazity-badge]][made-by-blazity-badge-link]
 
 Welcome to the _Next.js Enterprise Boilerplate_, an open-source template for enterprise projects! It's loaded with features that'll help you build a high-performance, maintainable, and enjoyable app. We've done all the heavy lifting for you, so sit back, relax, and get ready to conquer the world with your incredible app! 🌍
 
@@ -11,7 +15,7 @@ Welcome to the _Next.js Enterprise Boilerplate_, an open-source template for ent
 
 With this template, you get all the awesomeness you need:
 
-- 🏎️ **[Next.js](https://nextjs.org/)** - Fast by default, with config optimized for performance (with **App Directory**)
+- 🏎️ **[Next.js 15](https://nextjs.org/)** - Fast by default, with config optimized for performance (with **App Directory**)
 - 💅 **[Tailwind CSS](https://tailwindcss.com/)** - A utility-first CSS framework for rapid UI development
 - ✨ **[ESlint](https://eslint.org/)** and **[Prettier](https://prettier.io/)** - For clean, consistent, and error-free code
 - 🛠️ **[Extremely strict TypeScript](https://www.typescriptlang.org/)** - With [`ts-reset`](https://github.com/total-typescript/ts-reset) library for ultimate type safety
@@ -31,7 +35,6 @@ With this template, you get all the awesomeness you need:
 - **[Renovate BOT](https://www.whitesourcesoftware.com/free-developer-tools/renovate)** - Auto-updating dependencies, so you can focus on coding
 - **[Patch-package](https://www.npmjs.com/package/patch-package)** - Fix external dependencies without losing your mind
 - **Components coupling and cohesion graph** - A tool for managing component relationships
-- **[Automated ChatGPT Code Reviews](https://openai.com/chatgpt)** - **Stay on the cutting edge with AI-powered code reviews!**
 - **[Semantic Release](https://github.com/semantic-release/semantic-release)** - for automatic changelog
 - **[T3 Env](https://env.t3.gg/)** - Manage your environment variables with ease
 
@@ -69,19 +72,19 @@ To get started with this boilerplate, follow these steps:
 
 ```bash
 ## Don't forget to ⭐ star and fork it first :)
-git clone https://github.com/<your_username)/next-enterprise.git
+git clone https://github.com/<your_username>/next-enterprise.git
 ```
 
 2. Install the dependencies:
 
 ```bash
-yarn install --frozen-lockfile
+pnpm install --frozen-lockfile
 ```
 
 3. Run the development server:
 
 ```bash
-yarn dev
+pnpm run dev
 ```
 
 4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -118,7 +121,6 @@ The following scripts are available in the `package.json`:
 - `e2e:ui`: Runs end-to-end tests with UI
 - `format`: Formats the code with Prettier
 - `postinstall`: Applies patches to external dependencies
-- `preinstall`: Ensures the project is installed with Yarn
 - `coupling-graph`: **Generates a coupling and cohesion graph for the components**
 
 ## 🔗 Coupling Graph
@@ -126,7 +128,7 @@ The following scripts are available in the `package.json`:
 The `coupling-graph` script is a useful tool that helps visualize the coupling and connections between your project's internal modules. It's built using the [Madge](https://github.com/pahen/madge) library. To generate the graph, simply run the following command:
 
 ```bash
-yarn coupling-graph
+pnpm run coupling-graph
 ```
 
 This will create a `graph.svg` file, which contains a graphical representation of the connections between your components. You can open the file with any SVG-compatible viewer.
@@ -139,9 +141,9 @@ This boilerplate comes with various testing setups to ensure your application's 
 
 ### Running Tests
 
-- **Unit and integration tests**: Run Jest tests using `yarn test`
-- **End-to-end tests (headless mode)**: Run Playwright tests in headless mode with `yarn e2e:headless`
-- **End-to-end tests (UI mode)**: Run Playwright tests with UI using `yarn e2e:ui`
+- **Unit and integration tests**: Run Jest tests using `pnpm run test`
+- **End-to-end tests (headless mode)**: Run Playwright tests in headless mode with `pnpm run e2e:headless`
+- **End-to-end tests (UI mode)**: Run Playwright tests with UI using `pnpm run e2e:ui`
 
 <img width="1392" alt="image" src="https://user-images.githubusercontent.com/28964599/233666655-93b7d08b-2fd8-406a-b43c-44d4d96cf387.png">
 
@@ -183,7 +185,7 @@ export const FilledForm: Story = {
 
 ### Smoke Testing
 
-In this boilerplate, we use Storybook's out-of-the-box support for smoke testing to verify that components render correctly without any errors. Just run `yarn test-storybook` to perform smoke testing. Remember to write stories in JSX or TSX format only. Smoke testing and a lot of other functionalities dont work well with MDX stories.
+In this boilerplate, we use Storybook's out-of-the-box support for smoke testing to verify that components render correctly without any errors. Just run `pnpm run test-storybook` to perform smoke testing. Remember to write stories in JSX or TSX format only. Smoke testing and a lot of other functionalities dont work well with MDX stories.
 
 ## 🎨 Styling and Design System
 
@@ -214,14 +216,6 @@ While this boilerplate doesn't include a specific state management library, we b
 [Recoil](https://recoiljs.org/) is a state management library developed by Facebook, specifically designed for React applications. By utilizing atoms and selectors, Recoil allows you to efficiently manage state and derived state. Its key benefit is the ability to update components only when the state they're subscribed to changes, reducing unnecessary re-renders and keeping your application fast and efficient. Recoil also offers great developer experience with built-in debugging tools.
 
 Choose the library that best fits your requirements and project structure to ensure an efficient state management solution for your application.
-
-## 🤖 ChatGPT Code Review
-
-We've integrated the innovative [ChatGPT Code Review](https://github.com/anc95/ChatGPT-CodeReview) for AI-powered, automated code reviews. This feature provides real-time feedback on your code, helping improve code quality and catch potential issues.
-
-To use ChatGPT Code Review, add an `OPENAI_API_KEY` environment variable with an appropriate key from the OpenAI platform. For setup details, refer to the [Using GitHub Actions](https://github.com/anc95/ChatGPT-CodeReview#using-github-actions) section in the documentation.
-
-![image](https://user-images.githubusercontent.com/28964599/233685071-e1371edf-6359-41c3-a989-335d6ee09cb7.png)
 
 ## 💻 Environment Variables handling
 
