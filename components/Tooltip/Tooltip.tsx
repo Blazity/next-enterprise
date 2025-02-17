@@ -1,17 +1,17 @@
 "use client"
 
 import * as RadixTooltip from "@radix-ui/react-tooltip"
-import { cva, VariantProps } from "class-variance-authority"
+import { cva, type VariantProps } from "class-variance-authority"
 import React from "react"
 import { twMerge } from "tailwind-merge"
 
 const tooltipContent = cva([], {
   variants: {
     intent: {
-      primary: ["rounded-0.5md", "bg-zinc-700", "font-open-sans", "text-white"],
+      primary: ["rounded-md", "bg-zinc-700", "font-sans", "text-white"],
     },
     size: {
-      md: ["px-4", "py-2.5", "text-2xs"],
+      md: ["px-4", "py-2.5", "text-xs"],
     },
   },
   defaultVariants: {
