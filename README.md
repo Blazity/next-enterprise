@@ -10,19 +10,9 @@ Welcome to the _Next.js Enterprise Boilerplate_, an open-source template for ent
 > [!NOTE]
 > **Blazity** is a group of Next.js/Headless experts. Contact us at [contact@blazity.com](https://blazity.com) if you’d like to talk about your project or just to have a chat with us
 
-### Feature Manager (nefi)
-<a href="https://github.com/blazity/nefi"><img width="250" align="right" alt="nefi-badge" src="https://github.com/user-attachments/assets/37941f8c-944f-44c0-b3c7-b1d322431871" /></a>
-
-**nefi** (next-enterprise feature integrations) is an AI agent that will help configuring the boilerplate to your needs using natural language. It can remove/install dependencies, modify files and manage Git. 
-
-Simply set up the boilerplate, follow guide [in the getting started section](#getting-started) and type `npx nefi` in your terminal!
-
-Leave a ⭐ for [nefi on GitHub](https://github.com/blazity/nefi) and check out the [nefi.ai docs](https://nefi.ai/)!
-
-
 ### Integrated features
 
-Don't worry, with this template you will anyways get all the awesomeness you need:
+With this template you will get all the awesomeness you need:
 
 - 🏎️ **[Next.js 15](https://nextjs.org/)** - Fast by default, with config optimized for performance (with **App Directory**)
 - 💅 **[Tailwind CSS](https://tailwindcss.com/)** - A utility-first CSS framework for rapid UI development
@@ -46,6 +36,20 @@ Don't worry, with this template you will anyways get all the awesomeness you nee
 - **Components coupling and cohesion graph** - A tool for managing component relationships
 - **[Semantic Release](https://github.com/semantic-release/semantic-release)** - for automatic changelog
 - **[T3 Env](https://env.t3.gg/)** - Manage your environment variables with ease
+
+### More features
+
+**nefi** (next-enterprise feature integrations) is an AI agent that will help configuring the boilerplate to your needs using natural language. It can remove/install dependencies, modify files, manage git and integrate various solutions into your project. 
+
+Simply set up the boilerplate, follow guide [in the getting started section](#getting-started) and type `npx nefi` in your terminal!
+
+Here's an example video of [nefi](https://nefi.ai/) integrating [Clerk](https://clerk.com/) auth solutions with one command, no API keys and no manual configuration needed!
+
+
+https://github.com/user-attachments/assets/5c13a110-7389-4859-909f-60a7f623e47d
+
+
+Leave a ⭐ for [nefi on GitHub](https://github.com/blazity/nefi) and check out the [nefi.ai docs](https://nefi.ai/)!
 
 ## Table of Contents
 
