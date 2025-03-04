@@ -10,6 +10,10 @@ const config: NextConfig = {
       fullUrl: true,
     },
   },
+  images: {
+    domains: ["raw.githubusercontent.com"], // ✅ อนุญาตโหลดรูปจาก GitHub
+    unoptimized: true, // ✅ ปิดการ Optimize รูปภาพ (ถ้าต้องการโหลด URL ตรง)
+  },
   rewrites: async () => [
     { source: "/healthz", destination: "/api/health" },
     { source: "/api/healthz", destination: "/api/health" },
