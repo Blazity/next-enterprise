@@ -8,8 +8,14 @@ export const env = createEnv({
       .optional()
       .transform((value) => value === "true"),
   },
-  client: {},
+  client:{
+    NEXT_PUBLIC_CLERK_ENABLE_KEYLESS: z
+      .enum(["true", "false"])
+      .optional()
+      .transform((value) => value === "true")
+  },
   runtimeEnv: {
+    NEXT_PUBLIC_CLERK_ENABLE_KEYLESS: process.env.NEXT_PUBLIC_CLERK_ENABLE_KEYLESS,
     ANALYZE: process.env.ANALYZE,
   },
 })
