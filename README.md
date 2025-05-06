@@ -95,7 +95,7 @@ Learn more in our [documentation (docs.blazity.com)][docs] how to quickstart wit
 - Jakub Jabłoński ([jjablonski-it](https://github.com/jjablonski-it)) - Head of Integrations @ Blazity
 
 #### All-time contributors
-[bmstefanski](https://github.com/bmstefanski), [jjablonski-it](https://github.com/jjablonski-it)
+[bmstefanski](https://github.com/bmstefanski)
 
 ## License
 
