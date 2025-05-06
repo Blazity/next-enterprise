@@ -1,5 +1,5 @@
 
-# Next.js Enterprise Boilerplate 
+# [Next.js Enterprise Boilerplate](https://blazity.com/open-source/nextjs-enterprise-boilerplate) 
 
 A production-ready template for building enterprise applications with Next.js. This boilerplate provides a solid foundation with carefully selected technologies and ready-to-go infrastructure to help you develop high-quality applications efficiently.
 
@@ -7,14 +7,24 @@ A production-ready template for building enterprise applications with Next.js. T
 
 While most Next.js boilerplates focus on individual developer needs with excessive complexity, **next-enterprise** prioritizes strategic simplicity for enterprise teams. It offers a streamlined foundation with high-impact features that maximize developer productivity and accelerate time-to-market for business-critical applications.
 
+<a href="https://blazity.com/">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="/assets/blazity-logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="/assets/blazity-logo-light.svg">
+  <img alt="Logo" align="right" height="80" src="/assets/blazity-logo-light.svg">
+</picture>
+</a>
+
 > [!NOTE]
 > **Blazity** is a group of Next.js architects. We help organizations architect, optimize, and deploy high-performance Next.js applications at scale. Contact us at [contact@blazity.com](https://blazity.com) if you’d like to talk about your project.
+
+
 
 ## Documentation
 
 There is a separate documentation that explains its functionality, highlights core business values and technical decisions, provides guidelines for future development, and includes architectural diagrams.
 
-We really encourage you to [visit our docs (docs.blazity.com)](https://docs.blazity.com) to learn more
+We encourage you to [visit our docs (docs.blazity.com)](https://docs.blazity.com) to learn more
 
 ## Integrated features
 
