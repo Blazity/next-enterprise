@@ -113,7 +113,7 @@
     "typed-query-selector": "^2.12.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.0",
-    "webpack": "5.89.0"
+    "webpack": "5.94.0"
   },
   "engines": {
     "node": ">=20.0.0"
