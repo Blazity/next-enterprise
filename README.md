@@ -90,9 +90,9 @@ Learn more in our [documentation (docs.blazity.com)][docs] how to quickstart wit
 
 #### Active maintainers
 
-- Igor Klepacki ([neg4n](https://github.com/neg4n)) - Open Source Software Developer @ Blazity
-- Tomasz Czechowski ([tomaszczechowski](https://github.com/tomaszczechowski)) - Solutions Architect & DevOps @ Blazity
-- Jakub Jabłoński ([jjablonski-it](https://github.com/jjablonski-it)) - Head of Integrations @ Blazity
+- Igor Klepacki ([neg4n](https://github.com/neg4n)) - Open Source Software Developer
+- Tomasz Czechowski ([tomaszczechowski](https://github.com/tomaszczechowski)) - Solutions Architect & DevOps
+- Jakub Jabłoński ([jjablonski-it](https://github.com/jjablonski-it)) - Head of Integrations
 
 #### All-time contributors
 [bmstefanski](https://github.com/bmstefanski)
