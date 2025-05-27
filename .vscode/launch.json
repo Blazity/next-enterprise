@@ -4,7 +4,7 @@
     {
       "type": "pwa-node",
       "request": "launch",
-      "name": "Debug (Next.js / no Turbopack",
+      "name": "Debug (Next.js / no Turbopack)",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["exec", "next", "dev"],
       "cwd": "${workspaceFolder}",
