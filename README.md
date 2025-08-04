@@ -39,7 +39,7 @@ With this template you will get all the boilerplate features included:
 * [GitHub Actions](https://github.com/features/actions) - Pre-configured workflows including bundle size and performance tracking
 * Perfect Lighthouse score - Optimized performance metrics
 * [Bundle analyzer](https://www.npmjs.com/package/@next/bundle-analyzer) - Monitor and manage bundle size during development
-* Testing suite - [Jest](https://jestjs.io/), [React Testing Library](https://testing-library.com/react), and [Playwright](https://playwright.dev/) for comprehensive testing
+* Testing suite - [Vitest](https://vitest.dev), [React Testing Library](https://testing-library.com/react), and [Playwright](https://playwright.dev/) for comprehensive testing
 * [Storybook](https://storybook.js.org/) - Component development and documentation
 * Advanced testing - Smoke and acceptance testing capabilities
 * [Conventional commits](https://www.conventionalcommits.org/) - Standardized commit history management
