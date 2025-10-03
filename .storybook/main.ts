@@ -1,22 +1,24 @@
-import type { StorybookConfig } from "@storybook/nextjs"
-const config: StorybookConfig = {
-  stories: ["../components/**/*.stories.mdx", "../components/**/*.stories.@(js|jsx|ts|tsx)"],
-  addons: ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/addon-interactions"],
-  framework: {
-    name: "@storybook/nextjs",
-    options: {},
-  },
-  docs: {
-    autodocs: "tag",
-  },
-  typescript: {
-    check: false,
-    checkOptions: {},
-    reactDocgen: false,
-    reactDocgenTypescriptOptions: {
-      shouldExtractLiteralValuesFromEnum: true,
-      propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
-    },
-  },
+import type { StorybookConfig } from '@storybook/sveltekit';
+
+import { join, dirname } from "path"
+
+/**
+* This function is used to resolve the absolute path of a package.
+* It is needed in projects that use Yarn PnP or are set up within a monorepo.
+*/
+function getAbsolutePath(value: string): any {
+  return dirname(require.resolve(join(value, 'package.json')))
 }
-export default config
+const config: StorybookConfig = {
+  "stories": [
+    "../src/**/*.stories.@(js|ts|svelte)"
+  ],
+  "addons": [
+    getAbsolutePath('@storybook/addon-svelte-csf')
+  ],
+  "framework": {
+    "name": getAbsolutePath('@storybook/sveltekit'),
+    "options": {}
+  }
+};
+export default config;

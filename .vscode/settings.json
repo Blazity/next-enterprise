@@ -1,5 +1,9 @@
 {
-  "tailwindCSS.experimental.classRegex": [
-    ["cva(?:<[^>]*>)?(([^)]*))", "[\"'`]([^\"'`]*).*?[\"'`]", "(?:twMerge|twJoin)\\(([^\\);]*)[\\);]"]
-  ]
+	"tailwindCSS.experimental.classRegex": [
+		[
+			"cva(?:<[^>]*>)?(([^)]*))",
+			"[\"'`]([^\"'`]*).*?[\"'`]",
+			"(?:twMerge|twJoin)\\(([^\\);]*)[\\);]"
+		]
+	]
 }

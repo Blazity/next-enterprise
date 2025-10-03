@@ -1,0 +1,8 @@
+
+> sveltekit-enterprise@0.0.1 check /Users/kurrytran/sveltekit-enterprise
+> svelte-kit sync && svelte-check --tsconfig ./tsconfig.json
+
+Loading svelte-check in workspace: /Users/kurrytran/sveltekit-enterprise
+Getting Svelte diagnostics...
+
+svelte-check found 0 errors and 0 warnings

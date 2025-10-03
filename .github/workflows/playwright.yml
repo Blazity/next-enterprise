@@ -14,12 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
-      - name: "use node ${{ env.node_version }}"
+      - name: 'use node ${{ env.node_version }}'
         uses: actions/setup-node@v3
         with:
-          node-version: "${{ env.node_version }}"
+          node-version: '${{ env.node_version }}'
 
-      - name: "Install pnpm & dependencies"
+      - name: 'Install pnpm & dependencies'
         uses: pnpm/action-setup@v4
         with:
           run_install: |

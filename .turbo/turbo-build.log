@@ -1,0 +1,115 @@
+
+> sveltekit-enterprise@0.0.1 build /Users/kurrytran/sveltekit-enterprise
+> vite build
+
+vite v7.1.9 building SSR bundle for production...
+transforming...
+"serial" is imported from external module "drizzle-orm/pg-core" but never used in "src/lib/server/db/schema.ts".
+✓ 210 modules transformed.
+rendering chunks...
+vite v7.1.9 building for production...
+transforming...
+✓ 159 modules transformed.
+rendering chunks...
+computing gzip size...
+.svelte-kit/output/client/_app/version.json                        0.03 kB │ gzip:  0.05 kB
+.svelte-kit/output/client/.vite/manifest.json                      5.04 kB │ gzip:  0.85 kB
+.svelte-kit/output/client/_app/immutable/assets/0.DU-Tcw1l.css    12.71 kB │ gzip:  3.29 kB
+.svelte-kit/output/client/_app/immutable/chunks/KprIAG8Z.js        0.03 kB │ gzip:  0.05 kB
+.svelte-kit/output/client/_app/immutable/chunks/NZTpNUN0.js        0.08 kB │ gzip:  0.09 kB
+.svelte-kit/output/client/_app/immutable/entry/start.DXRhJVnO.js   0.08 kB │ gzip:  0.09 kB
+.svelte-kit/output/client/_app/immutable/nodes/3.omDxb6Zn.js       0.21 kB │ gzip:  0.17 kB
+.svelte-kit/output/client/_app/immutable/nodes/4.NJHUlxqB.js       0.56 kB │ gzip:  0.37 kB
+.svelte-kit/output/client/_app/immutable/nodes/1.BTaY_GJy.js       1.02 kB │ gzip:  0.59 kB
+.svelte-kit/output/client/_app/immutable/nodes/5.BGlZAlh0.js       1.12 kB │ gzip:  0.54 kB
+.svelte-kit/output/client/_app/immutable/chunks/E1V1-Alx.js        1.28 kB │ gzip:  0.71 kB
+.svelte-kit/output/client/_app/immutable/chunks/CJWnaVeV.js        1.90 kB │ gzip:  0.93 kB
+.svelte-kit/output/client/_app/immutable/chunks/hy0MAcd1.js        2.14 kB │ gzip:  1.15 kB
+.svelte-kit/output/client/_app/immutable/nodes/0.DdhBXGxH.js       2.54 kB │ gzip:  1.06 kB
+.svelte-kit/output/client/_app/immutable/chunks/Bd1LgUiN.js        2.87 kB │ gzip:  1.50 kB
+.svelte-kit/output/client/_app/immutable/chunks/BluueYzA.js        4.46 kB │ gzip:  2.02 kB
+.svelte-kit/output/client/_app/immutable/entry/app.BJIUy9K1.js     6.32 kB │ gzip:  2.91 kB
+.svelte-kit/output/client/_app/immutable/chunks/DFbZd7Nd.js        6.54 kB │ gzip:  3.05 kB
+.svelte-kit/output/client/_app/immutable/chunks/DMLsjVnn.js       21.17 kB │ gzip:  8.43 kB
+.svelte-kit/output/client/_app/immutable/chunks/DKtxTpPG.js       33.37 kB │ gzip: 12.98 kB
+.svelte-kit/output/client/_app/immutable/nodes/2.DDcVLftZ.js      46.40 kB │ gzip: 15.52 kB
+✓ built in 671ms
+.svelte-kit/output/server/.vite/manifest.json                                  6.40 kB
+.svelte-kit/output/server/_app/immutable/assets/_layout.DU-Tcw1l.css          12.71 kB
+.svelte-kit/output/server/entries/pages/demo/_page.svelte.js                   0.13 kB
+.svelte-kit/output/server/chunks/environment.js                                0.19 kB
+.svelte-kit/output/server/chunks/shared-server.js                              0.28 kB
+.svelte-kit/output/server/chunks/equality.js                                   0.33 kB
+.svelte-kit/output/server/chunks/state.svelte.js                               0.38 kB
+.svelte-kit/output/server/internal.js                                          0.43 kB
+.svelte-kit/output/server/chunks/server.js                                     0.48 kB
+.svelte-kit/output/server/chunks/escaping.js                                   0.53 kB
+.svelte-kit/output/server/entries/pages/demo/lucia/_page.svelte.js             0.62 kB
+.svelte-kit/output/server/chunks/hooks.server.js                               0.71 kB
+.svelte-kit/output/server/entries/pages/demo/lucia/_page.server.ts.js          0.82 kB
+.svelte-kit/output/server/chunks/utils2.js                                     0.91 kB
+.svelte-kit/output/server/entries/fallbacks/error.svelte.js                    1.14 kB
+.svelte-kit/output/server/chunks/context.js                                    1.18 kB
+.svelte-kit/output/server/entries/pages/demo/lucia/login/_page.svelte.js       1.24 kB
+.svelte-kit/output/server/chunks/index.js                                      1.46 kB
+.svelte-kit/output/server/entries/pages/_layout.svelte.js                      2.53 kB
+.svelte-kit/output/server/entries/pages/demo/lucia/login/_page.server.ts.js    3.14 kB
+.svelte-kit/output/server/chunks/auth.js                                       3.47 kB
+.svelte-kit/output/server/chunks/utils.js                                      3.48 kB
+.svelte-kit/output/server/chunks/exports.js                                    5.52 kB
+.svelte-kit/output/server/chunks/query.js                                      7.98 kB
+.svelte-kit/output/server/remote-entry.js                                      8.80 kB
+.svelte-kit/output/server/chunks/shared.js                                    16.46 kB
+.svelte-kit/output/server/entries/pages/_page.svelte.js                       18.51 kB
+.svelte-kit/output/server/chunks/index2.js                                    24.35 kB
+.svelte-kit/output/server/chunks/internal.js                                  72.19 kB
+.svelte-kit/output/server/index.js                                           145.26 kB
+✓ built in 3.69s
+
+Run npm run preview to preview your production build locally.
+
+> Using @sveltejs/adapter-vercel
+  Warning: The following modules failed to locate dependencies that may (or may not) be required for your app to work:
+  node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/index.js
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.darwin-universal.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.darwin-arm64.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.android-arm64.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.android-arm-eabi.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.darwin-x64.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.freebsd-arm64.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.freebsd-x64.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.win32-arm64-msvc.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.linux-x64-musl.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.linux-arm64-musl.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.linux-x64-gnu.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.linux-arm-musleabihf.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.linux-arm-gnueabihf.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.linux-riscv64-musl.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.linux-riscv64-gnu.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.linux-ppc64-gnu.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.linux-arm64-gnu.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.linux-s390x-gnu.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.wasi.cjs[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.win32-x64-msvc.node[39m[22m
+    - [1m[36m/Users/kurrytran/sveltekit-enterprise/node_modules/.pnpm/@node-rs+argon2@2.0.2/node_modules/@node-rs/argon2/argon2.win32-ia32-msvc.node[39m[22m
+    - [1m[36m@node-rs/argon2-darwin-universal[39m[22m
+    - [1m[36m@node-rs/argon2-android-arm-eabi[39m[22m
+    - [1m[36m@node-rs/argon2-win32-ia32-msvc[39m[22m
+    - [1m[36m@node-rs/argon2-win32-x64-msvc[39m[22m
+    - [1m[36m@node-rs/argon2-darwin-x64[39m[22m
+    - [1m[36m@node-rs/argon2-win32-arm64-msvc[39m[22m
+    - [1m[36m@node-rs/argon2-freebsd-x64[39m[22m
+    - [1m[36m@node-rs/argon2-linux-x64-musl[39m[22m
+    - [1m[36m@node-rs/argon2-freebsd-arm64[39m[22m
+    - [1m[36m@node-rs/argon2-linux-x64-gnu[39m[22m
+    - [1m[36m@node-rs/argon2-linux-arm64-gnu[39m[22m
+    - [1m[36m@node-rs/argon2-linux-arm-musleabihf[39m[22m
+    - [1m[36m@node-rs/argon2-linux-riscv64-gnu[39m[22m
+    - [1m[36m@node-rs/argon2-linux-arm-gnueabihf[39m[22m
+    - [1m[36m@node-rs/argon2-linux-riscv64-musl[39m[22m
+    - [1m[36m@node-rs/argon2-linux-ppc64-gnu[39m[22m
+    - [1m[36m@node-rs/argon2-android-arm64[39m[22m
+    - [1m[36m@node-rs/argon2-wasm32-wasi[39m[22m
+    - [1m[36m@node-rs/argon2-linux-arm64-musl[39m[22m
+    - [1m[36m@node-rs/argon2-linux-s390x-gnu[39m[22m
+  ✔ done

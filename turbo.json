@@ -1,0 +1,40 @@
+{
+	"$schema": "https://turborepo.com/schema.json",
+	"ui": "stream",
+	"tasks": {
+		"build": {
+			"outputs": [".svelte-kit/**", "build/**"],
+			"inputs": ["src/**", "package.json", "svelte.config.js", "vite.config.ts"]
+		},
+		"check": {
+			"inputs": ["src/**", "package.json", "tsconfig.json"]
+		},
+		"format": {
+			"inputs": ["src/**", "package.json"]
+		},
+		"lint": {
+			"inputs": ["src/**", "package.json", "eslint.config.js"]
+		},
+		"cpd": {
+			"inputs": ["src/**", "package.json"]
+		},
+		"test": {
+			"dependsOn": ["test:unit"]
+		},
+		"test:unit": {
+			"inputs": ["src/**", "package.json", "vitest.config.ts"]
+		},
+		"db:generate": {
+			"outputs": ["drizzle/migrations/**"],
+			"inputs": ["src/**", "package.json", "drizzle.config.ts"]
+		},
+		"db:migrate": {
+			"outputs": ["drizzle/migrations/**"],
+			"inputs": ["src/**", "package.json", "drizzle.config.ts"]
+		},
+		"build-storybook": {
+			"outputs": ["storybook-static/**"],
+			"inputs": ["src/**", "package.json", ".storybook/**"]
+		}
+	}
+}
