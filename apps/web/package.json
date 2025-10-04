@@ -58,7 +58,6 @@
 		"nanoid": "^5.1.6",
 		"neverthrow": "^8.2.0",
 		"node-cache": "^5.1.2",
-		"postgres": "^3.4.7",
 		"sonner": "^2.0.7",
 		"svelte-exmarkdown": "^5.0.2",
 		"svelte-sonner": "^1.0.5",

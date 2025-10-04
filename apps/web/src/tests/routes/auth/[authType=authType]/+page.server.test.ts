@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { actions, load } from '../../../../../routes/auth/[authType=authType]/+page.server';
 import type { RequestEvent } from '@sveltejs/kit';
+
+// Dynamic import to handle bracket characters in path
+const { actions, load } = await import('../../../routes/auth/[authType=authType]/+page.server.ts');
 
 vi.mock('$lib/server/auth/index', () => ({
 	generateSessionToken: vi.fn().mockReturnValue('test-token'),

@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { POST } from '../../../../routes/api/chat/+server';
+import { POST } from '$api/chat/+server';
 import type { RequestEvent } from '@sveltejs/kit';
 
 vi.mock('ai', () => ({
 	streamText: vi.fn().mockResolvedValue({
 		toTextStreamResponse: vi.fn().mockReturnValue(new Response('AI response'))
-	})
+	}),
+	customProvider: vi.fn()
 }));
 
 vi.mock('$db/queries', () => ({
@@ -68,11 +69,11 @@ describe('Chat API Route', () => {
 
 		const event = {
 			request: mockRequest,
-			locals: { user: null, session: null }
+			locals: { user: null, session: null },
+			cookies: { get: vi.fn().mockReturnValue(null) }
 		} as unknown as RequestEvent;
 
-		const response = await POST(event);
-		expect(response.status).toBe(401);
+		await expect(POST(event)).rejects.toThrow('Unauthorized');
 	});
 
 	it('should return 400 if chat ID is missing', async () => {
@@ -82,7 +83,8 @@ describe('Chat API Route', () => {
 
 		const event = {
 			request: mockRequest,
-			locals: mockLocals
+			locals: mockLocals,
+			cookies: { get: vi.fn().mockReturnValue(null) }
 		} as unknown as RequestEvent;
 
 		const response = await POST(event);
@@ -96,7 +98,8 @@ describe('Chat API Route', () => {
 
 		const event = {
 			request: mockRequest,
-			locals: mockLocals
+			locals: mockLocals,
+			cookies: { get: vi.fn().mockReturnValue(null) }
 		} as unknown as RequestEvent;
 
 		const response = await POST(event);
@@ -114,7 +117,8 @@ describe('Chat API Route', () => {
 
 		const event = {
 			request: mockRequest,
-			locals: mockLocals
+			locals: mockLocals,
+			cookies: { get: vi.fn().mockReturnValue(null) }
 		} as unknown as RequestEvent;
 
 		const response = await POST(event);

@@ -26,12 +26,14 @@
  * ```
  */
 declare module '$env/static/private' {
+	export const VSCODE_CLI: string;
 	export const TERM_PROGRAM: string;
+	export const VSCODE_CRASH_REPORTER_PROCESS_TYPE: string;
 	export const NODE: string;
 	export const INIT_CWD: string;
 	export const SHELL: string;
 	export const TERM: string;
-	export const TURBO_IS_TUI: string;
+	export const VSCODE_PROCESS_TITLE: string;
 	export const npm_config_registry: string;
 	export const PNPM_HOME: string;
 	export const USER: string;
@@ -45,6 +47,8 @@ declare module '$env/static/private' {
 	export const npm_package_json: string;
 	export const PWD: string;
 	export const npm_command: string;
+	export const VSCODE_HANDLES_UNCAUGHT_ERRORS: string;
+	export const VSCODE_ESM_ENTRYPOINT: string;
 	export const npm_config__jsr_registry: string;
 	export const npm_lifecycle_event: string;
 	export const LANG: string;
@@ -56,8 +60,14 @@ declare module '$env/static/private' {
 	export const pnpm_config_verify_deps_before_run: string;
 	export const HOME: string;
 	export const SHLVL: string;
+	export const VSCODE_NLS_CONFIG: string;
 	export const npm_lifecycle_script: string;
+	export const VSCODE_CODE_CACHE_PATH: string;
+	export const VSCODE_IPC_HOOK: string;
+	export const VSCODE_PID: string;
 	export const npm_config_user_agent: string;
+	export const VSCODE_CWD: string;
+	export const VSCODE_L10N_BUNDLE_LOCATION: string;
 	export const npm_node_execpath: string;
 }
 
@@ -89,12 +99,14 @@ declare module '$env/static/public' {
  */
 declare module '$env/dynamic/private' {
 	export const env: {
+		VSCODE_CLI: string;
 		TERM_PROGRAM: string;
+		VSCODE_CRASH_REPORTER_PROCESS_TYPE: string;
 		NODE: string;
 		INIT_CWD: string;
 		SHELL: string;
 		TERM: string;
-		TURBO_IS_TUI: string;
+		VSCODE_PROCESS_TITLE: string;
 		npm_config_registry: string;
 		PNPM_HOME: string;
 		USER: string;
@@ -108,6 +120,8 @@ declare module '$env/dynamic/private' {
 		npm_package_json: string;
 		PWD: string;
 		npm_command: string;
+		VSCODE_HANDLES_UNCAUGHT_ERRORS: string;
+		VSCODE_ESM_ENTRYPOINT: string;
 		npm_config__jsr_registry: string;
 		npm_lifecycle_event: string;
 		LANG: string;
@@ -119,8 +133,14 @@ declare module '$env/dynamic/private' {
 		pnpm_config_verify_deps_before_run: string;
 		HOME: string;
 		SHLVL: string;
+		VSCODE_NLS_CONFIG: string;
 		npm_lifecycle_script: string;
+		VSCODE_CODE_CACHE_PATH: string;
+		VSCODE_IPC_HOOK: string;
+		VSCODE_PID: string;
 		npm_config_user_agent: string;
+		VSCODE_CWD: string;
+		VSCODE_L10N_BUNDLE_LOCATION: string;
 		npm_node_execpath: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;
