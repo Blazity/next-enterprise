@@ -1,8 +1,69 @@
 # Code Quality Remediation - Complete Repository Cleanup
 
+## Turborepo Monorepo Architecture
+
+This repository uses Turborepo to manage a monorepo with shared packages and applications.
+
+### Repository Structure
+
+```
+sveltekit-enterprise/
+├── apps/
+│   └── web/                    # Main SvelteKit application
+├── packages/
+│   ├── database/               # @repo/database - Database layer
+│   ├── ui/                     # @repo/ui - Shared UI components
+│   ├── schemas/                # @repo/schemas - Valibot schemas
+│   ├── types/                  # @repo/types - Shared types
+│   ├── utils/                  # @repo/utils - Shared utilities
+│   └── config/                 # @repo/config - Shared configs
+├── package.json                # Root workspace configuration
+├── pnpm-workspace.yaml         # pnpm workspace definition
+└── turbo.json                  # Turborepo pipeline configuration
+```
+
+### Workspace Package Imports
+
+**ALWAYS use workspace packages for shared code:**
+
+```typescript
+import { db } from '@repo/database/client';
+import { user, chat } from '@repo/database/schema';
+import { getUserById } from '@repo/database/queries';
+import { Button } from '@repo/ui';
+import { cn } from '@repo/ui/utils';
+import type { User, TransitionConfig } from '@repo/types';
+import { userProfileSchema } from '@repo/schemas/user-profile';
+```
+
+**App-specific path aliases (apps/web only):**
+
+```typescript
+import { MyComponent } from '$components';
+import { myStore } from '$stores';
+import { myAction } from '$actions';
+import { aiProvider } from '$ai';
+```
+
+### Turborepo Commands
+
+**ALWAYS use `turbo run` for multi-package tasks:**
+
+```bash
+turbo run build check lint cpd test --parallel
+turbo run build --filter=web
+turbo run test --filter=@repo/database
+```
+
+**Benefits:**
+
+- 4-10x faster builds with caching
+- Parallel execution across packages
+- Only rebuilds what changed
+
 ## Quality Standards and Success Criteria
 
-**COMPLETION REQUIREMENT:**  
+**COMPLETION REQUIREMENT:**
 Achieve 100% completion—success is defined when ALL six validation commands exit with code 0:
 
 ```bash
@@ -11,6 +72,12 @@ turbo run check       # TypeScript/Svelte type checking
 turbo run lint        # ESLint code quality
 turbo run cpd         # Copy-paste detection (jscpd)
 turbo run test        # Vitest unit & integration tests
+```
+
+**Run all quality gates in parallel for maximum efficiency:**
+
+```bash
+turbo run build check lint cpd test --parallel
 ```
 
 This is an evaluation, exiting before completion is an automatic failure.
@@ -384,61 +451,85 @@ The goal is to achieve 100% completion because partial remediation leaves techni
 
 ### Schema-First Development
 
-1. ALL data structures start as Drizzle schemas in `$schemas/database.ts`
+1. ALL data structures start as Drizzle schemas in `packages/database/src/schema/`
 2. Generate Valibot schemas using `createSelectSchema()` from Drizzle
 3. Derive TypeScript types using `v.InferOutput<typeof schema>`
 4. NEVER manually create types that can be derived from schemas
 
-### Path Alias System
+### Workspace Package Import System
 
-ALL imports MUST use path aliases. NEVER use relative imports.
+**ALWAYS use workspace packages for shared code:**
 
-| Alias         | Path                      | Purpose                           |
-| ------------- | ------------------------- | --------------------------------- |
-| `$components` | `src/lib/components`      | UI components                     |
-| `$schemas`    | `src/lib/schemas`         | Valibot schemas (Drizzle-derived) |
-| `$types`      | `src/lib/types`           | TypeScript types                  |
-| `$models`     | `src/lib/models`          | Business logic classes            |
-| `$queries`    | `src/lib/queries`         | Database queries                  |
-| `$remote`     | `src/lib/remote`          | Remote functions                  |
-| `$utils`      | `src/lib/utils`           | Utility functions                 |
-| `$stores`     | `src/lib/stores`          | Svelte stores                     |
-| `$db`         | `src/lib/server/database` | Database client                   |
-| `$ai`         | `src/lib/server/ai`       | AI SDK code                       |
-| `$mcp`        | `src/lib/server/mcp`      | MCP tools                         |
-| `$api`        | `src/routes/api`          | API endpoints                     |
+| Package          | Import Path                      | Purpose                       |
+| ---------------- | -------------------------------- | ----------------------------- |
+| `@repo/database` | `@repo/database/client`          | Database client               |
+| `@repo/database` | `@repo/database/schema`          | Drizzle table schemas         |
+| `@repo/database` | `@repo/database/queries`         | Database query functions      |
+| `@repo/database` | `@repo/database/valibot-schemas` | Valibot schemas from Drizzle  |
+| `@repo/database` | `@repo/database/errors/db`       | Database error types          |
+| `@repo/ui`       | `@repo/ui`                       | Shared UI components (Button) |
+| `@repo/ui`       | `@repo/ui/utils`                 | UI utilities (cn, shadcn)     |
+| `@repo/ui`       | `@repo/ui/components/ui/*`       | Individual UI components      |
+| `@repo/schemas`  | `@repo/schemas`                  | Valibot validation schemas    |
+| `@repo/schemas`  | `@repo/schemas/user-profile`     | User profile schemas          |
+| `@repo/types`    | `@repo/types`                    | Shared TypeScript types       |
+
+**App-specific path aliases (apps/web only):**
+
+| Alias          | Path                  | Purpose                 |
+| -------------- | --------------------- | ----------------------- |
+| `$lib`         | `src/lib`             | Default SvelteKit alias |
+| `$components`  | `src/lib/components`  | App-specific components |
+| `$stores`      | `src/lib/stores`      | Svelte stores           |
+| `$remote`      | `src/lib/remote`      | Remote functions        |
+| `$actions`     | `src/lib/actions`     | Svelte actions          |
+| `$data`        | `src/lib/data`        | Static data             |
+| `$transitions` | `src/lib/transitions` | Custom transitions      |
+| `$ai`          | `src/lib/server/ai`   | AI SDK code             |
+| `$mcp`         | `src/lib/server/mcp`  | MCP tools               |
+| `$api`         | `src/routes/api`      | API endpoints           |
+
+**NEVER use relative imports. Use workspace packages or path aliases.**
 
 ### Anti-Duplication Workflow
 
 #### Before Creating ANY Schema:
 
-1. Check `$schemas/database.ts` for existing Drizzle schema
-2. Check `$schemas/index.ts` for existing Valibot schema
+1. Check `packages/database/src/schema/` for existing Drizzle schema
+2. Check `packages/schemas/src/` for existing Valibot schema
 3. Check if schema can be composed from existing schemas
 4. Only create new schema if absolutely necessary
-5. Export from `$schemas/index.ts`
+5. Export from appropriate package index
 
 #### Before Creating ANY Type:
 
-1. Check `$types/index.ts` for existing type
+1. Check `packages/types/src/index.ts` for existing type
 2. Check if type can be inferred from Valibot schema
 3. Check if type can be composed from existing types
 4. Only create new type if absolutely necessary
-5. Export from `$types/index.ts`
+5. Export from `packages/types/src/index.ts`
 
 #### Before Creating ANY Component:
 
-1. Check `$components` directory for similar component
-2. Check if existing component can be extended with props
-3. Only create new component if absolutely necessary
-4. Export from `$components/index.ts`
+1. Check `packages/ui/src/components/` for shared component
+2. Check `apps/web/src/lib/components/` for app-specific component
+3. Check if existing component can be extended with props
+4. Only create new component if absolutely necessary
+5. Export from appropriate package or app index
+
+#### Before Creating ANY Utility:
+
+1. Check if utility is app-specific or shared
+2. If shared, add to `packages/utils/src/`
+3. If app-specific, add to `apps/web/src/lib/utils/`
+4. Export from appropriate index file
 
 ### Code Organization
 
-#### src/lib/schemas/database.ts
+#### packages/database/src/schema/users.ts
 
 ```typescript
-import { pgTable, text, timestamp, uuid, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
 	id: uuid('id').defaultRandom().primaryKey(),
@@ -446,75 +537,36 @@ export const users = pgTable('users', {
 	name: text('name').notNull(),
 	createdAt: timestamp('created_at').defaultNow().notNull()
 });
-
-export const resumes = pgTable('resumes', {
-	id: uuid('id').defaultRandom().primaryKey(),
-	userId: uuid('user_id')
-		.references(() => users.id)
-		.notNull(),
-	content: text('content').notNull(),
-	skills: text('skills').array(),
-	experience: integer('experience'),
-	createdAt: timestamp('created_at').defaultNow().notNull()
-});
 ```
 
-#### src/lib/schemas/index.ts
+#### packages/database/src/valibot-schemas.ts
 
 ```typescript
-import { createSelectSchema, createInsertSchema } from 'drizzle-valibot'
-import \* as v from 'valibot'
-import { users, resumes } from './database'
+import { createSelectSchema, createInsertSchema } from 'drizzle-valibot';
+import * as v from 'valibot';
+import { users } from './schema';
 
 export const selectUserSchema = createSelectSchema(users);
 export const insertUserSchema = createInsertSchema(users);
-
-export const selectResumeSchema = createSelectSchema(resumes);
-export const insertResumeSchema = createInsertSchema(resumes);
-
-export const resumeAnalysisSchema = v.object({
-  resumeText: v.pipe(v.string(), v.nonEmpty()),
-  jobDescription: v.pipe(v.string(), v.nonEmpty())
-})
-
-export const resumeResponseSchema = v.object({
-  skills: v.array(v.string()),
-  experience: v.number(),
-  matchScore: v.number(),
-  summary: v.string()
-})
 ```
 
-#### src/lib/types/index.ts
+#### packages/types/src/index.ts
 
 ```typescript
 import type * as v from 'valibot';
-import type {
-	selectUserSchema,
-	insertUserSchema,
-	selectResumeSchema,
-	insertResumeSchema,
-	resumeAnalysisSchema,
-	resumeResponseSchema
-} from '$schemas';
+import type { selectUserSchema, insertUserSchema } from '@repo/database/valibot-schemas';
 
 export type User = v.InferOutput<typeof selectUserSchema>;
 export type InsertUser = v.InferOutput<typeof insertUserSchema>;
-
-export type Resume = v.InferOutput<typeof selectResumeSchema>;
-export type InsertResume = v.InferOutput<typeof insertResumeSchema>;
-
-export type ResumeAnalysis = v.InferOutput<typeof resumeAnalysisSchema>;
-export type ResumeResponse = v.InferOutput<typeof resumeResponseSchema>;
 ```
 
-#### src/lib/queries/index.ts
+#### packages/database/src/queries.ts
 
 ```typescript
-import { db } from '$db/client';
-import { users, resumes } from '$schemas/database';
+import { db } from './db';
+import { users } from './schema';
 import { eq } from 'drizzle-orm';
-import type { User, Resume, InsertUser, InsertResume } from '$types';
+import type { User, InsertUser } from '@repo/types';
 
 export async function getUserById(id: string): Promise<User | null> {
 	const [user] = await db.select().from(users).where(eq(users.id, id));
@@ -524,15 +576,6 @@ export async function getUserById(id: string): Promise<User | null> {
 export async function createUser(data: InsertUser): Promise<User> {
 	const [user] = await db.insert(users).values(data).returning();
 	return user;
-}
-
-export async function getResumesByUserId(userId: string): Promise<Resume[]> {
-	return db.select().from(resumes).where(eq(resumes.userId, userId));
-}
-
-export async function createResume(data: InsertResume): Promise<Resume> {
-	const [resume] = await db.insert(resumes).values(data).returning();
-	return resume;
 }
 ```
 
@@ -587,34 +630,46 @@ export { default as SkillBadge } from './SkillBadge.svelte';
 
 ### Import Examples
 
-CORRECT:
+CORRECT (Workspace Packages):
 
 ```typescript
-import { analyzeResume, deleteResume } from '$remote';
-import { getUserById, createUser } from '$queries';
-import { selectUserSchema, resumeAnalysisSchema } from '$schemas';
-import type { User, Resume, ResumeAnalysis } from '$types';
-import { ResumeUpload, JobCard } from '$components';
-import { validateEmail } from '$utils';
+import { db } from '@repo/database/client';
+import { user, chat } from '@repo/database/schema';
+import { getUserById, createUser } from '@repo/database/queries';
+import type { User, Chat } from '@repo/database/schema';
+import { Button } from '@repo/ui';
+import { cn } from '@repo/ui/utils';
+import { userProfileSchema } from '@repo/schemas/user-profile';
+import type { TransitionConfig } from '@repo/types';
 ```
 
-INCORRECT:
+CORRECT (App-specific Path Aliases):
 
 ```typescript
-import { analyzeResume } from '../lib/remote/index';
-import { getUserById } from '../../lib/queries/index';
+import { MyComponent } from '$components';
+import { myStore } from '$stores';
+import { myAction } from '$actions';
+import { aiProvider } from '$ai';
+import { mcpTool } from '$mcp';
+```
+
+INCORRECT (Relative Imports):
+
+```typescript
+import { getUserById } from '../../../packages/database/src/queries';
+import { Button } from '../../packages/ui/src/components/Button.svelte';
 import type { User } from '../lib/types/index';
 ```
 
-### Testing with Path Aliases
+### Testing with Workspace Packages
 
-ALL test files MUST use path aliases:
+ALL test files MUST use workspace packages and path aliases:
 
 ```typescript
 import { describe, it, expect } from 'vitest';
-import { analyzeResume } from '$remote';
-import { resumeAnalysisSchema } from '$schemas';
-import type { ResumeAnalysis } from '$types';
+import { getUserById } from '@repo/database/queries';
+import { userProfileSchema } from '@repo/schemas/user-profile';
+import type { User } from '@repo/database/schema';
 import { server } from '../tests/setup-integration';
 ```
 
@@ -623,83 +678,96 @@ import { server } from '../tests/setup-integration';
 ALWAYS prefer Drizzle schema as source of truth:
 
 ```typescript
-import { createSelectSchema, createInsertSchema } from 'drizzle-valibot'
-import { users } from '$schemas/database'
-import \* as v from 'valibot'
+import { createSelectSchema, createInsertSchema } from 'drizzle-valibot';
+import { users } from '@repo/database/schema';
+import * as v from 'valibot';
 
-export const selectUserSchema = createSelectSchema(users)
+export const selectUserSchema = createSelectSchema(users);
 
-export const updateUserSchema = v.partial(
-  v.omit(createInsertSchema(users), ['id', 'createdAt'])
-)
+export const updateUserSchema = v.partial(v.omit(createInsertSchema(users), ['id', 'createdAt']));
 
-export const userLoginSchema = v.pick(selectUserSchema, ['email'])
+export const userLoginSchema = v.pick(selectUserSchema, ['email']);
 ```
 
 ### AI Agent Checklist
 
 Before writing ANY code, verify:
 
-- [ ] Checked `$schemas/database.ts` for Drizzle schema
-- [ ] Checked `$schemas/index.ts` for Valibot schema
-- [ ] Checked `$types/index.ts` for TypeScript type
-- [ ] Checked `$queries/index.ts` for database query
-- [ ] Checked `$remote/index.ts` for remote function
-- [ ] Checked `$components` for UI component
-- [ ] Using path aliases for ALL imports
-- [ ] Exporting from appropriate index.ts file
+- [ ] Checked `packages/database/src/schema/` for Drizzle schema
+- [ ] Checked `packages/database/src/valibot-schemas.ts` for Valibot schema
+- [ ] Checked `packages/types/src/index.ts` for TypeScript type
+- [ ] Checked `packages/database/src/queries.ts` for database query
+- [ ] Checked `packages/ui/src/components/` for shared UI component
+- [ ] Checked `apps/web/src/lib/components/` for app-specific component
+- [ ] Using workspace packages (`@repo/*`) for shared code
+- [ ] Using path aliases for app-specific code
+- [ ] Exporting from appropriate package index.ts file
 - [ ] Using Svelte 5 runes syntax
 - [ ] Validating with Valibot schemas
+- [ ] Running `turbo run build check lint --parallel` before committing
 
-### File Structure
+### Monorepo File Structure
 
-src/
-├── lib/
-│ ├── components/
-│ │ ├── index.ts
-│ │ ├── ResumeUpload.svelte
-│ │ └── JobCard.svelte
-│ ├── schemas/
-│ │ ├── index.ts
-│ │ └── database.ts
-│ ├── types/
-│ │ └── index.ts
-│ ├── models/
-│ │ └── index.ts
-│ ├── queries/
-│ │ └── index.ts
-│ ├── remote/
-│ │ └── index.ts
-│ ├── utils/
-│ │ └── index.ts
-│ ├── stores/
-│ │ └── index.ts
-│ └── server/
-│ ├── database/
-│ │ └── client.ts
-│ ├── ai/
-│ │ └── index.ts
-│ └── mcp/
-│ └── index.ts
-├── routes/
-│ ├── api/
-│ │ └── ai/
-│ │ └── +server.ts
-│ └── +page.svelte
-└── tests/
-├── setup-integration.ts
-└── setup-component.ts
+```
+sveltekit-enterprise/
+├── apps/
+│   └── web/                    # Main SvelteKit application
+│       ├── src/
+│       │   ├── lib/
+│       │   │   ├── components/ # App-specific components
+│       │   │   ├── server/     # Server-side code (AI, MCP)
+│       │   │   ├── utils/      # App-specific utilities
+│       │   │   ├── stores/     # Svelte stores
+│       │   │   ├── actions/    # Svelte actions
+│       │   │   └── errors/     # App-specific errors
+│       │   ├── routes/         # SvelteKit routes
+│       │   └── tests/          # Test files
+│       └── package.json
+│
+├── packages/
+│   ├── database/               # @repo/database
+│   │   ├── src/
+│   │   │   ├── schema/        # Drizzle table schemas
+│   │   │   ├── errors/        # Database error types
+│   │   │   ├── db.ts          # Database client
+│   │   │   ├── queries.ts     # Query functions
+│   │   │   └── valibot-schemas.ts
+│   │   └── package.json
+│   │
+│   ├── ui/                     # @repo/ui
+│   │   ├── src/
+│   │   │   ├── components/    # Shared UI components
+│   │   │   ├── hooks/         # Shared hooks
+│   │   │   └── utils/         # UI utilities
+│   │   └── package.json
+│   │
+│   ├── schemas/                # @repo/schemas
+│   │   ├── src/               # Valibot validation schemas
+│   │   └── package.json
+│   │
+│   ├── types/                  # @repo/types
+│   │   ├── src/               # Shared TypeScript types
+│   │   └── package.json
+│   │
+│   ├── utils/                  # @repo/utils
+│   │   ├── src/               # Shared utility functions
+│   │   └── package.json
+│   │
+│   └── config/                 # @repo/config
+│       ├── eslint.config.js   # Shared ESLint config
+│       ├── tsconfig.json      # Base TypeScript config
+│       └── package.json
+│
+├── package.json                # Root workspace configuration
+├── pnpm-workspace.yaml         # pnpm workspace definition
+└── turbo.json                  # Turborepo pipeline configuration
+```
 
 This architecture eliminates code duplication through:
 
-Single source of truth (Drizzle schemas)
-
-Centralized exports (index.ts files)
-
-Path aliases prevent scattered imports
-
-Type inference from schemas
-
-Reusable query functions
-
-Remote functions as API abstraction
+- **Single source of truth** - Drizzle schemas in `@repo/database`
+- **Workspace packages** - Shared code in `packages/`
+- **Centralized exports** - Each package has index.ts
+- **Type inference** - Types derived from Valibot schemas
+- **Reusable components** - UI components in `@repo/ui`
+- **Turborepo caching** - 4-10x faster builds

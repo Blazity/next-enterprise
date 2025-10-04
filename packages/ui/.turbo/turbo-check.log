@@ -1,0 +1,8 @@
+
+> @repo/ui@0.0.0 check /Users/kurrytran/sveltekit-enterprise/packages/ui
+> svelte-check --tsconfig ./tsconfig.json
+
+Loading svelte-check in workspace: /Users/kurrytran/sveltekit-enterprise/packages/ui
+Getting Svelte diagnostics...
+
+svelte-check found 0 errors and 0 warnings

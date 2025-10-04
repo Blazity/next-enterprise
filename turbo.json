@@ -1,21 +1,30 @@
 {
 	"$schema": "https://turborepo.com/schema.json",
-	"ui": "stream",
+	"ui": "tui",
 	"tasks": {
 		"build": {
-			"outputs": [".svelte-kit/**", "build/**"],
-			"inputs": ["src/**", "package.json", "svelte.config.js", "vite.config.ts"]
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": [".svelte-kit/**", "build/**", "dist/**", ".vercel/**"]
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"preview": {
+			"cache": false,
+			"persistent": true
 		},
 		"format": {
 			"inputs": ["src/**", "package.json"]
 		},
 		"lint": {
-			"dependsOn": ["^format"],
-			"inputs": ["src/**", "package.json", "eslint.config.js"]
+			"dependsOn": ["^lint"],
+			"inputs": ["src/**", "package.json", "eslint.config.js", "eslint.config.mjs"]
 		},
 		"check": {
-			"dependsOn": ["^lint"],
-			"inputs": ["src/**", "package.json", "tsconfig.json"]
+			"dependsOn": ["^check"],
+			"inputs": ["src/**", "package.json", "tsconfig.json", "svelte.config.js"]
 		},
 		"cpd": {
 			"inputs": ["src/**", "package.json"]
@@ -24,10 +33,19 @@
 			"inputs": ["src/**", "package.json", "knip.config.ts"]
 		},
 		"test": {
-			"dependsOn": ["^check", "test:unit"]
+			"dependsOn": ["^build"],
+			"inputs": ["src/**", "package.json", "vitest.config.ts"]
 		},
 		"test:unit": {
+			"dependsOn": ["^build"],
 			"inputs": ["src/**", "package.json", "vitest.config.ts"]
+		},
+		"test:e2e": {
+			"dependsOn": ["^build"],
+			"inputs": ["src/**", "e2e/**", "package.json", "playwright.config.ts"]
+		},
+		"db:push": {
+			"cache": false
 		},
 		"db:generate": {
 			"outputs": ["drizzle/migrations/**"],
@@ -37,7 +55,16 @@
 			"outputs": ["drizzle/migrations/**"],
 			"inputs": ["src/**", "package.json", "drizzle.config.ts"]
 		},
+		"db:studio": {
+			"cache": false,
+			"persistent": true
+		},
+		"storybook": {
+			"cache": false,
+			"persistent": true
+		},
 		"build-storybook": {
+			"dependsOn": ["^build"],
 			"outputs": ["storybook-static/**"],
 			"inputs": ["src/**", "package.json", ".storybook/**"]
 		}

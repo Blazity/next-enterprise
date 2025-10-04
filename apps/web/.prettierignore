@@ -1,0 +1,12 @@
+.next
+node_modules
+/drizzle/
+.turbo
+.svelte-kit
+.vercel
+build
+dist
+pnpm-lock.yaml
+.storybook
+storybook-static
+

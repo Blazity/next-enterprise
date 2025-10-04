@@ -1,0 +1,169 @@
+
+> sveltekit-enterprise@0.0.1 check /Users/kurrytran/sveltekit-enterprise
+> svelte-kit sync && svelte-check --tsconfig ./tsconfig.json
+
+Loading svelte-check in workspace: /Users/kurrytran/sveltekit-enterprise
+Getting Svelte diagnostics...
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/profile/+page.server.ts:15:21
+Error: No overload matches this call.
+  Overload 1 of 2, '(adapter: ValidationAdapter<{ profile: { firstName: string; lastName: string; dateOfBirth?: string | undefined; phoneNumber?: string | undefined; address?: { street: string; city: string; state: string; zipCode: string; country: string; } | undefined; ... 16 more ...; availability?: "available" | ... 3 more ... | undefined; }; externalData: { ...; }; }, { ...; }>, options?: Partial<...> | undefined): Promise<...>', gave the following error.
+    Type '{ firstName: string; lastName: string; dateOfBirth?: string | undefined; phoneNumber?: string | undefined; address?: { street: string; city: string; state: string; zipCode: string; country: string; } | undefined; ... 16 more ...; availability?: "available" | ... 3 more ... | undefined; }' is not assignable to type '{ firstName: string; lastName: string; dateOfBirth?: string | undefined; phoneNumber?: string | undefined; address?: { street: string; city: string; state: string; zipCode: string; country: string; } | undefined; ... 16 more ...; availability?: "available" | ... 3 more ... | undefined; }'. Two different types with this name exist, but they are unrelated.
+      Types of property 'education' are incompatible.
+        Type '{ institution: string; degree: string; fieldOfStudy: string; startDate: string; endDate?: string | undefined; isCurrentlyEnrolled: boolean; gpa?: string | undefined; }[] | undefined' is not assignable to type '{ institution: string; degree: string; fieldOfStudy: string; startDate: string; endDate?: string | undefined; isCurrentlyEnrolled: boolean; gpa?: number | undefined; }[] | undefined'.
+          Type '{ institution: string; degree: string; fieldOfStudy: string; startDate: string; endDate?: string | undefined; isCurrentlyEnrolled: boolean; gpa?: string | undefined; }[]' is not assignable to type '{ institution: string; degree: string; fieldOfStudy: string; startDate: string; endDate?: string | undefined; isCurrentlyEnrolled: boolean; gpa?: number | undefined; }[]'.
+            Type '{ institution: string; degree: string; fieldOfStudy: string; startDate: string; endDate?: string | undefined; isCurrentlyEnrolled: boolean; gpa?: string | undefined; }' is not assignable to type '{ institution: string; degree: string; fieldOfStudy: string; startDate: string; endDate?: string | undefined; isCurrentlyEnrolled: boolean; gpa?: number | undefined; }'.
+              Types of property 'gpa' are incompatible.
+                Type 'string | undefined' is not assignable to type 'number | undefined'.
+                  Type 'string' is not assignable to type 'number'.
+  Overload 2 of 2, '(data: SuperValidateData<{ superFormValidationLibrary: "custom" | "valibot" | "arktype" | "classvalidator" | "joi" | "typebox" | "yup" | "zod" | "zod4" | "vine" | "schemasafe" | "superstruct" | "effect" | "superform"; ... 5 more ...; id: string; }>, adapter: ValidationAdapter<...>, options?: Partial<...> | undefined): Promise<...>', gave the following error.
+    Argument of type '{ defaults: { profile: { firstName: string; lastName: string; dateOfBirth?: string | undefined; phoneNumber?: string | undefined; address?: { street: string; city: string; state: string; zipCode: string; country: string; } | undefined; ... 16 more ...; availability?: "available" | ... 3 more ... | undefined; }; exte...' is not assignable to parameter of type 'ValidationAdapter<{ profile: { firstName: string; lastName: string; dateOfBirth?: string | undefined; phoneNumber?: string | undefined; address?: { street: string; city: string; state: string; zipCode: string; country: string; } | undefined; ... 16 more ...; availability?: "available" | ... 3 more ... | undefined; }...'.
+      Type '{ defaults: { profile: { firstName: string; lastName: string; dateOfBirth?: string | undefined; phoneNumber?: string | undefined; address?: { street: string; city: string; state: string; zipCode: string; country: string; } | undefined; ... 16 more ...; availability?: "available" | ... 3 more ... | undefined; }; exte...' is missing the following properties from type 'ClientValidationAdapter<{ profile: { firstName: string; lastName: string; dateOfBirth?: string | undefined; phoneNumber?: string | undefined; address?: { street: string; city: string; state: string; zipCode: string; country: string; } | undefined; ... 16 more ...; availability?: "available" | ... 3 more ... | undefi...': superFormValidationLibrary, validate 
+
+	const form = await superValidate(valibot(completeUserProfileFormSchema), {
+		defaults: {
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/chat/[chatId]/+page.svelte:10:2
+Error: Type 'ModelMessage[]' is not assignable to type 'ExtendedMessage[]'.
+  Type 'ModelMessage' is not assignable to type 'ExtendedMessage'.
+    Type 'UserModelMessage' is not assignable to type 'ExtendedMessage'.
+      Types of property 'content' are incompatible.
+        Type 'UserContent' is not assignable to type 'string'.
+          Type '(TextPart | ImagePart | FilePart)[]' is not assignable to type 'string'. (ts)
+	chat={data.chat}
+	initialMessages={convertToUIMessages(data.messages)}
+	readonly={data.user?.id !== data.chat.userId}
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/00-introduction/02-styling/+page.svelte:19:2
+Warn: Unused CSS selector ".colorful"
+https://svelte.dev/e/css_unused_selector (svelte)
+
+	.colorful {
+		background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/7guis/7guis-circles/+page.svelte:74:1
+Warn: Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events (svelte)
+
+<svg onclick={handleClick}>
+	{#each circles as circle}
+		<circle
+			cx={circle.cx}
+			cy={circle.cy}
+			r={circle.r}
+			onclick={(event) => select(circle, event)}
+			oncontextmenu={(e) => {
+				e.stopPropagation();
+				e.preventDefault();
+				adjusting = !adjusting;
+				if (adjusting) selected = circle;
+			}}
+			fill={circle === selected ? '#ccc' : 'white'}
+		/>
+	{/each}
+</svg>
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/7guis/7guis-circles/+page.svelte:74:1
+Warn: `<svg>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions (svelte)
+
+<svg onclick={handleClick}>
+	{#each circles as circle}
+		<circle
+			cx={circle.cx}
+			cy={circle.cy}
+			r={circle.r}
+			onclick={(event) => select(circle, event)}
+			oncontextmenu={(e) => {
+				e.stopPropagation();
+				e.preventDefault();
+				adjusting = !adjusting;
+				if (adjusting) selected = circle;
+			}}
+			fill={circle === selected ? '#ccc' : 'white'}
+		/>
+	{/each}
+</svg>
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/7guis/7guis-circles/+page.svelte:76:3
+Warn: Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events (svelte)
+	{#each circles as circle}
+		<circle
+			cx={circle.cx}
+			cy={circle.cy}
+			r={circle.r}
+			onclick={(event) => select(circle, event)}
+			oncontextmenu={(e) => {
+				e.stopPropagation();
+				e.preventDefault();
+				adjusting = !adjusting;
+				if (adjusting) selected = circle;
+			}}
+			fill={circle === selected ? '#ccc' : 'white'}
+		/>
+	{/each}
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/7guis/7guis-circles/+page.svelte:76:3
+Warn: `<circle>` with a click or contextmenu handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions (svelte)
+	{#each circles as circle}
+		<circle
+			cx={circle.cx}
+			cy={circle.cy}
+			r={circle.r}
+			onclick={(event) => select(circle, event)}
+			oncontextmenu={(e) => {
+				e.stopPropagation();
+				e.preventDefault();
+				adjusting = !adjusting;
+				if (adjusting) selected = circle;
+			}}
+			fill={circle === selected ? '#ccc' : 'white'}
+		/>
+	{/each}
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/7guis/7guis-flight-booker/+page.svelte:11:19
+Warn: This reference only captures the initial value of `start`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally (svelte)
+	let start = $state(startValue);
+	let end = $state(start);
+	let isReturn = $state(false);
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/actions/actions/+page.svelte:9:36
+Error: Object literal may only specify known properties, and '"onoutclick"' does not exist in type 'Omit<HTMLAttributes<HTMLDivElement>, never> & HTMLAttributes<any>'. (ts)
+{#if showModal}
+	<div class="box" use:clickOutside onoutclick={() => (showModal = false)}>Click outside me!</div>
+{/if}
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/actions/actions-pannable/+page.svelte:17:25
+Error: Parameter 'event' implicitly has an 'any' type. (ts)
+
+	function handlePanMove(event) {
+		coords.update(($coords) => ({
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/actions/actions-pannable/+page.svelte:24:24
+Error: Parameter 'event' implicitly has an 'any' type. (ts)
+
+	function handlePanEnd(event) {
+		coords.stiffness = 0.2;
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/actions/actions-pannable/+page.svelte:34:2
+Error: Object literal may only specify known properties, and '"onpanstart"' does not exist in type 'Omit<HTMLAttributes<HTMLDivElement>, never> & HTMLAttributes<any>'. (ts)
+	use:pannable
+	onpanstart={handlePanStart}
+	onpanmove={handlePanMove}
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/actions/adding-parameters-to-actions/+page.svelte:16:2
+Error: Object literal may only specify known properties, and '"onlongpress"' does not exist in type 'Omit<HTMLButtonAttributes, never> & HTMLAttributes<any>'. (ts)
+	use:longpress={duration}
+	onlongpress={() => (pressed = true)}
+	onmouseenter={() => (pressed = false)}>press and hold</button
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/animations/animate/+page.svelte:31:19
+Warn: This reference only captures the initial value of `todos`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally (svelte)
+
+	let uid = $state(todos.length + 1);
+
+/Users/kurrytran/sveltekit-enterprise/src/routes/examples/easing/easing/+page.svelte:20:28

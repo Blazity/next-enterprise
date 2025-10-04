@@ -1,0 +1,27 @@
+
+> sveltekit-enterprise@0.0.1 test /Users/kurrytran/sveltekit-enterprise
+> npm run test:unit -- --run
+
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+
+> sveltekit-enterprise@0.0.1 test:unit
+> vitest --project=unit --run
+
+Warning: Starting in Storybook 8.5.0-alpha.18, the "test.include" option in Vitest is discouraged in favor of just using the "stories" field in your Storybook configuration.
+
+The values you passed to "test.include" will be ignored, please remove them from your Vitest configuration where the Storybook plugin is applied.
+
+More info: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#addon-test-indexing-behavior-of-storybookaddon-test-is-changed
+
+ RUN  v3.2.4 /Users/kurrytran/sveltekit-enterprise
+
+No test files found, exiting with code 0
+
+projects: unit
+
+|unit| 
+
+include: src/**/*.unit.{test,spec}.{js,ts}, src/lib/utils/**/*.{test,spec}.{js,ts}
+exclude:  **/node_modules/**, **/dist/**, **/.svelte-kit/**, **/build/**, **/*.svelte.{test,spec}.{js,ts}, **/*.integration.{test,spec}.{js,ts}
+

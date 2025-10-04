@@ -3,5 +3,7 @@ node_modules
 /drizzle/
 .turbo
 .svelte-kit
+.vercel
 build
+dist
 pnpm-lock.yaml

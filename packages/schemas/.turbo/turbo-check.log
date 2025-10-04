@@ -1,0 +1,4 @@
+
+> @repo/schemas@0.0.0 check /Users/kurrytran/sveltekit-enterprise/packages/schemas
+> tsc --noEmit
+
