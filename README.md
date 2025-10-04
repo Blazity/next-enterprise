@@ -23,6 +23,7 @@ A comprehensive SvelteKit monorepo template with Svelte 5, TypeScript, Turborepo
 
 - Node.js 18+
 - pnpm (recommended) or npm
+- act (for running GitHub workflows locally): `brew install act`
 
 ### Installation
 
@@ -82,9 +83,15 @@ turbo run storybook        # Start Storybook
 turbo run build-storybook  # Build Storybook for production
 ```
 
-### All Quality Checks (Parallel Execution)
+### CI/CD
 
 ```bash
+# Run GitHub workflows locally (requires act)
+pnpm run ci:local
+
+# Or run directly with custom platform:
+act -s ACT_RUNNER_OS=macos-latest -P macos-latest=-self-hosted
+
 # Run all quality gates in parallel (recommended for CI/CD)
 turbo run build check lint cpd test --parallel
 

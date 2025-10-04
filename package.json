@@ -22,7 +22,8 @@
 		"build-storybook": "turbo run build-storybook",
 		"ci:all": "turbo run build check lint cpd test --parallel",
 		"ci:quality": "turbo run check lint cpd --parallel",
-		"ci": "pnpm run ci:all"
+		"ci": "pnpm run ci:all",
+		"ci:local": "act -s ACT_RUNNER_OS=macos-latest -P macos-latest=-self-hosted"
 	},
 	"devDependencies": {
 		"prettier": "^3.6.2",

@@ -33,3 +33,4 @@ storybook-static
 dist/
 **/dist/
 **/.dist/
+/packages/ui/.svelte-kit
