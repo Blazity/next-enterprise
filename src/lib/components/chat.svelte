@@ -6,7 +6,7 @@
 	import Messages from './messages.svelte';
 	import MultimodalInput from './multimodal-input.svelte';
 	import { untrack } from 'svelte';
-	import type { CoreMessage } from 'ai';
+	import type { ExtendedMessage } from '$types';
 	import { ChatClient } from '$lib/hooks/use-chat.svelte';
 
 	let {
@@ -17,7 +17,7 @@
 	}: {
 		user: User | undefined;
 		chat: DbChat | undefined;
-		initialMessages: CoreMessage[];
+		initialMessages: ExtendedMessage[];
 		readonly: boolean;
 	} = $props();
 
@@ -51,7 +51,7 @@
 		})
 	);
 
-	let attachments = $state<any[]>([]);
+	let attachments = $state<Array<{ url: string; name: string; contentType: string }>>([]);
 </script>
 
 <div class="bg-background flex h-dvh min-w-0 flex-col">

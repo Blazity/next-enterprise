@@ -45,7 +45,11 @@ export const actions = {
 				if (!usernameResult.success) {
 					return err(undefined);
 				}
-				user = yield* createAuthUser(emailResult.output, passwordResult.output, usernameResult.output);
+				user = yield* createAuthUser(
+					emailResult.output,
+					passwordResult.output,
+					usernameResult.output
+				);
 			} else {
 				user = yield* getAuthUser(emailResult.output);
 				const passwordIsCorrect = await compare(passwordResult.output, user.passwordHash);

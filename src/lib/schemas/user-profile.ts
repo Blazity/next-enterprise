@@ -1,6 +1,5 @@
 import * as v from 'valibot';
 
-// Base schemas for user profile form
 export const addressSchema = v.object({
 	street: v.pipe(v.string(), v.minLength(1, 'Street is required')),
 	city: v.pipe(v.string(), v.minLength(1, 'City is required')),
@@ -32,9 +31,7 @@ export const languageSchema = v.object({
 	proficiency: v.picklist(['beginner', 'intermediate', 'advanced', 'native'])
 });
 
-// Main user profile form schema
 export const userProfileFormSchema = v.object({
-	// Basic Information
 	firstName: v.pipe(
 		v.string(),
 		v.minLength(1, 'First name is required'),
@@ -47,13 +44,11 @@ export const userProfileFormSchema = v.object({
 	),
 	dateOfBirth: v.optional(v.pipe(v.string(), v.minLength(1))),
 	phoneNumber: v.optional(
-		v.pipe(v.string(), v.regex(/^\+?[\d\s\-\(\)]+$/, 'Please enter a valid phone number'))
+		v.pipe(v.string(), v.regex(/^\+?[\d\s\-()]+$/, 'Please enter a valid phone number'))
 	),
 
-	// Address
 	address: v.optional(addressSchema),
 
-	// Professional Information
 	experienceLevel: v.picklist(['entry', 'mid', 'senior', 'lead', 'executive']),
 	industry: v.optional(v.pipe(v.string(), v.minLength(1))),
 	company: v.optional(v.pipe(v.string(), v.minLength(1))),
@@ -66,18 +61,15 @@ export const userProfileFormSchema = v.object({
 		)
 	),
 
-	// Online Presence
 	linkedinUrl: v.optional(v.pipe(v.string(), v.url('Please enter a valid LinkedIn URL'))),
 	githubUrl: v.optional(v.pipe(v.string(), v.url('Please enter a valid GitHub URL'))),
 	portfolioUrl: v.optional(v.pipe(v.string(), v.url('Please enter a valid portfolio URL'))),
 
-	// Skills and Qualifications
 	skills: v.optional(v.array(v.pipe(v.string(), v.minLength(1)))),
 	education: v.optional(v.array(educationSchema)),
 	certifications: v.optional(v.array(certificationSchema)),
 	languages: v.optional(v.array(languageSchema)),
 
-	// Personal Information
 	bio: v.optional(v.pipe(v.string(), v.maxLength(500, 'Bio cannot exceed 500 characters'))),
 	avatarUrl: v.optional(v.pipe(v.string(), v.url())),
 	preferences: v.optional(v.record(v.string(), v.any())),
@@ -85,7 +77,6 @@ export const userProfileFormSchema = v.object({
 	availability: v.optional(v.picklist(['available', 'busy', 'away', 'offline']))
 });
 
-// External API response schema
 export const externalUserDataSchema = v.object({
 	creditScore: v.pipe(v.number(), v.minValue(300), v.maxValue(850)),
 	employmentStatus: v.picklist(['employed', 'self-employed', 'unemployed', 'student']),
@@ -94,21 +85,16 @@ export const externalUserDataSchema = v.object({
 	recommendations: v.array(v.pipe(v.string(), v.minLength(1)))
 });
 
-// Combined form schema with external data
 export const completeUserProfileFormSchema = v.object({
-	// User profile data
 	profile: userProfileFormSchema,
 
-	// External API data (read-only)
 	externalData: externalUserDataSchema
 });
 
-// Type definitions
 export type UserProfileFormData = v.InferInput<typeof userProfileFormSchema>;
 export type ExternalUserData = v.InferInput<typeof externalUserDataSchema>;
 export type CompleteUserProfileFormData = v.InferInput<typeof completeUserProfileFormSchema>;
 
-// Default values for form initialization
 export const defaultUserProfileFormValues: UserProfileFormData = {
 	firstName: '',
 	lastName: '',

@@ -13,7 +13,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		const buffer = await storage.download(filename, 'chat-uploads');
 		const metadata = await storage.getMetadata(filename, 'chat-uploads');
 
-		return new Response(buffer, {
+		return new Response(new Uint8Array(buffer), {
 			headers: {
 				'Content-Type': metadata?.mimeType || 'application/octet-stream',
 				'Content-Length': buffer.length.toString()

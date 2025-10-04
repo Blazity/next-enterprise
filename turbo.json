@@ -6,20 +6,25 @@
 			"outputs": [".svelte-kit/**", "build/**"],
 			"inputs": ["src/**", "package.json", "svelte.config.js", "vite.config.ts"]
 		},
-		"check": {
-			"inputs": ["src/**", "package.json", "tsconfig.json"]
-		},
 		"format": {
 			"inputs": ["src/**", "package.json"]
 		},
 		"lint": {
+			"dependsOn": ["^format"],
 			"inputs": ["src/**", "package.json", "eslint.config.js"]
+		},
+		"check": {
+			"dependsOn": ["^lint"],
+			"inputs": ["src/**", "package.json", "tsconfig.json"]
 		},
 		"cpd": {
 			"inputs": ["src/**", "package.json"]
 		},
+		"knip": {
+			"inputs": ["src/**", "package.json", "knip.config.ts"]
+		},
 		"test": {
-			"dependsOn": ["test:unit"]
+			"dependsOn": ["^check", "test:unit"]
 		},
 		"test:unit": {
 			"inputs": ["src/**", "package.json", "vitest.config.ts"]

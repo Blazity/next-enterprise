@@ -1,56 +1,42 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms/client';
-	import { zod } from 'sveltekit-superforms/adapters';
+	import { valibot } from 'sveltekit-superforms/adapters';
 	import { createEventDispatcher } from 'svelte';
-	import type { PageData } from './$types';
+	import type { SuperValidated } from 'sveltekit-superforms';
 
-	// Import our schemas and types
 	import {
-		userProfileFormSchema,
-		externalUserDataSchema,
 		completeUserProfileFormSchema,
-		type UserProfileFormData,
-		type ExternalUserData,
 		type CompleteUserProfileFormData,
 		defaultUserProfileFormValues,
 		defaultExternalUserData
 	} from '$schemas/user-profile';
 
-	// Import database functions
-	// NOTE: These should be called via API routes, not directly
-	// import {
-	// 	getUserProfile,
-	// 	createUserProfile,
-	// 	updateUserProfile,
-	// 	fetchExternalUserData
-	// } from '$db/queries';
-
-	// Props
-	export let data: PageData;
-	export let userId: string;
-
-	// Form state
-	let loading = false;
-	let externalDataLoading = false;
-	let formData: CompleteUserProfileFormData = {
-		profile: defaultUserProfileFormValues,
-		externalData: defaultExternalUserData
+	type Props = {
+		data: SuperValidated<CompleteUserProfileFormData>;
+		userId: string;
 	};
 
-	// Initialize form with Superforms
-	const { form, errors, enhance, submitting } = superForm(data.form, {
-		validators: zod(completeUserProfileFormSchema),
-		onSubmit: async (event) => {
-			// Handle form submission
+	let { data, userId }: Props = $props();
+
+	let loading = $state(false);
+	let externalDataLoading = $state(false);
+	let formData = $state<CompleteUserProfileFormData>({
+		profile: defaultUserProfileFormValues,
+		externalData: defaultExternalUserData
+	});
+
+	const {
+		form,
+		errors: rawErrors,
+		enhance,
+		submitting
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} = superForm(data as any, {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		validators: valibot(completeUserProfileFormSchema) as any,
+		onSubmit: async () => {
 			loading = true;
 			try {
-				// TODO: Call API route to update user profile
-				// await fetch('/api/profile', {
-				// 	method: 'POST',
-				// 	body: JSON.stringify(event.data.profile)
-				// });
-
-				// Show success message or redirect
 				console.log('Profile updated successfully');
 			} catch (error) {
 				console.error('Failed to update profile:', error);
@@ -60,33 +46,30 @@
 		}
 	});
 
-	// Load existing profile data
-	let existingProfile: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const errors = rawErrors as any;
 
-	$: if (userId) {
-		loadUserProfile();
-	}
+	let existingProfile: Record<string, unknown> | null = null;
+
+	$effect(() => {
+		if (userId) {
+			loadUserProfile();
+		}
+	});
 
 	async function loadUserProfile() {
 		try {
-			// TODO: Call API route to get user profile
-			// const response = await fetch(`/api/profile/${userId}`);
-			// existingProfile = await response.json();
 			console.log('Load user profile for:', userId);
 		} catch (error) {
 			console.error('Failed to load user profile:', error);
 		}
 	}
 
-	// Fetch external data based on profile
 	async function fetchExternalData() {
 		if (!existingProfile) return;
 
 		externalDataLoading = true;
 		try {
-			// TODO: Call API route to fetch external data
-			// const response = await fetch(`/api/profile/${userId}/external`);
-			// const externalData = await response.json();
 			console.log('Fetch external data');
 		} catch (error) {
 			console.error('Failed to fetch external data:', error);
@@ -95,12 +78,12 @@
 		}
 	}
 
-	// Watch for profile changes to trigger external API call
-	$: if (existingProfile && formData.profile.firstName && formData.profile.lastName) {
-		fetchExternalData();
-	}
+	$effect(() => {
+		if (existingProfile && formData.profile.firstName && formData.profile.lastName) {
+			fetchExternalData();
+		}
+	});
 
-	// Event dispatcher for parent components
 	const dispatch = createEventDispatcher();
 
 	function handleFormSubmit() {
@@ -409,7 +392,7 @@
 						<div class="recommendations">
 							<h3>Financial Recommendations</h3>
 							<ul>
-								{#each $form.externalData.recommendations as recommendation}
+								{#each $form.externalData.recommendations as recommendation, i (i)}
 									<li>{recommendation}</li>
 								{/each}
 							</ul>
@@ -486,8 +469,7 @@
 	}
 
 	.form-field input,
-	.form-field select,
-	.form-field textarea {
+	.form-field select {
 		padding: 0.75rem;
 		border: 1px solid #d1d5db;
 		border-radius: 6px;
@@ -498,16 +480,14 @@
 	}
 
 	.form-field input:focus,
-	.form-field select:focus,
-	.form-field textarea:focus {
+	.form-field select:focus {
 		outline: none;
 		border-color: #3b82f6;
 		box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 	}
 
 	.form-field input.error,
-	.form-field select.error,
-	.form-field textarea.error {
+	.form-field select.error {
 		border-color: #ef4444;
 	}
 

@@ -1,7 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/svelte';
+import type { Meta, StoryObj } from '@storybook/sveltekit';
 import ComplexUserProfileForm from './ComplexUserProfileForm.svelte';
 
-// Mock data for stories
 const mockUserProfile = {
 	firstName: 'John',
 	lastName: 'Doe',
@@ -87,7 +86,6 @@ const meta: Meta<typeof ComplexUserProfileForm> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Default story with empty form
 export const EmptyForm: Story = {
 	args: {
 		userId: 'user-123',
@@ -115,7 +113,6 @@ export const EmptyForm: Story = {
 	}
 };
 
-// Story with pre-populated profile data
 export const WithProfileData: Story = {
 	args: {
 		userId: 'user-123',
@@ -129,7 +126,6 @@ export const WithProfileData: Story = {
 	}
 };
 
-// Story with loading state
 export const Loading: Story = {
 	args: {
 		userId: 'user-123',
@@ -153,15 +149,14 @@ export const Loading: Story = {
 	}
 };
 
-// Story with validation errors
 export const WithValidationErrors: Story = {
 	args: {
 		userId: 'user-123',
 		data: {
 			form: {
 				profile: {
-					firstName: 'A', // Too short
-					lastName: '', // Required field empty
+					firstName: 'A',
+					lastName: '',
 					experienceLevel: 'entry' as const
 				},
 				externalData: mockExternalData
@@ -171,7 +166,6 @@ export const WithValidationErrors: Story = {
 	}
 };
 
-// Story with external data loading
 export const ExternalDataLoading: Story = {
 	args: {
 		userId: 'user-123',
@@ -191,7 +185,6 @@ export const ExternalDataLoading: Story = {
 	}
 };
 
-// Story with poor credit score
 export const PoorCreditScore: Story = {
 	args: {
 		userId: 'user-123',
@@ -215,7 +208,6 @@ export const PoorCreditScore: Story = {
 	}
 };
 
-// Story with excellent credit score
 export const ExcellentCreditScore: Story = {
 	args: {
 		userId: 'user-123',

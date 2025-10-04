@@ -18,7 +18,6 @@ export {
 	Content,
 	Provider,
 	Portal,
-	//
 	Root as Tooltip,
 	type TooltipProps,
 	Content as TooltipContent,

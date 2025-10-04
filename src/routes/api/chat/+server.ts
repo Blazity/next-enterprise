@@ -3,7 +3,7 @@ import { systemPrompt } from '$lib/server/ai/prompts.js';
 import { generateTitleFromUserMessage } from '$lib/server/ai/utils';
 import { deleteChatById, getChatById, saveChat, saveMessages } from '$db/queries';
 import type { Chat } from '$db/schema';
-import { getMostRecentUserMessage, getTrailingMessageId } from '$lib/utils/chat.js';
+import { getMostRecentUserMessage } from '$lib/utils/chat.js';
 import { allowAnonymousChats } from '$lib/utils/constants.js';
 import { error } from '@sveltejs/kit';
 import { smoothStream, streamText, type CoreMessage } from 'ai';
@@ -13,7 +13,6 @@ import { nanoid } from 'nanoid';
 type MessageWithId = CoreMessage & { id?: string };
 
 export async function POST({ request, locals: { user }, cookies }) {
-	// TODO: zod?
 	const { id, messages }: { id: string; messages: MessageWithId[] } = await request.json();
 	const selectedChatModel = cookies.get('selected-model') || 'openai/gpt-3.5-turbo';
 
@@ -96,7 +95,6 @@ export async function POST({ request, locals: { user }, cookies }) {
 }
 
 export async function DELETE({ locals: { user }, request }) {
-	// TODO: zod
 	const { id }: { id: string } = await request.json();
 	if (!user) {
 		error(401, 'Unauthorized');

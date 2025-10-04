@@ -1,3 +1,7 @@
 .next
 node_modules
 /drizzle/
+.turbo
+.svelte-kit
+build
+pnpm-lock.yaml

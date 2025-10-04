@@ -21,7 +21,7 @@
 		chatClient,
 		class: c
 	}: {
-		attachments: any[];
+		attachments: Array<{ url: string; name: string; contentType: string }>;
 		user: User | undefined;
 		chatClient: ChatClient;
 		class?: string;

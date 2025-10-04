@@ -47,7 +47,7 @@ export class ChatHistory {
 		});
 		if (!res.ok) {
 			toast.error('Failed to update chat visibility');
-			// try reloading data from source in case another competing mutation caused an issue
+
 			await this.refetch();
 		}
 	};

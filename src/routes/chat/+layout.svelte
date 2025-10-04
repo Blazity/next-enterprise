@@ -11,6 +11,6 @@
 </script>
 
 <SidebarProvider open={!data.sidebarCollapsed}>
-	<AppSidebar user={data.user} />
+	<AppSidebar user={data.user ?? undefined} />
 	<SidebarInset>{@render children?.()}</SidebarInset>
 </SidebarProvider>

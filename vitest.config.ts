@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 
 export default defineConfig({
 	resolve: process.env.VITEST
@@ -16,9 +17,13 @@ export default defineConfig({
 					$remote: './src/lib/remote',
 					$stores: './src/lib/stores',
 					$server: './src/lib/server',
-					$db: './src/lib/db',
+					$db: './src/lib/server/database',
 					$mcp: './src/lib/server/mcp',
-					$ai: './src/lib/server/ai'
+					$ai: './src/lib/server/ai',
+					$api: './src/routes/api',
+					$actions: './src/lib/actions',
+					$transitions: './src/lib/transitions',
+					$data: './src/lib/data'
 				}
 			}
 		: undefined,
@@ -83,16 +88,27 @@ export default defineConfig({
 				}
 			},
 			{
-				extends: true,
+				plugins: [
+					storybookTest({
+						configDir: '.storybook',
+						storybookUrl: 'http://localhost:6006',
+						storybookScript: 'storybook',
+						tags: { include: ['test'], exclude: [], skip: [] },
+						disableAddonDocs: true
+					})
+				],
 				test: {
 					name: 'storybook',
-					environment: 'jsdom',
-					include: [
-						'src/**/*.stories.test.ts',
-						'src/**/*.stories.{js,ts,svelte}',
-						'src/**/*.story.{js,ts,svelte}'
-					],
-					setupFiles: ['./.storybook/vitest.setup.ts']
+					environment: 'browser',
+					include: ['src/**/*.stories.@(js|ts|svelte)'],
+					setupFiles: ['.storybook/vitest.setup.ts'],
+					browser: {
+						enabled: true,
+						name: 'chromium',
+						provider: 'playwright'
+					},
+					testTimeout: 30000,
+					hookTimeout: 30000
 				}
 			}
 		],

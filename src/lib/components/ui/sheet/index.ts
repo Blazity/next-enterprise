@@ -34,7 +34,6 @@ export {
 	Footer,
 	Title,
 	Description,
-	//
 	Root as Sheet,
 	type SheetProps,
 	Close as SheetClose,

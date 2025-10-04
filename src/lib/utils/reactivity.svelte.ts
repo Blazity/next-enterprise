@@ -8,11 +8,6 @@ export class Box<T> {
 	}
 }
 
-/**
- * Expects there to be a route at `/api/synchronized-cookie/:key` that sets a cookie with the given key/value.
- * That handler is responsible for validating the cookie value and setting the cookie with the given key.
- * This uses fire-and-forget logic for setting the cookie, optimistically updating local state.
- */
 export class SynchronizedCookie {
 	#contextKey: symbol;
 	#key: string;

@@ -1,0 +1,22 @@
+{
+	"threshold": 10,
+	"reporters": ["console", "html"],
+	"output": "./jscpd-report",
+	"format": ["javascript", "typescript", "svelte"],
+	"ignore": [
+		"**/node_modules/**",
+		"**/dist/**",
+		"**/.svelte-kit/**",
+		"**/build/**",
+		"**/*.d.ts",
+		"**/*.config.*",
+		"**/*.spec.*",
+		"**/*.test.*",
+		"**/stories/**",
+		"**/mocks/**",
+		"**/examples/**"
+	],
+	"absolute": true,
+	"minLines": 5,
+	"minTokens": 50
+}

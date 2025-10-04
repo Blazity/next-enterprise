@@ -33,13 +33,13 @@ Located in `/docs/testing_examples/`:
 
 ### Testing Stack
 
-| Layer | Tool | Purpose | Documentation |
-|-------|------|---------|---------------|
-| Unit Tests | Vitest | Pure functions, utilities, schemas | [Testable Standards](./TESTABLE_CODE_STANDARDS.md#validation--type-safety) |
-| Component Tests | Playwright CT | Component interactions | [Interaction Testing](../storybook-playwright/04-interaction-testing.md) |
-| Integration Tests | Vitest + PGlite | Database operations, API routes | [Database Testability](./TESTABLE_CODE_STANDARDS.md#database-layer-testability) |
-| E2E Tests | Playwright | Full user workflows | [Stories in E2E](../storybook-playwright/03-stories-in-e2e-tests.md) |
-| Visual Tests | Storybook | Component appearance, states | [Storybook Basics](../storybook-playwright/01-storybook-basics.md) |
+| Layer             | Tool            | Purpose                            | Documentation                                                                   |
+| ----------------- | --------------- | ---------------------------------- | ------------------------------------------------------------------------------- |
+| Unit Tests        | Vitest          | Pure functions, utilities, schemas | [Testable Standards](./TESTABLE_CODE_STANDARDS.md#validation--type-safety)      |
+| Component Tests   | Playwright CT   | Component interactions             | [Interaction Testing](../storybook-playwright/04-interaction-testing.md)        |
+| Integration Tests | Vitest + PGlite | Database operations, API routes    | [Database Testability](./TESTABLE_CODE_STANDARDS.md#database-layer-testability) |
+| E2E Tests         | Playwright      | Full user workflows                | [Stories in E2E](../storybook-playwright/03-stories-in-e2e-tests.md)            |
+| Visual Tests      | Storybook       | Component appearance, states       | [Storybook Basics](../storybook-playwright/01-storybook-basics.md)              |
 
 ### Test Commands
 
@@ -64,15 +64,15 @@ supabase test db
 ### 1. Separation of Concerns
 
 ```typescript
-export async function fetchData(db: DatabaseClient): Promise<Data[]>
-export function validateData(data: Data[]): ValidationResult
-export function transformData(data: Data[]): TransformedData[]
+export async function fetchData(db: DatabaseClient): Promise<Data[]>;
+export function validateData(data: Data[]): ValidationResult;
+export function transformData(data: Data[]): TransformedData[];
 
 export async function loadPageData(db: DatabaseClient): Promise<PageData> {
-  const rawData = await fetchData(db);
-  const validated = validateData(rawData);
-  const transformed = transformData(rawData);
-  return { data: transformed };
+	const rawData = await fetchData(db);
+	const validated = validateData(rawData);
+	const transformed = transformData(rawData);
+	return { data: transformed };
 }
 ```
 
@@ -80,13 +80,13 @@ export async function loadPageData(db: DatabaseClient): Promise<PageData> {
 
 ```typescript
 export async function processUser(
-  db: DatabaseClient,
-  stripe: Stripe,
-  userId: string
+	db: DatabaseClient,
+	stripe: Stripe,
+	userId: string
 ): Promise<Result> {
-  const user = await getUserById(db, userId);
-  const payment = await createPayment(stripe, user);
-  return { user, payment };
+	const user = await getUserById(db, userId);
+	const payment = await createPayment(stripe, user);
+	return { user, payment };
 }
 ```
 
@@ -94,11 +94,11 @@ export async function processUser(
 
 ```typescript
 export function calculateTotal(items: Item[]): number {
-  return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+	return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 }
 
 test('calculates total correctly', () => {
-  expect(calculateTotal([{ price: 10, quantity: 2 }])).toBe(20);
+	expect(calculateTotal([{ price: 10, quantity: 2 }])).toBe(20);
 });
 ```
 
@@ -118,14 +118,14 @@ export type User = v.InferOutput<typeof selectUserSchema>;
 
 ```typescript
 export async function loadUserData(db: DatabaseClient, userId: string) {
-  const user = await getUserById(db, userId);
-  return { user };
+	const user = await getUserById(db, userId);
+	return { user };
 }
 
 test('loads user data', async () => {
-  const mockDb = createMockDb();
-  const result = await loadUserData(mockDb, '123');
-  expect(result.user).toBeDefined();
+	const mockDb = createMockDb();
+	const result = await loadUserData(mockDb, '123');
+	expect(result.user).toBeDefined();
 });
 ```
 
@@ -135,9 +135,9 @@ test('loads user data', async () => {
 import { test, expect } from '@playwright/experimental-ct-svelte';
 
 test('component handles user interaction', async ({ mount }) => {
-  const component = await mount(MyComponent);
-  await component.getByTestId('button').click();
-  await expect(component.getByText('Clicked')).toBeVisible();
+	const component = await mount(MyComponent);
+	await component.getByTestId('button').click();
+	await expect(component.getByText('Clicked')).toBeVisible();
 });
 ```
 
@@ -150,12 +150,12 @@ import { beforeEach, afterEach } from 'vitest';
 let pgLite: PGlite;
 
 beforeEach(async () => {
-  pgLite = new PGlite();
-  await pgLite.exec(`CREATE TABLE users (...)`);
+	pgLite = new PGlite();
+	await pgLite.exec(`CREATE TABLE users (...)`);
 });
 
 afterEach(async () => {
-  await pgLite.close();
+	await pgLite.close();
 });
 ```
 
@@ -165,11 +165,11 @@ afterEach(async () => {
 import { validateAndCreateUser } from './+server';
 
 test('validates and creates user', async () => {
-  const mockDb = createMockDb();
-  const data = { name: 'Test', email: 'test@example.com' };
-  
-  const user = await validateAndCreateUser(mockDb, data);
-  expect(user.name).toBe('Test');
+	const mockDb = createMockDb();
+	const data = { name: 'Test', email: 'test@example.com' };
+
+	const user = await validateAndCreateUser(mockDb, data);
+	expect(user.name).toBe('Test');
 });
 ```
 
@@ -181,7 +181,7 @@ test('validates and creates user', async () => {
 import { db } from '$db/client';
 
 export async function getUser(id: string) {
-  return db.select().from(users).where(eq(users.id, id));
+	return db.select().from(users).where(eq(users.id, id));
 }
 ```
 
@@ -189,7 +189,7 @@ export async function getUser(id: string) {
 
 ```typescript
 export async function getUser(db: DatabaseClient, id: string) {
-  return db.select().from(users).where(eq(users.id, id));
+	return db.select().from(users).where(eq(users.id, id));
 }
 ```
 
@@ -197,9 +197,9 @@ export async function getUser(db: DatabaseClient, id: string) {
 
 ```typescript
 test('uses array filter method', () => {
-  const spy = vi.spyOn(Array.prototype, 'filter');
-  filterUsers(users);
-  expect(spy).toHaveBeenCalled();
+	const spy = vi.spyOn(Array.prototype, 'filter');
+	filterUsers(users);
+	expect(spy).toHaveBeenCalled();
 });
 ```
 
@@ -207,13 +207,13 @@ test('uses array filter method', () => {
 
 ```typescript
 test('filters active users', () => {
-  const users = [
-    { id: '1', active: true },
-    { id: '2', active: false }
-  ];
-  const result = filterActiveUsers(users);
-  expect(result).toHaveLength(1);
-  expect(result[0].id).toBe('1');
+	const users = [
+		{ id: '1', active: true },
+		{ id: '2', active: false }
+	];
+	const result = filterActiveUsers(users);
+	expect(result).toHaveLength(1);
+	expect(result[0].id).toBe('1');
 });
 ```
 
@@ -286,4 +286,3 @@ MIT - See main project LICENSE file
 **Last Updated**: 2025-10-03  
 **Verification Method**: MCP Tool Discovery  
 **Next Review**: 2026-01-03 (or upon major framework updates)
-

@@ -3,9 +3,4 @@ import Root from './separator.svelte';
 
 type SeparatorProps = ComponentProps<typeof Root>;
 
-export {
-	Root,
-	//
-	Root as Separator,
-	type SeparatorProps
-};
+export { Root, Root as Separator, type SeparatorProps };

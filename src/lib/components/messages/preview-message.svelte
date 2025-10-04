@@ -8,10 +8,13 @@
 	import { Markdown } from '../markdown';
 	import MessageReasoning from '../message-reasoning.svelte';
 	import { fly } from 'svelte/transition';
-	import type { UIMessage } from '@ai-sdk/svelte';
+	import type { ExtendedMessage } from '$types';
 
-	let { message, readonly, loading }: { message: UIMessage; readonly: boolean; loading: boolean } =
-		$props();
+	let {
+		message,
+		readonly,
+		loading
+	}: { message: ExtendedMessage; readonly: boolean; loading: boolean } = $props();
 
 	let mode = $state<'view' | 'edit'>('view');
 </script>
@@ -49,10 +52,10 @@
 				</div>
 			{/if}
 
-			{#each message.parts as part, i (`${message.id}-${i}`)}
+			{#each message.parts || [] as part, i (`${message.id}-${i}`)}
 				{@const { type } = part}
 				{#if type === 'reasoning'}
-					<MessageReasoning {loading} reasoning={part.reasoning} />
+					<MessageReasoning {loading} reasoning={part.reasoning || ''} />
 				{:else if type === 'text'}
 					{#if mode === 'view'}
 						<div class="flex flex-row items-start gap-2">
@@ -80,7 +83,7 @@
 									'bg-primary text-primary-foreground rounded-xl px-3 py-2': message.role === 'user'
 								})}
 							>
-								<Markdown md={part.text} />
+								<Markdown md={part.text || ''} />
 							</div>
 						</div>
 					{:else if mode === 'edit'}

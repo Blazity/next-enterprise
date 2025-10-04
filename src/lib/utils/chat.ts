@@ -4,7 +4,7 @@ import type { Message as DBMessage, Document } from '$db/schema';
 export function convertToUIMessages(messages: Array<DBMessage>): Array<CoreMessage> {
 	return messages.map((message) => {
 		const parts = typeof message.parts === 'string' ? JSON.parse(message.parts) : message.parts;
-		const textPart = parts.find((p: any) => p.type === 'text');
+		const textPart = parts.find((p: { type: string; text?: string }) => p.type === 'text');
 
 		return {
 			id: message.id,
@@ -14,7 +14,9 @@ export function convertToUIMessages(messages: Array<DBMessage>): Array<CoreMessa
 	});
 }
 
-export function getMostRecentUserMessage(messages: Array<CoreMessage>) {
+export function getMostRecentUserMessage(
+	messages: Array<CoreMessage & { id?: string }>
+): (CoreMessage & { id?: string }) | undefined {
 	const userMessages = messages.filter((message) => message.role === 'user');
 	return userMessages.at(-1);
 }

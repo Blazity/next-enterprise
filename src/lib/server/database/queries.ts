@@ -1,5 +1,5 @@
 import { genSaltSync, hashSync } from 'bcrypt-ts';
-import { and, asc, desc, eq, gt, gte, inArray } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, gte } from 'drizzle-orm';
 import { ResultAsync, fromPromise, ok, safeTry } from 'neverthrow';
 import {
 	user,
@@ -41,7 +41,11 @@ export function getUser(email: string): ResultAsync<User, DbError> {
 			db.select().from(user).where(eq(user.email, email)),
 			(e) => new DbInternalError({ cause: e })
 		);
-		const { passwordHash: _, ...rest } = yield* unwrapSingleQueryResult(userResult, email, 'User');
+		const { passwordHash: _passwordHash, ...rest } = yield* unwrapSingleQueryResult(
+			userResult,
+			email,
+			'User'
+		);
 
 		return ok(rest);
 	});
@@ -391,7 +395,6 @@ export async function updateChatVisiblityById({
 	}
 }
 
-// User Profile Queries for Complex Form Example
 export async function getUserProfile(userId: string): Promise<UserProfile | null> {
 	try {
 		const [profile] = await db.select().from(userProfile).where(eq(userProfile.userId, userId));
@@ -408,8 +411,8 @@ export async function createUserProfile(profileData: {
 	lastName: string;
 	dateOfBirth?: string;
 	phoneNumber?: string;
-	address?: any;
-	preferences?: any;
+	address?: Record<string, unknown>;
+	preferences?: Record<string, unknown>;
 	avatarUrl?: string;
 	bio?: string;
 	linkedinUrl?: string;
@@ -421,9 +424,9 @@ export async function createUserProfile(profileData: {
 	company?: string;
 	jobTitle?: string;
 	yearsOfExperience?: number;
-	education?: any[];
-	certifications?: any[];
-	languages?: any[];
+	education?: Record<string, unknown>[];
+	certifications?: Record<string, unknown>[];
+	languages?: Record<string, unknown>[];
 	timezone?: string;
 	availability?: 'available' | 'busy' | 'away' | 'offline';
 }): Promise<UserProfile> {
@@ -477,8 +480,8 @@ export async function updateUserProfile(
 		lastName?: string;
 		dateOfBirth?: string;
 		phoneNumber?: string;
-		address?: any;
-		preferences?: any;
+		address?: Record<string, unknown>;
+		preferences?: Record<string, unknown>;
 		avatarUrl?: string;
 		bio?: string;
 		linkedinUrl?: string;
@@ -490,20 +493,19 @@ export async function updateUserProfile(
 		company?: string;
 		jobTitle?: string;
 		yearsOfExperience?: number;
-		education?: any[];
-		certifications?: any[];
-		languages?: any[];
+		education?: Record<string, unknown>[];
+		certifications?: Record<string, unknown>[];
+		languages?: Record<string, unknown>[];
 		timezone?: string;
 		availability?: 'available' | 'busy' | 'away' | 'offline';
 	}>
 ): Promise<UserProfile | null> {
 	try {
-		const updateData: any = {
+		const updateData: Record<string, unknown> = {
 			...updates,
 			updatedAt: new Date()
 		};
 
-		// Serialize JSON fields
 		if (updates.address) updateData.address = JSON.stringify(updates.address);
 		if (updates.preferences) updateData.preferences = JSON.stringify(updates.preferences);
 		if (updates.skills) updateData.skills = JSON.stringify(updates.skills);
@@ -533,11 +535,9 @@ export async function deleteUserProfile(userId: string): Promise<void> {
 	}
 }
 
-// External API simulation for the complex form example
-export async function fetchExternalUserData(userProfile: UserProfile) {
-	// Simulate external API call with user profile data
+export async function fetchExternalUserData(_userProfile: UserProfile) {
 	const externalApiResponse = {
-		creditScore: Math.floor(Math.random() * 300) + 400, // 400-700 range
+		creditScore: Math.floor(Math.random() * 300) + 400,
 		employmentStatus: ['employed', 'self-employed', 'unemployed', 'student'][
 			Math.floor(Math.random() * 4)
 		],

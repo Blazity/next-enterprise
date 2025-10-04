@@ -9,6 +9,6 @@
 	chat={data.chat}
 	initialMessages={convertToUIMessages(data.messages)}
 	readonly={data.user?.id !== data.chat.userId}
-	user={data.user}
+	user={data.user ?? undefined}
 />
 <!-- TODO <DataStreamHandler {id} /> -->

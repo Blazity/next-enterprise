@@ -1,14 +1,12 @@
 <script lang="ts">
 	import ComplexUserProfileForm from '$components/ComplexUserProfileForm.svelte';
 
-	// Page data from server load function
-	export let data;
-	export let form;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	export let data: any;
 
-	// Handle form submission success
 	function handleFormSubmit(event: CustomEvent) {
 		console.log('Form submitted:', event.detail);
-		// In a real app, you might redirect or show a success message
+
 		alert('Profile updated successfully!');
 	}
 </script>

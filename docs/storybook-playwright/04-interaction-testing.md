@@ -184,7 +184,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	} catch (err) {
 		console.error('Profile enrichment failed:', err);
 		error(500, 'Failed to enrich profile data');
-  }
+	}
 };
 ```
 
@@ -365,7 +365,7 @@ import { profileFormSchema } from '$schemas';
 const meta = {
 	title: 'Forms/ProfileForm',
 	component: ProfileForm,
-  parameters: {
+	parameters: {
 		layout: 'centered',
 		docs: {
 			description: {
@@ -479,7 +479,7 @@ export const ValidationErrors: Story = {
 			const firstNameInput = screen.getByTestId('firstName');
 			await userEvent.type(firstNameInput, 'John');
 
-    await waitFor(() => {
+			await waitFor(() => {
 				const firstNameError = screen.queryByText(/First name is required/i);
 				expect(firstNameError).not.toBeInTheDocument();
 			});
@@ -488,7 +488,7 @@ export const ValidationErrors: Story = {
 };
 
 export const LoadingState: Story = {
-  args: {
+	args: {
 		data: defaults(valibot(profileFormSchema)),
 		onEnrich: fn(),
 		loading: true
@@ -498,7 +498,7 @@ export const LoadingState: Story = {
 
 		const loadingIndicator = await screen.findByRole('status');
 		await expect(loadingIndicator).toHaveTextContent(/Processing/i);
-  }
+	}
 };
 ```
 
@@ -511,7 +511,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Profile Form E2E', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('http://localhost:6006/?path=/story/forms-profileform--complete-user-flow');
-    await page.waitForLoadState('networkidle');
+		await page.waitForLoadState('networkidle');
 	});
 
 	test('complete user journey with API enrichment', async ({ page }) => {
@@ -562,7 +562,7 @@ test.describe('Profile Form E2E', () => {
 		await storyFrame.getByTestId('submitButton').click();
 
 		await expect(storyFrame.getByText(/Invalid email format/i)).toBeVisible();
-  });
+	});
 });
 ```
 
@@ -602,7 +602,7 @@ export const WithMockedAPI: Story = {
 				})
 			]
 		}
-  }
+	}
 };
 ```
 

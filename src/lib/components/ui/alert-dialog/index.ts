@@ -37,7 +37,6 @@ export {
 	Overlay,
 	Content,
 	Description,
-	//
 	Root as AlertDialog,
 	type AlertDialogProps,
 	Title as AlertDialogTitle,

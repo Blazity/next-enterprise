@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Attachment } from 'ai';
+	import type { Attachment } from '$types';
 	import LoaderIcon from './icons/loader.svelte';
 
 	let {

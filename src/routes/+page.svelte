@@ -44,7 +44,7 @@
 <section class="bg-base-100 py-16">
 	<div class="container mx-auto px-4">
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-			{#each LP_GRID_ITEMS as item}
+			{#each LP_GRID_ITEMS as item (item.title)}
 				<div class="card bg-base-100 shadow-xl transition-shadow hover:shadow-2xl">
 					<div class="card-body items-center text-center">
 						<div

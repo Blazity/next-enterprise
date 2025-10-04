@@ -45,3 +45,17 @@ export interface StyleConfig {
 export interface TimerCleanup {
 	(): void;
 }
+
+export interface Attachment {
+	url: string;
+	name: string;
+	contentType: string;
+}
+
+export interface ExtendedMessage {
+	id?: string;
+	role: string;
+	content: string;
+	parts?: Array<{ type: string; text?: string; reasoning?: string }>;
+	experimental_attachments?: Attachment[];
+}

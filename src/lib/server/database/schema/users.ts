@@ -48,4 +48,3 @@ export const userProfile = pgTable('user_profile', {
 });
 
 export type UserProfile = InferSelectModel<typeof userProfile>;
-

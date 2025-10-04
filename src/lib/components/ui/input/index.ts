@@ -3,9 +3,4 @@ import Root from './input.svelte';
 
 type InputProps = ComponentProps<typeof Root>;
 
-export {
-	Root,
-	//
-	Root as Input,
-	type InputProps
-};
+export { Root, Root as Input, type InputProps };

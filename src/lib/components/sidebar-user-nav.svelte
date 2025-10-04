@@ -38,7 +38,7 @@
 			</DropdownMenuTrigger>
 			<DropdownMenuContent side="top" class="w-[--bits-floating-anchor-width]">
 				<DropdownMenuItem class="cursor-pointer" onSelect={toggleMode}>
-					Toggle {$mode === 'light' ? 'dark' : 'light'} mode
+					Toggle {mode.current === 'light' ? 'dark' : 'light'} mode
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>

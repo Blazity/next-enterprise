@@ -1,3 +1,0 @@
----
-title: 'Render prop props'
----

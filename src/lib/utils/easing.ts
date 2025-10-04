@@ -13,7 +13,7 @@ interface EaseGroup {
 }
 
 interface ProcessedEases {
-	[key: string]: EaseGroup | EasingFunction;
+	[key: string]: EaseGroup | EasingFunction | undefined;
 	linear?: EasingFunction;
 }
 

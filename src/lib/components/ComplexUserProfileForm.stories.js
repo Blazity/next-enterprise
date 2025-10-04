@@ -1,6 +1,5 @@
 import ComplexUserProfileForm from './ComplexUserProfileForm.svelte';
 
-// Mock data for stories
 const mockUserProfile = {
 	firstName: 'John',
 	lastName: 'Doe',
@@ -93,7 +92,6 @@ const Template = (args) => ({
 	}
 });
 
-// Default story with empty form
 export const EmptyForm = Template.bind({});
 EmptyForm.args = {
 	userId: 'user-123',
@@ -120,7 +118,6 @@ EmptyForm.args = {
 	}
 };
 
-// Story with pre-populated profile data
 export const WithProfileData = Template.bind({});
 WithProfileData.args = {
 	userId: 'user-123',
@@ -133,7 +130,6 @@ WithProfileData.args = {
 	}
 };
 
-// Story with loading state
 export const Loading = Template.bind({});
 Loading.args = {
 	userId: 'user-123',
@@ -156,15 +152,14 @@ Loading.args = {
 	}
 };
 
-// Story with validation errors
 export const WithValidationErrors = Template.bind({});
 WithValidationErrors.args = {
 	userId: 'user-123',
 	data: {
 		form: {
 			profile: {
-				firstName: 'A', // Too short
-				lastName: '', // Required field empty
+				firstName: 'A',
+				lastName: '',
 				experienceLevel: 'entry'
 			},
 			externalData: mockExternalData
@@ -173,7 +168,6 @@ WithValidationErrors.args = {
 	}
 };
 
-// Story with external data loading
 export const ExternalDataLoading = Template.bind({});
 ExternalDataLoading.args = {
 	userId: 'user-123',
@@ -192,7 +186,6 @@ ExternalDataLoading.args = {
 	}
 };
 
-// Story with poor credit score
 export const PoorCreditScore = Template.bind({});
 PoorCreditScore.args = {
 	userId: 'user-123',
@@ -215,7 +208,6 @@ PoorCreditScore.args = {
 	}
 };
 
-// Story with excellent credit score
 export const ExcellentCreditScore = Template.bind({});
 ExcellentCreditScore.args = {
 	userId: 'user-123',

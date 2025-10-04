@@ -1,9 +1,9 @@
-interface License {
+export interface License {
 	name: string;
 	url: string;
 }
 
-interface ImageData {
+export interface ImageData {
 	color: string;
 	id: string;
 	alt: string;

@@ -36,4 +36,3 @@ export const suggestion = pgTable('suggestion', {
 });
 
 export type Suggestion = InferSelectModel<typeof suggestion>;
-

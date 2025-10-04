@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { cva, type VariantProps } from 'class-variance-authority';
+	import { cva } from 'class-variance-authority';
 	import { twMerge } from 'tailwind-merge';
+	import type { Snippet } from 'svelte';
 
 	const button = cva(['btn'], {
 		variants: {
@@ -25,7 +26,7 @@
 		size?: 'sm' | 'lg';
 		underline?: boolean;
 		href?: string;
-		children?: any;
+		children?: Snippet;
 		class?: string;
 	}
 

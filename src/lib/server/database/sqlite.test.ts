@@ -8,8 +8,6 @@ describe('PGlite Database with Drizzle ORM', () => {
 
 	beforeEach(async () => {
 		db = createTestDb();
-		// PGlite with Drizzle automatically creates tables from schema
-		// No need for manual CREATE TABLE statements
 	});
 
 	it('should create a test database', () => {

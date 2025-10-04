@@ -11,4 +11,3 @@ export const session = pgTable('session', {
 });
 
 export type Session = InferSelectModel<typeof session>;
-

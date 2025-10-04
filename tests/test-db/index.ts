@@ -6,12 +6,10 @@ let sql: postgres.Sql | null = null;
 let db: ReturnType<typeof drizzle> | null = null;
 
 export async function createTestDatabase() {
-	// Create test database connection
 	const testDbUrl = process.env.TEST_DATABASE_URL || 'postgresql://test:test@localhost:5432/test';
 	sql = postgres(testDbUrl, { max: 1 });
 	db = drizzle(sql, { schema });
 
-	// Create tables
 	await createTables();
 	return db;
 }
@@ -19,7 +17,6 @@ export async function createTestDatabase() {
 export async function createTables() {
 	if (!sql) throw new Error('Database not initialized');
 
-	// Create tables based on your schema
 	await sql`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
@@ -34,7 +31,6 @@ export async function createTables() {
 export async function dropTables() {
 	if (!sql) return;
 
-	// Drop tables in reverse order of dependencies
 	await sql`DROP TABLE IF EXISTS users CASCADE`;
 
 	await sql.end();

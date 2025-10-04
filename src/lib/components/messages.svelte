@@ -3,7 +3,7 @@
 	import Overview from './messages/overview.svelte';
 	import { onMount } from 'svelte';
 	import PreviewMessage from './messages/preview-message.svelte';
-	import type { UIMessage } from '@ai-sdk/svelte';
+	import type { ExtendedMessage } from '$types';
 	import { getLock } from '$lib/hooks/lock';
 
 	let containerRef = $state<HTMLDivElement | null>(null);
@@ -16,7 +16,7 @@
 	}: {
 		readonly: boolean;
 		loading: boolean;
-		messages: UIMessage[];
+		messages: ExtendedMessage[];
 	} = $props();
 
 	let mounted = $state(false);

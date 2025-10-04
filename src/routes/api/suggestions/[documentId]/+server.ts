@@ -6,15 +6,14 @@ export async function GET({ locals: { user }, params: { documentId } }) {
 		error(401, 'Unauthorized');
 	}
 
-	return await getSuggestionsByDocumentId({ documentId })
-		.andTee((suggestions) => {
-			const suggestion = suggestions.at(0);
-			if (suggestion?.userId !== user.id) {
-				error(403, 'Forbidden');
-			}
-		})
-		.match(
-			(suggestions) => Response.json(suggestions),
-			() => error(500, 'An error occurred while processing your request')
-		);
+	try {
+		const suggestions = await getSuggestionsByDocumentId({ documentId });
+		const suggestion = suggestions.at(0);
+		if (suggestion?.userId !== user.id) {
+			error(403, 'Forbidden');
+		}
+		return Response.json(suggestions);
+	} catch {
+		error(500, 'An error occurred while processing your request');
+	}
 }

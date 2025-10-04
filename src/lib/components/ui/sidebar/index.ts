@@ -71,7 +71,6 @@ export {
 	Rail,
 	Root,
 	Separator,
-	//
 	Root as Sidebar,
 	type SidebarProps,
 	Content as SidebarContent,

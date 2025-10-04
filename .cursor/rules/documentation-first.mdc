@@ -1,0 +1,306 @@
+---
+alwaysApply: true
+description: MANDATORY documentation lookup before writing ANY code using external libraries
+---
+
+# Documentation-First Development Rule
+
+## CRITICAL REQUIREMENT: Documentation Lookup is MANDATORY
+
+**BEFORE writing ANY code that uses external libraries, you MUST:**
+
+1. **STOP** - Do not write any code yet
+2. **LOOKUP** - Use MCP tools to get official documentation
+3. **VERIFY** - Confirm you understand the correct patterns
+4. **THEN** - Write code based on authoritative documentation
+
+## When Documentation Lookup is REQUIRED
+
+**MANDATORY for ANY of these scenarios:**
+- ❌ **TypeScript errors** in external library code
+- ❌ **Import statements** from external libraries
+- ❌ **API calls** to external libraries
+- ❌ **Configuration** of external libraries
+- ❌ **Plugin installation** (npm/pnpm install commands)
+- ❌ **Plugin configuration** (config files, settings)
+- ❌ **Usage patterns** you're unsure about
+- ❌ **Error messages** from external libraries
+- ❌ **Any code** that touches external libraries
+
+## Required Documentation Lookup Process
+
+### 1. Context7 Library Documentation Tools
+
+**For ANY external library usage:**
+```
+mcp_context7_get-library-docs
+context7CompatibleLibraryID: "[use-library-id-from-list-below]"
+topic: "[specific-feature-or-error]"
+tokens: 5000
+```
+
+### 2. Svelte 5 Documentation Tool
+
+**For ANY Svelte code:**
+```
+mcp_mcp-svelte-docs_svelte_definition
+identifier: "[svelte-concept]"
+format: "full"
+```
+
+## Project-Specific Library IDs
+
+**Use these Context7-compatible library IDs for libraries in this project:**
+
+### Core Framework & Build Tools
+- **Svelte:** `/llmstxt/svelte_dev_llms-full_txt` (23,069 code snippets, Trust Score: 8)
+- **SvelteKit:** `/llmstxt/svelte_dev_kit_llms_txt` (9,828 code snippets, Trust Score: 8)
+- **TypeScript:** `/microsoft/typescript` (15,930 code snippets, Trust Score: 9.9)
+- **Vite:** Use Context7 resolve for latest Vite docs
+
+### Database & Validation
+- **Drizzle ORM:** `/llmstxt/orm_drizzle_team-llms.txt` (8,977 code snippets, Trust Score: 8)
+- **Valibot:** `/llmstxt/valibot_dev_llms-full_txt` (5,053 code snippets, Trust Score: 8)
+
+### Testing & Quality
+- **Vitest:** `/vitest-dev/vitest` (1,183 code snippets, Trust Score: 8.3)
+- **Playwright:** `/microsoft/playwright` (2,075 code snippets, Trust Score: 9.9)
+- **ESLint:** `/eslint/eslint` (2,893 code snippets, Trust Score: 9.1)
+- **Storybook:** `/storybookjs/storybook` (1,735 code snippets, Trust Score: 8.8)
+
+### Styling & UI
+- **Tailwind CSS:** `/websites/v2_tailwindcss` (3,875 code snippets, Trust Score: 7.5)
+- **DaisyUI 5:** `/daisyui.com/llmstxt` (926 code snippets, Trust Score: 9)
+
+### AI & Utilities
+- **AI SDK 5:** `/ai-sdk.dev/llmstxt` (16,953 code snippets, Trust Score: 7)
+- **Better SQLite3:** Use Context7 resolve for latest docs
+- **Date-fns/Day.js:** Use Context7 resolve for latest docs
+
+## Specific Scenarios Requiring Documentation Lookup
+
+### Scenario 1: TypeScript Errors
+```typescript
+// ❌ WRONG - Fixing TypeScript errors without documentation lookup
+// Error: Property 'xyz' does not exist on type 'ABC'
+someLibrary.xyz() // Trying to guess the fix
+
+// ✅ CORRECT - Look up documentation first
+// 1. Get library documentation for the specific error
+mcp_context7_get-library-docs("/library-id", "typescript-errors")
+// 2. Then fix based on official documentation
+```
+
+### Scenario 2: Import Statements
+```typescript
+// ❌ WRONG - Guessing import syntax
+import { someFunction } from 'some-library'
+
+// ✅ CORRECT - Look up documentation first
+// 1. Get library documentation for imports
+mcp_context7_get-library-docs("/library-id", "imports")
+// 2. Then use correct import syntax
+```
+
+### Scenario 3: API Usage Patterns
+```typescript
+// ❌ WRONG - Guessing API usage
+await someLibrary.doSomething(data)
+
+// ✅ CORRECT - Look up documentation first
+// 1. Get library documentation for API usage
+mcp_context7_get-library-docs("/library-id", "api-usage")
+// 2. Then use correct API patterns
+```
+
+### Scenario 4: Error Resolution
+```typescript
+// ❌ WRONG - Guessing error solutions
+// Error: "Cannot read property 'x' of undefined"
+// Trying random fixes...
+
+// ✅ CORRECT - Look up documentation first
+// 1. Get library documentation for error handling
+mcp_context7_get-library-docs("/library-id", "error-handling")
+// 2. Then implement proper error handling
+```
+
+### Scenario 5: ESLint Plugin Installation & Configuration
+```typescript
+// ❌ WRONG - Installing ESLint plugins without documentation lookup
+// User: "install this plugin: eslint-plugin-path-alias"
+// AI: *immediately starts installing and configuring*
+
+// ✅ CORRECT - Look up documentation first
+// 1. Get plugin documentation
+mcp_context7_resolve-library-id("eslint-plugin-path-alias")
+mcp_context7_get-library-docs("/resolved-plugin-id", "configuration")
+// 2. Get SvelteKit ESLint configuration patterns
+mcp_context7_get-library-docs("/llmstxt/svelte_dev_kit_llms_txt", "eslint-configuration")
+// 3. Get SvelteKit + plugin integration examples
+mcp_context7_get-library-docs("/eslint/eslint", "sveltekit-integration")
+// 4. Then install and configure based on official SvelteKit docs
+```
+
+## Enforcement Examples
+
+### Example 1: User says "run turbo check and fix errors"
+**REQUIRED ACTION:**
+1. **STOP** - Do not start fixing errors yet
+2. **IDENTIFY** - Which libraries have TypeScript errors
+3. **LOOKUP** - Get documentation for each library with errors
+4. **THEN** - Fix errors based on official documentation
+
+### Example 2: User says "add a new component"
+**REQUIRED ACTION:**
+1. **STOP** - Do not start writing component code yet
+2. **IDENTIFY** - Which libraries will be used (Svelte, DaisyUI, etc.)
+3. **LOOKUP** - Get documentation for each library
+4. **THEN** - Write component based on official patterns
+
+### Example 3: User says "install this plugin: eslint-plugin-path-alias"
+**REQUIRED ACTION:**
+1. **STOP** - Do not install or configure the plugin yet
+2. **IDENTIFY** - This is an ESLint plugin that needs SvelteKit-specific configuration
+3. **LOOKUP** - Get documentation for:
+   - The specific plugin (eslint-plugin-path-alias)
+   - SvelteKit ESLint configuration patterns
+   - Plugin + SvelteKit integration examples
+4. **THEN** - Install and configure based on official SvelteKit documentation
+
+### Example 4: User says "configure this library"
+**REQUIRED ACTION:**
+1. **STOP** - Do not start configuration yet
+2. **IDENTIFY** - Which library needs configuration
+3. **LOOKUP** - Get documentation for configuration patterns
+4. **THEN** - Configure based on official documentation
+
+## Documentation Lookup Checklist
+
+Before writing ANY code using project libraries, verify:
+
+- [ ] **Library identified from package.json**
+- [ ] **Correct Context7 library ID used** (from list above)
+- [ ] **Library documentation retrieved** using `mcp_context7_get-library-docs`
+- [ ] **Svelte 5 concept identified** (if using Svelte features)
+- [ ] **Svelte documentation retrieved** using `mcp_mcp-svelte-docs_svelte_definition`
+- [ ] **Documentation reviewed and understood**
+- [ ] **Code written based on authoritative documentation**
+
+## Project-Specific Quality Standards
+
+### For Core Libraries (High Priority):
+- **Svelte/SvelteKit:** Always use Svelte 5 runes documentation
+- **Drizzle ORM:** Follow exact query patterns from documentation
+- **Valibot:** Use proper schema validation patterns
+- **TypeScript:** Follow strict typing patterns
+- **AI SDK 5:** Use proper streaming and provider integration patterns
+
+### For Testing Libraries:
+- **Vitest:** Use proper test structure and assertions
+- **Playwright:** Follow best practices for E2E testing
+- **Storybook:** Use proper story structure and controls
+
+### For Styling:
+- **Tailwind CSS:** Use proper utility class combinations
+- **DaisyUI 5:** Follow component API patterns and Tailwind CSS 4 integration
+
+## Enforcement Rules - NON-NEGOTIABLE
+
+**BEFORE writing ANY code that uses external libraries, you MUST:**
+
+### Immediate Documentation Lookup Required For:
+- ❌ **Any TypeScript errors** involving external libraries
+- ❌ **Any import statements** from external libraries  
+- ❌ **Any API calls** to external libraries
+- ❌ **Any configuration** of external libraries
+- ❌ **Any ESLint plugin installation** (eslint-plugin-*, npm/pnpm install commands)
+- ❌ **Any ESLint plugin configuration** (config files, settings)
+- ❌ **Any SvelteKit configuration** (always requires SvelteKit-specific docs)
+- ❌ **Any error messages** from external libraries
+- ❌ **Any usage patterns** you're unsure about
+
+### Specific Library Requirements:
+- ❌ **Svelte/SvelteKit:** MUST lookup docs before ANY Svelte code
+- ❌ **Drizzle ORM:** MUST lookup docs before ANY database queries
+- ❌ **Valibot:** MUST lookup docs before ANY schema creation
+- ❌ **AI SDK 5:** MUST lookup docs before ANY AI integration
+- ❌ **Playwright:** MUST lookup docs before ANY test code
+- ❌ **Vitest:** MUST lookup docs before ANY unit test code
+- ❌ **DaisyUI 5:** MUST lookup docs before ANY component styling
+
+### ESLint Plugin Requirements:
+- ❌ **ANY ESLint plugin:** MUST lookup plugin docs + SvelteKit integration docs
+- ❌ **eslint-plugin-*:** MUST lookup plugin docs + SvelteKit ESLint configuration
+- ❌ **ESLint configuration:** MUST lookup SvelteKit-specific ESLint patterns
+- ❌ **Plugin configuration:** MUST lookup both plugin docs and SvelteKit compatibility
+
+## Violation Detection
+
+**If you see any of these, STOP and lookup documentation:**
+- TypeScript compilation errors
+- Import resolution errors
+- Runtime errors from external libraries
+- **ESLint plugin installation requests** (eslint-plugin-*)
+- **ESLint plugin configuration requests**
+- **SvelteKit configuration requests**
+- Plugin installation requests
+- Plugin configuration requests
+- Unfamiliar API patterns
+- Configuration errors
+- Type errors
+- Package installation commands
+- Library configuration changes
+
+## Required Process Flow
+
+```
+1. User Request → 2. Identify Libraries → 3. Lookup Documentation → 4. Write Code
+```
+
+**NEVER skip step 3!**
+
+## Success Metrics
+
+**Code is compliant when:**
+- ✅ All project libraries have Context7 documentation references
+- ✅ All Svelte 5 features have official definition references  
+- ✅ Code matches documented patterns exactly
+- ✅ No assumptions or guesswork in implementation
+- ✅ Uses only libraries present in package.json
+
+## ESLint Plugin & SvelteKit Configuration Protocol
+
+### MANDATORY Process for ESLint Plugins:
+
+**When user requests ANY ESLint plugin installation:**
+
+1. **STOP** - Do not install or configure yet
+2. **IDENTIFY** - Plugin name (e.g., eslint-plugin-path-alias)
+3. **LOOKUP REQUIRED DOCS:**
+   ```
+   # 1. Get plugin documentation
+   mcp_context7_resolve-library-id("plugin-name")
+   mcp_context7_get-library-docs("/resolved-id", "configuration")
+   
+   # 2. Get SvelteKit ESLint configuration patterns
+   mcp_context7_get-library-docs("/llmstxt/svelte_dev_kit_llms_txt", "eslint-configuration")
+   
+   # 3. Get SvelteKit + plugin integration examples
+   mcp_context7_get-library-docs("/eslint/eslint", "sveltekit-integration")
+   
+   # 4. Get SvelteKit-specific ESLint patterns
+   mcp_context7_get-library-docs("/sveltejs/eslint-plugin-svelte", "configuration")
+   ```
+4. **THEN** - Install and configure based on SvelteKit documentation
+
+### SvelteKit Configuration Requirements:
+
+**ALWAYS lookup SvelteKit-specific documentation for:**
+- ESLint configuration files
+- Plugin integration with SvelteKit
+- SvelteKit-specific ESLint rules
+- Framework-specific configuration patterns
+- SvelteKit + plugin compatibility
+
+**Remember: This project uses specific versions and patterns. Always verify against official documentation first.**

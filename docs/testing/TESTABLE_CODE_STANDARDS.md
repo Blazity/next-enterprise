@@ -31,47 +31,49 @@ This document defines testability standards for SvelteKit applications using Sve
 
 **Where Code Should Live**:
 
-| Concern | Location | Testable With | Example |
-|---------|----------|---------------|---------|
-| Business Logic | `src/lib/models` or `src/lib/services` | Vitest unit tests | User registration validation |
-| Data Access | `src/lib/queries` | Vitest with PGlite | Database CRUD operations |
-| Validation | `src/lib/schemas` | Vitest unit tests | Schema validation |
-| UI Logic | Svelte components | Playwright component tests | Button interactions |
-| API Routes | `src/routes/api/**/*.ts` | Vitest integration tests | REST endpoints |
-| Server Load | `src/routes/**/+page.server.ts` | Vitest integration tests | Data fetching |
+| Concern        | Location                               | Testable With              | Example                      |
+| -------------- | -------------------------------------- | -------------------------- | ---------------------------- |
+| Business Logic | `src/lib/models` or `src/lib/services` | Vitest unit tests          | User registration validation |
+| Data Access    | `src/lib/queries`                      | Vitest with PGlite         | Database CRUD operations     |
+| Validation     | `src/lib/schemas`                      | Vitest unit tests          | Schema validation            |
+| UI Logic       | Svelte components                      | Playwright component tests | Button interactions          |
+| API Routes     | `src/routes/api/**/*.ts`               | Vitest integration tests   | REST endpoints               |
+| Server Load    | `src/routes/**/+page.server.ts`        | Vitest integration tests   | Data fetching                |
 
 **Anti-Pattern - Mixed Concerns**:
+
 ```typescript
 export const load = async ({ fetch }) => {
-  const response = await fetch('/api/users');
-  const users = await response.json();
-  const validUsers = users.filter(u => u.email.includes('@'));
-  const sortedUsers = validUsers.sort((a, b) => a.name.localeCompare(b.name));
-  return { users: sortedUsers };
+	const response = await fetch('/api/users');
+	const users = await response.json();
+	const validUsers = users.filter((u) => u.email.includes('@'));
+	const sortedUsers = validUsers.sort((a, b) => a.name.localeCompare(b.name));
+	return { users: sortedUsers };
 };
 ```
 
 **Testable Pattern - Separated Concerns**:
+
 ```typescript
 export async function getUsersFromApi(fetch: Fetch): Promise<User[]> {
-  const response = await fetch('/api/users');
-  if (!response.ok) throw new Error('Failed to fetch users');
-  return response.json();
+	const response = await fetch('/api/users');
+	if (!response.ok) throw new Error('Failed to fetch users');
+	return response.json();
 }
 
 export function filterValidUsers(users: User[]): User[] {
-  return users.filter(u => v.safeParse(emailSchema, u.email).success);
+	return users.filter((u) => v.safeParse(emailSchema, u.email).success);
 }
 
 export function sortUsersByName(users: User[]): User[] {
-  return [...users].sort((a, b) => a.name.localeCompare(b.name));
+	return [...users].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export const load = async ({ fetch }) => {
-  const users = await getUsersFromApi(fetch);
-  const validUsers = filterValidUsers(users);
-  const sortedUsers = sortUsersByName(validUsers);
-  return { users: sortedUsers };
+	const users = await getUsersFromApi(fetch);
+	const validUsers = filterValidUsers(users);
+	const sortedUsers = sortUsersByName(validUsers);
+	return { users: sortedUsers };
 };
 ```
 
@@ -80,47 +82,46 @@ export const load = async ({ fetch }) => {
 **Principle**: Pass dependencies explicitly rather than importing them directly to enable mocking.
 
 **Function Injection (Preferred)**:
+
 ```typescript
-export async function createUser(
-  db: DatabaseClient,
-  userData: InsertUser
-): Promise<User> {
-  const [user] = await db.insert(users).values(userData).returning();
-  return user;
+export async function createUser(db: DatabaseClient, userData: InsertUser): Promise<User> {
+	const [user] = await db.insert(users).values(userData).returning();
+	return user;
 }
 
 it('creates a user', async () => {
-  const mockDb = {
-    insert: vi.fn().mockReturnValue({
-      values: vi.fn().mockReturnValue({
-        returning: vi.fn().mockResolvedValue([{ id: '123', name: 'Test' }])
-      })
-    })
-  };
-  
-  const user = await createUser(mockDb as any, { name: 'Test', email: 'test@example.com' });
-  expect(user.id).toBe('123');
+	const mockDb = {
+		insert: vi.fn().mockReturnValue({
+			values: vi.fn().mockReturnValue({
+				returning: vi.fn().mockResolvedValue([{ id: '123', name: 'Test' }])
+			})
+		})
+	};
+
+	const user = await createUser(mockDb as any, { name: 'Test', email: 'test@example.com' });
+	expect(user.id).toBe('123');
 });
 ```
 
 **SvelteKit Context Injection**:
+
 ```typescript
 import { getRequestEvent } from '$app/server';
 
 export async function getCurrentUser(): Promise<User | null> {
-  const { locals } = getRequestEvent();
-  return locals.user || null;
+	const { locals } = getRequestEvent();
+	return locals.user || null;
 }
 
 it('gets current user from locals', async () => {
-  vi.mock('$app/server', () => ({
-    getRequestEvent: () => ({
-      locals: { user: { id: '123', name: 'Test' } }
-    })
-  }));
-  
-  const user = await getCurrentUser();
-  expect(user?.id).toBe('123');
+	vi.mock('$app/server', () => ({
+		getRequestEvent: () => ({
+			locals: { user: { id: '123', name: 'Test' } }
+		})
+	}));
+
+	const user = await getCurrentUser();
+	expect(user?.id).toBe('123');
 });
 ```
 
@@ -129,46 +130,44 @@ it('gets current user from locals', async () => {
 **Principle**: Favor pure functions that are deterministic and have no side effects.
 
 **Pure Function Characteristics**:
+
 - Same input always produces same output
 - No side effects (no mutations, I/O, or external state changes)
 - Easily testable without mocks or setup
 - Can be tested in parallel
 
 **Pure Function Example**:
+
 ```typescript
-export function calculateTotalPrice(
-  items: CartItem[],
-  taxRate: number
-): number {
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  return subtotal * (1 + taxRate);
+export function calculateTotalPrice(items: CartItem[], taxRate: number): number {
+	const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+	return subtotal * (1 + taxRate);
 }
 
 it('calculates total price correctly', () => {
-  const items = [
-    { price: 10, quantity: 2 },
-    { price: 5, quantity: 3 }
-  ];
-  expect(calculateTotalPrice(items, 0.1)).toBe(38.5);
+	const items = [
+		{ price: 10, quantity: 2 },
+		{ price: 5, quantity: 3 }
+	];
+	expect(calculateTotalPrice(items, 0.1)).toBe(38.5);
 });
 ```
 
 **Impure Function (Only When Necessary)**:
+
 ```typescript
 export async function saveUserProfile(
-  db: DatabaseClient,
-  userId: string,
-  profile: ProfileData
+	db: DatabaseClient,
+	userId: string,
+	profile: ProfileData
 ): Promise<void> {
-  await db.update(userProfiles)
-    .set(profile)
-    .where(eq(userProfiles.userId, userId));
+	await db.update(userProfiles).set(profile).where(eq(userProfiles.userId, userId));
 }
 
 it('saves user profile', async () => {
-  const mockDb = createMockDb();
-  await saveUserProfile(mockDb, '123', { bio: 'Test' });
-  expect(mockDb.update).toHaveBeenCalledWith(userProfiles);
+	const mockDb = createMockDb();
+	await saveUserProfile(mockDb, '123', { bio: 'Test' });
+	expect(mockDb.update).toHaveBeenCalledWith(userProfiles);
 });
 ```
 
@@ -177,33 +176,39 @@ it('saves user profile', async () => {
 **Principle**: Make dependencies, parameters, return types, and error conditions explicit.
 
 **Explicit Pattern**:
+
 ```typescript
 export async function processPayment(
-  stripe: Stripe,
-  amount: number,
-  currency: string,
-  customerId: string
+	stripe: Stripe,
+	amount: number,
+	currency: string,
+	customerId: string
 ): Promise<{ success: boolean; paymentIntentId?: string; error?: string }> {
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency,
-      customer: customerId
-    });
-    return { success: true, paymentIntentId: paymentIntent.id };
-  } catch (error) {
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
-  }
+	try {
+		const paymentIntent = await stripe.paymentIntents.create({
+			amount,
+			currency,
+			customer: customerId
+		});
+		return { success: true, paymentIntentId: paymentIntent.id };
+	} catch (error) {
+		return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+	}
 }
 ```
 
 **Anti-Pattern - Implicit Dependencies**:
+
 ```typescript
 import { stripe } from '$lib/server/stripe';
 
 export async function processPayment(amount: number, customerId: string) {
-  const paymentIntent = await stripe.paymentIntents.create({ amount, currency: 'usd', customer: customerId });
-  return paymentIntent.id;
+	const paymentIntent = await stripe.paymentIntents.create({
+		amount,
+		currency: 'usd',
+		customer: customerId
+	});
+	return paymentIntent.id;
 }
 ```
 
@@ -212,30 +217,31 @@ export async function processPayment(amount: number, customerId: string) {
 **Principle**: Each module/function should have one reason to change.
 
 **Example - Single Responsibilities**:
+
 ```typescript
 export async function fetchUserData(userId: string): Promise<RawUserData> {
-  const response = await fetch(`/api/users/${userId}`);
-  if (!response.ok) throw new Error('User not found');
-  return response.json();
+	const response = await fetch(`/api/users/${userId}`);
+	if (!response.ok) throw new Error('User not found');
+	return response.json();
 }
 
 export function transformUserData(raw: RawUserData): User {
-  return {
-    id: raw.id,
-    name: `${raw.first_name} ${raw.last_name}`,
-    email: raw.email.toLowerCase()
-  };
+	return {
+		id: raw.id,
+		name: `${raw.first_name} ${raw.last_name}`,
+		email: raw.email.toLowerCase()
+	};
 }
 
 export function validateUserData(user: User): boolean {
-  return v.safeParse(userSchema, user).success;
+	return v.safeParse(userSchema, user).success;
 }
 
 export async function loadAndValidateUser(userId: string): Promise<User> {
-  const raw = await fetchUserData(userId);
-  const user = transformUserData(raw);
-  if (!validateUserData(user)) throw new Error('Invalid user data');
-  return user;
+	const raw = await fetchUserData(userId);
+	const user = transformUserData(raw);
+	if (!validateUserData(user)) throw new Error('Invalid user data');
+	return user;
 }
 ```
 
@@ -255,21 +261,18 @@ import { error } from '@sveltejs/kit';
 import { getUserById } from '$queries';
 import type { DatabaseClient } from '$db/client';
 
-export async function fetchUserData(
-  db: DatabaseClient,
-  userId: string
-): Promise<User | null> {
-  return getUserById(db, userId);
+export async function fetchUserData(db: DatabaseClient, userId: string): Promise<User | null> {
+	return getUserById(db, userId);
 }
 
 export const load: PageServerLoad = async ({ params, locals }) => {
-  const user = await fetchUserData(locals.db, params.id);
-  
-  if (!user) {
-    error(404, { message: 'User not found' });
-  }
-  
-  return { user };
+	const user = await fetchUserData(locals.db, params.id);
+
+	if (!user) {
+		error(404, { message: 'User not found' });
+	}
+
+	return { user };
 };
 ```
 
@@ -280,33 +283,33 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { fetchUserData } from './+page.server';
 
 describe('fetchUserData', () => {
-  let mockDb: any;
+	let mockDb: any;
 
-  beforeEach(() => {
-    mockDb = {
-      select: vi.fn().mockReturnValue({
-        from: vi.fn().mockReturnValue({
-          where: vi.fn().mockResolvedValue([{ id: '123', name: 'Test User' }])
-        })
-      })
-    };
-  });
+	beforeEach(() => {
+		mockDb = {
+			select: vi.fn().mockReturnValue({
+				from: vi.fn().mockReturnValue({
+					where: vi.fn().mockResolvedValue([{ id: '123', name: 'Test User' }])
+				})
+			})
+		};
+	});
 
-  it('fetches user by ID', async () => {
-    const user = await fetchUserData(mockDb, '123');
-    expect(user).toEqual({ id: '123', name: 'Test User' });
-  });
+	it('fetches user by ID', async () => {
+		const user = await fetchUserData(mockDb, '123');
+		expect(user).toEqual({ id: '123', name: 'Test User' });
+	});
 
-  it('returns null for non-existent user', async () => {
-    mockDb.select.mockReturnValue({
-      from: vi.fn().mockReturnValue({
-        where: vi.fn().mockResolvedValue([])
-      })
-    });
-    
-    const user = await fetchUserData(mockDb, 'non-existent');
-    expect(user).toBeNull();
-  });
+	it('returns null for non-existent user', async () => {
+		mockDb.select.mockReturnValue({
+			from: vi.fn().mockReturnValue({
+				where: vi.fn().mockResolvedValue([])
+			})
+		});
+
+		const user = await fetchUserData(mockDb, 'non-existent');
+		expect(user).toBeNull();
+	});
 });
 ```
 
@@ -316,10 +319,10 @@ describe('fetchUserData', () => {
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ depends, fetch }) => {
-  depends('custom:user-data');
-  
-  const response = await fetch('/api/user');
-  return { user: await response.json() };
+	depends('custom:user-data');
+
+	const response = await fetch('/api/user');
+	return { user: await response.json() };
 };
 ```
 
@@ -334,25 +337,22 @@ import { createUser } from '$queries';
 import { userInsertSchema } from '$schemas';
 import * as v from 'valibot';
 
-export async function validateAndCreateUser(
-  db: DatabaseClient,
-  rawData: unknown
-): Promise<User> {
-  const validated = v.parse(userInsertSchema, rawData);
-  return createUser(db, validated);
+export async function validateAndCreateUser(db: DatabaseClient, rawData: unknown): Promise<User> {
+	const validated = v.parse(userInsertSchema, rawData);
+	return createUser(db, validated);
 }
 
 export const POST: RequestHandler = async ({ request, locals }) => {
-  try {
-    const rawData = await request.json();
-    const user = await validateAndCreateUser(locals.db, rawData);
-    return json(user, { status: 201 });
-  } catch (err) {
-    if (err instanceof v.ValiError) {
-      error(400, { message: 'Invalid user data' });
-    }
-    error(500, { message: 'Failed to create user' });
-  }
+	try {
+		const rawData = await request.json();
+		const user = await validateAndCreateUser(locals.db, rawData);
+		return json(user, { status: 201 });
+	} catch (err) {
+		if (err instanceof v.ValiError) {
+			error(400, { message: 'Invalid user data' });
+		}
+		error(500, { message: 'Failed to create user' });
+	}
 };
 ```
 
@@ -364,27 +364,28 @@ import { validateAndCreateUser } from './+server';
 import * as v from 'valibot';
 
 describe('validateAndCreateUser', () => {
-  const mockDb = {
-    insert: vi.fn().mockReturnValue({
-      values: vi.fn().mockReturnValue({
-        returning: vi.fn().mockResolvedValue([{ id: '123', name: 'John', email: 'john@example.com' }])
-      })
-    })
-  };
+	const mockDb = {
+		insert: vi.fn().mockReturnValue({
+			values: vi.fn().mockReturnValue({
+				returning: vi
+					.fn()
+					.mockResolvedValue([{ id: '123', name: 'John', email: 'john@example.com' }])
+			})
+		})
+	};
 
-  it('validates and creates user with valid data', async () => {
-    const rawData = { name: 'John', email: 'john@example.com' };
-    const user = await validateAndCreateUser(mockDb as any, rawData);
-    
-    expect(user).toEqual({ id: '123', name: 'John', email: 'john@example.com' });
-  });
+	it('validates and creates user with valid data', async () => {
+		const rawData = { name: 'John', email: 'john@example.com' };
+		const user = await validateAndCreateUser(mockDb as any, rawData);
 
-  it('throws ValiError for invalid data', async () => {
-    const rawData = { name: 'John', email: 'invalid-email' };
-    
-    await expect(() => validateAndCreateUser(mockDb as any, rawData))
-      .rejects.toThrow(v.ValiError);
-  });
+		expect(user).toEqual({ id: '123', name: 'John', email: 'john@example.com' });
+	});
+
+	it('throws ValiError for invalid data', async () => {
+		const rawData = { name: 'John', email: 'invalid-email' };
+
+		await expect(() => validateAndCreateUser(mockDb as any, rawData)).rejects.toThrow(v.ValiError);
+	});
 });
 ```
 
@@ -403,38 +404,38 @@ import { profileFormSchema } from '$schemas';
 import { upsertProfile } from '$queries';
 
 export async function processProfileSubmission(
-  db: DatabaseClient,
-  userId: string,
-  formData: FormData
+	db: DatabaseClient,
+	userId: string,
+	formData: FormData
 ): Promise<{ success: boolean; errors?: string[] }> {
-  const form = await superValidate(formData, valibot(profileFormSchema));
-  
-  if (!form.valid) {
-    return { success: false, errors: Object.values(form.errors).flat() };
-  }
-  
-  await upsertProfile(db, userId, form.data);
-  return { success: true };
+	const form = await superValidate(formData, valibot(profileFormSchema));
+
+	if (!form.valid) {
+		return { success: false, errors: Object.values(form.errors).flat() };
+	}
+
+	await upsertProfile(db, userId, form.data);
+	return { success: true };
 }
 
 export const actions: Actions = {
-  default: async ({ request, locals }) => {
-    if (!locals.user) {
-      return fail(401, { message: 'Unauthorized' });
-    }
-    
-    const result = await processProfileSubmission(
-      locals.db,
-      locals.user.id,
-      await request.formData()
-    );
-    
-    if (!result.success) {
-      return fail(400, { errors: result.errors });
-    }
-    
-    return { success: true };
-  }
+	default: async ({ request, locals }) => {
+		if (!locals.user) {
+			return fail(401, { message: 'Unauthorized' });
+		}
+
+		const result = await processProfileSubmission(
+			locals.db,
+			locals.user.id,
+			await request.formData()
+		);
+
+		if (!result.success) {
+			return fail(400, { errors: result.errors });
+		}
+
+		return { success: true };
+	}
 };
 ```
 
@@ -445,28 +446,28 @@ import { describe, it, expect, vi } from 'vitest';
 import { processProfileSubmission } from './+page.server';
 
 describe('processProfileSubmission', () => {
-  it('processes valid form data', async () => {
-    const mockDb = createMockDb();
-    const formData = new FormData();
-    formData.append('firstName', 'John');
-    formData.append('lastName', 'Doe');
-    formData.append('email', 'john@example.com');
-    
-    const result = await processProfileSubmission(mockDb, 'user-123', formData);
-    
-    expect(result.success).toBe(true);
-  });
+	it('processes valid form data', async () => {
+		const mockDb = createMockDb();
+		const formData = new FormData();
+		formData.append('firstName', 'John');
+		formData.append('lastName', 'Doe');
+		formData.append('email', 'john@example.com');
 
-  it('returns errors for invalid data', async () => {
-    const mockDb = createMockDb();
-    const formData = new FormData();
-    formData.append('email', 'invalid-email');
-    
-    const result = await processProfileSubmission(mockDb, 'user-123', formData);
-    
-    expect(result.success).toBe(false);
-    expect(result.errors).toBeDefined();
-  });
+		const result = await processProfileSubmission(mockDb, 'user-123', formData);
+
+		expect(result.success).toBe(true);
+	});
+
+	it('returns errors for invalid data', async () => {
+		const mockDb = createMockDb();
+		const formData = new FormData();
+		formData.append('email', 'invalid-email');
+
+		const result = await processProfileSubmission(mockDb, 'user-123', formData);
+
+		expect(result.success).toBe(false);
+		expect(result.errors).toBeDefined();
+	});
 });
 ```
 
@@ -478,14 +479,14 @@ describe('processProfileSubmission', () => {
 import type { HandleServerError } from '@sveltejs/kit';
 
 export const handleServerError: HandleServerError = async ({ error, event, status, message }) => {
-  const errorId = crypto.randomUUID();
-  
-  console.error(`[${errorId}] ${status}: ${message}`, error);
-  
-  return {
-    message: 'An unexpected error occurred',
-    errorId
-  };
+	const errorId = crypto.randomUUID();
+
+	console.error(`[${errorId}] ${status}: ${message}`, error);
+
+	return {
+		message: 'An unexpected error occurred',
+		errorId
+	};
 };
 ```
 
@@ -495,11 +496,11 @@ export const handleServerError: HandleServerError = async ({ error, event, statu
 import type { HandleValidationError } from '@sveltejs/kit';
 
 export const handleValidationError: HandleValidationError = ({ event, issues }) => {
-  console.warn('Validation failed:', issues);
-  
-  return {
-    message: 'Invalid request data'
-  };
+	console.warn('Validation failed:', issues);
+
+	return {
+		message: 'Invalid request data'
+	};
 };
 ```
 
@@ -515,41 +516,41 @@ export const handleValidationError: HandleValidationError = ({ event, issues }) 
 
 ```svelte
 <script lang="ts">
-  import type { User } from '$types';
-  import { getUserDisplay } from '$utils/user';
-  
-  interface Props {
-    user: User;
-    onUpdate?: (user: User) => void;
-  }
-  
-  let { user, onUpdate }: Props = $props();
-  
-  let isEditing = $state(false);
-  let editedName = $state(user.name);
-  
-  const displayName = $derived(getUserDisplay(user));
-  
-  $effect(() => {
-    if (!isEditing) {
-      editedName = user.name;
-    }
-  });
-  
-  function handleSave() {
-    onUpdate?.({ ...user, name: editedName });
-    isEditing = false;
-  }
+	import type { User } from '$types';
+	import { getUserDisplay } from '$utils/user';
+
+	interface Props {
+		user: User;
+		onUpdate?: (user: User) => void;
+	}
+
+	let { user, onUpdate }: Props = $props();
+
+	let isEditing = $state(false);
+	let editedName = $state(user.name);
+
+	const displayName = $derived(getUserDisplay(user));
+
+	$effect(() => {
+		if (!isEditing) {
+			editedName = user.name;
+		}
+	});
+
+	function handleSave() {
+		onUpdate?.({ ...user, name: editedName });
+		isEditing = false;
+	}
 </script>
 
 <div data-testid="user-card">
-  {#if isEditing}
-    <input bind:value={editedName} data-testid="name-input" />
-    <button onclick={handleSave} data-testid="save-button">Save</button>
-  {:else}
-    <h3>{displayName}</h3>
-    <button onclick={() => isEditing = true} data-testid="edit-button">Edit</button>
-  {/if}
+	{#if isEditing}
+		<input bind:value={editedName} data-testid="name-input" />
+		<button onclick={handleSave} data-testid="save-button">Save</button>
+	{:else}
+		<h3>{displayName}</h3>
+		<button onclick={() => (isEditing = true)} data-testid="edit-button">Edit</button>
+	{/if}
 </div>
 ```
 
@@ -560,22 +561,24 @@ import { test, expect } from '@playwright/experimental-ct-svelte';
 import UserCard from './UserCard.svelte';
 
 test('allows editing user name', async ({ mount }) => {
-  const user = { id: '123', name: 'John Doe', email: 'john@example.com' };
-  let updatedUser: User | null = null;
-  
-  const component = await mount(UserCard, {
-    props: {
-      user,
-      onUpdate: (u: User) => { updatedUser = u; }
-    }
-  });
-  
-  await component.getByTestId('edit-button').click();
-  await component.getByTestId('name-input').fill('Jane Doe');
-  await component.getByTestId('save-button').click();
-  
-  expect(updatedUser?.name).toBe('Jane Doe');
-  await expect(component.getByText('Jane Doe')).toBeVisible();
+	const user = { id: '123', name: 'John Doe', email: 'john@example.com' };
+	let updatedUser: User | null = null;
+
+	const component = await mount(UserCard, {
+		props: {
+			user,
+			onUpdate: (u: User) => {
+				updatedUser = u;
+			}
+		}
+	});
+
+	await component.getByTestId('edit-button').click();
+	await component.getByTestId('name-input').fill('Jane Doe');
+	await component.getByTestId('save-button').click();
+
+	expect(updatedUser?.name).toBe('Jane Doe');
+	await expect(component.getByText('Jane Doe')).toBeVisible();
 });
 ```
 
@@ -585,16 +588,16 @@ test('allows editing user name', async ({ mount }) => {
 
 ```svelte
 <script lang="ts">
-  let count = $state(0);
-  let todos = $state<Todo[]>([]);
-  
-  function increment() {
-    count++;
-  }
-  
-  function addTodo(text: string) {
-    todos.push({ id: crypto.randomUUID(), text, completed: false });
-  }
+	let count = $state(0);
+	let todos = $state<Todo[]>([]);
+
+	function increment() {
+		count++;
+	}
+
+	function addTodo(text: string) {
+		todos.push({ id: crypto.randomUUID(), text, completed: false });
+	}
 </script>
 ```
 
@@ -602,14 +605,12 @@ test('allows editing user name', async ({ mount }) => {
 
 ```svelte
 <script lang="ts">
-  let firstName = $state('John');
-  let lastName = $state('Doe');
-  
-  const fullName = $derived(`${firstName} ${lastName}`);
-  
-  const filteredTodos = $derived(
-    todos.filter(t => !t.completed)
-  );
+	let firstName = $state('John');
+	let lastName = $state('Doe');
+
+	const fullName = $derived(`${firstName} ${lastName}`);
+
+	const filteredTodos = $derived(todos.filter((t) => !t.completed));
 </script>
 ```
 
@@ -617,15 +618,15 @@ test('allows editing user name', async ({ mount }) => {
 
 ```svelte
 <script lang="ts">
-  let count = $state(0);
-  
-  $effect(() => {
-    console.log(`Count changed to ${count}`);
-    
-    return () => {
-      console.log('Cleanup');
-    };
-  });
+	let count = $state(0);
+
+	$effect(() => {
+		console.log(`Count changed to ${count}`);
+
+		return () => {
+			console.log('Cleanup');
+		};
+	});
 </script>
 ```
 
@@ -636,58 +637,58 @@ test('allows editing user name', async ({ mount }) => {
 ```svelte
 <!-- Child.svelte -->
 <script lang="ts">
-  interface Props {
-    items: Item[];
-    onItemClick?: (item: Item) => void;
-    onDelete?: (id: string) => void;
-  }
-  
-  let { items, onItemClick, onDelete }: Props = $props();
+	interface Props {
+		items: Item[];
+		onItemClick?: (item: Item) => void;
+		onDelete?: (id: string) => void;
+	}
+
+	let { items, onItemClick, onDelete }: Props = $props();
 </script>
 
 <ul>
-  {#each items as item}
-    <li>
-      <span onclick={() => onItemClick?.(item)}>{item.name}</span>
-      <button onclick={() => onDelete?.(item.id)}>Delete</button>
-    </li>
-  {/each}
+	{#each items as item}
+		<li>
+			<span onclick={() => onItemClick?.(item)}>{item.name}</span>
+			<button onclick={() => onDelete?.(item.id)}>Delete</button>
+		</li>
+	{/each}
 </ul>
 ```
 
 ```svelte
 <!-- Parent.svelte -->
 <script>
-  let items = $state([...]);
-  
-  function handleClick(item: Item) {
-    console.log('Clicked:', item);
-  }
-  
-  function handleDelete(id: string) {
-    items = items.filter(i => i.id !== id);
-  }
+	let items = $state([]);
+
+	function handleClick(item: Item) {
+		console.log('Clicked:', item);
+	}
+
+	function handleDelete(id: string) {
+		items = items.filter((i) => i.id !== id);
+	}
 </script>
 
-<ItemList items={items} onItemClick={handleClick} onDelete={handleDelete} />
+<ItemList {items} onItemClick={handleClick} onDelete={handleDelete} />
 ```
 
 ### Snippets for Reusable Templates
 
 ```svelte
 <script lang="ts">
-  let { data } = $props();
+	let { data } = $props();
 </script>
 
 {#snippet card(title: string, content: string)}
-  <div class="card">
-    <h3>{title}</h3>
-    <p>{content}</p>
-  </div>
+	<div class="card">
+		<h3>{title}</h3>
+		<p>{content}</p>
+	</div>
 {/snippet}
 
 {#each data.posts as post}
-  {@render card(post.title, post.excerpt)}
+	{@render card(post.title, post.excerpt)}
 {/each}
 ```
 
@@ -695,63 +696,67 @@ test('allows editing user name', async ({ mount }) => {
 
 ```typescript
 test('renders snippet correctly', async ({ mount }) => {
-  const component = await mount(CardList, {
-    props: { data: { posts: [{ title: 'Test', excerpt: 'Content' }] } }
-  });
-  
-  await expect(component.getByText('Test')).toBeVisible();
-  await expect(component.getByText('Content')).toBeVisible();
+	const component = await mount(CardList, {
+		props: { data: { posts: [{ title: 'Test', excerpt: 'Content' }] } }
+	});
+
+	await expect(component.getByText('Test')).toBeVisible();
+	await expect(component.getByText('Content')).toBeVisible();
 });
 ```
 
 ### Anti-Patterns That Hinder Testing
 
 **❌ Deep Effect Nesting**:
+
 ```svelte
 <script>
-  $effect(() => {
-    $effect(() => {
-      $effect(() => {
-        console.log('Too deep!');
-      });
-    });
-  });
+	$effect(() => {
+		$effect(() => {
+			$effect(() => {
+				console.log('Too deep!');
+			});
+		});
+	});
 </script>
 ```
 
 **❌ Side Effects in Derived State**:
+
 ```svelte
 <script>
-  const value = $derived(() => {
-    fetch('/api/data');
-    return someComputation();
-  });
+	const value = $derived(() => {
+		fetch('/api/data');
+		return someComputation();
+	});
 </script>
 ```
 
 **❌ Global State Without Context**:
+
 ```svelte
 <script>
-  import { globalStore } from '$lib/stores/global';
-  
-  let value = $state(globalStore.value);
+	import { globalStore } from '$lib/stores/global';
+
+	let value = $state(globalStore.value);
 </script>
 ```
 
 **✅ Use Context for Dependency Injection**:
+
 ```svelte
 <!-- App.svelte -->
 <script>
   import { setContext } from 'svelte';
   import { db } from '$db/client';
-  
+
   setContext('db', db);
 </script>
 
 <!-- Child.svelte -->
 <script>
   import { getContext } from 'svelte';
-  
+
   const db = getContext<DatabaseClient>('db');
 </script>
 ```
@@ -772,40 +777,27 @@ import type { DatabaseClient } from '$db/client';
 import { users } from '$schemas/database';
 import type { User, InsertUser } from '$types';
 
-export async function getUserById(
-  db: DatabaseClient,
-  id: string
-): Promise<User | null> {
-  const [user] = await db.select().from(users).where(eq(users.id, id));
-  return user || null;
+export async function getUserById(db: DatabaseClient, id: string): Promise<User | null> {
+	const [user] = await db.select().from(users).where(eq(users.id, id));
+	return user || null;
 }
 
-export async function createUser(
-  db: DatabaseClient,
-  data: InsertUser
-): Promise<User> {
-  const [user] = await db.insert(users).values(data).returning();
-  return user;
+export async function createUser(db: DatabaseClient, data: InsertUser): Promise<User> {
+	const [user] = await db.insert(users).values(data).returning();
+	return user;
 }
 
 export async function updateUser(
-  db: DatabaseClient,
-  id: string,
-  data: Partial<InsertUser>
+	db: DatabaseClient,
+	id: string,
+	data: Partial<InsertUser>
 ): Promise<User> {
-  const [user] = await db
-    .update(users)
-    .set(data)
-    .where(eq(users.id, id))
-    .returning();
-  return user;
+	const [user] = await db.update(users).set(data).where(eq(users.id, id)).returning();
+	return user;
 }
 
-export async function deleteUser(
-  db: DatabaseClient,
-  id: string
-): Promise<void> {
-  await db.delete(users).where(eq(users.id, id));
+export async function deleteUser(db: DatabaseClient, id: string): Promise<void> {
+	await db.delete(users).where(eq(users.id, id));
 }
 ```
 
@@ -815,28 +807,28 @@ export async function deleteUser(
 
 ```typescript
 export async function transferFunds(
-  db: DatabaseClient,
-  fromAccountId: string,
-  toAccountId: string,
-  amount: number
+	db: DatabaseClient,
+	fromAccountId: string,
+	toAccountId: string,
+	amount: number
 ): Promise<{ success: boolean; error?: string }> {
-  try {
-    await db.transaction(async (tx) => {
-      await tx
-        .update(accounts)
-        .set({ balance: sql`${accounts.balance} - ${amount}` })
-        .where(eq(accounts.id, fromAccountId));
-      
-      await tx
-        .update(accounts)
-        .set({ balance: sql`${accounts.balance} + ${amount}` })
-        .where(eq(accounts.id, toAccountId));
-    });
-    
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
-  }
+	try {
+		await db.transaction(async (tx) => {
+			await tx
+				.update(accounts)
+				.set({ balance: sql`${accounts.balance} - ${amount}` })
+				.where(eq(accounts.id, fromAccountId));
+
+			await tx
+				.update(accounts)
+				.set({ balance: sql`${accounts.balance} + ${amount}` })
+				.where(eq(accounts.id, toAccountId));
+		});
+
+		return { success: true };
+	} catch (error) {
+		return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+	}
 }
 ```
 
@@ -853,14 +845,14 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import * as schema from '$schemas/database';
 
 describe('User Queries', () => {
-  let db: ReturnType<typeof drizzle>;
-  let pgLite: PGlite;
+	let db: ReturnType<typeof drizzle>;
+	let pgLite: PGlite;
 
-  beforeEach(async () => {
-    pgLite = new PGlite();
-    db = drizzle(pgLite, { schema });
-    
-    await pgLite.exec(`
+	beforeEach(async () => {
+		pgLite = new PGlite();
+		db = drizzle(pgLite, { schema });
+
+		await pgLite.exec(`
       CREATE TABLE users (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         name TEXT NOT NULL,
@@ -868,29 +860,29 @@ describe('User Queries', () => {
         created_at TIMESTAMP DEFAULT NOW()
       );
     `);
-  });
+	});
 
-  it('creates and retrieves user', async () => {
-    const insertData = { name: 'Test User', email: 'test@example.com' };
-    const created = await createUser(db, insertData);
-    
-    expect(created.name).toBe('Test User');
-    
-    const retrieved = await getUserById(db, created.id);
-    expect(retrieved).toEqual(created);
-  });
+	it('creates and retrieves user', async () => {
+		const insertData = { name: 'Test User', email: 'test@example.com' };
+		const created = await createUser(db, insertData);
 
-  it('handles transactions correctly', async () => {
-    await pgLite.transaction(async (tx) => {
-      const dbTx = drizzle(tx, { schema });
-      
-      await createUser(dbTx, { name: 'User 1', email: 'user1@example.com' });
-      await createUser(dbTx, { name: 'User 2', email: 'user2@example.com' });
-    });
-    
-    const allUsers = await db.select().from(schema.users);
-    expect(allUsers).toHaveLength(2);
-  });
+		expect(created.name).toBe('Test User');
+
+		const retrieved = await getUserById(db, created.id);
+		expect(retrieved).toEqual(created);
+	});
+
+	it('handles transactions correctly', async () => {
+		await pgLite.transaction(async (tx) => {
+			const dbTx = drizzle(tx, { schema });
+
+			await createUser(dbTx, { name: 'User 1', email: 'user1@example.com' });
+			await createUser(dbTx, { name: 'User 2', email: 'user2@example.com' });
+		});
+
+		const allUsers = await db.select().from(schema.users);
+		expect(allUsers).toHaveLength(2);
+	});
 });
 ```
 
@@ -904,15 +896,15 @@ import { createSelectSchema, createInsertSchema } from 'drizzle-valibot';
 import * as v from 'valibot';
 
 export const users = pgTable('users', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  name: text('name').notNull(),
-  email: text('email').notNull().unique(),
-  createdAt: timestamp('created_at').defaultNow().notNull()
+	id: uuid('id').defaultRandom().primaryKey(),
+	name: text('name').notNull(),
+	email: text('email').notNull().unique(),
+	createdAt: timestamp('created_at').defaultNow().notNull()
 });
 
 export const selectUserSchema = createSelectSchema(users);
 export const insertUserSchema = createInsertSchema(users, {
-  email: (schema) => v.pipe(schema, v.email('Invalid email format'))
+	email: (schema) => v.pipe(schema, v.email('Invalid email format'))
 });
 
 export type User = v.InferOutput<typeof selectUserSchema>;
@@ -927,20 +919,20 @@ import { insertUserSchema } from '$schemas';
 import * as v from 'valibot';
 
 describe('insertUserSchema', () => {
-  it('validates correct user data', () => {
-    const data = { name: 'John', email: 'john@example.com' };
-    const result = v.safeParse(insertUserSchema, data);
-    
-    expect(result.success).toBe(true);
-  });
+	it('validates correct user data', () => {
+		const data = { name: 'John', email: 'john@example.com' };
+		const result = v.safeParse(insertUserSchema, data);
 
-  it('rejects invalid email', () => {
-    const data = { name: 'John', email: 'invalid-email' };
-    const result = v.safeParse(insertUserSchema, data);
-    
-    expect(result.success).toBe(false);
-    expect(result.issues?.[0]?.message).toContain('Invalid email format');
-  });
+		expect(result.success).toBe(true);
+	});
+
+	it('rejects invalid email', () => {
+		const data = { name: 'John', email: 'invalid-email' };
+		const result = v.safeParse(insertUserSchema, data);
+
+		expect(result.success).toBe(false);
+		expect(result.issues?.[0]?.message).toContain('Invalid email format');
+	});
 });
 ```
 
@@ -959,38 +951,41 @@ describe('insertUserSchema', () => {
 import * as v from 'valibot';
 
 export const emailSchema = v.pipe(
-  v.string('Email is required'),
-  v.nonEmpty('Email cannot be empty'),
-  v.email('Invalid email format'),
-  v.maxLength(255, 'Email is too long')
+	v.string('Email is required'),
+	v.nonEmpty('Email cannot be empty'),
+	v.email('Invalid email format'),
+	v.maxLength(255, 'Email is too long')
 );
 
 export const passwordSchema = v.pipe(
-  v.string('Password is required'),
-  v.minLength(8, 'Password must be at least 8 characters'),
-  v.regex(/[A-Z]/, 'Password must contain uppercase letter'),
-  v.regex(/[0-9]/, 'Password must contain number')
+	v.string('Password is required'),
+	v.minLength(8, 'Password must be at least 8 characters'),
+	v.regex(/[A-Z]/, 'Password must contain uppercase letter'),
+	v.regex(/[0-9]/, 'Password must contain number')
 );
 
 export const loginSchema = v.object({
-  email: emailSchema,
-  password: passwordSchema
+	email: emailSchema,
+	password: passwordSchema
 });
 
-export const registerSchema = v.object({
-  email: emailSchema,
-  password: passwordSchema,
-  confirmPassword: v.string()
-}, [
-  v.forward(
-    v.partialCheck(
-      [['password'], ['confirmPassword']],
-      (input) => input.password === input.confirmPassword,
-      'Passwords must match'
-    ),
-    ['confirmPassword']
-  )
-]);
+export const registerSchema = v.object(
+	{
+		email: emailSchema,
+		password: passwordSchema,
+		confirmPassword: v.string()
+	},
+	[
+		v.forward(
+			v.partialCheck(
+				[['password'], ['confirmPassword']],
+				(input) => input.password === input.confirmPassword,
+				'Passwords must match'
+			),
+			['confirmPassword']
+		)
+	]
+);
 
 export type LoginData = v.InferOutput<typeof loginSchema>;
 export type RegisterData = v.InferOutput<typeof registerSchema>;
@@ -1007,28 +1002,27 @@ import { users } from '$schemas/database';
 
 export const selectUserSchema = createSelectSchema(users);
 
-export const updateUserSchema = v.partial(
-  v.omit(selectUserSchema, ['id', 'createdAt'])
-);
+export const updateUserSchema = v.partial(v.omit(selectUserSchema, ['id', 'createdAt']));
 
 export type User = v.InferOutput<typeof selectUserSchema>;
 export type UpdateUser = v.InferOutput<typeof updateUserSchema>;
 ```
 
 **Anti-Pattern - Manual Type Duplication**:
+
 ```typescript
 export interface User {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: Date;
+	id: string;
+	name: string;
+	email: string;
+	createdAt: Date;
 }
 
 export const userSchema = v.object({
-  id: v.string(),
-  name: v.string(),
-  email: v.pipe(v.string(), v.email()),
-  createdAt: v.date()
+	id: v.string(),
+	name: v.string(),
+	email: v.pipe(v.string(), v.email()),
+	createdAt: v.date()
 });
 ```
 
@@ -1041,29 +1035,29 @@ import { describe, it, expect } from 'vitest';
 import * as v from 'valibot';
 
 const passwordSchema = v.pipe(
-  v.string(),
-  v.minLength(8),
-  v.custom((value) => /[A-Z]/.test(value), 'Must contain uppercase'),
-  v.custom((value) => /[0-9]/.test(value), 'Must contain number')
+	v.string(),
+	v.minLength(8),
+	v.custom((value) => /[A-Z]/.test(value), 'Must contain uppercase'),
+	v.custom((value) => /[0-9]/.test(value), 'Must contain number')
 );
 
 describe('passwordSchema', () => {
-  it('accepts valid password', () => {
-    const result = v.safeParse(passwordSchema, 'Password123');
-    expect(result.success).toBe(true);
-  });
+	it('accepts valid password', () => {
+		const result = v.safeParse(passwordSchema, 'Password123');
+		expect(result.success).toBe(true);
+	});
 
-  it('rejects password without uppercase', () => {
-    const result = v.safeParse(passwordSchema, 'password123');
-    expect(result.success).toBe(false);
-    expect(result.issues?.[0]?.message).toBe('Must contain uppercase');
-  });
+	it('rejects password without uppercase', () => {
+		const result = v.safeParse(passwordSchema, 'password123');
+		expect(result.success).toBe(false);
+		expect(result.issues?.[0]?.message).toBe('Must contain uppercase');
+	});
 
-  it('rejects password without number', () => {
-    const result = v.safeParse(passwordSchema, 'Password');
-    expect(result.success).toBe(false);
-    expect(result.issues?.[0]?.message).toBe('Must contain number');
-  });
+	it('rejects password without number', () => {
+		const result = v.safeParse(passwordSchema, 'Password');
+		expect(result.success).toBe(false);
+		expect(result.issues?.[0]?.message).toBe('Must contain number');
+	});
 });
 ```
 
@@ -1075,34 +1069,34 @@ describe('passwordSchema', () => {
 
 ```svelte
 <script lang="ts">
-  import { superForm } from 'sveltekit-superforms';
-  import { valibot } from 'sveltekit-superforms/adapters';
-  import type { SuperValidated } from 'sveltekit-superforms';
-  import type { ProfileFormData } from '$types';
+	import { superForm } from 'sveltekit-superforms';
+	import { valibot } from 'sveltekit-superforms/adapters';
+	import type { SuperValidated } from 'sveltekit-superforms';
+	import type { ProfileFormData } from '$types';
 
-  interface Props {
-    data: SuperValidated<ProfileFormData>;
-  }
+	interface Props {
+		data: SuperValidated<ProfileFormData>;
+	}
 
-  let { data }: Props = $props();
+	let { data }: Props = $props();
 
-  const { form, errors, enhance, delayed, submitting } = superForm(data, {
-    validators: valibot(profileFormSchema),
-    dataType: 'json',
-    resetForm: false,
-    taintedMessage: 'You have unsaved changes'
-  });
+	const { form, errors, enhance, delayed, submitting } = superForm(data, {
+		validators: valibot(profileFormSchema),
+		dataType: 'json',
+		resetForm: false,
+		taintedMessage: 'You have unsaved changes'
+	});
 </script>
 
 <form method="POST" use:enhance>
-  <input type="text" bind:value={$form.name} data-testid="name-input" />
-  {#if $errors.name}
-    <p class="error" role="alert">{$errors.name[0]}</p>
-  {/if}
-  
-  <button type="submit" disabled={$submitting} data-testid="submit-button">
-    {$submitting ? 'Saving...' : 'Save'}
-  </button>
+	<input type="text" bind:value={$form.name} data-testid="name-input" />
+	{#if $errors.name}
+		<p class="error" role="alert">{$errors.name[0]}</p>
+	{/if}
+
+	<button type="submit" disabled={$submitting} data-testid="submit-button">
+		{$submitting ? 'Saving...' : 'Save'}
+	</button>
 </form>
 ```
 
@@ -1118,25 +1112,25 @@ describe('passwordSchema', () => {
 
 ```typescript
 export async function fetchAndProcessData(
-  userId: string
+	userId: string
 ): Promise<{ data?: ProcessedData; error?: string }> {
-  try {
-    const response = await fetch(`/api/users/${userId}/data`);
-    
-    if (!response.ok) {
-      return { error: `HTTP ${response.status}: ${response.statusText}` };
-    }
-    
-    const rawData = await response.json();
-    const validated = v.parse(dataSchema, rawData);
-    const processed = processData(validated);
-    
-    return { data: processed };
-  } catch (error) {
-    return {
-      error: error instanceof Error ? error.message : 'Unknown error occurred'
-    };
-  }
+	try {
+		const response = await fetch(`/api/users/${userId}/data`);
+
+		if (!response.ok) {
+			return { error: `HTTP ${response.status}: ${response.statusText}` };
+		}
+
+		const rawData = await response.json();
+		const validated = v.parse(dataSchema, rawData);
+		const processed = processData(validated);
+
+		return { data: processed };
+	} catch (error) {
+		return {
+			error: error instanceof Error ? error.message : 'Unknown error occurred'
+		};
+	}
 }
 ```
 
@@ -1146,29 +1140,29 @@ export async function fetchAndProcessData(
 import { describe, it, expect, vi } from 'vitest';
 
 describe('fetchAndProcessData', () => {
-  it('processes valid data successfully', async () => {
-    global.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ value: 123 })
-    });
-    
-    const result = await fetchAndProcessData('user-123');
-    
-    expect(result.data).toBeDefined();
-    expect(result.error).toBeUndefined();
-  });
+	it('processes valid data successfully', async () => {
+		global.fetch = vi.fn().mockResolvedValue({
+			ok: true,
+			json: async () => ({ value: 123 })
+		});
 
-  it('handles HTTP errors', async () => {
-    global.fetch = vi.fn().mockResolvedValue({
-      ok: false,
-      status: 404,
-      statusText: 'Not Found'
-    });
-    
-    const result = await fetchAndProcessData('user-123');
-    
-    expect(result.error).toBe('HTTP 404: Not Found');
-  });
+		const result = await fetchAndProcessData('user-123');
+
+		expect(result.data).toBeDefined();
+		expect(result.error).toBeUndefined();
+	});
+
+	it('handles HTTP errors', async () => {
+		global.fetch = vi.fn().mockResolvedValue({
+			ok: false,
+			status: 404,
+			statusText: 'Not Found'
+		});
+
+		const result = await fetchAndProcessData('user-123');
+
+		expect(result.error).toBe('HTTP 404: Not Found');
+	});
 });
 ```
 
@@ -1178,21 +1172,21 @@ describe('fetchAndProcessData', () => {
 
 ```typescript
 export async function loadDashboardData(userId: string) {
-  const [user, posts, comments] = await Promise.all([
-    getUserById(userId),
-    getPostsByUser(userId),
-    getCommentsByUser(userId)
-  ]);
-  
-  return { user, posts, comments };
+	const [user, posts, comments] = await Promise.all([
+		getUserById(userId),
+		getPostsByUser(userId),
+		getCommentsByUser(userId)
+	]);
+
+	return { user, posts, comments };
 }
 
 export async function processWorkflow(data: WorkflowData) {
-  const step1 = await processStep1(data);
-  const step2 = await processStep2(step1);
-  const step3 = await processStep3(step2);
-  
-  return step3;
+	const step1 = await processStep1(data);
+	const step2 = await processStep2(step1);
+	const step3 = await processStep3(step2);
+
+	return step3;
 }
 ```
 
@@ -1200,23 +1194,23 @@ export async function processWorkflow(data: WorkflowData) {
 
 ```typescript
 export async function fetchWithTimeout<T>(
-  fetcher: () => Promise<T>,
-  timeoutMs: number
+	fetcher: () => Promise<T>,
+	timeoutMs: number
 ): Promise<{ data?: T; error?: string }> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), timeoutMs);
-  
-  try {
-    const data = await fetcher();
-    clearTimeout(timeout);
-    return { data };
-  } catch (error) {
-    clearTimeout(timeout);
-    if (error instanceof Error && error.name === 'AbortError') {
-      return { error: 'Request timeout' };
-    }
-    return { error: error instanceof Error ? error.message : 'Unknown error' };
-  }
+	const controller = new AbortController();
+	const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+	try {
+		const data = await fetcher();
+		clearTimeout(timeout);
+		return { data };
+	} catch (error) {
+		clearTimeout(timeout);
+		if (error instanceof Error && error.name === 'AbortError') {
+			return { error: 'Request timeout' };
+		}
+		return { error: error instanceof Error ? error.message : 'Unknown error' };
+	}
 }
 ```
 
@@ -1224,35 +1218,44 @@ export async function fetchWithTimeout<T>(
 
 ```typescript
 export class ApplicationError extends Error {
-  constructor(message: string, public code: string) {
-    super(message);
-    this.name = 'ApplicationError';
-  }
+	constructor(
+		message: string,
+		public code: string
+	) {
+		super(message);
+		this.name = 'ApplicationError';
+	}
 }
 
 export class ValidationError extends ApplicationError {
-  constructor(message: string, public field: string) {
-    super(message, 'VALIDATION_ERROR');
-    this.name = 'ValidationError';
-  }
+	constructor(
+		message: string,
+		public field: string
+	) {
+		super(message, 'VALIDATION_ERROR');
+		this.name = 'ValidationError';
+	}
 }
 
 export class DatabaseError extends ApplicationError {
-  constructor(message: string, public query?: string) {
-    super(message, 'DATABASE_ERROR');
-    this.name = 'DatabaseError';
-  }
+	constructor(
+		message: string,
+		public query?: string
+	) {
+		super(message, 'DATABASE_ERROR');
+		this.name = 'DatabaseError';
+	}
 }
 
 export class ExternalServiceError extends ApplicationError {
-  constructor(
-    message: string,
-    public service: string,
-    public statusCode?: number
-  ) {
-    super(message, 'EXTERNAL_SERVICE_ERROR');
-    this.name = 'ExternalServiceError';
-  }
+	constructor(
+		message: string,
+		public service: string,
+		public statusCode?: number
+	) {
+		super(message, 'EXTERNAL_SERVICE_ERROR');
+		this.name = 'ExternalServiceError';
+	}
 }
 ```
 
@@ -1270,37 +1273,37 @@ export class ExternalServiceError extends ApplicationError {
 import Anthropic from '@anthropic-ai/sdk';
 
 export interface AIProvider {
-  generateText(prompt: string, options?: GenerateOptions): Promise<string>;
-  streamText(prompt: string): AsyncIterable<string>;
+	generateText(prompt: string, options?: GenerateOptions): Promise<string>;
+	streamText(prompt: string): AsyncIterable<string>;
 }
 
 export class AnthropicProvider implements AIProvider {
-  constructor(private client: Anthropic) {}
+	constructor(private client: Anthropic) {}
 
-  async generateText(prompt: string, options?: GenerateOptions): Promise<string> {
-    const message = await this.client.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: options?.maxTokens || 1024,
-      messages: [{ role: 'user', content: prompt }]
-    });
-    
-    return message.content[0].type === 'text' ? message.content[0].text : '';
-  }
+	async generateText(prompt: string, options?: GenerateOptions): Promise<string> {
+		const message = await this.client.messages.create({
+			model: 'claude-sonnet-4-20250514',
+			max_tokens: options?.maxTokens || 1024,
+			messages: [{ role: 'user', content: prompt }]
+		});
 
-  async *streamText(prompt: string): AsyncIterable<string> {
-    const stream = await this.client.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1024,
-      messages: [{ role: 'user', content: prompt }],
-      stream: true
-    });
+		return message.content[0].type === 'text' ? message.content[0].text : '';
+	}
 
-    for await (const event of stream) {
-      if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
-        yield event.delta.text;
-      }
-    }
-  }
+	async *streamText(prompt: string): AsyncIterable<string> {
+		const stream = await this.client.messages.create({
+			model: 'claude-sonnet-4-20250514',
+			max_tokens: 1024,
+			messages: [{ role: 'user', content: prompt }],
+			stream: true
+		});
+
+		for await (const event of stream) {
+			if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+				yield event.delta.text;
+			}
+		}
+	}
 }
 ```
 
@@ -1310,35 +1313,35 @@ export class AnthropicProvider implements AIProvider {
 import { describe, it, expect, vi } from 'vitest';
 
 class MockAIProvider implements AIProvider {
-  async generateText(prompt: string): Promise<string> {
-    return `Mocked response to: ${prompt}`;
-  }
+	async generateText(prompt: string): Promise<string> {
+		return `Mocked response to: ${prompt}`;
+	}
 
-  async *streamText(prompt: string): AsyncIterable<string> {
-    yield 'Mocked ';
-    yield 'streaming ';
-    yield 'response';
-  }
+	async *streamText(prompt: string): AsyncIterable<string> {
+		yield 'Mocked ';
+		yield 'streaming ';
+		yield 'response';
+	}
 }
 
 describe('AI Integration', () => {
-  it('generates text with mock provider', async () => {
-    const provider = new MockAIProvider();
-    const result = await provider.generateText('Hello');
-    
-    expect(result).toBe('Mocked response to: Hello');
-  });
+	it('generates text with mock provider', async () => {
+		const provider = new MockAIProvider();
+		const result = await provider.generateText('Hello');
 
-  it('streams text with mock provider', async () => {
-    const provider = new MockAIProvider();
-    const chunks: string[] = [];
-    
-    for await (const chunk of provider.streamText('Hello')) {
-      chunks.push(chunk);
-    }
-    
-    expect(chunks).toEqual(['Mocked ', 'streaming ', 'response']);
-  });
+		expect(result).toBe('Mocked response to: Hello');
+	});
+
+	it('streams text with mock provider', async () => {
+		const provider = new MockAIProvider();
+		const chunks: string[] = [];
+
+		for await (const chunk of provider.streamText('Hello')) {
+			chunks.push(chunk);
+		}
+
+		expect(chunks).toEqual(['Mocked ', 'streaming ', 'response']);
+	});
 });
 ```
 
@@ -1352,46 +1355,38 @@ describe('AI Integration', () => {
 import Stripe from 'stripe';
 
 export interface PaymentProvider {
-  createPaymentIntent(
-    amount: number,
-    currency: string,
-    customerId: string
-  ): Promise<{ id: string; clientSecret: string }>;
-  
-  constructWebhookEvent(
-    payload: string,
-    signature: string,
-    secret: string
-  ): Stripe.Event;
+	createPaymentIntent(
+		amount: number,
+		currency: string,
+		customerId: string
+	): Promise<{ id: string; clientSecret: string }>;
+
+	constructWebhookEvent(payload: string, signature: string, secret: string): Stripe.Event;
 }
 
 export class StripePaymentProvider implements PaymentProvider {
-  constructor(private stripe: Stripe) {}
+	constructor(private stripe: Stripe) {}
 
-  async createPaymentIntent(
-    amount: number,
-    currency: string,
-    customerId: string
-  ): Promise<{ id: string; clientSecret: string }> {
-    const paymentIntent = await this.stripe.paymentIntents.create({
-      amount,
-      currency,
-      customer: customerId
-    });
-    
-    return {
-      id: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret!
-    };
-  }
+	async createPaymentIntent(
+		amount: number,
+		currency: string,
+		customerId: string
+	): Promise<{ id: string; clientSecret: string }> {
+		const paymentIntent = await this.stripe.paymentIntents.create({
+			amount,
+			currency,
+			customer: customerId
+		});
 
-  constructWebhookEvent(
-    payload: string,
-    signature: string,
-    secret: string
-  ): Stripe.Event {
-    return this.stripe.webhooks.constructEvent(payload, signature, secret);
-  }
+		return {
+			id: paymentIntent.id,
+			clientSecret: paymentIntent.client_secret!
+		};
+	}
+
+	constructWebhookEvent(payload: string, signature: string, secret: string): Stripe.Event {
+		return this.stripe.webhooks.constructEvent(payload, signature, secret);
+	}
 }
 ```
 
@@ -1402,28 +1397,28 @@ import { describe, it, expect } from 'vitest';
 import Stripe from 'stripe';
 
 describe('Stripe Webhook Handling', () => {
-  it('constructs and validates webhook event', () => {
-    const stripe = new Stripe('sk_test_123', { apiVersion: '2024-12-18.acacia' });
-    
-    const payload = {
-      id: 'evt_test_webhook',
-      object: 'event',
-      type: 'payment_intent.succeeded'
-    };
-    
-    const payloadString = JSON.stringify(payload);
-    const secret = 'whsec_test_secret';
-    
-    const header = stripe.webhooks.generateTestHeaderString({
-      payload: payloadString,
-      secret
-    });
-    
-    const event = stripe.webhooks.constructEvent(payloadString, header, secret);
-    
-    expect(event.id).toBe(payload.id);
-    expect(event.type).toBe('payment_intent.succeeded');
-  });
+	it('constructs and validates webhook event', () => {
+		const stripe = new Stripe('sk_test_123', { apiVersion: '2024-12-18.acacia' });
+
+		const payload = {
+			id: 'evt_test_webhook',
+			object: 'event',
+			type: 'payment_intent.succeeded'
+		};
+
+		const payloadString = JSON.stringify(payload);
+		const secret = 'whsec_test_secret';
+
+		const header = stripe.webhooks.generateTestHeaderString({
+			payload: payloadString,
+			secret
+		});
+
+		const event = stripe.webhooks.constructEvent(payloadString, header, secret);
+
+		expect(event.id).toBe(payload.id);
+		expect(event.type).toBe('payment_intent.succeeded');
+	});
 });
 ```
 
@@ -1431,35 +1426,35 @@ describe('Stripe Webhook Handling', () => {
 
 ```typescript
 export async function handleStripePayment(
-  stripe: Stripe,
-  amount: number,
-  customerId: string
+	stripe: Stripe,
+	amount: number,
+	customerId: string
 ): Promise<{ success: boolean; error?: string }> {
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency: 'usd',
-      customer: customerId
-    });
-    
-    return { success: true };
-  } catch (err) {
-    if (err instanceof Stripe.errors.StripeError) {
-      switch (err.type) {
-        case 'StripeCardError':
-          return { success: false, error: 'Card declined' };
-        case 'StripeInvalidRequestError':
-          return { success: false, error: 'Invalid request parameters' };
-        case 'StripeAPIError':
-          return { success: false, error: 'Stripe API error' };
-        case 'StripeAuthenticationError':
-          return { success: false, error: 'Authentication failed' };
-        default:
-          return { success: false, error: 'Payment processing failed' };
-      }
-    }
-    return { success: false, error: 'Unknown error' };
-  }
+	try {
+		const paymentIntent = await stripe.paymentIntents.create({
+			amount,
+			currency: 'usd',
+			customer: customerId
+		});
+
+		return { success: true };
+	} catch (err) {
+		if (err instanceof Stripe.errors.StripeError) {
+			switch (err.type) {
+				case 'StripeCardError':
+					return { success: false, error: 'Card declined' };
+				case 'StripeInvalidRequestError':
+					return { success: false, error: 'Invalid request parameters' };
+				case 'StripeAPIError':
+					return { success: false, error: 'Stripe API error' };
+				case 'StripeAuthenticationError':
+					return { success: false, error: 'Authentication failed' };
+				default:
+					return { success: false, error: 'Payment processing failed' };
+			}
+		}
+		return { success: false, error: 'Unknown error' };
+	}
 }
 ```
 
@@ -1474,16 +1469,13 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '$types/supabase';
 
 export async function getUserTodos(
-  supabase: SupabaseClient<Database>,
-  userId: string
+	supabase: SupabaseClient<Database>,
+	userId: string
 ): Promise<Todo[]> {
-  const { data, error } = await supabase
-    .from('todos')
-    .select('*')
-    .eq('user_id', userId);
-  
-  if (error) throw error;
-  return data || [];
+	const { data, error } = await supabase.from('todos').select('*').eq('user_id', userId);
+
+	if (error) throw error;
+	return data || [];
 }
 ```
 
@@ -1495,44 +1487,38 @@ import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
 describe('Todos RLS', () => {
-  const USER_1_ID = crypto.randomUUID();
-  const USER_2_ID = crypto.randomUUID();
-  
-  const supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!
-  );
+	const USER_1_ID = crypto.randomUUID();
+	const USER_2_ID = crypto.randomUUID();
 
-  beforeAll(async () => {
-    const adminSupabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SERVICE_ROLE_KEY!
-    );
+	const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_ANON_KEY!);
 
-    await adminSupabase.auth.admin.createUser({
-      id: USER_1_ID,
-      email: `user1-${USER_1_ID}@test.com`,
-      password: 'password123',
-      email_confirm: true
-    });
+	beforeAll(async () => {
+		const adminSupabase = createClient(process.env.SUPABASE_URL!, process.env.SERVICE_ROLE_KEY!);
 
-    await adminSupabase.from('todos').insert([
-      { task: 'User 1 Task 1', user_id: USER_1_ID },
-      { task: 'User 1 Task 2', user_id: USER_1_ID }
-    ]);
-  });
+		await adminSupabase.auth.admin.createUser({
+			id: USER_1_ID,
+			email: `user1-${USER_1_ID}@test.com`,
+			password: 'password123',
+			email_confirm: true
+		});
 
-  it('allows User 1 to only see their own todos', async () => {
-    await supabase.auth.signInWithPassword({
-      email: `user1-${USER_1_ID}@test.com`,
-      password: 'password123'
-    });
+		await adminSupabase.from('todos').insert([
+			{ task: 'User 1 Task 1', user_id: USER_1_ID },
+			{ task: 'User 1 Task 2', user_id: USER_1_ID }
+		]);
+	});
 
-    const { data: todos } = await supabase.from('todos').select('*');
+	it('allows User 1 to only see their own todos', async () => {
+		await supabase.auth.signInWithPassword({
+			email: `user1-${USER_1_ID}@test.com`,
+			password: 'password123'
+		});
 
-    expect(todos).toHaveLength(2);
-    todos?.forEach(todo => expect(todo.user_id).toBe(USER_1_ID));
-  });
+		const { data: todos } = await supabase.from('todos').select('*');
+
+		expect(todos).toHaveLength(2);
+		todos?.forEach((todo) => expect(todo.user_id).toBe(USER_1_ID));
+	});
 });
 ```
 
@@ -1590,20 +1576,20 @@ let pgLite: PGlite;
 let db: ReturnType<typeof drizzle>;
 
 beforeAll(async () => {
-  pgLite = new PGlite();
-  db = drizzle(pgLite, { schema });
+	pgLite = new PGlite();
+	db = drizzle(pgLite, { schema });
 });
 
 afterAll(async () => {
-  await pgLite.close();
+	await pgLite.close();
 });
 
 beforeEach(async () => {
-  await pgLite.exec('BEGIN');
+	await pgLite.exec('BEGIN');
 });
 
 afterEach(async () => {
-  await pgLite.exec('ROLLBACK');
+	await pgLite.exec('ROLLBACK');
 });
 ```
 
@@ -1613,31 +1599,31 @@ afterEach(async () => {
 import { test as base } from 'vitest';
 
 interface TestFixtures {
-  db: ReturnType<typeof drizzle>;
-  mockUser: User;
+	db: ReturnType<typeof drizzle>;
+	mockUser: User;
 }
 
 export const test = base.extend<TestFixtures>({
-  db: async ({}, use) => {
-    const pgLite = new PGlite();
-    const db = drizzle(pgLite, { schema });
-    
-    await pgLite.exec(`CREATE TABLE users (...)`);
-    
-    await use(db);
-    
-    await pgLite.close();
-  },
-  
-  mockUser: async ({}, use) => {
-    const user = {
-      id: crypto.randomUUID(),
-      name: 'Test User',
-      email: 'test@example.com'
-    };
-    
-    await use(user);
-  }
+	db: async ({}, use) => {
+		const pgLite = new PGlite();
+		const db = drizzle(pgLite, { schema });
+
+		await pgLite.exec(`CREATE TABLE users (...)`);
+
+		await use(db);
+
+		await pgLite.close();
+	},
+
+	mockUser: async ({}, use) => {
+		const user = {
+			id: crypto.randomUUID(),
+			name: 'Test User',
+			email: 'test@example.com'
+		};
+
+		await use(user);
+	}
 });
 ```
 
@@ -1649,12 +1635,12 @@ export const test = base.extend<TestFixtures>({
 import { vi } from 'vitest';
 
 vi.mock('$db/client', () => ({
-  db: {
-    select: vi.fn(),
-    insert: vi.fn(),
-    update: vi.fn(),
-    delete: vi.fn()
-  }
+	db: {
+		select: vi.fn(),
+		insert: vi.fn(),
+		update: vi.fn(),
+		delete: vi.fn()
+	}
 }));
 ```
 
@@ -1664,21 +1650,21 @@ vi.mock('$db/client', () => ({
 import { vi, describe, it, expect } from 'vitest';
 
 const messages = {
-  items: [],
-  addItem(item: Message) {
-    messages.items.push(item);
-  }
+	items: [],
+	addItem(item: Message) {
+		messages.items.push(item);
+	}
 };
 
 describe('message system', () => {
-  it('tracks method calls with spy', () => {
-    const spy = vi.spyOn(messages, 'addItem');
-    
-    messages.addItem({ text: 'Hello', from: 'User' });
-    
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith({ text: 'Hello', from: 'User' });
-  });
+	it('tracks method calls with spy', () => {
+		const spy = vi.spyOn(messages, 'addItem');
+
+		messages.addItem({ text: 'Hello', from: 'User' });
+
+		expect(spy).toHaveBeenCalledTimes(1);
+		expect(spy).toHaveBeenCalledWith({ text: 'Hello', from: 'User' });
+	});
 });
 ```
 
@@ -1690,13 +1676,13 @@ import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 
 const server = setupServer(
-  http.get('/api/users/:id', ({ params }) => {
-    return HttpResponse.json({
-      id: params.id,
-      name: 'Test User',
-      email: 'test@example.com'
-    });
-  })
+	http.get('/api/users/:id', ({ params }) => {
+		return HttpResponse.json({
+			id: params.id,
+			name: 'Test User',
+			email: 'test@example.com'
+		});
+	})
 );
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
@@ -1713,31 +1699,33 @@ import { test, expect } from '@playwright/experimental-ct-svelte';
 import LoginForm from './LoginForm.svelte';
 
 test('validates email format', async ({ mount }) => {
-  const component = await mount(LoginForm);
-  
-  await component.getByTestId('email-input').fill('invalid-email');
-  await component.getByTestId('submit-button').click();
-  
-  await expect(component.getByText(/Invalid email format/i)).toBeVisible();
+	const component = await mount(LoginForm);
+
+	await component.getByTestId('email-input').fill('invalid-email');
+	await component.getByTestId('submit-button').click();
+
+	await expect(component.getByText(/Invalid email format/i)).toBeVisible();
 });
 
 test('calls onSubmit with valid data', async ({ mount }) => {
-  let submitted: any = null;
-  
-  const component = await mount(LoginForm, {
-    props: {
-      onSubmit: (data: any) => { submitted = data; }
-    }
-  });
-  
-  await component.getByTestId('email-input').fill('test@example.com');
-  await component.getByTestId('password-input').fill('Password123');
-  await component.getByTestId('submit-button').click();
-  
-  expect(submitted).toEqual({
-    email: 'test@example.com',
-    password: 'Password123'
-  });
+	let submitted: any = null;
+
+	const component = await mount(LoginForm, {
+		props: {
+			onSubmit: (data: any) => {
+				submitted = data;
+			}
+		}
+	});
+
+	await component.getByTestId('email-input').fill('test@example.com');
+	await component.getByTestId('password-input').fill('Password123');
+	await component.getByTestId('submit-button').click();
+
+	expect(submitted).toEqual({
+		email: 'test@example.com',
+		password: 'Password123'
+	});
 });
 ```
 
@@ -1749,14 +1737,14 @@ test('calls onSubmit with valid data', async ({ mount }) => {
 import crypto from 'crypto';
 
 describe('User Management', () => {
-  it('creates user with unique ID', async () => {
-    const testId = crypto.randomUUID();
-    const email = `test-${testId}@example.com`;
-    
-    const user = await createUser({ name: 'Test', email });
-    
-    expect(user.email).toBe(email);
-  });
+	it('creates user with unique ID', async () => {
+		const testId = crypto.randomUUID();
+		const email = `test-${testId}@example.com`;
+
+		const user = await createUser({ name: 'Test', email });
+
+		expect(user.email).toBe(email);
+	});
 });
 ```
 
@@ -1766,13 +1754,13 @@ describe('User Management', () => {
 import { beforeEach, afterEach } from 'vitest';
 
 beforeEach(async () => {
-  await db.transaction(async (tx) => {
-    testTx = tx;
-  });
+	await db.transaction(async (tx) => {
+		testTx = tx;
+	});
 });
 
 afterEach(async () => {
-  await testTx.rollback();
+	await testTx.rollback();
 });
 ```
 
@@ -1849,10 +1837,11 @@ afterEach(async () => {
 All patterns in this document were verified using:
 
 - `mcp_context7_get-library-docs` - Library documentation for Vitest, Playwright, Drizzle, Valibot, Superforms, Anthropic SDK, Stripe
-- `mcp_mcp-svelte-docs_svelte_definition` - Svelte 5 runes definitions  
+- `mcp_mcp-svelte-docs_svelte_definition` - Svelte 5 runes definitions
 - `mcp_supabase_search_docs` - Supabase testing best practices
 
 **Library Versions**:
+
 - SvelteKit: Latest
 - Svelte 5: Latest
 - Vitest: v3.2.4
@@ -1867,4 +1856,3 @@ All patterns in this document were verified using:
 **Last Updated**: 2025-10-03  
 **Maintained By**: Development Team  
 **Review Cycle**: Quarterly or when major library updates occur
-

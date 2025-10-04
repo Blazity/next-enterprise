@@ -4,9 +4,11 @@ import { updateChatVisiblityById } from '$db/queries';
 export async function POST({ request }) {
 	const { chatId, visibility }: { chatId: string; visibility: VisibilityType } =
 		await request.json();
-	// TODO: This definitely needs a user check too
-	return updateChatVisiblityById({ chatId, visibility }).match(
-		() => new Response('Chat visibility updated', { status: 200 }),
-		() => new Response('An error occurred while processing your request', { status: 500 })
-	);
+
+	try {
+		await updateChatVisiblityById({ chatId, visibility });
+		return new Response('Chat visibility updated', { status: 200 });
+	} catch {
+		return new Response('An error occurred while processing your request', { status: 500 });
+	}
 }

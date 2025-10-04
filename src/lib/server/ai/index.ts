@@ -63,6 +63,7 @@ export async function streamAIChat(
 
 export async function generateStructuredOutput<T>(
 	prompt: string,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	schema: any,
 	model: string = 'openai/gpt-3.5-turbo'
 ): Promise<T> {

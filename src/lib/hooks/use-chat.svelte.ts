@@ -1,16 +1,16 @@
-import type { CoreMessage } from 'ai';
+import type { ExtendedMessage } from '$types';
 import { nanoid } from 'nanoid';
 
 export interface ChatOptions {
 	id?: string;
-	initialMessages?: CoreMessage[];
+	initialMessages?: ExtendedMessage[];
 	onFinish?: () => Promise<void>;
 	onError?: (error: Error) => void;
 }
 
 export class ChatClient {
 	id: string;
-	messages = $state<CoreMessage[]>([]);
+	messages = $state<ExtendedMessage[]>([]);
 	input = $state('');
 	status = $state<'idle' | 'streaming' | 'submitted'>('idle');
 	private onFinish?: () => Promise<void>;
@@ -32,7 +32,7 @@ export class ChatClient {
 			return;
 		}
 
-		const userMessage: CoreMessage = {
+		const userMessage: ExtendedMessage = {
 			id: nanoid(),
 			role: 'user',
 			content: this.input

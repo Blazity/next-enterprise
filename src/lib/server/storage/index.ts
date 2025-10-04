@@ -1,5 +1,5 @@
 import { mkdir, writeFile, readFile, unlink, readdir, stat } from 'fs/promises';
-import { join, dirname } from 'path';
+import { join } from 'path';
 import { existsSync } from 'fs';
 
 interface StorageOptions {
