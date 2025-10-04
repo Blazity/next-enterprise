@@ -9,6 +9,9 @@ node_modules
 /.svelte-kit
 /build
 
+# Turbo
+.turbo
+
 # OS
 .DS_Store
 Thumbs.db

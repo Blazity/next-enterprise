@@ -19,6 +19,8 @@
 		"test-storybook": "CI=true pnpm run test:storybook",
 		"test": "npm run test:unit -- --run",
 		"test:e2e": "playwright test",
+		"test:e2e:errors": "playwright test homepage-no-errors homepage-errors-simple",
+		"test:e2e:ui": "playwright test --ui",
 		"db:push": "drizzle-kit push --config=../../packages/database/drizzle.config.ts",
 		"db:generate": "drizzle-kit generate --config=../../packages/database/drizzle.config.ts",
 		"db:migrate": "drizzle-kit migrate --config=../../packages/database/drizzle.config.ts",

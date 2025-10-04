@@ -31,6 +31,7 @@ declare module '$env/static/private' {
 	export const INIT_CWD: string;
 	export const SHELL: string;
 	export const TERM: string;
+	export const TURBO_IS_TUI: string;
 	export const npm_config_registry: string;
 	export const PNPM_HOME: string;
 	export const USER: string;
@@ -93,6 +94,7 @@ declare module '$env/dynamic/private' {
 		INIT_CWD: string;
 		SHELL: string;
 		TERM: string;
+		TURBO_IS_TUI: string;
 		npm_config_registry: string;
 		PNPM_HOME: string;
 		USER: string;
