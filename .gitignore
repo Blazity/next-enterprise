@@ -28,3 +28,8 @@ vite.config.ts.timestamp-*
 
 *storybook.log
 storybook-static
+
+# Missing patterns that should be ignored
+dist/
+**/dist/
+**/.dist/
