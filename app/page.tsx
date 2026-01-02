@@ -43,7 +43,12 @@ export default function Web() {
     const terminal = document.getElementById("log-terminal")
     if (terminal) {
       const div = document.createElement("div")
-      div.innerHTML = `<span class="opacity-50">[${new Date().toLocaleTimeString()}]</span> > ${msg}`
+      const timeSpan = document.createElement("span")
+      timeSpan.className = "opacity-50"
+      timeSpan.textContent = `[${new Date().toLocaleTimeString()}]`
+      
+      div.appendChild(timeSpan)
+      div.appendChild(document.createTextNode(` > ${msg}`))
       terminal.appendChild(div)
       terminal.scrollTop = terminal.scrollHeight
     }
@@ -119,6 +124,24 @@ export default function Web() {
           data: {
             labels: ["SKU-1", "SKU-2", "SKU-3", "SKU-4"],
             datasets: [{ data: [85, 92, 74, 98], backgroundColor: "#4f46e5", borderRadius: 8 }],
+          },
+          options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { max: 100 }, x: { grid: { display: false } } },
+          },
+        })
+      }
+
+      // Router Chart
+      const routerCtx = document.getElementById("routerChart") as HTMLCanvasElement
+      if (routerCtx) {
+        if (chartsRef.current.router) chartsRef.current.router.destroy()
+        chartsRef.current.router = new Chart(routerCtx.getContext("2d"), {
+          type: "bar",
+          data: {
+            labels: ["Route-1", "Route-2", "Route-3", "Route-4"],
+            datasets: [{ data: [78, 95, 88, 91], backgroundColor: "#4f46e5", borderRadius: 8 }],
           },
           options: {
             maintainAspectRatio: false,
@@ -560,7 +583,7 @@ export default function Web() {
                   Logistic Router: VRP Efficiency
                 </h3>
                 <div className="chart-container">
-                  <canvas id="oracleChart"></canvas>
+                  <canvas id="routerChart"></canvas>
                 </div>
               </div>
             </div>
