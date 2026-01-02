@@ -174,7 +174,7 @@ export default function Web() {
   }
 
   const provisionService = (name: string, event: React.MouseEvent<HTMLButtonElement>) => {
-    const btn = event.target as HTMLButtonElement
+    const btn = event.currentTarget
     const originalText = btn.innerText
     btn.innerText = "Processing..."
     btn.disabled = true
