@@ -1,206 +1,226 @@
 "use client"
 
+import { Chart as ChartJS, registerables } from "chart.js"
+import { Activity, PieChart, Server, ShieldAlert, ShoppingBag, Terminal, Zap } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ChartType = any
+// Register Chart.js components
+ChartJS.register(...registerables)
 
-export default function Web() {
-  const [activeTier, setActiveTierState] = useState<"customer" | "partner">("customer")
-  const [activeMode, setActiveModeState] = useState<"marketplace" | "terminal">("marketplace")
-  const chartsRef = useRef<Record<string, ChartType>>({})
+// Constants for timing
+const LOG_INTERVAL_MS = 4000
+const PROVISION_DELAY_MS = 1500
+const SUCCESS_DISPLAY_MS = 2000
+const CHART_INIT_DELAY_MS = 100
 
+export default function Page() {
+  const [activeTier, setActiveTier] = useState<"customer" | "partner">("customer")
+  const [activeMode, setActiveMode] = useState<"marketplace" | "terminal">("marketplace")
+  const [logs, setLogs] = useState<string[]>([
+    "[SYSTEM] API CORE V6.0.1 INITIALIZED.",
+    "[SYSTEM] LISTENING ON PORT 8080 (Cloud Run)...",
+  ])
+  const [provisioningStates, setProvisioningStates] = useState<Record<string, string>>({})
+  
+  const chartsRef = useRef<Record<string, ChartJS | null>>({})
+  const terminalRef = useRef<HTMLDivElement>(null)
+
+  // Cleanup charts on unmount
   useEffect(() => {
-    // Initialize Lucide icons
-    if (typeof window !== "undefined" && (window as Window & { lucide?: ChartType }).lucide) {
-      ;(window as Window & { lucide?: ChartType }).lucide.createIcons()
+    return () => {
+      Object.values(chartsRef.current).forEach((chart) => {
+        if (chart) chart.destroy()
+      })
     }
+  }, [])
 
-    // Initialize charts
-    initCharts()
+  // Terminal log generator
+  useEffect(() => {
+    if (activeTier !== "partner" || activeMode !== "terminal") return
 
-    // Start terminal log loop
+    const partnerLogs = [
+      "INBOUND: Webhook /shopify/order_fulfillment",
+      "API_SPLIT: Calculated $0.35 margin for User_882",
+      "GCP_BUCKET: Streaming payload to pnw-analytics-raw",
+      "OR_TOOLS: Optimization solve completed in 42ms",
+      "GODADDY_API: Hosting node provisioned successfully",
+      "MANAGEMENT: Automated email delivery sent to client",
+      "CREDIT: Affiliate bonus applied to account balance",
+    ]
+
     const logInterval = setInterval(() => {
-      if (activeTier === "partner" && activeMode === "terminal") {
-        const partnerLogs = [
-          "INBOUND: Webhook /shopify/order_fulfillment",
-          "API_SPLIT: Calculated $0.35 margin for User_882",
-          "GCP_BUCKET: Streaming payload to pnw-analytics-raw",
-          "OR_TOOLS: Optimization solve completed in 42ms",
-          "GODADDY_API: Hosting node provisioned successfully",
-          "MANAGEMENT: Automated email delivery sent to client",
-          "CREDIT: Affiliate bonus applied to account balance",
-        ]
-        const log = partnerLogs[Math.floor(Math.random() * partnerLogs.length)]
-        if (log) addLog(log)
+      const randomLog = partnerLogs[Math.floor(Math.random() * partnerLogs.length)]
+      if (randomLog) {
+        setLogs((prev) => [...prev, randomLog])
       }
-    }, 4000)
+    }, LOG_INTERVAL_MS)
 
     return () => clearInterval(logInterval)
   }, [activeTier, activeMode])
 
-  const addLog = (msg: string) => {
-    const terminal = document.getElementById("log-terminal")
-    if (terminal) {
-      const div = document.createElement("div")
-      const timeSpan = document.createElement("span")
-      timeSpan.className = "opacity-50"
-      timeSpan.textContent = `[${new Date().toLocaleTimeString()}]`
-      
-      div.appendChild(timeSpan)
-      div.appendChild(document.createTextNode(` > ${msg}`))
-      terminal.appendChild(div)
-      terminal.scrollTop = terminal.scrollHeight
+  // Auto-scroll terminal
+  useEffect(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight
     }
-  }
+  }, [logs])
 
-  const initCharts = () => {
-    if (typeof window === "undefined" || !(window as Window & { Chart?: ChartType }).Chart) return
-
-    const Chart = (window as Window & { Chart?: ChartType }).Chart
-    Chart.defaults.font.family = "'Inter', sans-serif"
-    Chart.defaults.color = "#94a3b8"
-
-    // Discovery Chart
-    const discoveryCtx = document.getElementById("discoveryChart") as HTMLCanvasElement
-    if (discoveryCtx) {
-      if (chartsRef.current.discovery) chartsRef.current.discovery.destroy()
-      chartsRef.current.discovery = new Chart(discoveryCtx.getContext("2d"), {
-        type: "line",
-        data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-          datasets: [
-            {
-              label: "Projected Monthly Revenue ($)",
-              data: [1200, 3500, 8400, 14200, 22500, 31000],
-              borderColor: "#4f46e5",
-              backgroundColor: "rgba(79, 70, 229, 0.05)",
-              fill: true,
-              tension: 0.4,
-              borderWidth: 4,
-              pointRadius: 0,
-            },
-          ],
-        },
-        options: {
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: { display: false },
-            x: { grid: { display: false }, ticks: { font: { weight: "bold" } } },
-          },
-        },
-      })
-    }
-
-    // Partner Split Chart
-    if (activeTier === "partner") {
-      const splitCtx = document.getElementById("splitChart") as HTMLCanvasElement
-      if (splitCtx) {
-        if (chartsRef.current.split) chartsRef.current.split.destroy()
-        chartsRef.current.split = new Chart(splitCtx.getContext("2d"), {
-          type: "doughnut",
+  // Initialize charts
+  useEffect(() => {
+    const initCharts = () => {
+      // Discovery Chart
+      const discoveryCanvas = document.getElementById("discoveryChart") as HTMLCanvasElement | null
+      if (discoveryCanvas) {
+        if (chartsRef.current.discovery) chartsRef.current.discovery.destroy()
+        chartsRef.current.discovery = new ChartJS(discoveryCanvas, {
+          type: "line",
           data: {
-            labels: ["Provider", "Infrastructure", "1C Bonus"],
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
             datasets: [
               {
-                data: [10, 5, 35],
-                backgroundColor: ["#cbd5e1", "#94a3b8", "#4f46e5"],
-                borderWidth: 0,
-                cutout: "75%",
+                label: "Projected Monthly Revenue ($)",
+                data: [1200, 3500, 8400, 14200, 22500, 31000],
+                borderColor: "#4f46e5",
+                backgroundColor: "rgba(79, 70, 229, 0.05)",
+                fill: true,
+                tension: 0.4,
+                borderWidth: 4,
+                pointRadius: 0,
               },
             ],
           },
-          options: { maintainAspectRatio: false, plugins: { legend: { display: false } } },
-        })
-      }
-
-      // Oracle Chart
-      const oracleCtx = document.getElementById("oracleChart") as HTMLCanvasElement
-      if (oracleCtx) {
-        if (chartsRef.current.oracle) chartsRef.current.oracle.destroy()
-        chartsRef.current.oracle = new Chart(oracleCtx.getContext("2d"), {
-          type: "bar",
-          data: {
-            labels: ["SKU-1", "SKU-2", "SKU-3", "SKU-4"],
-            datasets: [{ data: [85, 92, 74, 98], backgroundColor: "#4f46e5", borderRadius: 8 }],
-          },
           options: {
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
-            scales: { y: { max: 100 }, x: { grid: { display: false } } },
+            scales: {
+              y: { display: false },
+              x: { grid: { display: false }, ticks: { font: { weight: "bold" } } },
+            },
           },
         })
       }
 
-      // Router Chart
-      const routerCtx = document.getElementById("routerChart") as HTMLCanvasElement
-      if (routerCtx) {
-        if (chartsRef.current.router) chartsRef.current.router.destroy()
-        chartsRef.current.router = new Chart(routerCtx.getContext("2d"), {
-          type: "bar",
-          data: {
-            labels: ["Route-1", "Route-2", "Route-3", "Route-4"],
-            datasets: [{ data: [78, 95, 88, 91], backgroundColor: "#4f46e5", borderRadius: 8 }],
-          },
-          options: {
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { max: 100 }, x: { grid: { display: false } } },
-          },
-        })
+      // Partner charts (only in partner mode)
+      if (activeTier === "partner") {
+        // Split Chart
+        const splitCanvas = document.getElementById("splitChart") as HTMLCanvasElement | null
+        if (splitCanvas) {
+          if (chartsRef.current.split) chartsRef.current.split.destroy()
+          chartsRef.current.split = new ChartJS(splitCanvas, {
+            type: "doughnut",
+            data: {
+              labels: ["Provider", "Infrastructure", "1C Bonus"],
+              datasets: [
+                {
+                  data: [10, 5, 35],
+                  backgroundColor: ["#cbd5e1", "#94a3b8", "#4f46e5"],
+                  borderWidth: 0,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              cutout: "75%",
+            },
+          })
+        }
+
+        // Oracle Chart
+        const oracleCanvas = document.getElementById("oracleChart") as HTMLCanvasElement | null
+        if (oracleCanvas) {
+          if (chartsRef.current.oracle) chartsRef.current.oracle.destroy()
+          chartsRef.current.oracle = new ChartJS(oracleCanvas, {
+            type: "bar",
+            data: {
+              labels: ["SKU-1", "SKU-2", "SKU-3", "SKU-4"],
+              datasets: [
+                {
+                  data: [85, 92, 74, 98],
+                  backgroundColor: "#4f46e5",
+                  borderRadius: 8,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: { y: { max: 100 }, x: { grid: { display: false } } },
+            },
+          })
+        }
+
+        // Router Chart
+        const routerCanvas = document.getElementById("routerChart") as HTMLCanvasElement | null
+        if (routerCanvas) {
+          if (chartsRef.current.router) chartsRef.current.router.destroy()
+          chartsRef.current.router = new ChartJS(routerCanvas, {
+            type: "bar",
+            data: {
+              labels: ["Route-1", "Route-2", "Route-3", "Route-4"],
+              datasets: [
+                {
+                  data: [78, 95, 88, 91],
+                  backgroundColor: "#4f46e5",
+                  borderRadius: 8,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: { y: { max: 100 }, x: { grid: { display: false } } },
+            },
+          })
+        }
       }
     }
-  }
 
-  const setTier = (tier: "customer" | "partner") => {
-    setActiveTierState(tier)
-    setTimeout(() => {
-      if (typeof window !== "undefined" && (window as Window & { lucide?: ChartType }).lucide) {
-        ;(window as Window & { lucide?: ChartType }).lucide.createIcons()
-      }
-      initCharts()
-    }, 100)
-  }
+    // Delay chart initialization to ensure DOM is ready
+    const timeout = setTimeout(initCharts, CHART_INIT_DELAY_MS)
+    return () => clearTimeout(timeout)
+  }, [activeTier, activeMode])
 
-  const switchMode = (mode: "marketplace" | "terminal") => {
-    setActiveModeState(mode)
-    setTimeout(() => {
-      if (typeof window !== "undefined" && (window as Window & { lucide?: ChartType }).lucide) {
-        ;(window as Window & { lucide?: ChartType }).lucide.createIcons()
-      }
-      initCharts()
-    }, 100)
-  }
-
-  const provisionService = (name: string, event: React.MouseEvent<HTMLButtonElement>) => {
-    const btn = event.currentTarget
-    const originalText = btn.innerText
-    btn.innerText = "Processing..."
-    btn.disabled = true
+  const handleProvision = (serviceName: string) => {
+    setProvisioningStates((prev) => ({ ...prev, [serviceName]: "processing" }))
 
     setTimeout(() => {
-      btn.innerText = "API Success"
-      btn.className = btn.className.replace("bg-indigo-600", "bg-emerald-600")
-
+      setProvisioningStates((prev) => ({ ...prev, [serviceName]: "success" }))
+      
       if (activeTier === "partner") {
-        addLog(`MANUAL_TRIGGER: Provisioned ${name}`)
-        addLog(`API_SPLIT: Distribution confirmed via 1C-Splitter`)
+        setLogs((prev) => [
+          ...prev,
+          `MANUAL_TRIGGER: Provisioned ${serviceName}`,
+          "API_SPLIT: Distribution confirmed via 1C-Splitter",
+        ])
       }
 
       setTimeout(() => {
-        btn.innerText = originalText
-        btn.className = btn.className.replace("bg-emerald-600", "bg-indigo-600")
-        btn.disabled = false
-      }, 2000)
-    }, 1500)
+        setProvisioningStates((prev) => {
+          const newState = { ...prev }
+          delete newState[serviceName]
+          return newState
+        })
+      }, SUCCESS_DISPLAY_MS)
+    }, PROVISION_DELAY_MS)
+  }
+
+  const getButtonText = (serviceName: string, defaultText: string) => {
+    const state = provisioningStates[serviceName]
+    if (state === "processing") return "Processing..."
+    if (state === "success") return "API Success"
+    return defaultText
+  }
+
+  const getButtonClass = (serviceName: string, baseClass: string) => {
+    const state = provisioningStates[serviceName]
+    if (state === "success") return baseClass.replace("bg-indigo-600", "bg-emerald-600")
+    return baseClass
   }
 
   return (
     <>
       <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap");
-
         :root {
           --slate-50: #f8fafc;
           --slate-100: #f1f5f9;
@@ -241,16 +261,14 @@ export default function Web() {
           box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2);
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
           background-color: #4338ca;
           transform: translateY(-1px);
         }
 
-        .tier-locked {
-          filter: blur(5px);
-          pointer-events: none;
-          opacity: 0.4;
-          user-select: none;
+        .btn-primary:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
         }
 
         .worked-terminal {
@@ -304,22 +322,24 @@ export default function Web() {
 
             <nav className="hidden lg:flex items-center gap-6">
               <button
-                onClick={() => switchMode("marketplace")}
+                onClick={() => setActiveMode("marketplace")}
                 className={
                   activeMode === "marketplace"
                     ? "text-sm font-bold nav-active py-2"
                     : "text-sm font-bold text-slate-400 hover:text-slate-900 py-2"
                 }
+                aria-label="Switch to Service Marketplace view"
               >
                 Service Marketplace
               </button>
               <button
-                onClick={() => switchMode("terminal")}
+                onClick={() => setActiveMode("terminal")}
                 className={
                   activeMode === "terminal"
                     ? "text-sm font-bold nav-active py-2"
                     : "text-sm font-bold text-slate-400 hover:text-slate-900 py-2"
                 }
+                aria-label="Switch to Partner Command view"
               >
                 Partner Command
               </button>
@@ -329,22 +349,24 @@ export default function Web() {
           <div className="flex items-center gap-6">
             <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-1">
               <button
-                onClick={() => setTier("customer")}
+                onClick={() => setActiveTier("customer")}
                 className={
                   activeTier === "customer"
                     ? "px-4 py-2 rounded-lg text-xs font-bold transition-all bg-white shadow-sm"
                     : "px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-500"
                 }
+                aria-label="Switch to Customer View"
               >
                 Customer View
               </button>
               <button
-                onClick={() => setTier("partner")}
+                onClick={() => setActiveTier("partner")}
                 className={
                   activeTier === "partner"
                     ? "px-4 py-2 rounded-lg text-xs font-bold transition-all bg-white shadow-sm"
                     : "px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-500"
                 }
+                aria-label="Switch to Partner View"
               >
                 Partner View
               </button>
@@ -381,7 +403,7 @@ export default function Web() {
             <div className="card-enterprise flex flex-col group">
               <div className="flex justify-between items-start mb-6">
                 <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shadow-sm">
-                  <i data-lucide="shopping-bag" className="w-6 h-6"></i>
+                  <ShoppingBag className="w-6 h-6" />
                 </div>
                 <span className="bg-emerald-100 text-emerald-700 text-[10px] font-black px-2 py-1 rounded uppercase tracking-widest">
                   Shopify Native
@@ -394,8 +416,10 @@ export default function Web() {
 
               <div className="mt-6 p-4 bg-slate-50 rounded-xl space-y-3">
                 <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Configuration</label>
-                  <select className="bg-transparent text-sm font-bold focus:outline-none">
+                  <label htmlFor="shopify-config" className="text-[10px] font-bold text-slate-400 uppercase">
+                    Configuration
+                  </label>
+                  <select id="shopify-config" className="bg-transparent text-sm font-bold focus:outline-none">
                     <option>Build Only ($0 Setup)</option>
                     <option>Build & Managed (+$29/mo)</option>
                   </select>
@@ -406,8 +430,13 @@ export default function Web() {
                 <span className="text-2xl font-black text-slate-900">
                   $0<span className="text-xs text-slate-400 font-normal ml-1">/ Start</span>
                 </span>
-                <button onClick={(e) => provisionService("Shopify Instance", e)} className="btn-primary">
-                  Provision
+                <button
+                  onClick={() => handleProvision("Shopify Instance")}
+                  className={getButtonClass("Shopify Instance", "btn-primary")}
+                  disabled={!!provisioningStates["Shopify Instance"]}
+                  aria-busy={provisioningStates["Shopify Instance"] === "processing"}
+                >
+                  {getButtonText("Shopify Instance", "Provision")}
                 </button>
               </div>
             </div>
@@ -416,7 +445,7 @@ export default function Web() {
             <div className="card-enterprise flex flex-col group">
               <div className="flex justify-between items-start mb-6">
                 <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm">
-                  <i data-lucide="server" className="w-6 h-6"></i>
+                  <Server className="w-6 h-6" />
                 </div>
                 <span className="bg-indigo-100 text-indigo-700 text-[10px] font-black px-2 py-1 rounded uppercase tracking-widest">
                   GoDaddy Cloud
@@ -429,8 +458,10 @@ export default function Web() {
 
               <div className="mt-6 p-4 bg-slate-50 rounded-xl space-y-3">
                 <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Automation Tier</label>
-                  <select className="bg-transparent text-sm font-bold focus:outline-none">
+                  <label htmlFor="godaddy-tier" className="text-[10px] font-bold text-slate-400 uppercase">
+                    Automation Tier
+                  </label>
+                  <select id="godaddy-tier" className="bg-transparent text-sm font-bold focus:outline-none">
                     <option>Standard ($12.99/mo)</option>
                     <option>Ultra-Managed ($19.99/mo)</option>
                   </select>
@@ -441,8 +472,13 @@ export default function Web() {
                 <span className="text-2xl font-black text-slate-900">
                   $12.99<span className="text-xs text-slate-400 font-normal ml-1">/ mo</span>
                 </span>
-                <button onClick={(e) => provisionService("GoDaddy Hosting", e)} className="btn-primary">
-                  Provision
+                <button
+                  onClick={() => handleProvision("GoDaddy Hosting")}
+                  className={getButtonClass("GoDaddy Hosting", "btn-primary")}
+                  disabled={!!provisioningStates["GoDaddy Hosting"]}
+                  aria-busy={provisioningStates["GoDaddy Hosting"] === "processing"}
+                >
+                  {getButtonText("GoDaddy Hosting", "Provision")}
                 </button>
               </div>
             </div>
@@ -451,7 +487,7 @@ export default function Web() {
             <div className="card-enterprise bg-slate-900 text-white border-none flex flex-col relative overflow-hidden">
               <div className="relative z-10 flex flex-col h-full">
                 <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-indigo-400 mb-6 shadow-sm">
-                  <i data-lucide="terminal" className="w-6 h-6"></i>
+                  <Terminal className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold">Unified API Access</h3>
                 <p className="text-sm text-slate-400 mt-2 flex-1">
@@ -463,14 +499,20 @@ export default function Web() {
                     $0.50<span className="text-xs text-slate-500 font-normal ml-1">/ call</span>
                   </span>
                   <button
-                    onClick={(e) => provisionService("Unified API Access", e)}
-                    className="bg-white text-slate-900 px-6 py-2.5 rounded-xl text-sm font-black hover:bg-slate-100 transition-all"
+                    onClick={() => handleProvision("Unified API Access")}
+                    className={
+                      provisioningStates["Unified API Access"] === "success"
+                        ? "bg-emerald-600 text-white px-6 py-2.5 rounded-xl text-sm font-black transition-all"
+                        : "bg-white text-slate-900 px-6 py-2.5 rounded-xl text-sm font-black hover:bg-slate-100 transition-all"
+                    }
+                    disabled={!!provisioningStates["Unified API Access"]}
+                    aria-busy={provisioningStates["Unified API Access"] === "processing"}
                   >
-                    Claim Key
+                    {getButtonText("Unified API Access", "Claim Key")}
                   </button>
                 </div>
               </div>
-              <i data-lucide="zap" className="absolute -right-8 -bottom-8 w-40 h-40 text-white/5 rotate-12"></i>
+              <Zap className="absolute -right-8 -bottom-8 w-40 h-40 text-white/5 rotate-12" />
             </div>
           </div>
 
@@ -491,103 +533,109 @@ export default function Web() {
 
         {/* SECTION: PARTNER COMMAND */}
         <section className={activeMode === "terminal" ? "space-y-12 animate-fade-in" : "hidden"}>
-          <div
-            id="partner-lock-ui"
-            className={
-              activeTier === "customer"
-                ? "text-center py-20 card-enterprise border-dashed space-y-6"
-                : "hidden text-center py-20 card-enterprise border-dashed space-y-6"
-            }
-          >
-            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mx-auto">
-              <i data-lucide="shield-alert" className="w-8 h-8"></i>
-            </div>
-            <h3 className="text-2xl font-black text-slate-900">Partner Transparency Locked</h3>
-            <p className="text-slate-500 max-w-md mx-auto">
-              Advanced API fee-splitting logic, raw GCP OR-Tools logs, and management margin engines are restricted to
-              verified Partners.
-            </p>
-            <button onClick={() => setTier("partner")} className="text-indigo-600 font-bold hover:underline">
-              Apply for Partner Access &rarr;
-            </button>
-          </div>
-
-          <div id="partner-content" className={activeTier === "partner" ? "space-y-10" : "hidden space-y-10"}>
-            <div className="flex justify-between items-end">
-              <div className="max-w-2xl">
-                <h2 className="text-3xl font-black text-slate-900 tracking-tight">Partner Intelligence Terminal</h2>
-                <p className="text-slate-500 mt-2">
-                  The "Brain" of your business. Visualizing the internal split of the 1C Unified API and traditional
-                  cloud automation.
-                </p>
+          {activeTier === "customer" ? (
+            <div className="text-center py-20 card-enterprise border-dashed space-y-6">
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mx-auto">
+                <ShieldAlert className="w-8 h-8" />
               </div>
+              <h3 className="text-2xl font-black text-slate-900">Partner Transparency Locked</h3>
+              <p className="text-slate-500 max-w-md mx-auto">
+                Advanced API fee-splitting logic, raw GCP OR-Tools logs, and management margin engines are restricted to
+                verified Partners.
+              </p>
+              <button onClick={() => setActiveTier("partner")} className="text-indigo-600 font-bold hover:underline">
+                Apply for Partner Access &rarr;
+              </button>
             </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* API SPLIT TRANSPARENCY */}
-              <div className="card-enterprise space-y-8 flex flex-col">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest">
-                    Unified API Split: $0.50 Fee
-                  </h3>
-                  <i data-lucide="pie-chart" className="w-4 h-4 text-slate-400"></i>
-                </div>
-                <div className="flex-1 flex flex-col justify-center">
-                  <div className="chart-container h-[200px]">
-                    <canvas id="splitChart"></canvas>
-                  </div>
-                </div>
-                <div className="space-y-3 font-mono-data text-[10px]">
-                  <div className="flex justify-between p-2 bg-slate-50 rounded">
-                    <span>Shopify/GoDaddy Layer</span> <span className="text-slate-900 font-bold">$0.10</span>
-                  </div>
-                  <div className="flex justify-between p-2 bg-slate-50 rounded">
-                    <span>GCP Cloud Run Compute</span> <span className="text-slate-900 font-bold">$0.05</span>
-                  </div>
-                  <div className="flex justify-between p-2 bg-emerald-50 rounded text-emerald-700 font-bold">
-                    <span>1C Management Bonus</span> <span>$0.35</span>
-                  </div>
+          ) : (
+            <div className="space-y-10">
+              <div className="flex justify-between items-end">
+                <div className="max-w-2xl">
+                  <h2 className="text-3xl font-black text-slate-900 tracking-tight">Partner Intelligence Terminal</h2>
+                  <p className="text-slate-500 mt-2">
+                    The "Brain" of your business. Visualizing the internal split of the 1C Unified API and traditional
+                    cloud automation.
+                  </p>
                 </div>
               </div>
 
-              {/* WORKED INFO TERMINAL */}
-              <div className="lg:col-span-2 flex flex-col">
-                <div className="flex justify-between items-center mb-4 px-2">
-                  <div className="flex items-center gap-2">
-                    <i data-lucide="activity" className="w-4 h-4 text-indigo-600"></i>
-                    <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">
-                      Worked Info Feed (GCP Standalone)
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* API SPLIT TRANSPARENCY */}
+                <div className="card-enterprise space-y-8 flex flex-col">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest">
+                      Unified API Split: $0.50 Fee
                     </h3>
+                    <PieChart className="w-4 h-4 text-slate-400" />
                   </div>
-                  <span className="text-[10px] font-bold text-slate-400">STATUS: LIVE STREAMING</span>
+                  <div className="flex-1 flex flex-col justify-center">
+                    <div className="chart-container h-[200px]">
+                      <canvas id="splitChart"></canvas>
+                    </div>
+                  </div>
+                  <div className="space-y-3 font-mono-data text-[10px]">
+                    <div className="flex justify-between p-2 bg-slate-50 rounded">
+                      <span>Shopify/GoDaddy Layer</span> <span className="text-slate-900 font-bold">$0.10</span>
+                    </div>
+                    <div className="flex justify-between p-2 bg-slate-50 rounded">
+                      <span>GCP Cloud Run Compute</span> <span className="text-slate-900 font-bold">$0.05</span>
+                    </div>
+                    <div className="flex justify-between p-2 bg-emerald-50 rounded text-emerald-700 font-bold">
+                      <span>1C Management Bonus</span> <span>$0.35</span>
+                    </div>
+                  </div>
                 </div>
-                <div id="log-terminal" className="worked-terminal custom-scrollbar space-y-2">
-                  <div className="text-slate-500">[SYSTEM] API CORE V6.0.1 INITIALIZED.</div>
-                  <div className="text-slate-500">[SYSTEM] LISTENING ON PORT 8080 (Cloud Run)...</div>
-                </div>
-              </div>
-            </div>
 
-            {/* OPTIMIZATION METRICS */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="card-enterprise">
-                <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-6">
-                  Inventory Oracle: Knapsack Solution
-                </h3>
-                <div className="chart-container">
-                  <canvas id="oracleChart"></canvas>
+                {/* WORKED INFO TERMINAL */}
+                <div className="lg:col-span-2 flex flex-col">
+                  <div className="flex justify-between items-center mb-4 px-2">
+                    <div className="flex items-center gap-2">
+                      <Activity className="w-4 h-4 text-indigo-600" />
+                      <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">
+                        Worked Info Feed (GCP Standalone)
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-bold text-slate-400" aria-live="polite">
+                      STATUS: LIVE STREAMING
+                    </span>
+                  </div>
+                  <div
+                    ref={terminalRef}
+                    className="worked-terminal custom-scrollbar space-y-2"
+                    role="log"
+                    aria-live="polite"
+                    aria-atomic="false"
+                  >
+                    {logs.map((log, index) => (
+                      <div key={index}>
+                        <span className="opacity-50">[{new Date().toLocaleTimeString()}]</span> &gt; {log}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="card-enterprise">
-                <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-6">
-                  Logistic Router: VRP Efficiency
-                </h3>
-                <div className="chart-container">
-                  <canvas id="routerChart"></canvas>
+
+              {/* OPTIMIZATION METRICS */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="card-enterprise">
+                  <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-6">
+                    Inventory Oracle: Knapsack Solution
+                  </h3>
+                  <div className="chart-container">
+                    <canvas id="oracleChart"></canvas>
+                  </div>
+                </div>
+                <div className="card-enterprise">
+                  <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-6">
+                    Logistic Router: VRP Efficiency
+                  </h3>
+                  <div className="chart-container">
+                    <canvas id="routerChart"></canvas>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </section>
       </main>
 
