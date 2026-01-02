@@ -7357,13 +7357,18 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.49.1:
-    resolution: {integrity: sha512-VYL8zLoNTBxVOrJBbDuRgDWa3i+mfQgDTrL8Ah9QXZ7ax4Dsj0MSq5bYgytRnDVVe+njoKnfsYkH3HzqVj5UZA==}
+  playwright-core@1.57.0:
+    resolution: {integrity: sha512-agTcKlMw/mjBWOnD6kFZttAAGHgi/Nw0CZ2o6JqWSbMlI219lAFLZZCyqByTsvVAJq5XA5H8cA6PrvBRpBWEuQ==}
     engines: {node: '>=18'}
     hasBin: true
 
   playwright@1.52.0:
     resolution: {integrity: sha512-JAwMNMBlxJ2oD1kce4KPtMkDeKGHQstdpFPcPH3maElAXon/QZeTvtsfXmTMRyO9TslfoYOXkSsvao2nE1ilTw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.57.0:
+    resolution: {integrity: sha512-ilYQj1s8sr2ppEJ2YVadYBN0Mb3mdo9J0wQ+UuDhzYqURwSoW4n1Xs5vs7ORwgDGmyEh33tRMeS8KhdkMoLXQw==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -12513,7 +12518,7 @@ snapshots:
       jest-serializer-html: 7.1.0
       jest-watch-typeahead: 2.2.2(jest@29.7.0(@types/node@20.17.43)(babel-plugin-macros@3.1.0))
       nyc: 15.1.0
-      playwright: 1.49.1
+      playwright: 1.57.0
       storybook: 8.6.15(prettier@3.0.3)
     transitivePeerDependencies:
       - '@swc/helpers'
@@ -17119,15 +17124,17 @@ snapshots:
 
   playwright-core@1.52.0: {}
 
-  playwright@1.49.1:
-    dependencies:
-      playwright-core: 1.49.1
-    optionalDependencies:
-      fsevents: 2.3.2
+  playwright-core@1.57.0: {}
 
   playwright@1.52.0:
     dependencies:
       playwright-core: 1.52.0
+    optionalDependencies:
+      fsevents: 2.3.2
+
+  playwright@1.57.0:
+    dependencies:
+      playwright-core: 1.57.0
     optionalDependencies:
       fsevents: 2.3.2
 
