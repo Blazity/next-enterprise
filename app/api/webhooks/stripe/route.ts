@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse payload
-    const event = JSON.parse(payload)
+    const event = JSON.parse(payload) as { id: string; created: number; type: string; data: { object: Record<string, unknown> } }
 
     // Map Stripe event type to our event type
     const eventTypeMap: Record<string, string> = {

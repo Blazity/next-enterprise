@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse payload
-    const data = JSON.parse(payload)
+    const data = JSON.parse(payload) as Record<string, unknown>
 
     // Map Shopify topic to our event type
     const eventTypeMap: Record<string, string> = {
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
 
     // Create webhook event
     const webhookEvent: WebhookEvent = {
-      id: data.id?.toString() || `${Date.now()}`,
+      id: String(data.id || Date.now()),
       provider: "shopify",
       eventType: eventType as WebhookEvent["eventType"],
       timestamp: new Date().toISOString(),

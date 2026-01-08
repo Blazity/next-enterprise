@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse payload
-    const data = JSON.parse(payload)
+    const data = JSON.parse(payload) as Record<string, unknown>
 
     // Map GoDaddy event to our event type
     const eventTypeMap: Record<string, string> = {
@@ -40,10 +40,10 @@ export async function POST(request: NextRequest) {
 
     // Create webhook event
     const webhookEvent: WebhookEvent = {
-      id: data.eventId?.toString() || `${Date.now()}`,
+      id: String(data.eventId || Date.now()),
       provider: "godaddy",
       eventType: mappedEventType as WebhookEvent["eventType"],
-      timestamp: data.timestamp || new Date().toISOString(),
+      timestamp: String(data.timestamp || new Date().toISOString()),
       data,
       rawPayload: data,
     }

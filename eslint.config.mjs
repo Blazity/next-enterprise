@@ -93,6 +93,13 @@ const config = typescriptEslint.config(
           },
         },
       ],
+      // Disable import/no-unresolved for @/ imports as TypeScript handles them
+      "import/no-unresolved": [
+        "error",
+        {
+          ignore: ["^@/"],
+        },
+      ],
     },
   }
 )

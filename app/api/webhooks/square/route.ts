@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse payload
-    const event = JSON.parse(payload)
+    const event = JSON.parse(payload) as { event_id?: string; type: string; created_at?: string; data: Record<string, unknown> }
 
     // Map Square event type to our event type
     const eventTypeMap: Record<string, string> = {
