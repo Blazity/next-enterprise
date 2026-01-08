@@ -40,7 +40,14 @@ export async function processWebhookEvent(event: WebhookEvent): Promise<WebhookP
         await handleProductEvent(event)
         break
       default:
-        console.warn(`Unknown event type: ${event.eventType}`)
+        console.warn(`Unknown event type: ${event.eventType}`, {
+          eventId: event.id,
+          provider: event.provider,
+        })
+        return {
+          success: false,
+          error: `Unknown event type: ${event.eventType}`,
+        }
     }
 
     return {

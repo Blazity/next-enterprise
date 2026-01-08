@@ -124,8 +124,16 @@ export class UnifiedAPIClient {
         return this.getShopifyClient().createOrder(orderData)
       case "woocommerce":
         return this.getWooCommerceClient().createOrder(orderData)
-      case "square":
-        return this.getSquareClient().createOrder(orderData as { location_id: string; line_items: Array<Record<string, unknown>> })
+      case "square": {
+        // Validate Square-specific order data structure
+        if (!orderData.location_id || !Array.isArray(orderData.line_items)) {
+          throw new Error("Square orders require location_id and line_items array")
+        }
+        return this.getSquareClient().createOrder({
+          location_id: String(orderData.location_id),
+          line_items: orderData.line_items as Array<Record<string, unknown>>,
+        })
+      }
       default:
         throw new Error(`Order operations not supported for provider: ${provider}`)
     }
@@ -137,18 +145,34 @@ export class UnifiedAPIClient {
     data: { amount: number; currency: string; metadata?: Record<string, unknown> }
   ) {
     switch (provider) {
-      case "stripe":
+      case "stripe": {
+        // Ensure metadata values are strings for Stripe
+        const stripeMetadata: Record<string, string> = {}
+        if (data.metadata) {
+          Object.entries(data.metadata).forEach(([key, value]) => {
+            stripeMetadata[key] = String(value)
+          })
+        }
         return this.getStripeClient().createPaymentIntent({
           amount: data.amount,
           currency: data.currency,
-          metadata: data.metadata as Record<string, string>,
+          metadata: stripeMetadata,
         })
-      case "square":
+      }
+      case "square": {
+        // Validate required Square payment fields
+        if (!data.metadata?.source_id) {
+          throw new Error("Square payments require source_id in metadata")
+        }
+        if (!data.metadata?.idempotency_key) {
+          throw new Error("Square payments require idempotency_key in metadata for request deduplication")
+        }
         return this.getSquareClient().createPayment({
-          source_id: (data.metadata?.source_id as string) || "",
+          source_id: String(data.metadata.source_id),
           amount_money: { amount: data.amount, currency: data.currency },
-          idempotency_key: (data.metadata?.idempotency_key as string) || `${Date.now()}`,
+          idempotency_key: String(data.metadata.idempotency_key),
         })
+      }
       default:
         throw new Error(`Payment operations not supported for provider: ${provider}`)
     }

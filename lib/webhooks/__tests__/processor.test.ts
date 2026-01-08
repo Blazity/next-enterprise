@@ -59,7 +59,8 @@ describe("Webhook Processor", () => {
     const event: WebhookEvent = {
       id: "test-999",
       provider: "shopify",
-      eventType: "order.created",
+      // @ts-expect-error - Testing with intentionally invalid event type
+      eventType: "unknown.event.type",
       timestamp: new Date().toISOString(),
       data: {},
       rawPayload: {},
@@ -67,7 +68,8 @@ describe("Webhook Processor", () => {
 
     const result = await processWebhookEvent(event)
 
-    // Should still succeed even with unknown event types
-    expect(result.success).toBe(true)
+    // Should return error for unknown event types
+    expect(result.success).toBe(false)
+    expect(result.error).toContain("Unknown event type")
   })
 })
