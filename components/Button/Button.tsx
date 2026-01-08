@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority"
-
+import { memo } from "react"
 import { twMerge } from "tailwind-merge"
 
 const button = cva(
@@ -38,10 +38,16 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLAnchorElemen
   href: string
 }
 
-export function Button({ className, intent, size, underline, ...props }: ButtonProps) {
+function ButtonComponent({ className, intent, size, underline, ...props }: ButtonProps) {
   return (
     <a className={twMerge(button({ intent, size, className, underline }))} {...props}>
       {props.children}
     </a>
   )
 }
+
+/**
+ * To prevent unnecessary re-renders of the component.
+ * @see https://react.dev/reference/react/memo
+ */
+export const Button = memo(ButtonComponent)
