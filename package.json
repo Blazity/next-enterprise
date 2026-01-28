@@ -51,7 +51,7 @@
     "@vercel/otel": "^1.12.0",
     "class-variance-authority": "^0.7.0",
     "lodash": "^4.17.21",
-    "next": "15.3.8",
+    "next": "16.0.10",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwind-merge": "^2.6.0",
