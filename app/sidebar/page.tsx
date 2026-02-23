@@ -1,0 +1,15 @@
+import { Sidebar } from "components/Sidebar/Sidebar"
+
+export default function SidebarPage() {
+  return (
+    <div className="h-full bg-[#dddce8] flex items-center justify-center relative overflow-hidden">
+      {/* Background blobs */}
+      <div className="absolute top-[-80px] right-[28%] w-[420px] h-[420px] bg-purple-300/50 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-[-60px] right-[-30px] w-[300px] h-[300px] bg-purple-400/35 rounded-full blur-2xl pointer-events-none" />
+
+      <div className="h-[600px] rounded-[28px] overflow-hidden shadow-2xl">
+        <Sidebar />
+      </div>
+    </div>
+  )
+}
