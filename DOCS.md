@@ -497,7 +497,50 @@ Import group order enforced by `import/order`:
 
 ---
 
-## 10. Contributing
+## 10. Git Hooks (Husky + lint-staged)
+
+Husky runs `lint-staged` automatically on every `git commit`. Staged files are linted and formatted before the commit is created — if ESLint finds unfixable errors, the commit is aborted.
+
+### What runs on commit
+
+**Config:** `lint-staged` block in [package.json](package.json)
+
+| File pattern | Commands |
+|---|---|
+| `*.{js,jsx,ts,tsx}` | `eslint --fix` then `prettier --write` |
+| `*.{json,md,css}` | `prettier --write` |
+
+Only **staged files** are processed — unchanged files are never touched.
+
+### Hook location
+
+**File:** [.husky/pre-commit](.husky/pre-commit)
+
+```sh
+npx lint-staged
+```
+
+### How it was set up
+
+```bash
+pnpm add -D husky lint-staged   # install packages
+pnpm exec husky init            # creates .husky/ and adds "prepare": "husky" to package.json
+# then edit .husky/pre-commit to run lint-staged
+```
+
+The `"prepare": "husky"` script in `package.json` ensures Husky hooks are installed automatically after every `pnpm install`.
+
+### Bypassing the hook (use sparingly)
+
+```bash
+git commit --no-verify -m "chore: emergency fix"
+```
+
+> Only use `--no-verify` for genuine emergencies. All checks still run in CI and will block merging.
+
+---
+
+## 11. Contributing
 
 ### Commit Message Format
 
