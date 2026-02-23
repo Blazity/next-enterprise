@@ -13,7 +13,7 @@
 | Language | TypeScript 5.8.3 (strict mode) |
 | Styling | Tailwind CSS v4 |
 | Node.js | >= 20.0.0 |
-| Package manager | npm (bundled with Node.js) |
+| Package manager | pnpm 10.0.0 (enforced via `packageManager` field) |
 
 ---
 
@@ -26,11 +26,12 @@ Before you begin, make sure you have the following installed:
 | Tool | Version | Install |
 |---|---|---|
 | Node.js | >= 20.0.0 | [nodejs.org](https://nodejs.org) or via `nvm` |
+| pnpm | 10.0.0 | `npm install -g pnpm@10.0.0` |
 | Git | any | [git-scm.com](https://git-scm.com) |
 
-> **Using nvm?** Run `nvm install 20 && nvm use 20` to switch to a compatible Node version. npm is bundled with Node — no separate install needed.
+> **Using nvm?** Run `nvm install 20 && nvm use 20` to switch to a compatible Node version.
 
-> **Note on `--legacy-peer-deps`:** `@radix-ui/react-form@0.0.3` declares peer support for React 16/17/18 only, but this project uses React 19. npm is strict about this mismatch, so `--legacy-peer-deps` is required on every `npm install`. This is safe — the package works correctly with React 19.
+> **WARNING: Do not use `npm install` or `yarn install`.** This project enforces `pnpm` via the `packageManager` field in `package.json`. Using `npm` will fail with a peer dependency conflict (`@radix-ui/react-form` vs React 19) because `npm` is strict about peer deps. `pnpm` resolves this correctly. Always use `pnpm install`.
 
 ---
 
@@ -44,15 +45,15 @@ cd next-enterprise
 ### Step 2 — Install dependencies
 
 ```bash
-npm install --legacy-peer-deps
+pnpm install
 ```
 
-`--legacy-peer-deps` is required due to a peer dependency mismatch between `@radix-ui/react-form@0.0.3` and React 19. This also automatically runs `patch-package` via the `postinstall` hook — you will see output like `applying patch …` in the terminal. This is expected.
+This installs all packages from `package.json` and automatically runs `patch-package` via the `postinstall` hook to apply any local dependency patches. This is expected — you will see output like `applying patch …` in the terminal.
 
 ### Step 3 — Start the development server
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 The app starts at **http://localhost:3000** using Turbopack for fast hot-module replacement.
@@ -60,9 +61,9 @@ The app starts at **http://localhost:3000** using Turbopack for fast hot-module 
 ### Step 4 — (Optional) Verify everything works
 
 ```bash
-npm run lint          # ESLint — should exit with no errors
-npm test              # Vitest unit tests — should all pass
-npm run e2e:headless  # Playwright E2E — requires the dev server to be running
+pnpm lint          # ESLint — should exit with no errors
+pnpm test          # Vitest unit tests — should all pass
+pnpm e2e:headless  # Playwright E2E — requires the dev server to be running
 ```
 
 ---
@@ -74,20 +75,20 @@ npm run e2e:headless  # Playwright E2E — requires the dev server to be running
 git clone https://github.com/Blazity/next-enterprise.git
 cd next-enterprise
 
-# 2. Install all dependencies
-npm install --legacy-peer-deps
+# 2. Install all dependencies (patch-package runs automatically)
+pnpm install
 
 # 3. Start dev server → http://localhost:3000
-npm run dev
+pnpm dev
 
 # 4. Run unit tests
-npm test
+pnpm test
 
 # 5. Start Storybook → http://localhost:6006
-npm run storybook
+pnpm storybook
 
 # 6. Run E2E tests (headless)
-npm run e2e:headless
+pnpm e2e:headless
 ```
 
 ---
@@ -135,6 +136,83 @@ next-enterprise/
 ├── prettier.config.js          # Prettier (120 char width, no semi, tailwind plugin)
 └── postcss.config.js           # PostCSS plugins (postcss-import, tailwindcss)
 ```
+
+**Absolute imports:** `tsconfig.json` sets `"baseUrl": "."`, so all imports are absolute from the project root. There are no `../../` relative imports.
+
+---
+
+## 4. Component API
+
+### Button
+
+**Source:** [components/Button/Button.tsx](components/Button/Button.tsx)
+
+Renders an `<a>` (anchor) tag styled as a button. Use this for navigation links, not form submissions.
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `href` | `string` | required | URL the anchor navigates to |
+| `intent` | `"primary" \| "secondary"` | `"primary"` | `primary` = filled blue; `secondary` = outlined with blue border |
+| `size` | `"sm" \| "lg"` | `"lg"` | `sm` = min-h-10; `lg` = min-h-12 |
+| `underline` | `boolean` | `false` | Underlines the label text |
+| `className` | `string` | — | Additional classes merged via tailwind-merge |
+| `...rest` | `React.ButtonHTMLAttributes<HTMLAnchorElement>` | — | All standard anchor attributes (`target`, `rel`, etc.) |
+
+**Examples:**
+
+```tsx
+// Primary (default)
+<Button href="/dashboard">Go to Dashboard</Button>
+
+// Secondary, small, opens in new tab
+<Button href="https://example.com" intent="secondary" size="sm" target="_blank" rel="noopener noreferrer">
+  External Link
+</Button>
+
+// With underline
+<Button href="/terms" underline>Terms of Service</Button>
+```
+
+---
+
+### Tooltip
+
+**Source:** [components/Tooltip/Tooltip.tsx](components/Tooltip/Tooltip.tsx)
+
+`"use client"` — must be used in a client component tree. Built on `@radix-ui/react-tooltip` with a 200ms open delay.
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `explainer` | `React.ReactElement \| string` | required | Content rendered inside the tooltip popup |
+| `children` | `React.ReactElement` | required | Element that triggers the tooltip on hover |
+| `intent` | `"primary"` | `"primary"` | Visual style (zinc-700 background, white text) |
+| `size` | `"md"` | `"md"` | Size of the tooltip panel |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` | Which side of the trigger the tooltip appears on |
+| `withArrow` | `boolean` | `false` | Renders a directional arrow pointing to the trigger |
+| `className` | `string` | — | Additional classes for the tooltip content panel |
+| `open` | `boolean` | — | Controlled open state |
+| `defaultOpen` | `boolean` | — | Uncontrolled initial open state |
+| `onOpenChange` | `(open: boolean) => void` | — | Callback when open state changes |
+
+**Examples:**
+
+```tsx
+// Basic usage
+<Tooltip explainer="This is a tooltip">
+  <button>Hover me</button>
+</Tooltip>
+
+// With arrow, positioned to the right
+<Tooltip explainer="More info" side="right" withArrow>
+  <span>ℹ</span>
+</Tooltip>
+
+// Controlled
+<Tooltip explainer="Controlled tooltip" open={isOpen} onOpenChange={setIsOpen}>
+  <button>Click</button>
+</Tooltip>
+```
+
 ---
 
 ### Adding a New Component
@@ -149,6 +227,8 @@ components/
     └── MyComponent.stories.tsx # Storybook story
 ```
 
+Use CVA + tailwind-merge for variants (follow the Button pattern). Import using absolute paths:
+
 ```tsx
 import { MyComponent } from "components/MyComponent/MyComponent"
 ```
@@ -159,25 +239,61 @@ import { MyComponent } from "components/MyComponent/MyComponent"
 
 | Script | Description |
 |---|---|
-| `npm run dev` | Dev server with Turbopack on port 3000 |
-| `npm run build` | Production build |
-| `npm run start` | Start production server (run after `build`) |
-| `npm run lint` | ESLint check |
-| `npm run lint:fix` | ESLint auto-fix |
-| `npm run prettier` | Check Prettier formatting (`*.js,jsx,ts,tsx`) |
-| `npm run prettier:fix` | Auto-format JS/TS files |
-| `npm run format` | Auto-format TS, TSX, and MD files |
-| `npm run analyze` | Build with bundle analyzer UI (`ANALYZE=true`) |
-| `npm test` | Run Vitest unit tests once |
-| `npm run test:watch` | Run Vitest in watch mode |
-| `npm run test:ui` | Vitest browser dashboard |
-| `npm run test:coverage` | Unit test coverage report |
-| `npm run storybook` | Storybook dev server on port 6006 |
-| `npm run build-storybook` | Static Storybook build |
-| `npm run test-storybook` | Run Storybook interaction tests |
-| `npm run e2e:headless` | Playwright E2E tests (headless, all browsers) |
-| `npm run e2e:ui` | Playwright E2E with interactive UI |
-| `npm run coupling-graph` | Generate component dependency graph as `graph.svg` |
+| `pnpm dev` | Dev server with Turbopack on port 3000 |
+| `pnpm build` | Production build |
+| `pnpm start` | Start production server (run after `build`) |
+| `pnpm lint` | ESLint check |
+| `pnpm lint:fix` | ESLint auto-fix |
+| `pnpm prettier` | Check Prettier formatting (`*.js,jsx,ts,tsx`) |
+| `pnpm prettier:fix` | Auto-format JS/TS files |
+| `pnpm format` | Auto-format TS, TSX, and MD files |
+| `pnpm analyze` | Build with bundle analyzer UI (`ANALYZE=true`) |
+| `pnpm test` | Run Vitest unit tests once |
+| `pnpm test:watch` | Run Vitest in watch mode |
+| `pnpm test:ui` | Vitest browser dashboard |
+| `pnpm test:coverage` | Unit test coverage report |
+| `pnpm storybook` | Storybook dev server on port 6006 |
+| `pnpm build-storybook` | Static Storybook build |
+| `pnpm test-storybook` | Run Storybook interaction tests |
+| `pnpm e2e:headless` | Playwright E2E tests (headless, all browsers) |
+| `pnpm e2e:ui` | Playwright E2E with interactive UI |
+| `pnpm coupling-graph` | Generate component dependency graph as `graph.svg` |
+
+---
+
+## 6. Environment Variables
+
+Environment variables are validated at build time using [T3 Env](https://env.t3.gg/) with Zod. Missing required variables cause a startup error, not a runtime error.
+
+**Source:** [env.mjs](env.mjs)
+
+| Variable | Scope | Type | Required | Description |
+|---|---|---|---|---|
+| `ANALYZE` | Server | `"true" \| "false"` | No | Enables the Next.js bundle analyzer during `next build`. Use `pnpm analyze` instead of setting this directly. |
+
+**Adding a new variable:**
+
+1. Add the Zod schema to the `server` or `client` block in `env.mjs`
+2. Add the key to the `runtimeEnv` mapping
+3. Client-side variables must be prefixed `NEXT_PUBLIC_`
+
+```ts
+// env.mjs
+export const env = createEnv({
+  server: {
+    MY_SECRET: z.string().min(1),
+  },
+  client: {
+    NEXT_PUBLIC_API_URL: z.string().url(),
+  },
+  runtimeEnv: {
+    MY_SECRET: process.env.MY_SECRET,
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+  },
+})
+```
+
+Local overrides go in `.env.local` (not committed).
 
 ---
 
@@ -220,9 +336,9 @@ The root-level aliases (`/healthz`, `/health`, `/ping`) exist to support Kuberne
 - Excluded: `node_modules`, `dist`, `e2e/`, `.next/`
 
 ```bash
-npm test                   # single run
-npm run test:watch         # watch mode
-npm run test:coverage      # with coverage report
+pnpm test           # single run
+pnpm test:watch     # watch mode
+pnpm test:coverage  # with coverage report
 ```
 
 Example test following the Button pattern:
@@ -243,6 +359,42 @@ describe("Button", () => {
   })
 })
 ```
+
+---
+
+### Component Stories (Storybook)
+
+**Config:** [.storybook/main.ts](.storybook/main.ts)
+- Framework: `@storybook/nextjs`
+- Discovers stories from: `components/**/*.stories.{ts,tsx,mdx}`
+- Port: 6006
+
+```bash
+pnpm storybook          # dev server → http://localhost:6006
+pnpm build-storybook    # static build to storybook-static/
+pnpm test-storybook     # run interaction tests (requires running Storybook)
+```
+
+Story file template:
+
+```tsx
+import type { Meta, StoryObj } from "@storybook/react"
+import { MyComponent } from "./MyComponent"
+
+const meta: Meta<typeof MyComponent> = {
+  component: MyComponent,
+  args: {
+    // default prop values
+  },
+}
+
+export const Default: StoryObj<typeof MyComponent> = {
+  render: (args) => <MyComponent {...args} />,
+}
+
+export default meta
+```
+
 ---
 
 ### E2E Tests (Playwright)
@@ -251,12 +403,12 @@ describe("Button", () => {
 - Test directory: `e2e/`
 - Browsers: Chromium, Firefox, WebKit
 - Base URL: `http://127.0.0.1:3000`
-- Dev server starts automatically via `npm run dev` before tests run
+- Dev server starts automatically via `pnpm dev` before tests run
 - CI settings: retries = 2, workers = 1, `forbidOnly` enabled
 
 ```bash
-npm run e2e:headless    # all browsers, no UI
-npm run e2e:ui          # interactive Playwright UI
+pnpm e2e:headless    # all browsers, no UI
+pnpm e2e:ui          # interactive Playwright UI
 ```
 
 Example from [e2e/example.spec.ts](e2e/example.spec.ts):
@@ -284,10 +436,76 @@ Place new E2E tests in `e2e/feature-name.spec.ts`.
 
 ---
 
+## 9. Code Quality
+
+### TypeScript
+
+**Config:** [tsconfig.json](tsconfig.json)
+
+Key settings:
+- `"strict": true` — all strict checks enabled
+- `"noUncheckedIndexedAccess": true` — array/object index access returns `T | undefined`, forcing null checks
+- `"baseUrl": "."` — enables absolute imports from the project root
+
+```ts
+// Correct — absolute import
+import { Button } from "components/Button/Button"
+
+// Avoid — relative imports that traverse directories
+import { Button } from "../../components/Button/Button"
+```
+
+The `noUncheckedIndexedAccess` flag affects all array and record lookups:
+
+```ts
+const items = ["a", "b", "c"]
+const first = items[0]       // type: string | undefined
+const safe = items[0] ?? ""  // type: string
+```
+
+---
+
+### ESLint
+
+**Config:** [eslint.config.mjs](eslint.config.mjs)
+
+Active plugins:
+- `typescript-eslint` (recommended rules)
+- `eslint-plugin-import` — enforces import grouping and alphabetical order
+- `@next/eslint-plugin-next` — Core Web Vitals rules
+- `eslint-plugin-storybook` — Storybook-specific rules
+
+Import group order enforced by `import/order`:
+1. External packages
+2. Built-in Node modules
+3. Internal (project) modules
+4. Sibling / parent / index
+
+---
+
+### Prettier
+
+**Config:** [prettier.config.js](prettier.config.js)
+
+| Setting | Value |
+|---|---|
+| `printWidth` | 120 |
+| `tabWidth` | 2 |
+| `semi` | `false` |
+| `trailingComma` | `"es5"` |
+| Plugin | `prettier-plugin-tailwindcss` (auto-sorts Tailwind class names) |
+
+---
 
 ## 10. Contributing
 
 ### Commit Message Format
+
+The project uses [Semantic Release](https://semantic-release.gitbook.io/semantic-release/) with [Conventional Commits](https://www.conventionalcommits.org/). Commit message types determine automated version bumps and changelog entries.
+
+```
+<type>(<optional scope>): <subject>
+```
 
 | Type | Version bump | Use for |
 |---|---|---|
@@ -299,4 +517,43 @@ Place new E2E tests in `e2e/feature-name.spec.ts`.
 | `test` | None | Adding or updating tests |
 | `BREAKING CHANGE` (footer) | Major | Breaking API changes |
 
+Examples:
+
+```
+feat(button): add disabled prop
+fix(tooltip): correct arrow position on bottom side
+docs: update component API reference
+chore: upgrade radix-ui packages
+```
+
 ---
+
+### Pre-PR Checklist
+
+Run these locally before opening a pull request. The same checks run in CI and will block merging if they fail.
+
+```bash
+pnpm lint           # ESLint — must pass
+pnpm prettier       # Prettier format check — must pass
+pnpm test           # Unit tests — must pass
+pnpm e2e:headless   # E2E tests — should pass
+```
+
+---
+
+## 11. Observability
+
+**Source:** [instrumentation.ts](instrumentation.ts)
+
+The app uses OpenTelemetry via `@vercel/otel`. Next.js calls the exported `register()` function automatically via the [instrumentation hook](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation).
+
+```ts
+import { registerOTel } from "@vercel/otel"
+
+export function register() {
+  registerOTel("next-app")
+}
+```
+
+- On **Vercel**: traces are sent to Vercel Observability automatically — no configuration needed.
+- On **custom collectors**: set the standard `OTEL_EXPORTER_OTLP_ENDPOINT` environment variable. Add it to `env.mjs` for build-time validation.
