@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import { Button } from "components/Button/Button"
+import { Counter } from "components/Counter/Counter"
 
 import { LP_GRID_ITEMS } from "lp-items"
 
@@ -44,6 +45,12 @@ export default function Web() {
               Deploy Now
             </Button>
           </div>
+        </div>
+      </section>
+      <section className="bg-white dark:bg-gray-900">
+        <div className="mx-auto flex max-w-(--breakpoint-xl) flex-col items-center px-4 py-8">
+          <h2 className="mb-4 text-2xl font-bold dark:text-white">Zustand Counter</h2>
+          <Counter />
         </div>
       </section>
       <section className="bg-white dark:bg-gray-900">
