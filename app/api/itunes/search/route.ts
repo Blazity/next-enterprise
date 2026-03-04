@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server"
 
-const ITUNES_BASE = "https://itunes.apple.com/search"
+import { env } from "@/env.mjs"
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
   const limit = searchParams.get("limit") || "25"
 
-  const url = new URL(ITUNES_BASE)
+  const url = new URL(env.ITUNES_API_BASE_URL)
   url.searchParams.set("term", term)
   url.searchParams.set("media", "music")
   url.searchParams.set("entity", "song")
