@@ -1,6 +1,6 @@
 "use client"
 
-import { Disc3, Home, Library, ListMusic, Mic2, Music2, Search } from "lucide-react"
+import { Disc3, Home, Library, Mic2, Music2, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useTranslation } from "react-i18next"
@@ -23,14 +23,6 @@ const libraryNav = [
   { href: "/recently-added", labelKey: "nav.recentlyAdded", Icon: Disc3 },
   { href: "/artists", labelKey: "nav.artists", Icon: Mic2 },
   { href: "/songs", labelKey: "nav.songs", Icon: Music2 },
-]
-
-const playlists = [
-  { labelKey: "nav.playlist.chillVibes", slug: "chill-vibes" },
-  { labelKey: "nav.playlist.workoutMix", slug: "workout-mix" },
-  { labelKey: "nav.playlist.lateNight", slug: "late-night" },
-  { labelKey: "nav.playlist.roadTrip", slug: "road-trip" },
-  { labelKey: "nav.playlist.focusFlow", slug: "focus-flow" },
 ]
 
 export function NavBar() {
@@ -118,33 +110,6 @@ export function NavBar() {
           })}
         </div>
 
-        {/* Playlists section */}
-        <div className="px-2 pt-5">
-          <p className="text-text-tertiary mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">
-            {t("nav.playlists")}
-          </p>
-          {playlists.map((item) => {
-            const href = `/playlist/${item.slug}`
-            const isActive = pathname === href
-            return (
-              <Link
-                key={item.slug}
-                href={href}
-                className={cn(
-                  "flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-[13px] transition-colors",
-                  isActive ? "bg-white/10 text-white" : "text-text-secondary hover:bg-white/5 hover:text-white"
-                )}
-              >
-                <ListMusic
-                  size={16}
-                  strokeWidth={1.8}
-                  className={cn("shrink-0", isActive ? "text-accent" : "text-text-tertiary")}
-                />
-                <span className="truncate">{t(item.labelKey)}</span>
-              </Link>
-            )
-          })}
-        </div>
       </div>
     </nav>
   )
