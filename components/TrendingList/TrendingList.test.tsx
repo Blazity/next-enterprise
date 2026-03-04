@@ -28,8 +28,20 @@ describe("TrendingList", () => {
     })
   })
 
-  it("filters songs based on search query", () => {
-    useMusicStore.setState({ searchQuery: "Velocity" })
+  it("displays search results when search query is active", () => {
+    useMusicStore.setState({
+      searchQuery: "Velocity",
+      searchResults: [
+        {
+          id: "search-1",
+          title: "Velocity",
+          artist: { id: "a1", name: "Apex Motion" },
+          albumArt: "https://example.com/art.jpg",
+          duration: 200,
+          previewUrl: "https://example.com/preview.m4a",
+        },
+      ],
+    })
     render(<TrendingList />)
     expect(screen.getByText("Velocity")).toBeInTheDocument()
     expect(screen.queryByText("Glass Horizon")).not.toBeInTheDocument()
@@ -42,7 +54,7 @@ describe("TrendingList", () => {
   })
 
   it("shows empty state when no songs match", () => {
-    useMusicStore.setState({ searchQuery: "xyznonexistent" })
+    useMusicStore.setState({ searchQuery: "xyznonexistent", searchResults: [] })
     render(<TrendingList />)
     expect(screen.getByText("No songs found matching your search.")).toBeInTheDocument()
   })

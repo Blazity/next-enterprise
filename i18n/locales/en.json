@@ -27,11 +27,15 @@
   "trending.title": "Trending Now",
   "trending.resultsFor": "Results for \"{{query}}\"",
   "trending.noResults": "No songs found matching your search.",
+  "trending.searching": "Searching...",
+  "trending.error": "Something went wrong. Please try again.",
 
   "player.shuffle": "Shuffle",
   "player.previous": "Previous",
   "player.next": "Next",
   "player.repeat": "Repeat",
+  "player.comingSoon": "Coming soon",
+  "player.progress": "Playback progress",
 
   "playButton.pause": "Pause",
   "playButton.play": "Play",
@@ -41,5 +45,13 @@
   "meta.homeTitle": "Streamify — Discover Music",
   "meta.homeDescription": "Your daily dose of fresh tracks and curated picks.",
   "meta.searchTitle": "Streamify — Search",
-  "meta.searchDescription": "Search for songs and discover trending tracks."
+  "meta.searchDescription": "Search for songs and discover trending tracks.",
+
+  "meta.recentlyAddedTitle": "Streamify — Recently Added",
+  "meta.artistsTitle": "Streamify — Artists",
+  "meta.songsTitle": "Streamify — Songs",
+  "meta.playlistTitle": "Streamify — Playlist",
+
+  "comingSoon.title": "Coming Soon",
+  "comingSoon.description": "This section is under construction. Check back soon for updates."
 }

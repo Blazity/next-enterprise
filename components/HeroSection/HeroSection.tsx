@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { ChevronRight } from "lucide-react"
 import Image from "next/image"
+import { useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
 import { SongCard } from "@/components/SongCard/SongCard"
@@ -20,7 +21,12 @@ const fadeUp = {
 
 export function HeroSection() {
   const { t } = useTranslation()
-  const { featuredSongs, trendingSongs, currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
+  const { featuredSongs, trendingSongs, currentlyPlaying, playState, setPlayingTrack, togglePlay, fetchPopularContent } =
+    useMusicStore()
+
+  useEffect(() => {
+    fetchPopularContent()
+  }, [fetchPopularContent])
 
   const handlePlay = (songId: string) => {
     const song = [...featuredSongs, ...trendingSongs].find((s) => s.id === songId)

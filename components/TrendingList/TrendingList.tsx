@@ -1,7 +1,7 @@
 "use client"
 
 import { AnimatePresence, motion } from "framer-motion"
-import { SearchX, TrendingUp } from "lucide-react"
+import { Loader2, SearchX, TrendingUp } from "lucide-react"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -19,19 +19,25 @@ const fadeUp = {
 
 export function TrendingList() {
   const { t } = useTranslation()
-  const { trendingSongs, searchQuery, currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
+  const {
+    trendingSongs,
+    searchQuery,
+    searchResults,
+    isSearching,
+    searchError,
+    currentlyPlaying,
+    playState,
+    setPlayingTrack,
+    togglePlay,
+  } = useMusicStore()
 
-  const filteredSongs = useMemo(() => {
-    if (!searchQuery.trim()) return trendingSongs
-
-    const query = searchQuery.toLowerCase()
-    return trendingSongs.filter(
-      (song) => song.title.toLowerCase().includes(query) || song.artist.name.toLowerCase().includes(query)
-    )
-  }, [trendingSongs, searchQuery])
+  const displayedSongs = useMemo(() => {
+    if (searchQuery.trim()) return searchResults
+    return trendingSongs
+  }, [searchQuery, searchResults, trendingSongs])
 
   const handlePlay = (songId: string) => {
-    const song = trendingSongs.find((s) => s.id === songId)
+    const song = displayedSongs.find((s) => s.id === songId)
     if (!song) return
 
     if (currentlyPlaying?.id === songId) {
@@ -55,7 +61,30 @@ export function TrendingList() {
       </div>
 
       <AnimatePresence mode="wait">
-        {filteredSongs.length === 0 ? (
+        {isSearching ? (
+          <motion.div
+            key="loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="bg-surface-elevated flex items-center justify-center rounded-xl py-14"
+          >
+            <div className="text-text-tertiary flex items-center gap-2 text-sm">
+              <Loader2 size={16} className="animate-spin" />
+              {t("trending.searching")}
+            </div>
+          </motion.div>
+        ) : searchError ? (
+          <motion.div
+            key="error"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="bg-surface-elevated flex flex-col items-center gap-3 rounded-xl py-14 text-center"
+          >
+            <p className="text-text-tertiary text-sm">{t("trending.error")}</p>
+          </motion.div>
+        ) : displayedSongs.length === 0 ? (
           <motion.div
             key="empty"
             initial={{ opacity: 0 }}
@@ -67,18 +96,12 @@ export function TrendingList() {
             <p className="text-text-tertiary text-sm">{t("trending.noResults")}</p>
           </motion.div>
         ) : (
-          <motion.div
-            key="list"
-            variants={stagger}
-            initial="hidden"
-            animate="show"
-            className="bg-surface-elevated rounded-xl"
-          >
-            {filteredSongs.map((song, index) => (
+          <motion.div key="list" variants={stagger} initial="hidden" animate="show" className="bg-surface-elevated rounded-xl">
+            {displayedSongs.map((song, index) => (
               <motion.div
                 key={song.id}
                 variants={fadeUp}
-                className={index < filteredSongs.length - 1 ? "border-border border-b" : ""}
+                className={index < displayedSongs.length - 1 ? "border-border border-b" : ""}
               >
                 <SongCard
                   song={song}

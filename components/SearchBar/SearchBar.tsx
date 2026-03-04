@@ -13,17 +13,18 @@ export interface SearchBarProps {
 
 export function SearchBar({ className }: SearchBarProps) {
   const { t } = useTranslation()
-  const { searchQuery, setSearchQuery } = useMusicStore()
+  const { searchQuery, setSearchQuery, searchItunes } = useMusicStore()
   const [localQuery, setLocalQuery] = useState(searchQuery)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setSearchQuery(localQuery)
+      searchItunes(localQuery)
     }, 300)
 
     return () => clearTimeout(timer)
-  }, [localQuery, setSearchQuery])
+  }, [localQuery, setSearchQuery, searchItunes])
 
   const handleClear = () => {
     setLocalQuery("")
