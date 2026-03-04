@@ -78,7 +78,7 @@ export async function fetchPopularArtists(): Promise<ItunesArtist[]> {
       const artist: ItunesArtist = {
         wrapperType: "artist",
         artistType: "Artist",
-        artistId: track.collectionId,
+        artistId: track.artistId,
         artistName: track.artistName,
         primaryGenreName: track.primaryGenreName,
         artworkUrl: track.artworkUrl100.replace("100x100", "440x440"),
