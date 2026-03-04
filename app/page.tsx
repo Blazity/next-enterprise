@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import { Button } from "components/Button/Button"
+import { CounterExample } from "@/components/CounterExample"
 
 import { LP_GRID_ITEMS } from "lp-items"
 
@@ -44,6 +45,12 @@ export default function Web() {
               Deploy Now
             </Button>
           </div>
+        </div>
+      </section>
+      <section className="bg-white dark:bg-gray-900">
+        <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 sm:py-16 lg:px-6">
+          <h2 className="mb-4 text-2xl font-bold text-center dark:text-white">Zustand Counter Demo</h2>
+          <CounterExample />
         </div>
       </section>
       <section className="bg-white dark:bg-gray-900">
