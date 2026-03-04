@@ -1,0 +1,40 @@
+import { render, screen } from "@testing-library/react"
+import { beforeEach, describe, expect, it } from "vitest"
+
+import { useMusicStore } from "@/store/musicStore"
+
+import { HeroSection } from "./HeroSection"
+
+describe("HeroSection", () => {
+  beforeEach(() => {
+    useMusicStore.setState({
+      currentlyPlaying: null,
+      playState: "idle",
+    })
+  })
+
+  it("renders the page heading", () => {
+    render(<HeroSection />)
+    expect(screen.getByText("Home")).toBeInTheDocument()
+  })
+
+  it("renders top picks section", () => {
+    render(<HeroSection />)
+    expect(screen.getByText("Top Picks for You")).toBeInTheDocument()
+    expect(screen.getByText("Made for You")).toBeInTheDocument()
+  })
+
+  it("renders recently played section", () => {
+    render(<HeroSection />)
+    expect(screen.getByText("Recently Played")).toBeInTheDocument()
+  })
+
+  it("renders featured songs in top picks", () => {
+    render(<HeroSection />)
+    const { featuredSongs } = useMusicStore.getState()
+    const topPicks = featuredSongs.slice(0, 3)
+    topPicks.forEach((song) => {
+      expect(screen.getAllByText(song.title).length).toBeGreaterThanOrEqual(1)
+    })
+  })
+})
