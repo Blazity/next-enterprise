@@ -1,10 +1,11 @@
-import "styles/tailwind.css"
-
 import { AudioProvider } from "@/components/AudioProvider/AudioProvider"
 import { I18nProvider } from "@/components/I18nProvider/I18nProvider"
 import { NavBar } from "@/components/NavBar/NavBar"
 import { NowPlaying } from "@/components/NowPlaying/NowPlaying"
 import { NowPlayingSpacer } from "@/components/NowPlaying/NowPlayingSpacer"
+
+import "styles/tailwind.css"
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

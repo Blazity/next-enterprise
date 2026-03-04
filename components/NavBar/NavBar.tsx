@@ -1,8 +1,9 @@
 "use client"
 
-import { Disc3, Home, ListMusic, Mic2, Music2, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+
+import { Disc3, Home, ListMusic, Mic2, Music2, Search } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"

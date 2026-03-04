@@ -1,8 +1,9 @@
 "use client"
 
+import Image from "next/image"
+
 import { AnimatePresence, motion } from "framer-motion"
 import { Repeat, Shuffle, SkipBack, SkipForward, Volume2 } from "lucide-react"
-import Image from "next/image"
 import { useTranslation } from "react-i18next"
 
 import { PlayButton } from "@/components/PlayButton/PlayButton"

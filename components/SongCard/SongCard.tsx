@@ -1,7 +1,8 @@
 "use client"
 
-import { cva, type VariantProps } from "class-variance-authority"
 import Image from "next/image"
+
+import { cva, type VariantProps } from "class-variance-authority"
 import { useTranslation } from "react-i18next"
 
 import { PlayButton } from "@/components/PlayButton/PlayButton"
