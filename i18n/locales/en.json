@@ -1,0 +1,45 @@
+{
+  "nav.home": "Home",
+  "nav.search": "Search",
+  "nav.recentlyAdded": "Recently Added",
+  "nav.artists": "Artists",
+  "nav.songs": "Songs",
+  "nav.streamify": "Streamify",
+  "nav.library": "Library",
+  "nav.playlists": "Playlists",
+  "nav.playlist.chillVibes": "Chill Vibes",
+  "nav.playlist.workoutMix": "Workout Mix",
+  "nav.playlist.lateNight": "Late Night",
+  "nav.playlist.roadTrip": "Road Trip",
+  "nav.playlist.focusFlow": "Focus Flow",
+
+  "hero.home": "Home",
+  "hero.topPicks": "Top Picks for You",
+  "hero.madeForYou": "Made for You",
+  "hero.featuredStation": "Featured Station",
+  "hero.recentlyPlayed": "Recently Played",
+
+  "search.label": "Search songs",
+  "search.placeholder": "What do you want to listen to?",
+  "search.clear": "Clear search",
+  "search.pageTitle": "Search",
+
+  "trending.title": "Trending Now",
+  "trending.resultsFor": "Results for \"{{query}}\"",
+  "trending.noResults": "No songs found matching your search.",
+
+  "player.shuffle": "Shuffle",
+  "player.previous": "Previous",
+  "player.next": "Next",
+  "player.repeat": "Repeat",
+
+  "playButton.pause": "Pause",
+  "playButton.play": "Play",
+
+  "songCard.playing": "Playing",
+
+  "meta.homeTitle": "Streamify — Discover Music",
+  "meta.homeDescription": "Your daily dose of fresh tracks and curated picks.",
+  "meta.searchTitle": "Streamify — Search",
+  "meta.searchDescription": "Search for songs and discover trending tracks."
+}

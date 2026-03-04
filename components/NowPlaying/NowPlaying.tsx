@@ -3,11 +3,13 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { Repeat, Shuffle, SkipBack, SkipForward, Volume2 } from "lucide-react"
 import Image from "next/image"
+import { useTranslation } from "react-i18next"
 
 import { PlayButton } from "@/components/PlayButton/PlayButton"
 import { useMusicStore } from "@/store/musicStore"
 
 export function NowPlaying() {
+  const { t } = useTranslation()
   const { currentlyPlaying, playState, togglePlay } = useMusicStore()
 
   return (
@@ -23,17 +25,17 @@ export function NowPlaying() {
           <div className="flex items-center justify-between px-4 py-2">
             {/* Left: playback controls */}
             <div className="flex items-center gap-2">
-              <button className="text-text-tertiary p-1.5 transition-colors hover:text-white" aria-label="Shuffle">
+              <button className="text-text-tertiary p-1.5 transition-colors hover:text-white" aria-label={t("player.shuffle")}>
                 <Shuffle size={14} />
               </button>
-              <button className="text-text-secondary p-1.5 transition-colors hover:text-white" aria-label="Previous">
+              <button className="text-text-secondary p-1.5 transition-colors hover:text-white" aria-label={t("player.previous")}>
                 <SkipBack size={16} fill="currentColor" />
               </button>
               <PlayButton isPlaying={playState === "playing"} onToggle={togglePlay} size="sm" />
-              <button className="text-text-secondary p-1.5 transition-colors hover:text-white" aria-label="Next">
+              <button className="text-text-secondary p-1.5 transition-colors hover:text-white" aria-label={t("player.next")}>
                 <SkipForward size={16} fill="currentColor" />
               </button>
-              <button className="text-text-tertiary p-1.5 transition-colors hover:text-white" aria-label="Repeat">
+              <button className="text-text-tertiary p-1.5 transition-colors hover:text-white" aria-label={t("player.repeat")}>
                 <Repeat size={14} />
               </button>
             </div>

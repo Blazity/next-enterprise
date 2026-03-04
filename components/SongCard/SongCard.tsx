@@ -2,6 +2,7 @@
 
 import { cva, type VariantProps } from "class-variance-authority"
 import Image from "next/image"
+import { useTranslation } from "react-i18next"
 
 import { PlayButton } from "@/components/PlayButton/PlayButton"
 import { cn } from "@/lib/utils"
@@ -50,6 +51,7 @@ function EqBars() {
 }
 
 export function SongCard({ song, isPlaying = false, onPlay, variant, className, rank, subtitle }: SongCardProps) {
+  const { t } = useTranslation()
   if (variant === "trending") {
     return (
       <div className={cn(songCard({ variant }), className)} onClick={onPlay} role="button" tabIndex={0}>
@@ -112,7 +114,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
         {isPlaying && (
           <div className="absolute bottom-20 left-4 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1">
             <EqBars />
-            <span className="text-accent text-[11px] font-medium">Playing</span>
+            <span className="text-accent text-[11px] font-medium">{t("songCard.playing")}</span>
           </div>
         )}
       </div>

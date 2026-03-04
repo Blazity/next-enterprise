@@ -3,23 +3,31 @@
 import { Disc3, Home, ListMusic, Mic2, Music2, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"
 
 const mainNav = [
-  { href: "/", label: "Home", Icon: Home },
-  { href: "/search", label: "Search", Icon: Search },
+  { href: "/", labelKey: "nav.home", Icon: Home },
+  { href: "/search", labelKey: "nav.search", Icon: Search },
 ]
 
 const libraryNav = [
-  { href: "#", label: "Recently Added", Icon: Disc3 },
-  { href: "#", label: "Artists", Icon: Mic2 },
-  { href: "#", label: "Songs", Icon: Music2 },
+  { href: "#", labelKey: "nav.recentlyAdded", Icon: Disc3 },
+  { href: "#", labelKey: "nav.artists", Icon: Mic2 },
+  { href: "#", labelKey: "nav.songs", Icon: Music2 },
 ]
 
-const playlists = ["Chill Vibes", "Workout Mix", "Late Night", "Road Trip", "Focus Flow"]
+const playlists = [
+  "nav.playlist.chillVibes",
+  "nav.playlist.workoutMix",
+  "nav.playlist.lateNight",
+  "nav.playlist.roadTrip",
+  "nav.playlist.focusFlow",
+]
 
 export function NavBar() {
+  const { t } = useTranslation()
   const pathname = usePathname()
 
   return (
@@ -38,7 +46,7 @@ export function NavBar() {
               )}
             >
               <item.Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
-              <span>{item.label}</span>
+              <span>{t(item.labelKey)}</span>
             </Link>
           )
         })}
@@ -53,13 +61,15 @@ export function NavBar() {
             className="bg-surface-elevated text-text-tertiary hover:bg-surface-hover flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors"
           >
             <Search size={14} />
-            <span>Search</span>
+            <span>{t("nav.search")}</span>
           </Link>
         </div>
 
         {/* Streamify section */}
         <div className="px-2 pt-3">
-          <p className="text-text-tertiary mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">Streamify</p>
+          <p className="text-text-tertiary mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">
+            {t("nav.streamify")}
+          </p>
           {mainNav.map((item) => {
             const isActive = pathname === item.href
             return (
@@ -72,7 +82,7 @@ export function NavBar() {
                 )}
               >
                 <item.Icon size={18} className={isActive ? "text-accent" : ""} strokeWidth={isActive ? 2.2 : 1.8} />
-                <span>{item.label}</span>
+                <span>{t(item.labelKey)}</span>
               </Link>
             )
           })}
@@ -80,30 +90,34 @@ export function NavBar() {
 
         {/* Library section */}
         <div className="px-2 pt-5">
-          <p className="text-text-tertiary mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">Library</p>
+          <p className="text-text-tertiary mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">
+            {t("nav.library")}
+          </p>
           {libraryNav.map((item) => (
             <Link
-              key={item.label}
+              key={item.labelKey}
               href={item.href}
               className="text-text-secondary flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition-colors hover:bg-white/5 hover:text-white"
             >
               <item.Icon size={18} strokeWidth={1.8} />
-              <span>{item.label}</span>
+              <span>{t(item.labelKey)}</span>
             </Link>
           ))}
         </div>
 
         {/* Playlists section */}
         <div className="px-2 pt-5">
-          <p className="text-text-tertiary mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">Playlists</p>
-          {playlists.map((name) => (
+          <p className="text-text-tertiary mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">
+            {t("nav.playlists")}
+          </p>
+          {playlists.map((key) => (
             <Link
-              key={name}
+              key={key}
               href="#"
               className="text-text-secondary flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-[13px] transition-colors hover:bg-white/5 hover:text-white"
             >
               <ListMusic size={16} strokeWidth={1.8} className="text-text-tertiary shrink-0" />
-              <span className="truncate">{name}</span>
+              <span className="truncate">{t(key)}</span>
             </Link>
           ))}
         </div>

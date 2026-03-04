@@ -1,10 +1,11 @@
 import { Metadata } from "next"
 
 import { HeroSection } from "@/components/HeroSection/HeroSection"
+import en from "@/i18n/locales/en.json"
 
 export const metadata: Metadata = {
-  title: "Streamify — Discover Music",
-  description: "Your daily dose of fresh tracks and curated picks.",
+  title: en["meta.homeTitle"],
+  description: en["meta.homeDescription"],
 }
 
 export default function Home() {

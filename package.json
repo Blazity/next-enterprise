@@ -52,11 +52,13 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.34.5",
+    "i18next": "^25.8.14",
     "lodash": "^4.17.21",
     "lucide-react": "^0.576.0",
     "next": "15.3.8",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-i18next": "^16.5.4",
     "tailwind-merge": "^2.6.0",
     "zod": "^3.24.4",
     "zustand": "^5.0.11"
