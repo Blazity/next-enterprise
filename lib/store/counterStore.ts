@@ -1,10 +1,10 @@
-import { create } from 'zustand';
+import { create } from "zustand"
 
 interface CounterStore {
-  count: number;
-  increment: () => void;
-  decrement: () => void;
-  reset: () => void;
+  count: number
+  increment: () => void
+  decrement: () => void
+  reset: () => void
 }
 
 export const useCounterStore = create<CounterStore>((set) => ({
@@ -12,4 +12,4 @@ export const useCounterStore = create<CounterStore>((set) => ({
   increment: () => set((state) => ({ count: state.count + 1 })),
   decrement: () => set((state) => ({ count: state.count - 1 })),
   reset: () => set({ count: 0 }),
-}));
+}))

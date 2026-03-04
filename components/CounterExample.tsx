@@ -1,9 +1,9 @@
 "use client"
 
-import { useCounterStore } from '@/lib/store/counterStore';
+import { useCounterStore } from "@/lib/store/counterStore"
 
 export function CounterExample() {
-  const { count, increment, decrement, reset } = useCounterStore();
+  const { count, increment, decrement, reset } = useCounterStore()
 
   return (
     <div className="flex flex-col items-center justify-center gap-6 text-center">
@@ -11,9 +11,7 @@ export function CounterExample() {
         <span className="text-2xl font-extrabold lg:text-3xl">{count}</span>
       </div>
       <h3 className="text-xl font-bold dark:text-white">Counter</h3>
-      <p className="text-gray-500 dark:text-gray-400">
-        A simple counter powered by Zustand state management.
-      </p>
+      <p className="text-gray-500 dark:text-gray-400">A simple counter powered by Zustand state management.</p>
       <div className="inline-flex gap-3">
         <button
           onClick={increment}
@@ -35,5 +33,5 @@ export function CounterExample() {
         </button>
       </div>
     </div>
-  );
+  )
 }
