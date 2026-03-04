@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { SearchX, TrendingUp } from "lucide-react"
 import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 
 import { SongCard } from "@/components/SongCard/SongCard"
 import { useMusicStore } from "@/store/musicStore"
@@ -17,6 +18,7 @@ const fadeUp = {
 }
 
 export function TrendingList() {
+  const { t } = useTranslation()
   const { trendingSongs, searchQuery, currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
 
   const filteredSongs = useMemo(() => {
@@ -39,7 +41,7 @@ export function TrendingList() {
     }
   }
 
-  const heading = searchQuery.trim() ? `Results for "${searchQuery}"` : "Trending Now"
+  const heading = searchQuery.trim() ? t("trending.resultsFor", { query: searchQuery }) : t("trending.title")
 
   return (
     <section className="space-y-4">
@@ -62,7 +64,7 @@ export function TrendingList() {
             className="bg-surface-elevated flex flex-col items-center gap-3 rounded-xl py-14 text-center"
           >
             <SearchX size={32} className="text-text-tertiary" />
-            <p className="text-text-tertiary text-sm">No songs found matching your search.</p>
+            <p className="text-text-tertiary text-sm">{t("trending.noResults")}</p>
           </motion.div>
         ) : (
           <motion.div

@@ -2,6 +2,7 @@
 
 import { cva, type VariantProps } from "class-variance-authority"
 import { Pause, Play } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"
 
@@ -41,12 +42,13 @@ export interface PlayButtonProps
 }
 
 export function PlayButton({ isPlaying, onToggle, size = "md", className, ...props }: PlayButtonProps) {
+  const { t } = useTranslation()
   const iconSize = iconSizes[size ?? "md"]
 
   return (
     <button
       type="button"
-      aria-label={isPlaying ? "Pause" : "Play"}
+      aria-label={isPlaying ? t("playButton.pause") : t("playButton.play")}
       onClick={onToggle}
       className={cn(playButton({ size }), "bg-white/10 text-white hover:bg-white/20 active:scale-90", className)}
       {...props}

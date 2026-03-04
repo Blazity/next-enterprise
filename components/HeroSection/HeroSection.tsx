@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { ChevronRight } from "lucide-react"
 import Image from "next/image"
+import { useTranslation } from "react-i18next"
 
 import { SongCard } from "@/components/SongCard/SongCard"
 import { useMusicStore } from "@/store/musicStore"
@@ -18,6 +19,7 @@ const fadeUp = {
 }
 
 export function HeroSection() {
+  const { t } = useTranslation()
   const { featuredSongs, trendingSongs, currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
 
   const handlePlay = (songId: string) => {
@@ -38,7 +40,7 @@ export function HeroSection() {
     <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-10">
       {/* Page title */}
       <motion.div variants={fadeUp} className="flex items-center justify-between">
-        <h1 className="text-text-primary text-3xl font-bold tracking-tight">Home</h1>
+        <h1 className="text-text-primary text-3xl font-bold tracking-tight">{t("hero.home")}</h1>
         <div className="bg-surface-elevated size-9 overflow-hidden rounded-full">
           <div className="text-text-secondary flex size-full items-center justify-center text-sm font-semibold">U</div>
         </div>
@@ -47,8 +49,8 @@ export function HeroSection() {
       {/* Top Picks for You */}
       <motion.section variants={fadeUp} className="space-y-4">
         <div>
-          <h2 className="text-text-primary text-xl font-bold">Top Picks for You</h2>
-          <p className="text-text-tertiary text-sm">Made for You</p>
+          <h2 className="text-text-primary text-xl font-bold">{t("hero.topPicks")}</h2>
+          <p className="text-text-tertiary text-sm">{t("hero.madeForYou")}</p>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {topPicks.map((song, i) => (
@@ -61,7 +63,7 @@ export function HeroSection() {
               <SongCard
                 song={song}
                 variant="featured"
-                subtitle={i === 0 ? "Featured Station" : undefined}
+                subtitle={i === 0 ? t("hero.featuredStation") : undefined}
                 isPlaying={currentlyPlaying?.id === song.id && playState === "playing"}
                 onPlay={() => handlePlay(song.id)}
               />
@@ -73,7 +75,7 @@ export function HeroSection() {
       {/* Recently Played */}
       <motion.section variants={fadeUp} className="space-y-4">
         <div className="flex items-center gap-1">
-          <h2 className="text-text-primary text-xl font-bold">Recently Played</h2>
+          <h2 className="text-text-primary text-xl font-bold">{t("hero.recentlyPlayed")}</h2>
           <ChevronRight size={20} className="text-text-tertiary" />
         </div>
         <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-2 md:-mx-0 md:px-0">
