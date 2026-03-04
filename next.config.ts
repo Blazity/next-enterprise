@@ -5,6 +5,14 @@ import { env } from "./env.mjs"
 
 const config: NextConfig = {
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.mzstatic.com",
+      },
+    ],
+  },
   logging: {
     fetches: {
       fullUrl: true,
