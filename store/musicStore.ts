@@ -3,8 +3,8 @@
 import { create } from "zustand"
 
 import { featuredSongs as staticFeatured, trendingSongs as staticTrending } from "@/data/songs"
-import { mapITunesTrackToSong } from "@/lib/itunes"
-import type { ITunesSearchResponse, PlayState, Song } from "@/types/music"
+import { fetchPopularContent as fetchPopularContentService, searchTracks } from "@/lib/services/itunesService"
+import { PLAY_STATE, type PlayState, type Song } from "@/types/music"
 
 interface MusicStore {
   searchQuery: string
@@ -35,7 +35,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   featuredSongs: staticFeatured,
   trendingSongs: staticTrending,
   currentlyPlaying: null,
-  playState: "idle",
+  playState: PLAY_STATE.IDLE,
   currentTime: 0,
   duration: 0,
 
@@ -55,14 +55,14 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   setPlayingTrack: (song) =>
     set({
       currentlyPlaying: song,
-      playState: song ? "playing" : "idle",
+      playState: song ? PLAY_STATE.PLAYING : PLAY_STATE.IDLE,
       currentTime: 0,
       duration: 0,
     }),
 
   togglePlay: () =>
     set((state) => ({
-      playState: state.playState === "playing" ? "paused" : "playing",
+      playState: state.playState === PLAY_STATE.PLAYING ? PLAY_STATE.PAUSED : PLAY_STATE.PLAYING,
     })),
 
   setCurrentTime: (time) => set({ currentTime: time }),
@@ -77,11 +77,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
     set({ isSearching: true, searchError: null })
 
     try {
-      const res = await fetch(`/api/itunes/search?term=${encodeURIComponent(query)}&limit=25`)
-      if (!res.ok) throw new Error("Search failed")
-
-      const data = (await res.json()) as ITunesSearchResponse
-      const songs = data.results.filter((track) => track.previewUrl).map(mapITunesTrackToSong)
+      const songs = await searchTracks(query)
 
       // Only update if query hasn't changed while we were fetching
       if (get().searchQuery === query) {
@@ -100,20 +96,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
     set({ isLoadingHome: true })
 
     try {
-      const [featuredRes, trendingRes] = await Promise.all([
-        fetch("/api/itunes/search?term=top+hits+2026&limit=5"),
-        fetch("/api/itunes/search?term=trending+music+2026&limit=12"),
-      ])
-
-      if (!featuredRes.ok || !trendingRes.ok) throw new Error("Failed to load content")
-
-      const [featuredData, trendingData] = (await Promise.all([
-        featuredRes.json(),
-        trendingRes.json(),
-      ])) as [ITunesSearchResponse, ITunesSearchResponse]
-
-      const featured = featuredData.results.filter((t) => t.previewUrl).map(mapITunesTrackToSong)
-      const trending = trendingData.results.filter((t) => t.previewUrl).map(mapITunesTrackToSong)
+      const { featured, trending } = await fetchPopularContentService()
 
       set({
         featuredSongs: featured.length > 0 ? featured : staticFeatured,

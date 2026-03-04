@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next"
 
 import { SongCard } from "@/components/SongCard/SongCard"
 import { useMusicStore } from "@/store/musicStore"
+import { PLAY_STATE } from "@/types/music"
 
 const stagger = {
   show: { transition: { staggerChildren: 0.03 } },
@@ -84,7 +85,7 @@ export function TrendingList() {
                   song={song}
                   variant="trending"
                   rank={index + 1}
-                  isPlaying={currentlyPlaying?.id === song.id && playState === "playing"}
+                  isPlaying={currentlyPlaying?.id === song.id && playState === PLAY_STATE.PLAYING}
                   onPlay={() => handlePlay(song.id)}
                 />
               </motion.div>

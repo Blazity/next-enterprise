@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next"
 
 import { SongCard } from "@/components/SongCard/SongCard"
 import { useMusicStore } from "@/store/musicStore"
+import { PLAY_STATE } from "@/types/music"
 
 const stagger = {
   hidden: {},
@@ -64,7 +65,7 @@ export function HeroSection() {
                 song={song}
                 variant="featured"
                 subtitle={i === 0 ? t("hero.featuredStation") : undefined}
-                isPlaying={currentlyPlaying?.id === song.id && playState === "playing"}
+                isPlaying={currentlyPlaying?.id === song.id && playState === PLAY_STATE.PLAYING}
                 onPlay={() => handlePlay(song.id)}
               />
             </motion.div>
@@ -96,7 +97,7 @@ export function HeroSection() {
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                     sizes="144px"
                   />
-                  {currentlyPlaying?.id === song.id && playState === "playing" && (
+                  {currentlyPlaying?.id === song.id && playState === PLAY_STATE.PLAYING && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                       <div className="flex items-end gap-[2px]">
                         <span className="animate-eq-1 bg-accent inline-block w-[3px] rounded-full" />

@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it } from "vitest"
 
 import { useMusicStore } from "@/store/musicStore"
+import { PLAY_STATE } from "@/types/music"
 
 import { HeroSection } from "./HeroSection"
 
@@ -9,7 +10,7 @@ describe("HeroSection", () => {
   beforeEach(() => {
     useMusicStore.setState({
       currentlyPlaying: null,
-      playState: "idle",
+      playState: PLAY_STATE.IDLE,
     })
   })
 

@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next"
 
 import { PlayButton } from "@/components/PlayButton/PlayButton"
 import { useMusicStore } from "@/store/musicStore"
+import { PLAY_STATE } from "@/types/music"
 
 export function NowPlaying() {
   const { t } = useTranslation()
@@ -31,7 +32,7 @@ export function NowPlaying() {
               <button className="text-text-secondary p-1.5 transition-colors hover:text-white" aria-label={t("player.previous")}>
                 <SkipBack size={16} fill="currentColor" />
               </button>
-              <PlayButton isPlaying={playState === "playing"} onToggle={togglePlay} size="sm" />
+              <PlayButton isPlaying={playState === PLAY_STATE.PLAYING} onToggle={togglePlay} size="sm" />
               <button className="text-text-secondary p-1.5 transition-colors hover:text-white" aria-label={t("player.next")}>
                 <SkipForward size={16} fill="currentColor" />
               </button>
@@ -71,8 +72,8 @@ export function NowPlaying() {
             <motion.div
               className="bg-accent h-full"
               initial={{ width: "0%" }}
-              animate={{ width: playState === "playing" ? "100%" : "35%" }}
-              transition={playState === "playing" ? { duration: 30, ease: "linear" } : { duration: 0.3 }}
+              animate={{ width: playState === PLAY_STATE.PLAYING ? "100%" : "35%" }}
+              transition={playState === PLAY_STATE.PLAYING ? { duration: 30, ease: "linear" } : { duration: 0.3 }}
             />
           </div>
         </motion.div>
