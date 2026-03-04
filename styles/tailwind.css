@@ -1,13 +1,5 @@
 @import 'tailwindcss';
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
   *,
   ::after,
@@ -15,5 +7,66 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@theme {
+  --color-surface: #1a1a1a;
+  --color-surface-elevated: #232323;
+  --color-surface-hover: #2a2a2a;
+  --color-surface-sidebar: #1e1e1e;
+  --color-accent: #fc3c44;
+  --color-accent-hover: #ff5a5f;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a1a1a1;
+  --color-text-tertiary: #6a6a6a;
+  --color-border: rgba(255, 255, 255, 0.08);
+
+  --animate-fade-in: fade-in 0.4s ease both;
+  --animate-slide-up: slide-up 0.4s ease both;
+  --animate-eq-1: eq-bar 0.8s ease-in-out infinite;
+  --animate-eq-2: eq-bar 0.6s ease-in-out infinite 0.15s;
+  --animate-eq-3: eq-bar 0.7s ease-in-out infinite 0.3s;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes eq-bar {
+    0%, 100% { height: 3px; }
+    50% { height: 14px; }
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--color-surface);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
   }
 }
