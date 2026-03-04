@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server"
 
-const ITUNES_BASE_URL = "https://itunes.apple.com"
+const ITUNES_BASE_URL = process.env.ITUNES_BASE_URL  
 
 // Proxy route for iTunes Search API
 // Prevents CORS issues and centralises API config

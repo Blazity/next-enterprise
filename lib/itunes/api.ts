@@ -1,12 +1,10 @@
 // iTunes API helpers — calls local proxy routes to avoid CORS
 // wednesday-dev: verb-first names, explicit return types, UPPER_SNAKE_CASE constants
 
-import type { RssEntry, RssFeed } from "lib/itunes/rssTypes"
+import type { RssFeed } from "lib/itunes/rssTypes"
 import type { ItunesAlbum, ItunesArtist, ItunesSearchResponse, ItunesTrack } from "lib/itunes/types"
-
-const SEARCH_LIMIT_TRACKS = "12"
-const SEARCH_LIMIT_ALBUMS = "12"
-const POPULAR_ARTIST_NAMES = ["Taylor Swift", "Drake", "The Weeknd", "Beyonce", "Adele", "Ed Sheeran"]
+import { POPULAR_ARTIST_NAMES, SEARCH_LIMIT_ALBUMS, SEARCH_LIMIT_TRACKS } from "lib/itunes/constants"
+import { parseRssEntryToAlbum } from "lib/itunes/utils"
 
 // ─── Internal helpers ────────────────────────────────────────────────────────
 
@@ -16,25 +14,6 @@ async function fetchSearch<T>(entity: string, term: string, limit: string): Prom
   if (!response.ok) return []
   const data = (await response.json()) as ItunesSearchResponse<T>
   return data.results
-}
-
-function getLargestRssArtwork(images: RssEntry["im:image"]): string {
-  return images.at(-1)?.label ?? images[0]?.label ?? ""
-}
-
-function parseRssEntryToAlbum(entry: RssEntry): ItunesAlbum {
-  return {
-    wrapperType: "collection",
-    collectionType: "Album",
-    collectionId: parseInt(entry.id.attributes["im:id"]),
-    collectionName: entry["im:name"].label,
-    artistName: entry["im:artist"].label,
-    artworkUrl100: getLargestRssArtwork(entry["im:image"]),
-    releaseDate: entry["im:releaseDate"]?.label ?? new Date().toISOString(),
-    primaryGenreName: entry.category?.attributes.term ?? "Music",
-    artistId: 0,
-    trackCount: 0,
-  }
 }
 
 // ─── Search API ──────────────────────────────────────────────────────────────

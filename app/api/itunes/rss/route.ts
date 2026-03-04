@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server"
 
-const ITUNES_BASE_URL = "https://itunes.apple.com"
+const ITUNES_BASE_URL = process.env.ITUNES_BASE_URL 
 
 // Proxy for iTunes RSS feeds — avoids CORS, adds 1-hour cache
 // Usage: /api/itunes/rss?feed=topsongs&limit=20
