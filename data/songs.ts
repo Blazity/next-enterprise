@@ -1,0 +1,126 @@
+import type { Song } from "@/types/music"
+
+export const featuredSongs: Song[] = [
+  {
+    id: "feat-1",
+    title: "Midnight Echoes",
+    artist: { id: "artist-1", name: "Luna Wave" },
+    albumArt: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
+    duration: 234,
+  },
+  {
+    id: "feat-2",
+    title: "Neon Dreams",
+    artist: { id: "artist-2", name: "Synthex" },
+    albumArt: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop",
+    duration: 198,
+  },
+  {
+    id: "feat-3",
+    title: "Ocean Drive",
+    artist: { id: "artist-3", name: "Coastal Drift" },
+    albumArt: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop",
+    duration: 267,
+  },
+  {
+    id: "feat-4",
+    title: "Electric Pulse",
+    artist: { id: "artist-4", name: "Volt Runner" },
+    albumArt: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop",
+    duration: 212,
+  },
+  {
+    id: "feat-5",
+    title: "Starlight Serenade",
+    artist: { id: "artist-5", name: "Astral Keys" },
+    albumArt: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=400&fit=crop",
+    duration: 245,
+  },
+]
+
+export const trendingSongs: Song[] = [
+  {
+    id: "trend-1",
+    title: "Velocity",
+    artist: { id: "artist-6", name: "Apex Motion" },
+    albumArt: "https://images.unsplash.com/photo-1504509546545-e000b4a62425?w=400&h=400&fit=crop",
+    duration: 187,
+  },
+  {
+    id: "trend-2",
+    title: "Glass Horizon",
+    artist: { id: "artist-7", name: "Crystal Veil" },
+    albumArt: "https://images.unsplash.com/photo-1446057032654-9d8885db76c6?w=400&h=400&fit=crop",
+    duration: 203,
+  },
+  {
+    id: "trend-3",
+    title: "Ember Glow",
+    artist: { id: "artist-8", name: "Fire Bloom" },
+    albumArt: "https://images.unsplash.com/photo-1485579149621-3123dd979885?w=400&h=400&fit=crop",
+    duration: 221,
+  },
+  {
+    id: "trend-4",
+    title: "Shadow Waltz",
+    artist: { id: "artist-9", name: "Noir Ensemble" },
+    albumArt: "https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop",
+    duration: 256,
+  },
+  {
+    id: "trend-5",
+    title: "Frostbite",
+    artist: { id: "artist-10", name: "Arctic Sound" },
+    albumArt: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&h=400&fit=crop",
+    duration: 194,
+  },
+  {
+    id: "trend-6",
+    title: "Pixel Rain",
+    artist: { id: "artist-11", name: "Digital Haze" },
+    albumArt: "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=400&h=400&fit=crop",
+    duration: 178,
+  },
+  {
+    id: "trend-7",
+    title: "Golden Hour",
+    artist: { id: "artist-12", name: "Sunset Theory" },
+    albumArt: "https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=400&h=400&fit=crop",
+    duration: 231,
+  },
+  {
+    id: "trend-8",
+    title: "Thunder Road",
+    artist: { id: "artist-1", name: "Luna Wave" },
+    albumArt: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=400&h=400&fit=crop",
+    duration: 209,
+  },
+  {
+    id: "trend-9",
+    title: "Cosmos",
+    artist: { id: "artist-13", name: "Nebula Phase" },
+    albumArt: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=400&fit=crop",
+    duration: 274,
+  },
+  {
+    id: "trend-10",
+    title: "Bassline Theory",
+    artist: { id: "artist-14", name: "Sub Frequency" },
+    albumArt: "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?w=400&h=400&fit=crop",
+    duration: 196,
+  },
+  {
+    id: "trend-11",
+    title: "Crimson Sky",
+    artist: { id: "artist-15", name: "Red Meridian" },
+    albumArt: "https://images.unsplash.com/photo-1477233534935-f5e6fe7c1159?w=400&h=400&fit=crop",
+    duration: 242,
+  },
+  {
+    id: "trend-12",
+    title: "Deep Focus",
+    artist: { id: "artist-2", name: "Synthex" },
+    albumArt: "https://images.unsplash.com/photo-1487180144351-b8472da7d491?w=400&h=400&fit=crop",
+    duration: 218,
+  },
+]
