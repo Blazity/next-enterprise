@@ -1,10 +1,10 @@
 "use client"
 
+import { motion } from "framer-motion"
+import { ChevronRight } from "lucide-react"
 import Image from "next/image"
 import { useEffect } from "react"
 
-import { motion } from "framer-motion"
-import { ChevronRight } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { SongCard } from "@/components/SongCard/SongCard"

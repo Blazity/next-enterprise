@@ -1,7 +1,7 @@
 "use client"
 
-import { Music2 } from "lucide-react"
 import { motion } from "framer-motion"
+import { Music2 } from "lucide-react"
 
 const floatingNotes = [
   { emoji: "🎵", x: "8%", y: "18%", delay: 0, duration: 6, size: "text-5xl" },
