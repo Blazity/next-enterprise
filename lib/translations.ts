@@ -1,0 +1,26 @@
+// UI string translations — single source of truth for all user-facing copy
+// wednesday-dev: update here when copy changes, never hardcode strings in components
+
+export const HOME_SECTION_TITLES = {
+  trendingSongs: {
+    home: "🔥 Trending Right Now",
+    songs: "Trending Songs",
+  },
+  topAlbums: {
+    home: "💿 Top Albums",
+    albums: "Top Albums",
+  },
+  popularArtists: {
+    home: "🎤 Popular Artists",
+    artists: "Popular Artists",
+  },
+} as const
+
+// Returns the title for a section based on the current active view.
+// Falls back to the "home" variant if the view has no dedicated title.
+export function getSectionTitle(
+  titles: Partial<Record<string, string>>,
+  activeView: string
+): string {
+  return titles[activeView] ?? titles["home"] ?? ""
+}

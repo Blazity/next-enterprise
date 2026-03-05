@@ -6,6 +6,7 @@ export interface ItunesTrack {
   kind: "song"
   trackId: number
   trackName: string
+  artistId: number
   artistName: string
   collectionName: string
   artworkUrl100: string
