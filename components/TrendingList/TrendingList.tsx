@@ -1,8 +1,9 @@
 "use client"
 
+import { useMemo } from "react"
+
 import { AnimatePresence, motion } from "framer-motion"
 import { Loader2, SearchX, TrendingUp } from "lucide-react"
-import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { SongCard } from "@/components/SongCard/SongCard"

@@ -1,10 +1,10 @@
 "use client"
 
+import { useEffect } from "react"
+import Image from "next/image"
+
 import { motion } from "framer-motion"
 import { ChevronRight } from "lucide-react"
-import Image from "next/image"
-import { useEffect } from "react"
-
 import { useTranslation } from "react-i18next"
 
 import { SongCard } from "@/components/SongCard/SongCard"
@@ -49,9 +49,6 @@ export function HeroSection() {
       {/* Page title */}
       <motion.div variants={fadeUp} className="flex items-center justify-between">
         <h1 className="text-text-primary text-3xl font-bold tracking-tight">{t("hero.home")}</h1>
-        <div className="bg-surface-elevated size-9 overflow-hidden rounded-full">
-          <div className="text-text-secondary flex size-full items-center justify-center text-sm font-semibold">U</div>
-        </div>
       </motion.div>
 
       {/* Top Picks for You */}

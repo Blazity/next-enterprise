@@ -5,6 +5,7 @@ import { I18nProvider } from "@/components/I18nProvider/I18nProvider"
 
 import "styles/tailwind.css"
 
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider

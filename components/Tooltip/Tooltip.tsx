@@ -1,9 +1,9 @@
 "use client"
 
+import React from "react"
 
 import * as RadixTooltip from "@radix-ui/react-tooltip"
 import { cva, type VariantProps } from "class-variance-authority"
-import React from "react"
 import { twMerge } from "tailwind-merge"
 
 const tooltipContent = cva([], {

@@ -1,9 +1,10 @@
 "use client"
 
-import { UserButton } from "@clerk/nextjs"
-import { Disc3, Home, Library, Mic2, Music2, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+
+import { UserButton } from "@clerk/nextjs"
+import { Disc3, Home, Library, Mic2, Music2, Search } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { SearchBar } from "@/components/SearchBar/SearchBar"
