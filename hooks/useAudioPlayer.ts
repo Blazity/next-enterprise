@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 
 import { useMusicStore } from "@/store/musicStore"
+import { PLAY_STATE } from "@/types/music"
 
 let audioElement: HTMLAudioElement | null = null
 
@@ -40,9 +41,9 @@ export function useAudioPlayer() {
       return
     }
 
-    if (playState === "playing") {
+    if (playState === PLAY_STATE.PLAYING) {
       audio.play().catch(() => {})
-    } else if (playState === "paused") {
+    } else if (playState === PLAY_STATE.PAUSED) {
       audio.pause()
     }
   }, [currentlyPlaying, playState])

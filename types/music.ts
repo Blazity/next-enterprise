@@ -13,7 +13,13 @@ export interface Song {
   collectionName?: string
 }
 
-export type PlayState = "idle" | "playing" | "paused"
+export const PLAY_STATE = {
+  IDLE: "idle",
+  PLAYING: "playing",
+  PAUSED: "paused",
+} as const
+
+export type PlayState = (typeof PLAY_STATE)[keyof typeof PLAY_STATE]
 
 export interface ITunesTrack {
   trackId: number

@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next"
 import { PlayButton } from "@/components/PlayButton/PlayButton"
 import { seekAudio } from "@/hooks/useAudioPlayer"
 import { useMusicStore } from "@/store/musicStore"
+import { PLAY_STATE } from "@/types/music"
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60)
@@ -60,7 +61,7 @@ export function NowPlaying() {
               >
                 <SkipBack size={16} fill="currentColor" />
               </button>
-              <PlayButton isPlaying={playState === "playing"} onToggle={togglePlay} size="sm" />
+              <PlayButton isPlaying={playState === PLAY_STATE.PLAYING} onToggle={togglePlay} size="sm" />
               <button
                 className="text-text-secondary hidden cursor-not-allowed p-1.5 opacity-40 md:block"
                 aria-label={t("player.next")}

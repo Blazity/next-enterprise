@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it } from "vitest"
 
 import { useMusicStore } from "@/store/musicStore"
+import { PLAY_STATE } from "@/types/music"
 
 import { TrendingList } from "./TrendingList"
 
@@ -10,7 +11,7 @@ describe("TrendingList", () => {
     useMusicStore.setState({
       searchQuery: "",
       currentlyPlaying: null,
-      playState: "idle",
+      playState: PLAY_STATE.IDLE,
     })
   })
 
