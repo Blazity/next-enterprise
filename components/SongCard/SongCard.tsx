@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { useTranslation } from "react-i18next"
 
 import { cva, type VariantProps } from "class-variance-authority"
 import { useTranslation } from "react-i18next"
