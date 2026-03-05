@@ -1,10 +1,10 @@
 // iTunes API helpers — calls local proxy routes to avoid CORS
 // wednesday-dev: verb-first names, explicit return types, UPPER_SNAKE_CASE constants
 
-import type { RssFeed } from "lib/itunes/rssTypes"
-import type { ItunesAlbum, ItunesArtist, ItunesSearchResponse, ItunesTrack } from "lib/itunes/types"
 import { POPULAR_ARTIST_NAMES, SEARCH_LIMIT_ALBUMS, SEARCH_LIMIT_TRACKS } from "lib/itunes/constants"
 import { parseRssEntryToAlbum } from "lib/itunes/utils"
+import type { RssFeed } from "lib/itunes/rssTypes"
+import type { ItunesAlbum, ItunesArtist, ItunesSearchResponse, ItunesTrack } from "lib/itunes/types"
 
 // ─── Internal helpers ────────────────────────────────────────────────────────
 

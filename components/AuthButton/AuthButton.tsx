@@ -2,7 +2,7 @@
 
 // AuthButton — shows Sign in button or Clerk UserButton based on auth state
 
-import { SignInButton, UserButton, useAuth } from "@clerk/nextjs"
+import { SignInButton, useAuth, UserButton } from "@clerk/nextjs"
 
 import { AUTH_TEXT } from "lib/translations"
 
