@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
+import { UserButton } from "@clerk/nextjs"
 import { Disc3, Home, ListMusic, Mic2, Music2, Search } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
@@ -51,10 +52,16 @@ export function NavBar() {
             </Link>
           )
         })}
+        <UserButton />
       </div>
 
       {/* Desktop sidebar */}
       <div className="hidden h-full flex-col overflow-y-auto md:flex">
+        {/* User */}
+        <div className="flex items-center gap-3 px-4 pt-4">
+          <UserButton />
+        </div>
+
         {/* Search */}
         <div className="px-4 pt-4 pb-2">
           <Link
