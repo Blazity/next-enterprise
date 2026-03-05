@@ -3,6 +3,7 @@
 // SearchBar — wednesday-design: large input, green primary focus ring, DM Sans font
 // wednesday-dev: handleSubmit pattern, boolean isLoading prefix
 
+import { SearchIcon } from "components/icons"
 import { cn } from "lib/cn"
 
 interface SearchBarProps {
@@ -31,20 +32,7 @@ export function SearchBar({ value, isLoading, onChange, onSubmit }: SearchBarPro
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-[640px]">
       <div className="flex items-center gap-3 bg-surface-elevated rounded-[14px] pl-5 pr-1.5 py-1.5 border border-border">
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="shrink-0 text-muted"
-        >
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.35-4.35" />
-        </svg>
+        <SearchIcon width={18} height={18} className="shrink-0 text-muted" />
 
         <input
           type="text"

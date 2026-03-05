@@ -11,11 +11,11 @@ import { ArtistCard } from "components/ArtistCard/ArtistCard"
 import { HorizontalRow } from "components/HorizontalRow/HorizontalRow"
 import { Skeleton } from "components/Skeleton/Skeleton"
 import { SongCard } from "components/SongCard/SongCard"
-
+import type { ActiveView } from "lib/constants"
 import { fetchPopularArtists, fetchTopAlbums, fetchTrendingSongs } from "lib/itunes/api"
 import type { ItunesAlbum, ItunesArtist, ItunesTrack } from "lib/itunes/types"
-
-import type { ActiveView } from "app/page"
+import { getSectionTitle, HOME_SECTION_TITLES } from "lib/translations"
+import { isVisibleInView } from "lib/utils"
 
 interface HomeContentProps {
   activeView: Exclude<ActiveView, "search">
@@ -49,16 +49,13 @@ export function HomeContent({ activeView }: HomeContentProps) {
   if (isLoading) return <HomeSkeletons />
 
   const songsToShow = activeView === "songs" ? trendingSongs : trendingSongs.slice(0, SONG_PREVIEW_COUNT)
-  const shouldShowSongs = activeView === "home" || activeView === "songs"
-  const shouldShowAlbums = activeView === "home" || activeView === "albums"
-  const shouldShowArtists = activeView === "home" || activeView === "artists"
 
   return (
     <div>
-      {shouldShowSongs && trendingSongs.length > 0 && (
+      {isVisibleInView(activeView, "songs") && trendingSongs.length > 0 && (
         <section className="mb-10">
           <h2 className="text-xl font-bold text-white tracking-[-0.01em] mb-4">
-            {activeView === "songs" ? "Trending Songs" : "🔥 Trending Right Now"}
+            {getSectionTitle(HOME_SECTION_TITLES.trendingSongs, activeView)}
           </h2>
           <div className="flex flex-col gap-1">
             {songsToShow.map((track, index) => (
@@ -73,8 +70,8 @@ export function HomeContent({ activeView }: HomeContentProps) {
         </section>
       )}
 
-      {shouldShowAlbums && topAlbums.length > 0 && (
-        <HorizontalRow title={activeView === "albums" ? "Top Albums" : "💿 Top Albums"}>
+      {isVisibleInView(activeView, "albums") && topAlbums.length > 0 && (
+        <HorizontalRow title={getSectionTitle(HOME_SECTION_TITLES.topAlbums, activeView)}>
           {topAlbums.map((album) => (
             <div key={album.collectionId} className="shrink-0 w-40">
               <AlbumCard album={album} />
@@ -83,8 +80,8 @@ export function HomeContent({ activeView }: HomeContentProps) {
         </HorizontalRow>
       )}
 
-      {shouldShowArtists && popularArtists.length > 0 && (
-        <HorizontalRow title={activeView === "artists" ? "Popular Artists" : "🎤 Popular Artists"}>
+      {isVisibleInView(activeView, "artists") && popularArtists.length > 0 && (
+        <HorizontalRow title={getSectionTitle(HOME_SECTION_TITLES.popularArtists, activeView)}>
           {popularArtists.map((artist) => (
             <div key={artist.artistId} className="shrink-0 w-[140px]">
               <ArtistCard artist={artist} />

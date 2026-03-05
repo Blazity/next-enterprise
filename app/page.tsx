@@ -12,11 +12,10 @@ import { SearchResults } from "components/SearchResults/SearchResults"
 import { Sidebar } from "components/Sidebar/Sidebar"
 import { TopNav } from "components/TopNav/TopNav"
 
+import { type ActiveView } from "lib/constants"
 import { searchAlbums, searchArtists, searchSongs } from "lib/itunes/api"
 import type { ItunesAlbum, ItunesArtist, ItunesTrack } from "lib/itunes/types"
-
-// Exported so Sidebar and HomeContent can share this type
-export type ActiveView = "home" | "search" | "songs" | "albums" | "artists"
+import { isHomeView, ternary } from "lib/utils"
 
 export default function HomePage() {
   const [activeView, setActiveView] = useState<ActiveView>("home")
@@ -58,8 +57,6 @@ export default function HomePage() {
     if (!value) setActiveView("home")
   }
 
-  const isHomeView = activeView !== "search"
-
   return (
     <div className="flex h-screen overflow-hidden pb-[72px] box-border bg-bg">
       <Sidebar activeView={activeView} onNavClick={handleNavClick} />
@@ -74,9 +71,9 @@ export default function HomePage() {
         />
 
         <main className="flex-1 overflow-y-auto px-8 py-7">
-          {isHomeView ? (
-            <HomeContent activeView={activeView} />
-          ) : (
+          {ternary(
+            isHomeView(activeView),
+            <HomeContent activeView={activeView as Exclude<ActiveView, "search">} />,
             <SearchResults
               songs={songs}
               albums={albums}

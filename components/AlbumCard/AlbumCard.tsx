@@ -4,13 +4,10 @@
 import Image from "next/image"
 
 import type { ItunesAlbum } from "lib/itunes/types"
+import { extractReleaseYear } from "lib/itunes/utils"
 
 interface AlbumCardProps {
   album: ItunesAlbum
-}
-
-function extractReleaseYear(releaseDate: string): string {
-  return new Date(releaseDate).getFullYear().toString()
 }
 
 export function AlbumCard({ album }: AlbumCardProps) {

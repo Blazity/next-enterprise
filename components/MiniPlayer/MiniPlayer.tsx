@@ -5,10 +5,11 @@
 // wednesday-design: dark surface, green primary controls, inset highlight
 // wednesday-dev: audioRef suffix, useEffect for side effects
 
-import Image from "next/image"
-
 import { useEffect, useRef, useState } from "react"
 
+import Image from "next/image"
+
+import { CloseIcon, PauseIcon, PlayIcon } from "components/icons"
 import { usePlayerStore } from "store/usePlayerStore"
 
 export function MiniPlayer() {
@@ -105,14 +106,9 @@ export function MiniPlayer() {
         className="size-10 rounded-full border-0 cursor-pointer bg-gradient-btn flex items-center justify-center shrink-0 shadow-glow-sm transition-all"
       >
         {isPlaying ? (
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff">
-            <rect x="6" y="4" width="4" height="16" />
-            <rect x="14" y="4" width="4" height="16" />
-          </svg>
+          <PauseIcon width={14} height={14} className="text-white" />
         ) : (
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff">
-            <polygon points="5 3 19 12 5 21 5 3" />
-          </svg>
+          <PlayIcon width={14} height={14} className="text-white" />
         )}
       </button>
 
@@ -122,10 +118,7 @@ export function MiniPlayer() {
         aria-label="Close player"
         className="size-8 rounded-full border-0 cursor-pointer bg-transparent flex items-center justify-center shrink-0 text-muted hover:text-white transition-colors"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
+        <CloseIcon width={16} height={16} />
       </button>
     </div>
   )

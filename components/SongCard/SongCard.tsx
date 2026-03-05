@@ -5,20 +5,14 @@
 
 import Image from "next/image"
 
-import type { ItunesTrack } from "lib/itunes/types"
+import { PauseIcon, PlayIcon } from "components/icons"
 import { cn } from "lib/cn"
-
+import type { ItunesTrack } from "lib/itunes/types"
+import { formatDuration } from "lib/itunes/utils"
 import { usePlayerStore } from "store/usePlayerStore"
 
 interface SongCardProps {
   track: ItunesTrack
-}
-
-function formatDuration(ms: number): string {
-  const totalSeconds = Math.floor(ms / 1000)
-  const minutes = Math.floor(totalSeconds / 60)
-  const seconds = totalSeconds % 60
-  return `${minutes}:${seconds.toString().padStart(2, "0")}`
 }
 
 export function SongCard({ track }: SongCardProps) {
@@ -94,14 +88,9 @@ export function SongCard({ track }: SongCardProps) {
         )}
       >
         {isActiveAndPlaying ? (
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff">
-            <rect x="6" y="4" width="4" height="16" />
-            <rect x="14" y="4" width="4" height="16" />
-          </svg>
+          <PauseIcon width={12} height={12} className="text-white" />
         ) : (
-          <svg width="12" height="12" viewBox="0 0 24 24" fill={isCurrentTrack ? "#4ade80" : "#a7a7a7"}>
-            <polygon points="5 3 19 12 5 21 5 3" />
-          </svg>
+          <PlayIcon width={12} height={12} className={isCurrentTrack ? "text-primary" : "text-muted"} />
         )}
       </button>
     </div>
