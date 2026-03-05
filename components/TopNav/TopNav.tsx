@@ -5,6 +5,7 @@
 
 import { type RefObject } from "react"
 
+import { AuthButton } from "components/AuthButton/AuthButton"
 import { CloseIcon, SearchIcon, SpinnerIcon } from "components/icons"
 
 interface TopNavProps {
@@ -63,7 +64,9 @@ export function TopNav({ query, isLoading, inputRef, onChange, onSearch }: TopNa
         </div>
       </form>
 
-      <span className="text-xs text-muted ml-auto">30s previews via iTunes</span>
+      <div className="ml-auto flex items-center gap-3">
+         <AuthButton />
+      </div>
     </header>
   )
 }

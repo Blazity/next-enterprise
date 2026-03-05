@@ -13,11 +13,13 @@ import { Sidebar } from "components/Sidebar/Sidebar"
 import { TopNav } from "components/TopNav/TopNav"
 
 import { type ActiveView } from "lib/constants"
+import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import { searchAlbums, searchArtists, searchSongs } from "lib/itunes/api"
 import type { ItunesAlbum, ItunesArtist, ItunesTrack } from "lib/itunes/types"
 import { isHomeView, ternary } from "lib/utils"
 
 export default function HomePage() {
+  const { requireAuth } = useRequireAuth()
   const [activeView, setActiveView] = useState<ActiveView>("home")
   const [query, setQuery] = useState("")
   const [songs, setSongs] = useState<ItunesTrack[]>([])
@@ -28,21 +30,23 @@ export default function HomePage() {
 
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 
-  async function handleSearch(term: string) {
-    setActiveView("search")
-    setIsLoadingSearch(true)
-    setHasSearched(true)
+  function handleSearch(term: string) {
+    requireAuth(async () => {
+      setActiveView("search")
+      setIsLoadingSearch(true)
+      setHasSearched(true)
 
-    const [songsResult, albumsResult, artistsResult] = await Promise.all([
-      searchSongs(term),
-      searchAlbums(term),
-      searchArtists(term),
-    ])
+      const [songsResult, albumsResult, artistsResult] = await Promise.all([
+        searchSongs(term),
+        searchAlbums(term),
+        searchArtists(term),
+      ])
 
-    setSongs(songsResult)
-    setAlbums(albumsResult)
-    setArtists(artistsResult)
-    setIsLoadingSearch(false)
+      setSongs(songsResult)
+      setAlbums(albumsResult)
+      setArtists(artistsResult)
+      setIsLoadingSearch(false)
+    })
   }
 
   function handleNavClick(view: ActiveView) {

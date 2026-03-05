@@ -7,6 +7,7 @@ import Image from "next/image"
 
 import { PauseIcon, PlayIcon } from "components/icons"
 import { cn } from "lib/cn"
+import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import type { ItunesTrack } from "lib/itunes/types"
 import { formatDuration } from "lib/itunes/utils"
 import { usePlayerStore } from "store/usePlayerStore"
@@ -17,16 +18,19 @@ interface SongCardProps {
 
 export function SongCard({ track }: SongCardProps) {
   const { currentTrack, isPlaying, playTrack, togglePlay } = usePlayerStore()
+  const { requireAuth } = useRequireAuth()
   const isCurrentTrack = currentTrack?.trackId === track.trackId
   const isActiveAndPlaying = isCurrentTrack && isPlaying
 
   function handlePlay() {
     if (!track.previewUrl) return
-    if (isCurrentTrack) {
-      togglePlay()
-    } else {
-      playTrack(track)
-    }
+    requireAuth(() => {
+      if (isCurrentTrack) {
+        togglePlay()
+      } else {
+        playTrack(track)
+      }
+    })
   }
 
   const artworkUrl = track.artworkUrl100.replace("100x100", "300x300")

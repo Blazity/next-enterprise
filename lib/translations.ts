@@ -16,6 +16,11 @@ export const HOME_SECTION_TITLES = {
   },
 } as const
 
+export const AUTH_TEXT = {
+  signIn: "Sign in",
+  signInLabel: "Sign in to your account",
+} as const
+
 // Returns the title for a section based on the current active view.
 // Falls back to the "home" variant if the view has no dedicated title.
 export function getSectionTitle(
