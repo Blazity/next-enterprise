@@ -101,8 +101,8 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   setCurrentTime: (time) => set({ currentTime: time }),
   setDuration: (duration) => set({ duration }),
 
-  toggleShuffle: () => set((state) => ({ isShuffled: !state.isShuffled })),
-  toggleRepeat: () => set((state) => ({ isRepeating: !state.isRepeating })),
+  toggleShuffle: () => set((state) => ({ isShuffled: !state.isShuffled, isRepeating: false })),
+  toggleRepeat: () => set((state) => ({ isRepeating: !state.isRepeating, isShuffled: false })),
 
   playNext: () => {
     const { queue, isShuffled, isRepeating, currentlyPlaying } = get()
