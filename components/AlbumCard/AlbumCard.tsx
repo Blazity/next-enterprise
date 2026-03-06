@@ -15,7 +15,7 @@ export function AlbumCard({ album }: AlbumCardProps) {
   const year = extractReleaseYear(album.releaseDate)
 
   return (
-    <div className="bg-surface rounded-3xl p-4 border border-border cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover hover:border-primary/20">
+    <div className="bg-surface rounded-3xl p-4 border border-border">
       <Image
         src={artworkUrl}
         alt={album.collectionName}

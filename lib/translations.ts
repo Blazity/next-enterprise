@@ -16,6 +16,17 @@ export const HOME_SECTION_TITLES = {
   },
 } as const
 
+export const SEARCH_SUGGESTIONS = [
+  "Kanye West",
+  "Bohemian Rhapsody",
+  "Taylor Swift",
+  "Dark Side of the Moon",
+  "Kendrick Lamar",
+  "Hotel California",
+  "Daft Punk",
+  "Abbey Road",
+] as const
+
 export const AUTH_TEXT = {
   signIn: "Sign in",
   signInLabel: "Sign in to your account",
