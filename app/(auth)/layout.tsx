@@ -1,7 +1,6 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Music2 } from "lucide-react"
 
 const floatingNotes = [
   { emoji: "🎵", x: "8%", y: "18%", delay: 0, duration: 6, size: "text-5xl" },
@@ -69,7 +68,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         {/* Logo */}
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#fc3c44] to-[#f472b6] shadow-lg shadow-[#fc3c44]/25">
-            <Music2 size={22} className="text-white" />
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2" />
+              <circle cx="12" cy="12" r="3" fill="white" />
+              <path d="M12 2a10 10 0 0 1 10 10" stroke="white" strokeWidth="2" strokeLinecap="round" />
+            </svg>
           </div>
           <span className="text-2xl font-bold tracking-tight text-white">Streamify</span>
         </div>
