@@ -55,7 +55,7 @@ export function Sidebar({ activeView, onNavClick }: SidebarProps) {
         <div className="size-[30px] rounded-lg bg-gradient-brand flex items-center justify-center shrink-0 shadow-glow-sm">
           <DiscoverLogoIcon className="text-white" />
         </div>
-        <span className="text-[15px] font-bold text-white">Discover</span>
+        <span className="text-[15px] font-bold text-white">Sonara</span>
       </div>
 
       <nav className="flex flex-col gap-0.5">

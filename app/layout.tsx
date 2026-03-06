@@ -16,8 +16,8 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "Music Discovery",
-  description: "Search songs, albums and artists. Play 30-second previews powered by iTunes.",
+  title: "Sonara",
+  description: "Discover music, search songs, albums and artists. Play 30-second previews powered by iTunes.",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
