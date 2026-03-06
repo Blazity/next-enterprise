@@ -24,27 +24,29 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0f0a1e] via-[#1a0a2e] to-[#0a1628]" />
 
-      {/* Animated gradient orbs */}
-      <motion.div
-        className="absolute top-[-20%] left-[-10%] h-[700px] w-[700px] rounded-full bg-[#fc3c44]/30 blur-[150px]"
-        animate={{ x: [0, 80, 0], y: [0, 60, 0], scale: [1, 1.3, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute right-[-10%] bottom-[-20%] h-[700px] w-[700px] rounded-full bg-[#6366f1]/30 blur-[150px]"
-        animate={{ x: [0, -70, 0], y: [0, -50, 0], scale: [1.3, 1, 1.3] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute top-[20%] right-[15%] h-[500px] w-[500px] rounded-full bg-[#f472b6]/25 blur-[130px]"
-        animate={{ x: [0, -60, 0], y: [0, 70, 0], scale: [1, 1.4, 1] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-[10%] left-[20%] h-[400px] w-[400px] rounded-full bg-[#a855f7]/20 blur-[120px]"
-        animate={{ x: [0, 50, 0], y: [0, -40, 0], scale: [1.1, 1, 1.1] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-      />
+      {/* Animated gradient orbs — fixed overlay to prevent layout shift */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <motion.div
+          className="absolute top-[-20%] left-[-10%] h-[700px] w-[700px] rounded-full bg-[#fc3c44]/30 blur-[150px]"
+          animate={{ x: [0, 80, 0], y: [0, 60, 0], scale: [1, 1.3, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute right-[-10%] bottom-[-20%] h-[700px] w-[700px] rounded-full bg-[#6366f1]/30 blur-[150px]"
+          animate={{ x: [0, -70, 0], y: [0, -50, 0], scale: [1.3, 1, 1.3] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute top-[20%] right-[15%] h-[500px] w-[500px] rounded-full bg-[#f472b6]/25 blur-[130px]"
+          animate={{ x: [0, -60, 0], y: [0, 70, 0], scale: [1, 1.4, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-[10%] left-[20%] h-[400px] w-[400px] rounded-full bg-[#a855f7]/20 blur-[120px]"
+          animate={{ x: [0, 50, 0], y: [0, -40, 0], scale: [1.1, 1, 1.1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
 
       {/* Music note decorations */}
       {floatingNotes.map((note, i) => (
