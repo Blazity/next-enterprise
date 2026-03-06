@@ -5,6 +5,7 @@
   "nav.artists": "Artists",
   "nav.songs": "Songs",
   "nav.streamify": "Streamify",
+  "nav.welcome": "Welcome, {{name}}!",
   "nav.library": "Library",
   "nav.playlists": "Playlists",
   "nav.playlist.chillVibes": "Chill Vibes",
@@ -14,10 +15,16 @@
   "nav.playlist.focusFlow": "Focus Flow",
 
   "hero.home": "Home",
+  "hero.greeting": "Good {{timeOfDay}}, {{name}}",
+  "hero.greetingDefault": "Good {{timeOfDay}}",
+  "hero.morning": "morning",
+  "hero.afternoon": "afternoon",
+  "hero.evening": "evening",
   "hero.topPicks": "Top Picks for You",
   "hero.madeForYou": "Made for You",
   "hero.featuredStation": "Featured Station",
-  "hero.recentlyPlayed": "Recently Played",
+  "hero.recentlyPlayed": "Trending Now",
+  "hero.nowPlaying": "Now playing",
 
   "search.label": "Search songs",
   "search.placeholder": "What do you want to listen to?",
@@ -25,6 +32,7 @@
   "search.pageTitle": "Search",
 
   "trending.title": "Trending Now",
+  "trending.subtitle": "{{count}} songs trending right now",
   "trending.resultsFor": "Results for \"{{query}}\"",
   "trending.noResults": "No songs found matching your search.",
   "trending.searching": "Searching...",
@@ -47,12 +55,17 @@
   "songCard.playSong": "Play {{title}} by {{artist}}",
 
   "hero.loading": "Loading content...",
+  "hero.errorTitle": "Something went wrong",
+  "hero.errorDescription": "We couldn't load the music right now. Check your connection and try again.",
+  "hero.retry": "Try again",
 
   "meta.homeTitle": "Streamify — Discover Music",
   "meta.homeDescription": "Your daily dose of fresh tracks and curated picks.",
   "meta.searchTitle": "Streamify — Search",
   "meta.searchDescription": "Search for songs and discover trending tracks.",
 
+  "meta.trendingTitle": "Streamify — Trending Now",
+  "meta.trendingDescription": "See what songs are trending right now.",
   "meta.recentlyAddedTitle": "Streamify — Recently Added",
   "meta.artistsTitle": "Streamify — Artists",
   "meta.songsTitle": "Streamify — Songs",

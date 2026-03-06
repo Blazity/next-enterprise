@@ -46,17 +46,15 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Floating music notes */}
+      {/* Music note decorations */}
       {floatingNotes.map((note, i) => (
-        <motion.span
+        <span
           key={i}
-          className={`pointer-events-none absolute ${note.size}`}
+          className={`pointer-events-none absolute opacity-20 ${note.size}`}
           style={{ left: note.x, top: note.y }}
-          animate={{ y: [0, -50, 0], rotate: [0, 20, -20, 0], opacity: [0.2, 0.45, 0.2] }}
-          transition={{ duration: note.duration, delay: note.delay, repeat: Infinity, ease: "easeInOut" }}
         >
           {note.emoji}
-        </motion.span>
+        </span>
       ))}
 
       {/* Content */}

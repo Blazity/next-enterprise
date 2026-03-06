@@ -1,11 +1,15 @@
 import { render, screen } from "@testing-library/react"
-import { beforeEach, describe, expect, it } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { featuredSongs, trendingSongs } from "@/data/songs"
 import { useMusicStore } from "@/store/musicStore"
 import { PLAY_STATE } from "@/types/music"
 
 import { HeroSection } from "./HeroSection"
+
+vi.mock("@clerk/nextjs", () => ({
+  useUser: () => ({ user: { firstName: "Test" } }),
+}))
 
 describe("HeroSection", () => {
   beforeEach(() => {
@@ -15,12 +19,13 @@ describe("HeroSection", () => {
       featuredSongs,
       trendingSongs,
       isLoadingHome: false,
+      homeError: null,
     })
   })
 
-  it("renders the page heading", () => {
+  it("renders the greeting heading", () => {
     render(<HeroSection />)
-    expect(screen.getByText("Home")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument()
   })
 
   it("renders top picks section", () => {
@@ -29,9 +34,9 @@ describe("HeroSection", () => {
     expect(screen.getByText("Made for You")).toBeInTheDocument()
   })
 
-  it("renders recently played section", () => {
+  it("renders trending now section", () => {
     render(<HeroSection />)
-    expect(screen.getByText("Recently Played")).toBeInTheDocument()
+    expect(screen.getByText("Trending Now")).toBeInTheDocument()
   })
 
   it("renders featured songs in top picks", () => {

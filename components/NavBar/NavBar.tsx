@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-import { UserButton } from "@clerk/nextjs"
+import { UserButton, useUser } from "@clerk/nextjs"
 import { Disc3, Home, Library, Mic2, Music2, Search } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
@@ -28,14 +28,15 @@ const libraryNav = [
 
 export function NavBar() {
   const { t } = useTranslation()
+  const { user } = useUser()
   const pathname = usePathname()
 
   return (
     <nav
       aria-label={t("nav.streamify")}
-      className="border-border bg-surface-sidebar/95 md:bg-surface-sidebar fixed inset-x-0 bottom-0 z-50 border-t backdrop-blur-xl md:static md:inset-x-auto md:w-56 md:shrink-0 md:border-t-0 md:border-r"
+      className="bg-surface-sidebar/95 md:bg-surface-sidebar fixed inset-x-0 bottom-0 z-50 border-t border-white/[0.06] backdrop-blur-xl md:static md:inset-x-auto md:w-[240px] md:shrink-0 md:border-t-0 md:border-r md:border-white/[0.06]"
     >
-      {/* Mobile bottom nav */}
+      {/* ── Mobile bottom tab bar ── */}
       <div className="flex items-center justify-around py-2 md:hidden">
         {mobileNav.map((item) => {
           const isActive = pathname === item.href
@@ -45,7 +46,7 @@ export function NavBar() {
               href={item.href}
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex flex-col items-center gap-1 px-4 py-1 text-[10px] font-medium",
+                "flex flex-col items-center gap-0.5 px-4 py-1 text-[10px] font-medium transition-colors",
                 isActive ? "text-accent" : "text-text-tertiary"
               )}
             >
@@ -57,18 +58,22 @@ export function NavBar() {
         <UserButton />
       </div>
 
-      {/* Desktop sidebar */}
-      <div className="hidden h-full flex-col overflow-y-auto md:flex">
-        {/* User */}
-        <div className="flex items-center gap-3 px-4 pt-4">
-          <UserButton />
+      {/* ── Desktop sidebar ── */}
+      <div className="hidden h-full flex-col md:flex">
+        {/* Brand */}
+        <div className="flex items-center gap-2.5 px-5 pt-6 pb-5">
+          <div className="from-accent to-accent-hover flex size-9 items-center justify-center rounded-xl bg-gradient-to-br shadow-lg shadow-red-500/20">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2" />
+              <circle cx="12" cy="12" r="3" fill="white" />
+              <path d="M12 2a10 10 0 0 1 10 10" stroke="white" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </div>
+          <span className="text-[17px] font-bold tracking-tight text-white">{t("nav.streamify")}</span>
         </div>
 
-        {/* Streamify section */}
-        <div className="px-2 pt-3">
-          <p className="text-text-tertiary mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">
-            {t("nav.streamify")}
-          </p>
+        {/* Main navigation */}
+        <div className="space-y-0.5 px-3">
           {mainNav.map((item) => {
             const isActive = pathname === item.href
             return (
@@ -77,39 +82,73 @@ export function NavBar() {
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition-colors",
-                  isActive ? "bg-white/10 text-white" : "text-text-secondary hover:bg-white/5 hover:text-white"
+                  "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                  isActive ? "bg-white/[0.08] text-white" : "text-text-secondary hover:bg-white/[0.04] hover:text-white"
                 )}
               >
-                <item.Icon size={18} className={isActive ? "text-accent" : ""} strokeWidth={isActive ? 2.2 : 1.8} />
+                <item.Icon
+                  size={20}
+                  className={cn(
+                    "shrink-0 transition-colors",
+                    isActive ? "text-accent" : "text-text-tertiary group-hover:text-white"
+                  )}
+                  strokeWidth={isActive ? 2.2 : 1.7}
+                />
                 <span>{t(item.labelKey)}</span>
               </Link>
             )
           })}
         </div>
 
+        {/* Divider */}
+        <div className="mx-5 my-4 h-px bg-white/[0.06]" />
+
         {/* Library section */}
-        <div className="px-2 pt-5">
-          <p className="text-text-tertiary mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">
-            {t("nav.library")}
-          </p>
-          {libraryNav.map((item) => {
-            const isActive = pathname === item.href
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={isActive ? "page" : undefined}
-                className={cn(
-                  "flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition-colors",
-                  isActive ? "bg-white/10 text-white" : "text-text-secondary hover:bg-white/5 hover:text-white"
-                )}
-              >
-                <item.Icon size={18} className={isActive ? "text-accent" : ""} strokeWidth={isActive ? 2.2 : 1.8} />
-                <span>{t(item.labelKey)}</span>
-              </Link>
-            )
-          })}
+        <div className="flex-1 overflow-y-auto px-3">
+          <div className="mb-2 flex items-center justify-between px-3">
+            <p className="text-text-tertiary text-[11px] font-semibold tracking-widest uppercase">{t("nav.library")}</p>
+          </div>
+          <div className="space-y-0.5">
+            {libraryNav.map((item) => {
+              const isActive = pathname === item.href
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                    isActive
+                      ? "bg-white/[0.08] text-white"
+                      : "text-text-secondary hover:bg-white/[0.04] hover:text-white"
+                  )}
+                >
+                  <item.Icon
+                    size={20}
+                    className={cn(
+                      "shrink-0 transition-colors",
+                      isActive ? "text-accent" : "text-text-tertiary group-hover:text-white"
+                    )}
+                    strokeWidth={isActive ? 2.2 : 1.7}
+                  />
+                  <span>{t(item.labelKey)}</span>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* User profile — pinned to bottom */}
+        <div className="mt-auto border-t border-white/[0.06] px-4 py-3">
+          <div className="flex items-center gap-3">
+            <UserButton />
+            {user?.firstName && (
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-white">{user.firstName}</p>
+                <p className="text-text-tertiary truncate text-[11px]">{user.primaryEmailAddress?.emailAddress}</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </nav>

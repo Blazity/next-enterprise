@@ -33,14 +33,15 @@ export function TrendingList() {
     setPlayingTrack,
     togglePlay,
     isLoadingHome,
+    homeError,
     fetchPopularContent,
   } = useMusicStore()
 
   useEffect(() => {
-    if (trendingSongs.length === 0 && !isLoadingHome) {
+    if (trendingSongs.length === 0 && !isLoadingHome && !homeError) {
       fetchPopularContent()
     }
-  }, [trendingSongs.length, isLoadingHome, fetchPopularContent])
+  }, [trendingSongs.length, isLoadingHome, homeError, fetchPopularContent])
 
   const displayedSongs = useMemo(() => {
     if (searchQuery.trim()) return searchResults

@@ -2,7 +2,6 @@
 
 import { create } from "zustand"
 
-import { featuredSongs as staticFeatured, trendingSongs as staticTrending } from "@/data/songs"
 import { fetchPopularContent as fetchPopularContentService, searchTracks } from "@/lib/services/itunesService"
 import { PLAY_STATE, type PlayState, type Song } from "@/types/music"
 
@@ -22,6 +21,7 @@ interface MusicStore {
   volume: number
   isMuted: boolean
   isLoadingHome: boolean
+  homeError: string | null
 
   setVolume: (volume: number) => void
   toggleMute: () => void
@@ -50,6 +50,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   volume: 0.75,
   isMuted: false,
   isLoadingHome: false,
+  homeError: null,
 
   setVolume: (volume) => set({ volume, isMuted: volume === 0 }),
   toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
@@ -102,20 +103,19 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 
   fetchPopularContent: async () => {
     if (get().isLoadingHome) return
-    set({ isLoadingHome: true })
+    set({ isLoadingHome: true, homeError: null })
 
     try {
       const { featured, trending } = await fetchPopularContentService()
 
       set({
-        featuredSongs: featured.length > 0 ? featured : staticFeatured,
-        trendingSongs: trending.length > 0 ? trending : staticTrending,
+        featuredSongs: featured,
+        trendingSongs: trending,
         isLoadingHome: false,
       })
-    } catch {
+    } catch (error) {
       set({
-        featuredSongs: staticFeatured,
-        trendingSongs: staticTrending,
+        homeError: error instanceof Error ? error.message : "Failed to load content",
         isLoadingHome: false,
       })
     }
