@@ -66,8 +66,22 @@ const config = typescriptEslint.config(
       "import/order": [
         "warn",
         {
-          groups: ["external", "builtin", "internal", "sibling", "parent", "index"],
+          groups: ["builtin", "external", "internal", "sibling", "parent", "index"],
           pathGroups: [
+            {
+              pattern: "react",
+              group: "builtin",
+              position: "before",
+            },
+            {
+              pattern: "react-dom/**",
+              group: "builtin",
+              position: "before",
+            },
+            {
+              pattern: "next/**",
+              group: "builtin",
+            },
             ...getDirectoriesToSort().map((singleDir) => ({
               pattern: `${singleDir}/**`,
               group: "internal",
@@ -85,8 +99,14 @@ const config = typescriptEslint.config(
               group: "internal",
               position: "after",
             },
+            {
+              pattern: "styles/**",
+              group: "index",
+              position: "after",
+            },
           ],
-          pathGroupsExcludedImportTypes: ["internal"],
+          pathGroupsExcludedImportTypes: ["internal", "builtin"],
+          "newlines-between": "always",
           alphabetize: {
             order: "asc",
             caseInsensitive: true,

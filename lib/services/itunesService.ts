@@ -11,8 +11,8 @@ export async function searchTracks(query: string, limit = 25): Promise<Song[]> {
 
 export async function fetchPopularContent(): Promise<{ featured: Song[]; trending: Song[] }> {
   const [featuredRes, trendingRes] = await Promise.all([
-    fetch("/api/itunes/search?term=top+hits+2026&limit=5"),
-    fetch("/api/itunes/search?term=trending+music+2026&limit=12"),
+    fetch("/api/itunes/search?term=top+songs+2025&limit=5"),
+    fetch("/api/itunes/search?term=popular+music+2025&limit=12"),
   ])
 
   if (!featuredRes.ok || !trendingRes.ok) throw new Error("Failed to load content")
