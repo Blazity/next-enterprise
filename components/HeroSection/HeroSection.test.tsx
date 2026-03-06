@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it } from "vitest"
 
+import { featuredSongs, trendingSongs } from "@/data/songs"
 import { useMusicStore } from "@/store/musicStore"
 import { PLAY_STATE } from "@/types/music"
 
@@ -11,6 +12,9 @@ describe("HeroSection", () => {
     useMusicStore.setState({
       currentlyPlaying: null,
       playState: PLAY_STATE.IDLE,
+      featuredSongs,
+      trendingSongs,
+      isLoadingHome: false,
     })
   })
 
@@ -32,7 +36,6 @@ describe("HeroSection", () => {
 
   it("renders featured songs in top picks", () => {
     render(<HeroSection />)
-    const { featuredSongs } = useMusicStore.getState()
     const topPicks = featuredSongs.slice(0, 3)
     topPicks.forEach((song) => {
       expect(screen.getAllByText(song.title).length).toBeGreaterThanOrEqual(1)

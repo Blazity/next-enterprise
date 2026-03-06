@@ -19,8 +19,12 @@ interface MusicStore {
   isSearching: boolean
   searchError: string | null
 
+  volume: number
+  isMuted: boolean
   isLoadingHome: boolean
 
+  setVolume: (volume: number) => void
+  toggleMute: () => void
   setSearchQuery: (query: string) => void
   setPlayingTrack: (song: Song | null) => void
   togglePlay: () => void
@@ -32,8 +36,8 @@ interface MusicStore {
 
 export const useMusicStore = create<MusicStore>((set, get) => ({
   searchQuery: "",
-  featuredSongs: staticFeatured,
-  trendingSongs: staticTrending,
+  featuredSongs: [],
+  trendingSongs: [],
   currentlyPlaying: null,
   playState: PLAY_STATE.IDLE,
   currentTime: 0,
@@ -43,7 +47,12 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   isSearching: false,
   searchError: null,
 
+  volume: 0.75,
+  isMuted: false,
   isLoadingHome: false,
+
+  setVolume: (volume) => set({ volume, isMuted: volume === 0 }),
+  toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
 
   setSearchQuery: (query) => {
     set({ searchQuery: query })
@@ -104,7 +113,11 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
         isLoadingHome: false,
       })
     } catch {
-      set({ isLoadingHome: false })
+      set({
+        featuredSongs: staticFeatured,
+        trendingSongs: staticTrending,
+        isLoadingHome: false,
+      })
     }
   },
 }))

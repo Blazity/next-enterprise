@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 
 import { AnimatePresence, motion } from "framer-motion"
 import { Loader2, SearchX, TrendingUp } from "lucide-react"
@@ -32,7 +32,15 @@ export function TrendingList() {
     playState,
     setPlayingTrack,
     togglePlay,
+    isLoadingHome,
+    fetchPopularContent,
   } = useMusicStore()
+
+  useEffect(() => {
+    if (trendingSongs.length === 0 && !isLoadingHome) {
+      fetchPopularContent()
+    }
+  }, [trendingSongs.length, isLoadingHome, fetchPopularContent])
 
   const displayedSongs = useMemo(() => {
     if (searchQuery.trim()) return searchResults
@@ -66,7 +74,7 @@ export function TrendingList() {
       <AnimatePresence mode="wait">
         {renderFirst(
           [
-            isSearching,
+            isSearching || (isLoadingHome && !searchQuery.trim() && displayedSongs.length === 0),
             <motion.div
               key="loading"
               initial={{ opacity: 0 }}

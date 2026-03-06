@@ -20,8 +20,13 @@ export function seekAudio(time: number) {
   audio.currentTime = time
 }
 
+export function setAudioVolume(volume: number) {
+  const audio = getAudio()
+  audio.volume = Math.max(0, Math.min(1, volume))
+}
+
 export function useAudioPlayer() {
-  const { currentlyPlaying, playState } = useMusicStore()
+  const { currentlyPlaying, playState, volume, isMuted } = useMusicStore()
   const prevSongIdRef = useRef<string | null>(null)
 
   useEffect(() => {
@@ -47,6 +52,11 @@ export function useAudioPlayer() {
       audio.pause()
     }
   }, [currentlyPlaying, playState])
+
+  useEffect(() => {
+    const audio = getAudio()
+    audio.volume = isMuted ? 0 : volume
+  }, [volume, isMuted])
 
   useEffect(() => {
     const audio = getAudio()

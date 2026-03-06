@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+
 import Image from "next/image"
 
 import { motion } from "framer-motion"
@@ -23,8 +24,16 @@ const fadeUp = {
 
 export function HeroSection() {
   const { t } = useTranslation()
-  const { featuredSongs, trendingSongs, currentlyPlaying, playState, setPlayingTrack, togglePlay, fetchPopularContent } =
-    useMusicStore()
+  const {
+    featuredSongs,
+    trendingSongs,
+    currentlyPlaying,
+    playState,
+    setPlayingTrack,
+    togglePlay,
+    fetchPopularContent,
+    isLoadingHome,
+  } = useMusicStore()
 
   useEffect(() => {
     fetchPopularContent()
@@ -44,6 +53,34 @@ export function HeroSection() {
   const topPicks = featuredSongs.slice(0, 3)
   const recentlyPlayed = trendingSongs.slice(0, 6)
 
+  if (isLoadingHome && featuredSongs.length === 0) {
+    return (
+      <div className="space-y-10" aria-label={t("hero.loading")} role="status">
+        <div className="h-9 w-64 animate-pulse rounded-lg bg-white/10" />
+        <div className="space-y-4">
+          <div className="h-6 w-48 animate-pulse rounded bg-white/10" />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="aspect-square w-full animate-pulse rounded-xl bg-white/5" />
+            ))}
+          </div>
+        </div>
+        <div className="space-y-4">
+          <div className="h-6 w-40 animate-pulse rounded bg-white/10" />
+          <div className="flex gap-4 overflow-hidden">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="w-36 shrink-0 space-y-2">
+                <div className="aspect-square w-full animate-pulse rounded-lg bg-white/5" />
+                <div className="h-3 w-24 animate-pulse rounded bg-white/10" />
+                <div className="h-3 w-16 animate-pulse rounded bg-white/10" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-10">
       {/* Page title */}
@@ -52,9 +89,11 @@ export function HeroSection() {
       </motion.div>
 
       {/* Top Picks for You */}
-      <motion.section variants={fadeUp} className="space-y-4">
+      <motion.section variants={fadeUp} aria-labelledby="top-picks-heading" className="space-y-4">
         <div>
-          <h2 className="text-text-primary text-xl font-bold">{t("hero.topPicks")}</h2>
+          <h2 id="top-picks-heading" className="text-text-primary text-xl font-bold">
+            {t("hero.topPicks")}
+          </h2>
           <p className="text-text-tertiary text-sm">{t("hero.madeForYou")}</p>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -78,10 +117,12 @@ export function HeroSection() {
       </motion.section>
 
       {/* Recently Played */}
-      <motion.section variants={fadeUp} className="space-y-4">
+      <motion.section variants={fadeUp} aria-labelledby="recently-played-heading" className="space-y-4">
         <div className="flex items-center gap-1">
-          <h2 className="text-text-primary text-xl font-bold">{t("hero.recentlyPlayed")}</h2>
-          <ChevronRight size={20} className="text-text-tertiary" />
+          <h2 id="recently-played-heading" className="text-text-primary text-xl font-bold">
+            {t("hero.recentlyPlayed")}
+          </h2>
+          <ChevronRight size={20} className="text-text-tertiary" aria-hidden="true" />
         </div>
         <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-2 md:-mx-0 md:px-0">
           {recentlyPlayed.map((song, i) => (
@@ -92,7 +133,19 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + i * 0.05, duration: 0.35 }}
             >
-              <div className="group cursor-pointer" onClick={() => handlePlay(song.id)} role="button" tabIndex={0}>
+              <div
+                className="group cursor-pointer"
+                onClick={() => handlePlay(song.id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    handlePlay(song.id)
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={t("songCard.playSong", { title: song.title, artist: song.artist.name })}
+              >
                 <div className="relative aspect-square w-full overflow-hidden rounded-lg">
                   <Image
                     src={song.albumArt}

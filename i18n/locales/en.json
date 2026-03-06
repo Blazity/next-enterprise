@@ -36,11 +36,17 @@
   "player.repeat": "Repeat",
   "player.comingSoon": "Coming soon",
   "player.progress": "Playback progress",
+  "player.volume": "Volume",
+  "player.mute": "Mute",
+  "player.unmute": "Unmute",
 
   "playButton.pause": "Pause",
   "playButton.play": "Play",
 
   "songCard.playing": "Playing",
+  "songCard.playSong": "Play {{title}} by {{artist}}",
+
+  "hero.loading": "Loading content...",
 
   "meta.homeTitle": "Streamify — Discover Music",
   "meta.homeDescription": "Your daily dose of fresh tracks and curated picks.",
