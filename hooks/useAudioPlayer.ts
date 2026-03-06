@@ -63,7 +63,12 @@ export function useAudioPlayer() {
     const store = useMusicStore.getState
 
     const handleEnded = () => {
-      store().setPlayingTrack(null)
+      if (store().isRepeating) {
+        audio.currentTime = 0
+        audio.play().catch(() => {})
+        return
+      }
+      store().playNext()
     }
 
     const handleTimeUpdate = () => {

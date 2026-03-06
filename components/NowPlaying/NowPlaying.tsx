@@ -21,8 +21,24 @@ function formatTime(seconds: number): string {
 
 export function NowPlaying() {
   const { t } = useTranslation()
-  const { currentlyPlaying, playState, togglePlay, currentTime, duration, volume, isMuted, setVolume, toggleMute } =
-    useMusicStore()
+  const {
+    currentlyPlaying,
+    playState,
+    togglePlay,
+    currentTime,
+    duration,
+    volume,
+    isMuted,
+    setVolume,
+    toggleMute,
+    isShuffled,
+    toggleShuffle,
+    isRepeating,
+    toggleRepeat,
+    playNext,
+    playPrevious,
+    history,
+  } = useMusicStore()
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0
 
   const handleSeek = useCallback(
@@ -59,35 +75,44 @@ export function NowPlaying() {
             {/* Playback controls */}
             <div className="flex shrink-0 items-center gap-2">
               <button
-                className="text-text-tertiary hidden cursor-not-allowed p-1.5 opacity-40 md:block"
+                className={`hidden cursor-pointer p-1.5 transition-colors md:block ${
+                  isShuffled ? "text-accent" : "text-text-tertiary hover:text-white"
+                }`}
                 aria-label={t("player.shuffle")}
-                title={t("player.comingSoon")}
-                disabled
+                onClick={toggleShuffle}
+                type="button"
               >
-                <Shuffle size={14} />
+                <Shuffle size={16} />
               </button>
               <button
-                className="text-text-secondary hidden cursor-not-allowed p-1.5 opacity-40 md:block"
+                className={`hidden p-1.5 transition-colors md:block ${
+                  history.length > 0
+                    ? "text-text-secondary cursor-pointer hover:text-white"
+                    : "text-text-secondary cursor-not-allowed opacity-40"
+                }`}
                 aria-label={t("player.previous")}
-                title={t("player.comingSoon")}
-                disabled
+                onClick={playPrevious}
+                disabled={history.length === 0}
+                type="button"
               >
                 <SkipBack size={16} fill="currentColor" />
               </button>
               <PlayButton isPlaying={playState === PLAY_STATE.PLAYING} onToggle={togglePlay} size="sm" />
               <button
-                className="text-text-secondary hidden cursor-not-allowed p-1.5 opacity-40 md:block"
+                className="text-text-secondary hidden cursor-pointer p-1.5 transition-colors hover:text-white md:block"
                 aria-label={t("player.next")}
-                title={t("player.comingSoon")}
-                disabled
+                onClick={playNext}
+                type="button"
               >
                 <SkipForward size={16} fill="currentColor" />
               </button>
               <button
-                className="text-text-tertiary hidden cursor-not-allowed p-1.5 opacity-40 md:block"
+                className={`hidden cursor-pointer p-1.5 transition-colors md:block ${
+                  isRepeating ? "text-accent" : "text-text-tertiary hover:text-white"
+                }`}
                 aria-label={t("player.repeat")}
-                title={t("player.comingSoon")}
-                disabled
+                onClick={toggleRepeat}
+                type="button"
               >
                 <Repeat size={14} />
               </button>
