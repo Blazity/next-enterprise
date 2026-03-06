@@ -53,9 +53,24 @@ function EqBars() {
 
 export function SongCard({ song, isPlaying = false, onPlay, variant, className, rank, subtitle }: SongCardProps) {
   const { t } = useTranslation()
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault()
+      onPlay?.()
+    }
+  }
+  const songLabel = t("songCard.playSong", { title: song.title, artist: song.artist.name })
+
   if (variant === "trending") {
     return (
-      <div className={cn(songCard({ variant }), className)} onClick={onPlay} role="button" tabIndex={0}>
+      <div
+        className={cn(songCard({ variant }), className)}
+        onClick={onPlay}
+        onKeyDown={handleKeyDown}
+        role="button"
+        tabIndex={0}
+        aria-label={songLabel}
+      >
         {rank != null && (
           <span
             className={cn(
@@ -83,7 +98,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
         <span className="text-text-tertiary text-xs tabular-nums">
           {Math.floor(song.duration / 60)}:{String(song.duration % 60).padStart(2, "0")}
         </span>
-        <div className="opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="opacity-0 transition-opacity group-hover:opacity-100" onClick={(e) => e.stopPropagation()}>
           <PlayButton isPlaying={isPlaying} onToggle={() => onPlay?.()} size="sm" />
         </div>
       </div>
@@ -92,7 +107,14 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
 
   // Featured variant — large Apple Music style card
   return (
-    <div className={cn(songCard({ variant }), "w-full", className)} onClick={onPlay} role="button" tabIndex={0}>
+    <div
+      className={cn(songCard({ variant }), "w-full", className)}
+      onClick={onPlay}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={songLabel}
+    >
       <div className="relative aspect-square w-full overflow-hidden rounded-xl">
         <Image
           src={song.albumArt}
@@ -108,7 +130,10 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
           {subtitle && <p className="mt-0.5 text-xs text-white/50">{subtitle}</p>}
         </div>
         {/* Play button on hover */}
-        <div className="absolute right-3 bottom-3 opacity-0 transition-all duration-200 group-hover:opacity-100">
+        <div
+          className="absolute right-3 bottom-3 opacity-0 transition-all duration-200 group-hover:opacity-100"
+          onClick={(e) => e.stopPropagation()}
+        >
           <PlayButton isPlaying={isPlaying} onToggle={() => onPlay?.()} size="md" />
         </div>
         {/* Playing indicator */}
