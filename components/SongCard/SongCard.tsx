@@ -3,6 +3,7 @@
 import Image from "next/image"
 
 import { cva, type VariantProps } from "class-variance-authority"
+import { useFeatureFlagVariantKey } from "posthog-js/react"
 import { useTranslation } from "react-i18next"
 
 import { AddToPlaylistButton } from "@/components/AddToPlaylistButton/AddToPlaylistButton"
@@ -55,6 +56,9 @@ function EqBars() {
 
 export function SongCard({ song, isPlaying = false, onPlay, variant, className, rank, subtitle, showAddToPlaylist = false }: SongCardProps) {
   const { t } = useTranslation()
+  const playlistFeatureVariant = useFeatureFlagVariantKey("playlist-add-feature")
+  const playlistFeatureEnabled = playlistFeatureVariant === "on"
+  const canShowPlaylist = showAddToPlaylist && playlistFeatureEnabled
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault()
@@ -101,7 +105,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
           {Math.floor(song.duration / 60)}:{String(song.duration % 60).padStart(2, "0")}
         </span>
         <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100" onClick={(e) => e.stopPropagation()}>
-          {showAddToPlaylist && <AddToPlaylistButton song={song} />}
+          {canShowPlaylist && <AddToPlaylistButton song={song} />}
           <PlayButton isPlaying={isPlaying} onToggle={() => onPlay?.()} size="sm" />
         </div>
       </div>
@@ -139,7 +143,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
           className="absolute right-3 bottom-3 z-10 flex items-center gap-2 opacity-0 transition-all duration-200 group-hover:opacity-100"
           onClick={(e) => e.stopPropagation()}
         >
-          {showAddToPlaylist && <AddToPlaylistButton song={song} dropdownPosition="top" />}
+          {canShowPlaylist && <AddToPlaylistButton song={song} dropdownPosition="top" />}
           <PlayButton isPlaying={isPlaying} onToggle={() => onPlay?.()} size="md" />
         </div>
         {/* Playing indicator */}

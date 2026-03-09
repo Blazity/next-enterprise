@@ -57,6 +57,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.576.0",
     "next": "15.3.8",
+    "posthog-js": "^1.359.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-i18next": "^16.5.4",

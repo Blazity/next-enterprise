@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 
 import { UserButton, useUser } from "@clerk/nextjs"
 import { Disc3, Home, Library, ListMusic, Mic2, Music2, Search } from "lucide-react"
+import { useFeatureFlagVariantKey } from "posthog-js/react"
 import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"
@@ -31,6 +32,12 @@ export function NavBar() {
   const { t } = useTranslation()
   const { user } = useUser()
   const pathname = usePathname()
+  const playlistFeatureVariant = useFeatureFlagVariantKey("playlist-add-feature")
+  const playlistFeatureEnabled = playlistFeatureVariant === "on"
+
+  const filteredLibraryNav = playlistFeatureEnabled
+    ? libraryNav
+    : libraryNav.filter((item) => item.href !== "/playlists")
 
   return (
     <nav
@@ -110,7 +117,7 @@ export function NavBar() {
             <p className="text-text-tertiary text-[11px] font-semibold tracking-widest uppercase">{t("nav.library")}</p>
           </div>
           <div className="space-y-0.5">
-            {libraryNav.map((item) => {
+            {filteredLibraryNav.map((item) => {
               const isActive = pathname === item.href
               return (
                 <Link

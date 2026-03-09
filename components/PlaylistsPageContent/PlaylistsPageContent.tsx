@@ -2,17 +2,22 @@
 
 import { useCallback, useEffect, useState } from "react"
 
+import Link from "next/link"
+
 import { useUser } from "@clerk/nextjs"
 import { ListMusic, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react"
-import Link from "next/link"
+import { useFeatureFlagVariantKey } from "posthog-js/react"
 import { useTranslation } from "react-i18next"
 
+import { ComingSoon } from "@/components/ComingSoon/ComingSoon"
 import { cn } from "@/lib/utils"
 import { usePlaylistStore } from "@/store/playlistStore"
 
 export function PlaylistsPageContent() {
   const { t } = useTranslation()
   const { user } = useUser()
+  const playlistFeatureVariant = useFeatureFlagVariantKey("playlist-add-feature")
+  const playlistFeatureEnabled = playlistFeatureVariant === "on"
   const { playlists, isLoading, error, fetchPlaylists, createPlaylist, updatePlaylist, deletePlaylist } =
     usePlaylistStore()
 
@@ -75,6 +80,10 @@ export function PlaylistsPageContent() {
         <div className="border-accent size-8 animate-spin rounded-full border-2 border-t-transparent" />
       </div>
     )
+  }
+
+  if (!playlistFeatureEnabled) {
+    return <ComingSoon titleKey="nav.playlists" />
   }
 
   return (

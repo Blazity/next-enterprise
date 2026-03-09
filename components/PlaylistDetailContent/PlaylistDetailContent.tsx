@@ -7,8 +7,10 @@ import { useCallback, useEffect, useState } from "react"
 
 import { useUser } from "@clerk/nextjs"
 import { ArrowLeft, Clock, ListMusic, Music, Search, Trash2 } from "lucide-react"
+import { useFeatureFlagVariantKey } from "posthog-js/react"
 import { useTranslation } from "react-i18next"
 
+import { ComingSoon } from "@/components/ComingSoon/ComingSoon"
 import { cn } from "@/lib/utils"
 import { useMusicStore } from "@/store/musicStore"
 import { usePlaylistStore } from "@/store/playlistStore"
@@ -19,6 +21,8 @@ export function PlaylistDetailContent() {
     const { slug } = useParams<{ slug: string }>()
     const playlistId = Number(slug)
     const { user } = useUser()
+    const playlistFeatureVariant = useFeatureFlagVariantKey("playlist-add-feature")
+    const playlistFeatureEnabled = playlistFeatureVariant === "on"
 
     const { currentPlaylist, isLoading, error, fetchPlaylist, removeSong } = usePlaylistStore()
     const { currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
@@ -68,6 +72,10 @@ export function PlaylistDetailContent() {
                 <div className="border-accent size-8 animate-spin rounded-full border-2 border-t-transparent" />
             </div>
         )
+    }
+
+    if (!playlistFeatureEnabled) {
+        return <ComingSoon titleKey="nav.playlists" />
     }
 
     if (error || !currentPlaylist) {
