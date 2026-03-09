@@ -219,7 +219,7 @@ export function PlaylistsPageContent() {
                   onClick={() => setMenuOpenId(menuOpenId === playlist.id ? null : playlist.id)}
                   className={cn(
                     "rounded-lg p-2 text-white/40 transition-colors hover:bg-white/[0.06] hover:text-white",
-                    "opacity-0 group-hover:opacity-100",
+                    "opacity-100 md:opacity-0 md:group-hover:opacity-100",
                     menuOpenId === playlist.id && "opacity-100"
                   )}
                 >

@@ -117,7 +117,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
         <span className="text-text-tertiary text-xs tabular-nums">
           {Math.floor(song.duration / 60)}:{String(song.duration % 60).padStart(2, "0")}
         </span>
-        <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center gap-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100" onClick={(e) => e.stopPropagation()}>
           {canShowPlaylist && <AddToPlaylistButton song={song} />}
           <PlayButton isPlaying={isPlaying} onToggle={() => handlePlayAction("button")} size="sm" />
         </div>
@@ -153,7 +153,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
         </div>
         {/* Play button on hover */}
         <div
-          className="absolute right-3 bottom-3 z-10 flex items-center gap-2 opacity-0 transition-all duration-200 group-hover:opacity-100"
+          className="absolute right-3 bottom-3 z-10 flex items-center gap-2 opacity-100 transition-all duration-200 md:opacity-0 md:group-hover:opacity-100"
           onClick={(e) => e.stopPropagation()}
         >
           {canShowPlaylist && <AddToPlaylistButton song={song} dropdownPosition="top" />}

@@ -215,7 +215,7 @@ export function PlaylistDetailContent() {
                                     onClick={() => handleRemove(song.track_id)}
                                     disabled={isRemoving}
                                     aria-label={t("playlist.removeSong")}
-                                    className="rounded-lg p-2 text-white/30 opacity-0 transition-all hover:bg-red-500/10 hover:text-red-400 group-hover:opacity-100"
+                                    className="rounded-lg p-2 text-white/30 opacity-100 transition-all hover:bg-red-500/10 hover:text-red-400 md:opacity-0 md:group-hover:opacity-100"
                                 >
                                     <Trash2 size={16} />
                                 </button>

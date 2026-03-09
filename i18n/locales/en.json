@@ -72,6 +72,16 @@
   "meta.playlistTitle": "Streamify — Playlist",
   "meta.playlistsTitle": "Streamify — Playlists",
 
+  "recentlyAdded.title": "Recently Added",
+  "recentlyAdded.subtitle": "{{count}} fresh tracks just dropped",
+
+  "songs.title": "Songs",
+  "songs.subtitle": "{{count}} tracks to explore",
+
+  "artists.title": "Artists",
+  "artists.subtitle": "{{count}} artists to discover",
+  "artists.tracksCount": "{{count}} tracks",
+
   "comingSoon.title": "Coming Soon",
   "comingSoon.description": "This section is under construction. Check back soon for updates.",
 

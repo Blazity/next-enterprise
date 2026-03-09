@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { ComingSoon } from "@/components/ComingSoon/ComingSoon"
+import { RecentlyAddedContent } from "@/components/RecentlyAddedContent/RecentlyAddedContent"
 import en from "@/i18n/locales/en.json"
 
 export const metadata: Metadata = {
@@ -8,5 +8,11 @@ export const metadata: Metadata = {
 }
 
 export default function RecentlyAddedPage() {
-  return <ComingSoon titleKey="nav.recentlyAdded" />
+  return (
+    <div className="px-6 py-6 md:px-10 md:py-8">
+      <div className="mx-auto max-w-3xl">
+        <RecentlyAddedContent />
+      </div>
+    </div>
+  )
 }
