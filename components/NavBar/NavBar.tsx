@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import { UserButton, useUser } from "@clerk/nextjs"
-import { Disc3, Home, Library, ListMusic, Mic2, Music2, Search } from "lucide-react"
+import { Disc3, Home, ListMusic, Mic2, Music2, Search } from "lucide-react"
 import { useFeatureFlagVariantKey, usePostHog } from "posthog-js/react"
 import { useTranslation } from "react-i18next"
 
@@ -18,7 +18,10 @@ const mainNav = [
 const mobileNav = [
   { href: "/", labelKey: "nav.home", Icon: Home },
   { href: "/search", labelKey: "nav.search", Icon: Search },
-  { href: "/recently-added", labelKey: "nav.library", Icon: Library },
+  { href: "/recently-added", labelKey: "nav.recentlyAdded", Icon: Disc3 },
+  { href: "/artists", labelKey: "nav.artists", Icon: Mic2 },
+  { href: "/songs", labelKey: "nav.songs", Icon: Music2 },
+  { href: "/playlists", labelKey: "nav.playlists", Icon: ListMusic },
 ]
 
 const libraryNav = [
@@ -47,6 +50,9 @@ export function NavBar() {
   const filteredLibraryNav = playlistFeatureEnabled
     ? libraryNav
     : libraryNav.filter((item) => item.href !== "/playlists")
+  const filteredMobileNav = playlistFeatureEnabled
+    ? mobileNav
+    : mobileNav.filter((item) => item.href !== "/playlists")
 
   return (
     <nav
@@ -54,8 +60,8 @@ export function NavBar() {
       className="bg-surface-sidebar/95 md:bg-surface-sidebar fixed inset-x-0 bottom-0 z-50 border-t border-white/[0.06] backdrop-blur-xl md:static md:inset-x-auto md:z-auto md:w-[240px] md:shrink-0 md:border-t-0 md:border-r md:border-white/[0.06] md:backdrop-blur-none"
     >
       {/* ── Mobile bottom tab bar ── */}
-      <div className="flex items-center justify-around py-2 md:hidden">
-        {mobileNav.map((item) => {
+      <div className="flex items-center gap-2 overflow-x-auto px-2 py-2 md:hidden">
+        {filteredMobileNav.map((item) => {
           const isActive = pathname === item.href
           return (
             <Link
@@ -64,7 +70,7 @@ export function NavBar() {
               onClick={() => captureNavClick(item.href, "mobile")}
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex flex-col items-center gap-0.5 px-4 py-1 text-[10px] font-medium transition-colors",
+                "flex min-w-[68px] shrink-0 flex-col items-center gap-0.5 rounded-md px-2 py-1 text-[10px] font-medium transition-colors",
                 isActive ? "text-accent" : "text-text-tertiary"
               )}
             >
@@ -73,7 +79,9 @@ export function NavBar() {
             </Link>
           )
         })}
-        <UserButton />
+        <div className="ml-auto shrink-0 pl-1">
+          <UserButton />
+        </div>
       </div>
 
       {/* ── Desktop sidebar ── */}
