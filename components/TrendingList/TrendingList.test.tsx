@@ -1,10 +1,14 @@
 import { render, screen } from "@testing-library/react"
-import { beforeEach, describe, expect, it } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useMusicStore } from "@/store/musicStore"
 import { PLAY_STATE } from "@/types/music"
 
 import { TrendingList } from "./TrendingList"
+
+vi.mock("@clerk/nextjs", () => ({
+  useUser: () => ({ user: { id: "test-clerk-id", firstName: "Test" } }),
+}))
 
 describe("TrendingList", () => {
   beforeEach(() => {

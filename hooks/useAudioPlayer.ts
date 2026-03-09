@@ -28,6 +28,7 @@ export function setAudioVolume(volume: number) {
 export function useAudioPlayer() {
   const { currentlyPlaying, playState, volume, isMuted } = useMusicStore()
   const prevSongIdRef = useRef<string | null>(null)
+  const loadingNewTrackRef = useRef(false)
 
   useEffect(() => {
     const audio = getAudio()
@@ -40,7 +41,10 @@ export function useAudioPlayer() {
     }
 
     if (currentlyPlaying.id !== prevSongIdRef.current) {
+      loadingNewTrackRef.current = true
+      audio.pause()
       audio.src = currentlyPlaying.previewUrl
+      audio.load()
       audio.play().catch(() => {})
       prevSongIdRef.current = currentlyPlaying.id
       return
@@ -58,9 +62,21 @@ export function useAudioPlayer() {
     audio.volume = isMuted ? 0 : volume
   }, [volume, isMuted])
 
+  // Use requestAnimationFrame for smooth, immediate progress updates
   useEffect(() => {
     const audio = getAudio()
     const store = useMusicStore.getState
+    let rafId: number | null = null
+
+    const tick = () => {
+      if (!audio.paused && !loadingNewTrackRef.current) {
+        store().setCurrentTime(audio.currentTime)
+        if (audio.duration && isFinite(audio.duration)) {
+          store().setDuration(audio.duration)
+        }
+      }
+      rafId = requestAnimationFrame(tick)
+    }
 
     const handleEnded = () => {
       if (store().isRepeating) {
@@ -68,25 +84,36 @@ export function useAudioPlayer() {
         audio.play().catch(() => {})
         return
       }
-      store().playNext()
-    }
-
-    const handleTimeUpdate = () => {
-      store().setCurrentTime(audio.currentTime)
+      store().setCurrentTime(store().duration)
+      store().togglePlay()
     }
 
     const handleLoadedMetadata = () => {
       store().setDuration(audio.duration)
+      store().setCurrentTime(0)
+      loadingNewTrackRef.current = false
     }
 
+    const handlePlaying = () => {
+      store().setBuffering(false)
+    }
+
+    const handleWaiting = () => {
+      store().setBuffering(true)
+    }
+
+    rafId = requestAnimationFrame(tick)
     audio.addEventListener("ended", handleEnded)
-    audio.addEventListener("timeupdate", handleTimeUpdate)
     audio.addEventListener("loadedmetadata", handleLoadedMetadata)
+    audio.addEventListener("playing", handlePlaying)
+    audio.addEventListener("waiting", handleWaiting)
 
     return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId)
       audio.removeEventListener("ended", handleEnded)
-      audio.removeEventListener("timeupdate", handleTimeUpdate)
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata)
+      audio.removeEventListener("playing", handlePlaying)
+      audio.removeEventListener("waiting", handleWaiting)
     }
   }, [])
 }

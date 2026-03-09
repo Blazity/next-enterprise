@@ -152,6 +152,7 @@ export function HeroSection() {
                 subtitle={i === 0 ? t("hero.featuredStation") : undefined}
                 isPlaying={currentlyPlaying?.id === song.id && playState === PLAY_STATE.PLAYING}
                 onPlay={() => handlePlay(song.id)}
+                showAddToPlaylist
               />
             </motion.div>
           ))}

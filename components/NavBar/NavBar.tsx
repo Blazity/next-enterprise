@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import { UserButton, useUser } from "@clerk/nextjs"
-import { Disc3, Home, Library, Mic2, Music2, Search } from "lucide-react"
+import { Disc3, Home, Library, ListMusic, Mic2, Music2, Search } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"
@@ -24,6 +24,7 @@ const libraryNav = [
   { href: "/recently-added", labelKey: "nav.recentlyAdded", Icon: Disc3 },
   { href: "/artists", labelKey: "nav.artists", Icon: Mic2 },
   { href: "/songs", labelKey: "nav.songs", Icon: Music2 },
+  { href: "/playlists", labelKey: "nav.playlists", Icon: ListMusic },
 ]
 
 export function NavBar() {
@@ -34,7 +35,7 @@ export function NavBar() {
   return (
     <nav
       aria-label={t("nav.streamify")}
-      className="bg-surface-sidebar/95 md:bg-surface-sidebar fixed inset-x-0 bottom-0 z-50 border-t border-white/[0.06] backdrop-blur-xl md:static md:inset-x-auto md:w-[240px] md:shrink-0 md:border-t-0 md:border-r md:border-white/[0.06]"
+      className="bg-surface-sidebar/95 md:bg-surface-sidebar fixed inset-x-0 bottom-0 z-50 border-t border-white/[0.06] backdrop-blur-xl md:static md:inset-x-auto md:z-auto md:w-[240px] md:shrink-0 md:border-t-0 md:border-r md:border-white/[0.06] md:backdrop-blur-none"
     >
       {/* ── Mobile bottom tab bar ── */}
       <div className="flex items-center justify-around py-2 md:hidden">

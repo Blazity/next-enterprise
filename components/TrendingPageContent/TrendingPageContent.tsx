@@ -129,6 +129,7 @@ export function TrendingPageContent() {
                   rank={index + 1}
                   isPlaying={currentlyPlaying?.id === song.id && playState === PLAY_STATE.PLAYING}
                   onPlay={() => handlePlay(song.id)}
+                  showAddToPlaylist
                 />
               </motion.div>
             ))}
