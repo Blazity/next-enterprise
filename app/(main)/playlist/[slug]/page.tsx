@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { ComingSoon } from "@/components/ComingSoon/ComingSoon"
+import { PlaylistDetailContent } from "@/components/PlaylistDetailContent/PlaylistDetailContent"
 import en from "@/i18n/locales/en.json"
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 }
 
 export default function PlaylistPage() {
-  return <ComingSoon titleKey="nav.playlists" />
+  return <PlaylistDetailContent />
 }

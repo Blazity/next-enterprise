@@ -22,6 +22,7 @@ interface MusicStore {
   isMuted: boolean
   isLoadingHome: boolean
   homeError: string | null
+  isBuffering: boolean
   isShuffled: boolean
   isRepeating: boolean
   queue: Song[]
@@ -29,6 +30,7 @@ interface MusicStore {
 
   setVolume: (volume: number) => void
   toggleMute: () => void
+  setBuffering: (isBuffering: boolean) => void
   setSearchQuery: (query: string) => void
   setPlayingTrack: (song: Song | null) => void
   togglePlay: () => void
@@ -55,10 +57,11 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   isSearching: false,
   searchError: null,
 
-  volume: 0.75,
+  volume: 1,
   isMuted: false,
   isLoadingHome: false,
   homeError: null,
+  isBuffering: false,
   isShuffled: false,
   isRepeating: false,
   queue: [],
@@ -66,6 +69,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 
   setVolume: (volume) => set({ volume, isMuted: volume === 0 }),
   toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
+  setBuffering: (isBuffering) => set({ isBuffering }),
 
   setSearchQuery: (query) => {
     set({ searchQuery: query })
@@ -88,6 +92,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
       playState: PLAY_STATE.PLAYING,
       currentTime: 0,
       duration: 0,
+      isBuffering: true,
       queue,
       history,
     })
@@ -123,6 +128,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
       playState: PLAY_STATE.PLAYING,
       currentTime: 0,
       duration: 0,
+      isBuffering: true,
       queue: remaining,
       history,
     })
@@ -138,6 +144,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
       playState: PLAY_STATE.PLAYING,
       currentTime: 0,
       duration: 0,
+      isBuffering: true,
       history: remainingHistory,
       queue: newQueue,
     })

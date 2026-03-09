@@ -70,7 +70,23 @@
   "meta.artistsTitle": "Streamify — Artists",
   "meta.songsTitle": "Streamify — Songs",
   "meta.playlistTitle": "Streamify — Playlist",
+  "meta.playlistsTitle": "Streamify — Playlists",
 
   "comingSoon.title": "Coming Soon",
-  "comingSoon.description": "This section is under construction. Check back soon for updates."
+  "comingSoon.description": "This section is under construction. Check back soon for updates.",
+
+  "playlist.back": "Back to Playlists",
+  "playlist.songs": "{{count}} songs",
+  "playlist.emptySongs": "No songs yet",
+  "playlist.emptyHint": "Search for songs and add them to this playlist",
+  "playlist.removeSong": "Remove from playlist",
+  "playlist.songRemoved": "Song removed",
+  "playlist.notFound": "Playlist not found",
+
+  "addToPlaylist.title": "Add to Playlist",
+  "addToPlaylist.noPlaylists": "No playlists yet",
+  "addToPlaylist.create": "Create new playlist",
+  "addToPlaylist.added": "Added to {{name}}",
+  "addToPlaylist.alreadyAdded": "Already in this playlist",
+  "addToPlaylist.error": "Failed to add song"
 }

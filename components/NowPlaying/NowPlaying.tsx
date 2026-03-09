@@ -38,6 +38,7 @@ export function NowPlaying() {
     playNext,
     playPrevious,
     history,
+    isBuffering,
   } = useMusicStore()
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0
 
@@ -69,7 +70,7 @@ export function NowPlaying() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -60, opacity: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 28 }}
-          className="border-border bg-surface-sidebar/95 fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl"
+          className="border-border bg-surface-sidebar/95 fixed inset-x-0 top-0 z-[60] border-b backdrop-blur-xl"
         >
           <div className="flex items-center gap-3 px-3 py-2 md:justify-between md:px-4">
             {/* Playback controls */}
