@@ -3,7 +3,7 @@
 import Image from "next/image"
 
 import { cva, type VariantProps } from "class-variance-authority"
-import { useFeatureFlagVariantKey } from "posthog-js/react"
+import { useFeatureFlagVariantKey, usePostHog } from "posthog-js/react"
 import { useTranslation } from "react-i18next"
 
 import { AddToPlaylistButton } from "@/components/AddToPlaylistButton/AddToPlaylistButton"
@@ -56,13 +56,26 @@ function EqBars() {
 
 export function SongCard({ song, isPlaying = false, onPlay, variant, className, rank, subtitle, showAddToPlaylist = false }: SongCardProps) {
   const { t } = useTranslation()
+  const posthog = usePostHog()
   const playlistFeatureVariant = useFeatureFlagVariantKey("playlist-add-feature")
   const playlistFeatureEnabled = playlistFeatureVariant === "on"
   const canShowPlaylist = showAddToPlaylist && playlistFeatureEnabled
+
+  const handlePlayAction = (source: "card" | "button" | "keyboard") => {
+    posthog?.capture("song_play_interaction", {
+      song_id: song.id,
+      artist_name: song.artist.name,
+      card_variant: variant ?? "featured",
+      source,
+      was_playing: isPlaying,
+    })
+    onPlay?.()
+  }
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault()
-      onPlay?.()
+      handlePlayAction("keyboard")
     }
   }
   const songLabel = t("songCard.playSong", { title: song.title, artist: song.artist.name })
@@ -71,7 +84,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
     return (
       <div
         className={cn(songCard({ variant }), className)}
-        onClick={onPlay}
+        onClick={() => handlePlayAction("card")}
         onKeyDown={handleKeyDown}
         role="button"
         tabIndex={0}
@@ -106,7 +119,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
         </span>
         <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100" onClick={(e) => e.stopPropagation()}>
           {canShowPlaylist && <AddToPlaylistButton song={song} />}
-          <PlayButton isPlaying={isPlaying} onToggle={() => onPlay?.()} size="sm" />
+          <PlayButton isPlaying={isPlaying} onToggle={() => handlePlayAction("button")} size="sm" />
         </div>
       </div>
     )
@@ -116,7 +129,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
   return (
     <div
       className={cn(songCard({ variant }), "w-full", className)}
-      onClick={onPlay}
+      onClick={() => handlePlayAction("card")}
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
@@ -144,7 +157,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
           onClick={(e) => e.stopPropagation()}
         >
           {canShowPlaylist && <AddToPlaylistButton song={song} dropdownPosition="top" />}
-          <PlayButton isPlaying={isPlaying} onToggle={() => onPlay?.()} size="md" />
+          <PlayButton isPlaying={isPlaying} onToggle={() => handlePlayAction("button")} size="md" />
         </div>
         {/* Playing indicator */}
         {isPlaying && (

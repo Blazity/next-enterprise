@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 
 import { useUser } from "@clerk/nextjs"
 import { Check, ListPlus, Plus, X } from "lucide-react"
+import { usePostHog } from "posthog-js/react"
 import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"
@@ -19,6 +20,7 @@ interface AddToPlaylistButtonProps {
 export function AddToPlaylistButton({ song, className, dropdownPosition = "bottom" }: AddToPlaylistButtonProps) {
     const { t } = useTranslation()
     const { user } = useUser()
+    const posthog = usePostHog()
     const { playlists, fetchPlaylists, addSong, createPlaylist } = usePlaylistStore()
 
     const [isOpen, setIsOpen] = useState(false)
@@ -60,16 +62,30 @@ export function AddToPlaylistButton({ song, className, dropdownPosition = "botto
             try {
                 await addSong(playlistId, song)
                 setFeedback({ playlistId, type: "success" })
+                posthog?.capture("playlist_song_added", {
+                    playlist_id: playlistId,
+                    song_id: song.id,
+                    song_title: song.title,
+                })
             } catch (err) {
                 const msg = err instanceof Error ? err.message : ""
                 if (msg.includes("already") || msg.includes("Already")) {
                     setFeedback({ playlistId, type: "duplicate" })
+                    posthog?.capture("playlist_song_add_duplicate", {
+                        playlist_id: playlistId,
+                        song_id: song.id,
+                    })
                 } else {
                     setFeedback({ playlistId, type: "error" })
+                    posthog?.capture("playlist_song_add_failed", {
+                        playlist_id: playlistId,
+                        song_id: song.id,
+                        error_message: msg || "unknown",
+                    })
                 }
             }
         },
-        [addSong, song]
+        [addSong, posthog, song]
     )
 
     const handleQuickCreate = useCallback(async () => {
@@ -78,19 +94,34 @@ export function AddToPlaylistButton({ song, className, dropdownPosition = "botto
             const created = await createPlaylist(user.id, newName.trim())
             await addSong(created.id, song)
             setFeedback({ playlistId: created.id, type: "success" })
+            posthog?.capture("playlist_created_and_song_added", {
+                playlist_id: created.id,
+                playlist_name: created.name,
+                song_id: song.id,
+            })
             setNewName("")
             setShowCreate(false)
         } catch {
+            posthog?.capture("playlist_quick_create_failed", {
+                song_id: song.id,
+            })
             /* error in store */
         }
-    }, [user?.id, newName, createPlaylist, addSong, song])
+    }, [user?.id, newName, createPlaylist, addSong, posthog, song])
 
     return (
         <div className={cn("relative", className)} ref={dropdownRef}>
             <button
                 onClick={(e) => {
                     e.stopPropagation()
-                    setIsOpen(!isOpen)
+                    const nextOpen = !isOpen
+                    setIsOpen(nextOpen)
+                    if (nextOpen) {
+                        posthog?.capture("playlist_dropdown_opened", {
+                            song_id: song.id,
+                            dropdown_position: dropdownPosition,
+                        })
+                    }
                 }}
                 aria-label={t("addToPlaylist.title")}
                 className="rounded-lg p-1.5 text-white/40 transition-colors hover:bg-white/[0.08] hover:text-white"
@@ -161,7 +192,12 @@ export function AddToPlaylistButton({ song, className, dropdownPosition = "botto
                         </div>
                     ) : (
                         <button
-                            onClick={() => setShowCreate(true)}
+                            onClick={() => {
+                                setShowCreate(true)
+                                posthog?.capture("playlist_quick_create_opened", {
+                                    song_id: song.id,
+                                })
+                            }}
                             className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white/60 transition-colors hover:bg-white/[0.06] hover:text-white"
                         >
                             <Plus size={14} />

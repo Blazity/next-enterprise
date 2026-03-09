@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 
 import { UserButton, useUser } from "@clerk/nextjs"
 import { Disc3, Home, Library, ListMusic, Mic2, Music2, Search } from "lucide-react"
-import { useFeatureFlagVariantKey } from "posthog-js/react"
+import { useFeatureFlagVariantKey, usePostHog } from "posthog-js/react"
 import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"
@@ -32,8 +32,17 @@ export function NavBar() {
   const { t } = useTranslation()
   const { user } = useUser()
   const pathname = usePathname()
+  const posthog = usePostHog()
   const playlistFeatureVariant = useFeatureFlagVariantKey("playlist-add-feature")
   const playlistFeatureEnabled = playlistFeatureVariant === "on"
+
+  const captureNavClick = (href: string, section: "mobile" | "main" | "library") => {
+    posthog?.capture("nav_item_clicked", {
+      href,
+      section,
+      playlist_feature_variant: playlistFeatureVariant ?? "unknown",
+    })
+  }
 
   const filteredLibraryNav = playlistFeatureEnabled
     ? libraryNav
@@ -52,6 +61,7 @@ export function NavBar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => captureNavClick(item.href, "mobile")}
               aria-current={isActive ? "page" : undefined}
               className={cn(
                 "flex flex-col items-center gap-0.5 px-4 py-1 text-[10px] font-medium transition-colors",
@@ -88,6 +98,7 @@ export function NavBar() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => captureNavClick(item.href, "main")}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
@@ -123,6 +134,7 @@ export function NavBar() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  onClick={() => captureNavClick(item.href, "library")}
                   aria-current={isActive ? "page" : undefined}
                   className={cn(
                     "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
