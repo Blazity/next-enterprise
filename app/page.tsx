@@ -12,6 +12,7 @@ import { PlaylistsView } from "components/PlaylistsView/PlaylistsView"
 import { SearchResults } from "components/SearchResults/SearchResults"
 import { Sidebar } from "components/Sidebar/Sidebar"
 import { TopNav } from "components/TopNav/TopNav"
+import { useFeatureFlagEnabled } from "posthog-js/react"
 
 import { type ActiveView, SEARCH_DEBOUNCE_MS } from "lib/constants"
 import { useDebounce } from "lib/hooks/useDebounce"
@@ -34,6 +35,14 @@ export default function HomePage() {
 
   const searchInputRef = useRef<HTMLInputElement | null>(null)
   const debouncedQuery = useDebounce(query.trim(), SEARCH_DEBOUNCE_MS)
+
+  const isPlaylistEnabled = useFeatureFlagEnabled("playlist-feature") ?? false
+
+  useEffect(() => {
+    if (activeView === "playlists" && !isPlaylistEnabled) {
+      setActiveView("home")
+    }
+  }, [activeView, isPlaylistEnabled])
 
   // Search-as-you-type: fire when debounced query changes
   useEffect(() => {

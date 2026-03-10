@@ -7,6 +7,7 @@
 import { AlbumIcon, ArtistIcon, ChevronLeftIcon, DiscoverLogoIcon, HomeIcon, MusicNoteIcon, PlaylistIcon, SearchIcon } from "components/icons"
 import { cn } from "lib/cn"
 import type { ActiveView } from "lib/constants"
+import { useFeatureFlagEnabled } from "posthog-js/react"
 
 interface SidebarProps {
   activeView: ActiveView
@@ -44,11 +45,13 @@ function NavItem({ label, isActive, isCollapsed, icon, onClick }: NavItemProps) 
 }
 
 export function Sidebar({ activeView, onNavClick, isCollapsed, onToggleCollapse }: SidebarProps) {
+  const isPlaylistEnabled = useFeatureFlagEnabled("playlist-feature") ?? false
+
   const navItems: { label: string; view: ActiveView; icon: React.ReactNode }[] = [
     { label: "Home", view: "home", icon: <HomeIcon /> },
     { label: "Search", view: "search", icon: <SearchIcon width={20} height={20} /> },
     { label: "Songs", view: "songs", icon: <MusicNoteIcon /> },
-    { label: "Playlists", view: "playlists", icon: <PlaylistIcon /> },
+    ...(isPlaylistEnabled ? [{ label: "Playlists", view: "playlists" as ActiveView, icon: <PlaylistIcon /> }] : []),
     { label: "Albums", view: "albums", icon: <AlbumIcon /> },
     { label: "Artists", view: "artists", icon: <ArtistIcon /> },
   ]

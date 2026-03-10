@@ -54,6 +54,7 @@
     "framer-motion": "^12.35.0",
     "lodash": "^4.17.21",
     "next": "15.3.8",
+    "posthog-js": "^1.360.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwind-merge": "^2.6.0",

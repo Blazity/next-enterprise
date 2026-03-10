@@ -4,6 +4,10 @@ import { ClerkProvider } from "@clerk/nextjs"
 
 import { MiniPlayer } from "components/MiniPlayer/MiniPlayer"
 import { ToastContainer } from "components/Toast/ToastContainer"
+import { Suspense } from "react"
+
+import PostHogPageView from "components/Providers/PostHogPageView"
+import { PostHogProvider } from "components/Providers/PostHogProvider"
 import { CLERK_APPEARANCE } from "lib/constants"
 
 import "styles/tailwind.css"
@@ -25,7 +29,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <ClerkProvider appearance={CLERK_APPEARANCE}>
       <html lang="en" className={dmSans.variable}>
         <body className={`${dmSans.variable} font-sans antialiased bg-bg text-white`}>
-          {children}
+          <PostHogProvider>
+            <Suspense fallback={null}>
+              <PostHogPageView />
+            </Suspense>
+            {children}
+          </PostHogProvider>
           <ToastContainer />
           <MiniPlayer />
         </body>
