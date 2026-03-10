@@ -12,6 +12,8 @@ import { PlaylistsView } from "components/PlaylistsView/PlaylistsView"
 import { SearchResults } from "components/SearchResults/SearchResults"
 import { Sidebar } from "components/Sidebar/Sidebar"
 import { TopNav } from "components/TopNav/TopNav"
+import { DashboardShell } from "components/DashboardShell/DashboardShell"
+import { useAuth } from "@clerk/nextjs"
 import { useFeatureFlagEnabled } from "posthog-js/react"
 
 import { type ActiveView, SEARCH_DEBOUNCE_MS } from "lib/constants"
@@ -20,9 +22,12 @@ import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import { searchAlbums, searchArtists, searchSongs } from "lib/itunes/api"
 import type { ItunesAlbum, ItunesArtist, ItunesTrack } from "lib/itunes/types"
 import { isHomeView, ternary } from "lib/utils"
+import { usePlaylistStore } from "store/usePlaylistStore"
+import { getSharedWithMe } from "lib/api/playlists"
 
 
 export default function HomePage() {
+  const { getToken, isSignedIn } = useAuth()
   const { requireAuth } = useRequireAuth()
   const [activeView, setActiveView] = useState<ActiveView>("home")
   const [query, setQuery] = useState("")
@@ -36,6 +41,7 @@ export default function HomePage() {
   const searchInputRef = useRef<HTMLInputElement | null>(null)
   const debouncedQuery = useDebounce(query.trim(), SEARCH_DEBOUNCE_MS)
 
+  const { setSharedPlaylists, sharedPlaylists, selectedPlaylistId, setSelectedPlaylistId } = usePlaylistStore()
   const isPlaylistEnabled = useFeatureFlagEnabled("playlist-feature") ?? false
 
   useEffect(() => {
@@ -43,6 +49,23 @@ export default function HomePage() {
       setActiveView("home")
     }
   }, [activeView, isPlaylistEnabled])
+
+  useEffect(() => {
+    async function loadShared() {
+      if (isSignedIn) {
+        try {
+          const token = await getToken()
+          const res = await getSharedWithMe(token)
+          if (res.data) {
+            setSharedPlaylists(res.data)
+          }
+        } catch (err) {
+          console.error("Failed to load shared playlists", err)
+        }
+      }
+    }
+    loadShared()
+  }, [isSignedIn, getToken, setSharedPlaylists])
 
   // Search-as-you-type: fire when debounced query changes
   useEffect(() => {
@@ -88,38 +111,31 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden pb-[72px] box-border bg-bg">
-
-      <Sidebar
-        activeView={activeView}
-        onNavClick={handleNavClick}
-        isCollapsed={isSidebarCollapsed}
-        onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
-      />
-
-      <div className="flex-1 flex flex-col overflow-hidden bg-bg">
-        <TopNav
-          query={query}
-          inputRef={searchInputRef}
-          onChange={handleQueryChange}
+    <DashboardShell
+      activeView={activeView}
+      onNavClick={handleNavClick}
+      query={query}
+      onQueryChange={handleQueryChange}
+    >
+      {activeView === "playlists" ? (
+        <PlaylistsView />
+      ) : ternary(
+        isHomeView(activeView),
+        <HomeContent 
+          activeView={activeView as Exclude<ActiveView, "search" | "playlists">} 
+          onPlaylistClick={(id) => {
+            setSelectedPlaylistId(id)
+            setActiveView("playlists")
+          }}
+        />,
+        <SearchResults
+          songs={songs}
+          albums={albums}
+          artists={artists}
+          isLoading={isLoadingSearch}
+          hasSearched={hasSearched}
         />
-
-        <main className="flex-1 overflow-y-auto px-8 py-7">
-          {activeView === "playlists" ? (
-            <PlaylistsView />
-          ) : ternary(
-            isHomeView(activeView),
-            <HomeContent activeView={activeView as Exclude<ActiveView, "search" | "playlists">} />,
-            <SearchResults
-              songs={songs}
-              albums={albums}
-              artists={artists}
-              isLoading={isLoadingSearch}
-              hasSearched={hasSearched}
-            />
-          )}
-        </main>
-      </div>
-    </div>
+      )}
+    </DashboardShell>
   )
 }

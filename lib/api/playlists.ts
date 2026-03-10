@@ -8,6 +8,15 @@ export interface PlaylistTrack {
   addedAt: string
 }
 
+export interface PlaylistShare {
+  id: string
+  playlistId: string
+  sharedBy: string
+  sharedWith: string
+  token: string
+  createdAt: string
+}
+
 export interface Playlist {
   id: string
   name: string
@@ -16,8 +25,12 @@ export interface Playlist {
   createdAt: string
   updatedAt: string
   tracks?: PlaylistTrack[]
+  sharedBy?: string
   /** From list endpoint when tracks are not included */
-  _count?: { tracks: number }
+  _count?: { 
+    tracks: number
+    shares?: number
+  }
 }
 
 export interface ApiResponse<T> {
@@ -127,5 +140,30 @@ export async function reorderTracks(token: string | null, playlistId: string, tr
   return fetchApi<{ success: boolean }>(`/api/playlists/${playlistId}/tracks/reorder`, token, {
     method: "PUT",
     body: JSON.stringify({ tracks }),
+  })
+}
+
+export async function sharePlaylist(token: string | null, id: string, email: string) {
+  return fetchApi<{ shareUrl: string; share: PlaylistShare }>(`/api/playlists/${id}/share`, token, {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  })
+}
+
+export async function getSharedWithMe(token: string | null) {
+  return fetchApi<(Playlist & { sharedBy: string; shareId: string })[]>("/api/playlists/shared-with-me", token)
+}
+
+export async function getPlaylistByToken(token: string | null, shareToken: string) {
+  return fetchApi<Playlist>(`/api/playlists/by-token/${shareToken}`, token)
+}
+
+export async function getPlaylistShares(token: string | null, id: string) {
+  return fetchApi<PlaylistShare[]>(`/api/playlists/${id}/shares`, token)
+}
+
+export async function revokeShare(token: string | null, playlistId: string, shareId: string) {
+  return fetchApi<{ success: boolean }>(`/api/playlists/${playlistId}/share/${shareId}`, token, {
+    method: "DELETE",
   })
 }
