@@ -5,6 +5,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useAuth } from "@clerk/nextjs"
+import { useFeatureFlagEnabled } from "posthog-js/react"
 import { CreatePlaylistModal } from "components/CreatePlaylistModal/CreatePlaylistModal"
 import { PlaylistIcon, SpinnerIcon } from "components/icons"
 import { addTrack } from "lib/api/playlists"
@@ -24,6 +25,7 @@ export function AddToPlaylistButton({ trackId }: AddToPlaylistButtonProps) {
   const { playlists, isLoading } = usePlaylistStore()
   const { addToast } = useToastStore()
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const isPlaylistEnabled = useFeatureFlagEnabled("playlist-feature") ?? false
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -53,6 +55,8 @@ export function AddToPlaylistButton({ trackId }: AddToPlaylistButtonProps) {
       setAddingToId(null)
     }
   }
+
+  if (!isPlaylistEnabled) return null
 
   return (
     <div className="relative" ref={dropdownRef}>

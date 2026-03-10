@@ -12,6 +12,7 @@ import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import type { ItunesTrack } from "lib/itunes/types"
 import { formatDuration } from "lib/itunes/utils"
 import { usePlayerStore } from "store/usePlayerStore"
+import { useFeatureFlagEnabled } from "posthog-js/react"
 
 interface SongCardProps {
   track: ItunesTrack
@@ -20,6 +21,7 @@ interface SongCardProps {
 export function SongCard({ track }: SongCardProps) {
   const { currentTrack, isPlaying, playTrack, togglePlay } = usePlayerStore()
   const { requireAuth } = useRequireAuth()
+  const isPlaylistEnabled = useFeatureFlagEnabled("playlist-feature") ?? false
   const isCurrentTrack = currentTrack?.trackId === track.trackId
   const isActiveAndPlaying = isCurrentTrack && isPlaying
 
@@ -86,7 +88,7 @@ export function SongCard({ track }: SongCardProps) {
       </span>
 
       {/* Add To Playlist button */}
-      <AddToPlaylistButton trackId={track.trackId} />
+      {isPlaylistEnabled && <AddToPlaylistButton trackId={track.trackId} />}
 
       {/* Play button */}
       <button
