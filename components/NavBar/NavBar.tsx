@@ -3,6 +3,8 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
+import { useEffect } from "react"
+
 import { UserButton, useUser } from "@clerk/nextjs"
 import { Disc3, Home, ListMusic, Mic2, Music2, Search } from "lucide-react"
 import { usePostHog } from "posthog-js/react"
@@ -11,6 +13,7 @@ import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"
+import { usePlaylistStore } from "@/store/playlistStore"
 
 const mainNav = [
   { href: "/", labelKey: "nav.home", Icon: Home },
@@ -40,6 +43,14 @@ export function NavBar() {
   const posthog = usePostHog()
   const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
   const playlistFeatureEnabled = playlistFeatureVariant === "on"
+  const { sharedPlaylists, fetchSharedPlaylists } = usePlaylistStore()
+  const showPlaylistsLink = playlistFeatureEnabled || sharedPlaylists.length > 0
+
+  useEffect(() => {
+    if (user?.id && !playlistFeatureEnabled) {
+      fetchSharedPlaylists(user.id)
+    }
+  }, [user?.id, playlistFeatureEnabled, fetchSharedPlaylists])
 
   const captureNavClick = (href: string, section: "mobile" | "main" | "library") => {
     posthog?.capture("nav_item_clicked", {
@@ -49,10 +60,10 @@ export function NavBar() {
     })
   }
 
-  const filteredLibraryNav = playlistFeatureEnabled
+  const filteredLibraryNav = showPlaylistsLink
     ? libraryNav
     : libraryNav.filter((item) => item.href !== "/playlists")
-  const filteredMobileNav = playlistFeatureEnabled
+  const filteredMobileNav = showPlaylistsLink
     ? mobileNav
     : mobileNav.filter((item) => item.href !== "/playlists")
 
