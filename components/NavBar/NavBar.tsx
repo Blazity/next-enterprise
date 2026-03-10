@@ -60,19 +60,17 @@ export function NavBar() {
     })
   }
 
-  const sharedWithMeItem = { href: "/shared-playlists", labelKey: "share.sharedWithMe", Icon: Share2 }
-
-  const filteredLibraryNav = playlistFeatureEnabled
-    ? libraryNav
+  const playlistNavItem = playlistFeatureEnabled
+    ? { href: "/playlists", labelKey: "nav.playlists", Icon: ListMusic }
     : hasSharedPlaylists
-      ? [...libraryNav.filter((item) => item.href !== "/playlists"), sharedWithMeItem]
-      : libraryNav.filter((item) => item.href !== "/playlists")
+      ? { href: "/shared-playlists", labelKey: "share.sharedWithMe", Icon: Share2 }
+      : null
 
-  const filteredMobileNav = playlistFeatureEnabled
-    ? mobileNav
-    : hasSharedPlaylists
-      ? [...mobileNav.filter((item) => item.href !== "/playlists"), sharedWithMeItem]
-      : mobileNav.filter((item) => item.href !== "/playlists")
+  const resolveNav = (items: typeof libraryNav) =>
+    items.flatMap((item) => (item.href === "/playlists" ? (playlistNavItem ? [playlistNavItem] : []) : [item]))
+
+  const filteredLibraryNav = resolveNav(libraryNav)
+  const filteredMobileNav = resolveNav(mobileNav)
 
   return (
     <nav
