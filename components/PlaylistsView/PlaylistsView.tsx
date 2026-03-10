@@ -6,17 +6,22 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "@clerk/nextjs"
 import { CreatePlaylistModal } from "components/CreatePlaylistModal/CreatePlaylistModal"
+import { DeleteConfirmModal } from "components/DeleteConfirmModal/DeleteConfirmModal"
 import { ChevronRightIcon, PlaylistIcon, TrashIcon } from "components/icons"
 import { PlaylistDetail } from "components/PlaylistDetail/PlaylistDetail"
 import { Skeleton } from "components/Skeleton/Skeleton"
 import { deletePlaylist, getPlaylists } from "lib/api/playlists"
 import { usePlaylistStore } from "store/usePlaylistStore"
+import { useToastStore } from "store/useToastStore"
 
 export function PlaylistsView() {
   const { getToken } = useAuth()
   const { playlists, setPlaylists, isLoading, setIsLoading, removePlaylist } = usePlaylistStore()
+  const { addToast } = useToastStore()
   const [selectedPlaylistId, setSelectedPlaylistId] = useState<string | null>(null)
   const [isCreating, setIsCreating] = useState(false)
+  const [playlistToDelete, setPlaylistToDelete] = useState<{ id: string; name: string } | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     async function fetchAllPlaylists() {
@@ -108,12 +113,9 @@ export function PlaylistsView() {
                 </div>
                 <button
                   type="button"
-                  onClick={async (e) => {
+                  onClick={(e) => {
                     e.stopPropagation()
-                    if (!confirm("Delete this playlist?")) return
-                    const token = await getToken()
-                    const res = await deletePlaylist(token, playlist.id)
-                    if (!res.error) removePlaylist(playlist.id)
+                    setPlaylistToDelete({ id: playlist.id, name: playlist.name })
                   }}
                   className="shrink-0 size-8 rounded-lg flex items-center justify-center text-muted hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all border-0 cursor-pointer"
                   aria-label="Delete playlist"
@@ -128,6 +130,33 @@ export function PlaylistsView() {
       )}
 
       {isCreating && <CreatePlaylistModal onClose={() => setIsCreating(false)} />}
+
+      {playlistToDelete && (
+        <DeleteConfirmModal
+          title={`Delete "${playlistToDelete.name}"?`}
+          message="This action cannot be undone. All songs in this playlist will be removed from this collection."
+          isLoading={isDeleting}
+          onCancel={() => setPlaylistToDelete(null)}
+          onConfirm={async () => {
+            setIsDeleting(true)
+            try {
+              const token = await getToken()
+              const res = await deletePlaylist(token, playlistToDelete.id)
+              if (!res.error) {
+                removePlaylist(playlistToDelete.id)
+                addToast("Playlist deleted successfully")
+                setPlaylistToDelete(null)
+              } else {
+                addToast(res.error || "Failed to delete playlist", "error")
+              }
+            } catch (_err) {
+              addToast("An error occurred while deleting", "error")
+            } finally {
+              setIsDeleting(false)
+            }
+          }}
+        />
+      )}
     </div>
   )
 }

@@ -32,7 +32,7 @@ export function PlaylistDetail({ playlistId, onBack }: PlaylistDetailProps) {
         const res = await getPlaylist(token, playlistId)
         if (res.data) {
           setPlaylist(res.data)
-          
+
           if (res.data.tracks && res.data.tracks.length > 0) {
             // map them
             const trackIds = res.data.tracks.map((t: PlaylistTrack) => t.trackId)
@@ -40,7 +40,7 @@ export function PlaylistDetail({ playlistId, onBack }: PlaylistDetailProps) {
             // Re-order based on playlist tracks array
             const trackMap = new Map(itunesTracks.map(t => [t.trackId, t]))
             const ordered = trackIds.map((id: number) => trackMap.get(id)).filter(Boolean) as ItunesTrack[]
-            
+
             setEnrichedTracks(ordered)
           }
         }
@@ -88,10 +88,10 @@ export function PlaylistDetail({ playlistId, onBack }: PlaylistDetailProps) {
 
   if (!playlist) {
     return (
-      <div className="text-center py-20">
+      <div className="text-center py-12">
         <h2 className="text-xl font-bold text-white mb-2">Playlist not found</h2>
         <button onClick={onBack} className="text-primary hover:underline bg-transparent border-0 cursor-pointer">
-          Back to Playlists
+          Playlists
         </button>
       </div>
     )
@@ -100,22 +100,30 @@ export function PlaylistDetail({ playlistId, onBack }: PlaylistDetailProps) {
   return (
     <div className="animate-fade-in-up">
       {/* Header */}
-      <div className="mb-8">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 py-1 -ml-1 mb-6 rounded-lg border-0 bg-transparent text-muted hover:text-white transition-colors cursor-pointer"
-          aria-label="Back to playlists"
-        >
-          <ChevronLeftIcon width={18} height={18} />
-          <span className="text-sm">Back to playlists</span>
-        </button>
-        <h1 className="text-3xl font-bold text-white m-0 tracking-tight">{playlist.name}</h1>
+      <div className="mb-10">
+        <div className="flex flex-col gap-1.5">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-1.5 p-0 -ml-0.5 rounded-lg border-0 bg-transparent text-[13px] font-medium text-[#71717a] hover:text-white transition-colors cursor-pointer w-fit"
+            aria-label="Back to playlists"
+          >
+            <ChevronLeftIcon width={14} height={14} strokeWidth={2.5} />
+            <span>Playlists</span>
+          </button>
+          <h1 className="text-4xl font-extrabold text-white m-0 tracking-tight">{playlist.name}</h1>
+        </div>
+        
         {playlist.description && (
-          <p className="text-sm text-muted mt-1 m-0">{playlist.description}</p>
+          <p className="text-sm text-[#a1a1aa] mt-3 m-0 max-w-2xl leading-relaxed">
+            {playlist.description}
+          </p>
         )}
-        <p className="text-sm text-muted mt-2 m-0">
-          {playlist.tracks?.length || 0} track{playlist.tracks?.length !== 1 && "s"}
-        </p>
+
+        <div className="flex items-center gap-2 mt-4">
+          <p className="text-xs font-bold text-[#52525b] m-0 uppercase tracking-[0.1em]">
+            {playlist.tracks?.length || 0} track{playlist.tracks?.length !== 1 ? "s" : ""}
+          </p>
+        </div>
       </div>
 
       {/* Tracks List */}

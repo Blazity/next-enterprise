@@ -9,6 +9,7 @@ import { CreatePlaylistModal } from "components/CreatePlaylistModal/CreatePlayli
 import { PlaylistIcon, SpinnerIcon } from "components/icons"
 import { addTrack } from "lib/api/playlists"
 import { usePlaylistStore } from "store/usePlaylistStore"
+import { useToastStore } from "store/useToastStore"
 
 interface AddToPlaylistButtonProps {
   trackId: number
@@ -21,6 +22,7 @@ export function AddToPlaylistButton({ trackId }: AddToPlaylistButtonProps) {
   
   const { getToken } = useAuth()
   const { playlists, isLoading } = usePlaylistStore()
+  const { addToast } = useToastStore()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -41,10 +43,12 @@ export function AddToPlaylistButton({ trackId }: AddToPlaylistButtonProps) {
     try {
       const token = await getToken()
       await addTrack(token, playlistId, trackId)
-      // Success feedback could be added here (e.g. a toast)
+
+      addToast("Track added to playlist")
       setIsOpen(false)
     } catch (error) {
       console.error("Failed to add track", error)
+      addToast("Failed to add track", "error")
     } finally {
       setAddingToId(null)
     }

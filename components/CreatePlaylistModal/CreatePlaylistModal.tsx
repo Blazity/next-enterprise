@@ -9,6 +9,7 @@ import { CloseIcon, SpinnerIcon } from "components/icons"
 import { createPlaylist } from "lib/api/playlists"
 import { cn } from "lib/cn"
 import { usePlaylistStore } from "store/usePlaylistStore"
+import { useToastStore } from "store/useToastStore"
 
 interface CreatePlaylistModalProps {
   onClose: () => void
@@ -17,6 +18,7 @@ interface CreatePlaylistModalProps {
 export function CreatePlaylistModal({ onClose }: CreatePlaylistModalProps) {
   const { getToken } = useAuth()
   const { addPlaylist } = usePlaylistStore()
+  const { addToast } = useToastStore()
 
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
@@ -36,12 +38,16 @@ export function CreatePlaylistModal({ onClose }: CreatePlaylistModalProps) {
 
       if (result.error) {
         setError(result.error)
+        addToast(result.error, "error")
       } else if (result.data) {
         addPlaylist(result.data)
+        addToast("Playlist created successfully")
         onClose()
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Something went wrong")
+      const msg = err instanceof Error ? err.message : "Something went wrong"
+      setError(msg)
+      addToast(msg, "error")
     } finally {
       setIsSubmitting(false)
     }
@@ -110,14 +116,17 @@ export function CreatePlaylistModal({ onClose }: CreatePlaylistModalProps) {
               type="submit"
               disabled={!name.trim() || isSubmitting}
               className={cn(
-                "px-5 py-2.5 rounded-full border-0 text-sm font-bold text-black transition-all duration-200 cursor-pointer flex items-center gap-2",
+                "min-w-[100px] h-[40px] px-5 rounded-full border-0 text-sm font-bold text-black transition-all duration-200 cursor-pointer flex items-center justify-center gap-2",
                 !name.trim() || isSubmitting
                   ? "bg-[#3f3f46] text-[#71717a] cursor-not-allowed"
                   : "bg-primary hover:scale-105 active:scale-95"
               )}
             >
-              {isSubmitting && <SpinnerIcon className="animate-spin text-black" width={14} height={14} />}
-              Create
+              {isSubmitting ? (
+                <SpinnerIcon className="animate-spin text-black" width={16} height={16} />
+              ) : (
+                "Create"
+              )}
             </button>
           </div>
         </form>

@@ -1,9 +1,9 @@
-import type { Metadata } from "next"
-import { DM_Sans } from "next/font/google"
-
 import { ClerkProvider } from "@clerk/nextjs"
+import { DM_Sans } from "next/font/google"
+import type { Metadata } from "next"
 
 import { MiniPlayer } from "components/MiniPlayer/MiniPlayer"
+import { ToastContainer } from "components/Toast/ToastContainer"
 import { CLERK_APPEARANCE } from "lib/constants"
 
 import "styles/tailwind.css"
@@ -24,8 +24,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <ClerkProvider appearance={CLERK_APPEARANCE}>
       <html lang="en" className={dmSans.variable}>
-        <body>
+        <body className={`${dmSans.variable} font-sans antialiased bg-bg text-white`}>
           {children}
+          <ToastContainer />
           <MiniPlayer />
         </body>
       </html>
