@@ -12,6 +12,7 @@ import { getPlaylist, removeTrack } from "lib/api/playlists"
 import type { Playlist, PlaylistTrack } from "lib/api/playlists"
 import { fetchTracksByIds } from "lib/itunes/api"
 import type { ItunesTrack } from "lib/itunes/types"
+import { SharePlaylistModal } from "components/SharePlaylistModal/SharePlaylistModal"
 
 interface PlaylistDetailProps {
   playlistId: string
@@ -23,6 +24,8 @@ export function PlaylistDetail({ playlistId, onBack }: PlaylistDetailProps) {
   const [playlist, setPlaylist] = useState<Playlist | null>(null)
   const [enrichedTracks, setEnrichedTracks] = useState<ItunesTrack[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isSharing, setIsSharing] = useState(false)
+  const { userId: currentUserId } = useAuth()
 
   useEffect(() => {
     async function loadDetail() {
@@ -110,7 +113,31 @@ export function PlaylistDetail({ playlistId, onBack }: PlaylistDetailProps) {
             <ChevronLeftIcon width={14} height={14} strokeWidth={2.5} />
             <span>Playlists</span>
           </button>
-          <h1 className="text-4xl font-extrabold text-white m-0 tracking-tight">{playlist.name}</h1>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col">
+              {playlist.userId !== currentUserId && (
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
+                    Shared Playlist
+                  </span>
+                </div>
+              )}
+              <h1 className="text-4xl font-extrabold text-white m-0 tracking-tight">{playlist.name}</h1>
+              {playlist.sharedBy && (
+                <p className="text-primary text-sm font-medium mt-1 m-0">
+                  from {playlist.sharedBy}
+                </p>
+              )}
+            </div>
+            {playlist.userId === currentUserId && (
+              <button
+                onClick={() => setIsSharing(true)}
+                className="px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-[13px] font-bold hover:bg-primary/10 transition-colors cursor-pointer"
+              >
+                Share
+              </button>
+            )}
+          </div>
         </div>
         
         {playlist.description && (
@@ -119,10 +146,18 @@ export function PlaylistDetail({ playlistId, onBack }: PlaylistDetailProps) {
           </p>
         )}
 
-        <div className="flex items-center gap-2 mt-4">
+        <div className="flex items-center gap-4 mt-4">
           <p className="text-xs font-bold text-[#52525b] m-0 uppercase tracking-[0.1em]">
             {playlist.tracks?.length || 0} track{playlist.tracks?.length !== 1 ? "s" : ""}
           </p>
+          {playlist.userId === currentUserId && (playlist._count?.shares || 0) > 0 && (
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20">
+              <span className="size-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="text-[10px] font-bold text-primary uppercase tracking-wider">
+                Shared with {playlist._count?.shares} {playlist._count?.shares === 1 ? 'person' : 'people'}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -149,6 +184,14 @@ export function PlaylistDetail({ playlistId, onBack }: PlaylistDetailProps) {
           ))
         )}
       </div>
+
+      {isSharing && playlist && (
+        <SharePlaylistModal
+          playlistId={playlist.id}
+          playlistName={playlist.name}
+          onClose={() => setIsSharing(false)}
+        />
+      )}
     </div>
   )
 }

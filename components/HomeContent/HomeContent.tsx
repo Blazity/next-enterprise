@@ -8,12 +8,16 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 
 import { BentoCard, BentoGrid } from "components/BentoGrid/BentoGrid"
-import { EqualizerIcon, PlayIcon } from "components/icons"
+import { EqualizerIcon, PlayIcon, PlaylistIcon } from "components/icons"
 import { Skeleton } from "components/Skeleton/Skeleton"
 import { SongCard } from "components/SongCard/SongCard"
+import { getSharedWithMe } from "lib/api/playlists"
+import type { Playlist } from "lib/api/playlists"
+import { useAuth } from "@clerk/nextjs"
+import { usePlaylistStore } from "store/usePlaylistStore"
+import type { ActiveView } from "lib/constants"
 
 import { cn } from "lib/cn"
-import type { ActiveView } from "lib/constants"
 import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import { fetchPopularArtists, fetchTopAlbums, fetchTrendingSongs } from "lib/itunes/api"
 import type { ItunesAlbum, ItunesArtist, ItunesTrack } from "lib/itunes/types"
@@ -22,30 +26,37 @@ import { isVisibleInView } from "lib/utils"
 import { usePlayerStore } from "store/usePlayerStore"
 
 interface HomeContentProps {
-  activeView: Exclude<ActiveView, "search">
+  activeView: Exclude<ActiveView, "search" | "playlists">
+  onPlaylistClick: (id: string) => void
 }
 
 const FEATURED_SONG_COUNT = 3
 const ALBUM_GRID_COUNT = 6
 const ARTIST_DISPLAY_COUNT = 6
 
-export function HomeContent({ activeView }: HomeContentProps) {
+export function HomeContent({ activeView, onPlaylistClick }: HomeContentProps) {
   const [trendingSongs, setTrendingSongs] = useState<ItunesTrack[]>([])
   const [topAlbums, setTopAlbums] = useState<ItunesAlbum[]>([])
   const [popularArtists, setPopularArtists] = useState<ItunesArtist[]>([])
+  const { sharedPlaylists } = usePlaylistStore()
   const [isLoading, setIsLoading] = useState(true)
+  const { getToken, isSignedIn } = useAuth()
 
   useEffect(() => {
     async function loadHomeData() {
       setIsLoading(true)
-      const [songs, albums, artists] = await Promise.all([
+      const fetchPromises: Promise<any>[] = [
         fetchTrendingSongs(),
         fetchTopAlbums(),
         fetchPopularArtists(),
-      ])
-      setTrendingSongs(songs)
-      setTopAlbums(albums)
-      setPopularArtists(artists)
+      ]
+
+      const results = await Promise.all(fetchPromises)
+      
+      setTrendingSongs(results[0])
+      setTopAlbums(results[1])
+      setPopularArtists(results[2])
+      
       setIsLoading(false)
     }
 
@@ -153,6 +164,7 @@ export function HomeContent({ activeView }: HomeContentProps) {
           </div>
         </BentoCard>
       )}
+
 
       {/* Top Albums — full width mosaic */}
       {isVisibleInView(activeView, "albums") && albumsToShow.length > 0 && (

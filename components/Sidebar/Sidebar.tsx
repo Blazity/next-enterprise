@@ -8,12 +8,17 @@ import { AlbumIcon, ArtistIcon, ChevronLeftIcon, DiscoverLogoIcon, HomeIcon, Mus
 import { cn } from "lib/cn"
 import type { ActiveView } from "lib/constants"
 import { useFeatureFlagEnabled } from "posthog-js/react"
+import { usePlaylistStore } from "store/usePlaylistStore"
+import type { Playlist } from "lib/api/playlists"
 
 interface SidebarProps {
   activeView: ActiveView
   onNavClick: (view: ActiveView) => void
   isCollapsed: boolean
   onToggleCollapse: () => void
+  sharedPlaylists?: (Playlist & { sharedBy: string; shareId: string })[]
+  onSharedPlaylistClick?: (id: string) => void
+  selectedPlaylistId?: string | null
 }
 
 interface NavItemProps {
@@ -44,7 +49,15 @@ function NavItem({ label, isActive, isCollapsed, icon, onClick }: NavItemProps) 
   )
 }
 
-export function Sidebar({ activeView, onNavClick, isCollapsed, onToggleCollapse }: SidebarProps) {
+export function Sidebar({ 
+  activeView, 
+  onNavClick, 
+  isCollapsed, 
+  onToggleCollapse,
+  sharedPlaylists = [],
+  onSharedPlaylistClick,
+  selectedPlaylistId
+}: SidebarProps) {
   const isPlaylistEnabled = useFeatureFlagEnabled("playlist-feature") ?? false
 
   const navItems: { label: string; view: ActiveView; icon: React.ReactNode }[] = [
@@ -102,6 +115,53 @@ export function Sidebar({ activeView, onNavClick, isCollapsed, onToggleCollapse 
             onClick={() => onNavClick(item.view)}
           />
         ))}
+
+        {/* Shared with you section */}
+        {isPlaylistEnabled && sharedPlaylists.length > 0 && (
+          <div className="mt-6">
+            {!isCollapsed && (
+              <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-[0.12em] mb-2">
+                Shared with you
+              </p>
+            )}
+            <div className="flex flex-col gap-0.5">
+              {sharedPlaylists.slice(0, 2).map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => onSharedPlaylistClick?.(p.id)}
+                  title={isCollapsed ? `${p.name} (from ${p.sharedBy})` : undefined}
+                  className={cn(
+                    "flex items-center gap-3.5 w-full bg-transparent border-0 rounded-lg cursor-pointer text-sm text-left relative transition-all duration-200",
+                    isCollapsed ? "px-0 py-2.5 justify-center" : "px-4 py-2.5",
+                    activeView === "playlists" && selectedPlaylistId === p.id 
+                      ? "text-white font-bold bg-white/5" 
+                      : "text-muted font-normal hover:text-white hover:bg-white/5"
+                  )}
+                >
+                  {activeView === "playlists" && selectedPlaylistId === p.id && (
+                    <span className="absolute left-0 top-[20%] bottom-[20%] w-[3px] rounded-r-sm bg-primary" />
+                  )}
+                  <PlaylistIcon className={cn("shrink-0 size-4", (activeView === "playlists" && selectedPlaylistId === p.id) ? "opacity-100 text-primary" : "opacity-70")} />
+                  {!isCollapsed && (
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate m-0">{p.name}</p>
+                      <p className="text-[10px] text-muted truncate m-0 font-normal">from {p.sharedBy}</p>
+                    </div>
+                  )}
+                </button>
+              ))}
+
+              {!isCollapsed && sharedPlaylists.length > 2 && (
+                <button
+                  onClick={() => onNavClick("playlists")}
+                  className="mx-4 mt-1 text-[11px] font-bold text-muted hover:text-white transition-colors border-0 bg-transparent cursor-pointer text-left w-fit"
+                >
+                  View all ({sharedPlaylists.length})
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </nav>
     </aside>
   )
