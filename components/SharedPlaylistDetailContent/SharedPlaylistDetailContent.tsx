@@ -3,48 +3,29 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 
 import { useUser } from "@clerk/nextjs"
-import { ArrowLeft, Clock, ListMusic, Music, Search, Share2, Trash2 } from "lucide-react"
-import { useFeatureFlag } from "@/hooks/useFeatureFlag"
+import { ArrowLeft, Clock, ListMusic, Music, Share2 } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
-import { ComingSoon } from "@/components/ComingSoon/ComingSoon"
-import { SharePlaylistDialog } from "@/components/SharePlaylistDialog/SharePlaylistDialog"
 import { cn } from "@/lib/utils"
 import { useMusicStore } from "@/store/musicStore"
 import { usePlaylistStore } from "@/store/playlistStore"
 import { PLAY_STATE } from "@/types/music"
 
-export function PlaylistDetailContent() {
+export function SharedPlaylistDetailContent() {
     const { t } = useTranslation()
     const { slug } = useParams<{ slug: string }>()
     const playlistId = Number(slug)
     const { user } = useUser()
-    const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
-    const playlistFeatureEnabled = playlistFeatureVariant === "on"
 
-    const { currentPlaylist, isLoading, error, fetchPlaylist, removeSong } = usePlaylistStore()
+    const { currentPlaylist, isLoading, error, fetchPlaylist } = usePlaylistStore()
     const { currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
-
-    const [removingTrackId, setRemovingTrackId] = useState<string | null>(null)
 
     useEffect(() => {
         if (playlistId && user?.id) fetchPlaylist(playlistId, user.id)
     }, [playlistId, user?.id, fetchPlaylist])
-
-    const handleRemove = useCallback(
-        async (trackId: string) => {
-            setRemovingTrackId(trackId)
-            try {
-                await removeSong(playlistId, trackId)
-            } finally {
-                setRemovingTrackId(null)
-            }
-        },
-        [playlistId, removeSong]
-    )
 
     const handlePlaySong = useCallback(
         (song: NonNullable<typeof currentPlaylist>["songs"] extends (infer S)[] | undefined ? S : never) => {
@@ -75,19 +56,15 @@ export function PlaylistDetailContent() {
         )
     }
 
-    if (!playlistFeatureEnabled) {
-        return <ComingSoon titleKey="nav.playlists" />
-    }
-
     if (error || !currentPlaylist) {
         return (
             <div className="mx-auto max-w-3xl px-4 py-8 md:px-6">
                 <Link
-                    href="/playlists"
+                    href="/shared-playlists"
                     className="text-text-tertiary hover:text-white mb-6 inline-flex items-center gap-2 text-sm transition-colors"
                 >
                     <ArrowLeft size={16} />
-                    {t("playlist.back")}
+                    {t("share.sharedWithMe")}
                 </Link>
                 <div className="flex min-h-[30vh] flex-col items-center justify-center text-center">
                     <ListMusic size={48} className="mb-4 text-white/20" />
@@ -98,23 +75,21 @@ export function PlaylistDetailContent() {
     }
 
     const songs = currentPlaylist.songs || []
-    const isOwner = currentPlaylist.is_owner !== false
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-8 md:px-6">
-            {/* Back link */}
             <Link
-                href="/playlists"
+                href="/shared-playlists"
                 className="text-text-tertiary hover:text-white mb-6 inline-flex items-center gap-2 text-sm transition-colors"
             >
                 <ArrowLeft size={16} />
-                {t("playlist.back")}
+                {t("share.sharedWithMe")}
             </Link>
 
             {/* Playlist header */}
             <div className="mb-8 flex items-start gap-5">
-                <div className="from-accent/30 to-accent/10 flex size-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg shadow-red-500/10">
-                    <ListMusic size={36} className="text-accent" />
+                <div className="flex size-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/30 to-blue-500/10 shadow-lg shadow-blue-500/10">
+                    <Share2 size={36} className="text-blue-400" />
                 </div>
                 <div className="min-w-0">
                     <h1 className="text-2xl font-bold text-white">{currentPlaylist.name}</h1>
@@ -127,20 +102,11 @@ export function PlaylistDetailContent() {
                 </div>
             </div>
 
-            {/* Share button – owner only */}
-            {isOwner && user?.id && (
-                <div className="mb-6">
-                    <SharePlaylistDialog playlistId={playlistId} sharedByClerkId={user.id} />
-                </div>
-            )}
-
             {/* Shared indicator */}
-            {!isOwner && (
-                <p className="text-text-tertiary mb-6 flex items-center gap-2 text-xs">
-                    <Share2 size={14} className="text-blue-400" />
-                    {t("share.sharedPlaylist")}
-                </p>
-            )}
+            <p className="text-text-tertiary mb-6 flex items-center gap-2 text-xs">
+                <Share2 size={14} className="text-blue-400" />
+                {t("share.sharedPlaylist")}
+            </p>
 
             {/* Song list */}
             {songs.length === 0 ? (
@@ -149,30 +115,19 @@ export function PlaylistDetailContent() {
                         <Music size={28} className="text-white/20" />
                     </div>
                     <p className="text-lg font-medium text-white/60">{t("playlist.emptySongs")}</p>
-                    <p className="text-text-tertiary mt-1 max-w-xs text-sm">{t("playlist.emptyHint")}</p>
-                    <Link
-                        href="/search"
-                        className="bg-accent hover:bg-accent-hover mt-5 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-white transition-colors"
-                    >
-                        <Search size={16} />
-                        {t("nav.search")}
-                    </Link>
                 </div>
             ) : (
                 <div className="bg-surface-elevated overflow-hidden rounded-xl">
                     {songs.map((song, index) => {
                         const isPlaying = currentlyPlaying?.id === song.track_id && playState === PLAY_STATE.PLAYING
-                        const isRemoving = removingTrackId === song.track_id
                         return (
                             <div
                                 key={song.id}
                                 className={cn(
                                     "group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-white/[0.04]",
-                                    index < songs.length - 1 && "border-b border-white/[0.06]",
-                                    isRemoving && "pointer-events-none opacity-40"
+                                    index < songs.length - 1 && "border-b border-white/[0.06]"
                                 )}
                             >
-                                {/* Position */}
                                 <span
                                     className={cn(
                                         "w-5 text-center text-sm tabular-nums",
@@ -182,7 +137,6 @@ export function PlaylistDetailContent() {
                                     {index + 1}
                                 </span>
 
-                                {/* Album art */}
                                 <button
                                     onClick={() => handlePlaySong(song)}
                                     className="relative size-11 shrink-0 overflow-hidden rounded-lg"
@@ -211,7 +165,6 @@ export function PlaylistDetailContent() {
                                     )}
                                 </button>
 
-                                {/* Song info */}
                                 <div className="min-w-0 flex-1 cursor-pointer" onClick={() => handlePlaySong(song)}>
                                     <p className={cn("truncate text-[13px] font-medium", isPlaying ? "text-accent" : "text-text-primary")}>
                                         {song.title}
@@ -219,24 +172,11 @@ export function PlaylistDetailContent() {
                                     <p className="text-text-tertiary truncate text-xs">{song.artist_name}</p>
                                 </div>
 
-                                {/* Duration */}
                                 {song.duration != null && (
                                     <span className="text-text-tertiary flex items-center gap-1 text-xs tabular-nums">
                                         <Clock size={12} />
                                         {Math.floor(song.duration / 60)}:{String(song.duration % 60).padStart(2, "0")}
                                     </span>
-                                )}
-
-                                {/* Remove button – owner only */}
-                                {isOwner && (
-                                    <button
-                                        onClick={() => handleRemove(song.track_id)}
-                                        disabled={isRemoving}
-                                        aria-label={t("playlist.removeSong")}
-                                        className="rounded-lg p-2 text-white/30 opacity-100 transition-all hover:bg-red-500/10 hover:text-red-400 md:opacity-0 md:group-hover:opacity-100"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
                                 )}
                             </div>
                         )

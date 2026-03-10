@@ -51,7 +51,7 @@ export function SharedPlaylistsPageContent() {
           {sharedPlaylists.map((playlist) => (
             <Link
               key={playlist.id}
-              href={`/playlist/${playlist.id}`}
+              href={`/shared-playlists/${playlist.id}`}
               className="group relative flex items-center gap-4 rounded-xl px-4 py-3.5 transition-colors hover:bg-white/[0.04]"
             >
               <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-500/5">
