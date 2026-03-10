@@ -1,5 +1,55 @@
 @import 'tailwindcss';
 
+@theme {
+  --font-sans: var(--font-inter);
+
+  /* AuraMusic Theme Colors */
+  --colors-aura-primary: #8b5cf6; /* Vibrant Purple */
+  --colors-aura-secondary: #ec4899; /* Vibrant Pink */
+  --colors-aura-dark: #0f172a; /* Slate 900 */
+  --colors-aura-darker: #020617; /* Slate 950 */
+  --colors-aura-card: rgba(30, 41, 59, 0.7); /* Translucent Slate */
+  --colors-aura-card-hover: rgba(51, 65, 85, 0.9);
+  
+  --colors-spotify-green: #1db954; /* Keep for backward compat on any leftover classes, though we'll remove them */
+  --colors-spotify-green-hover: #1ed760;
+  --colors-spotify-dark: #121212;
+  --colors-spotify-darker: #000000;
+  --colors-spotify-card: #181818;
+  --colors-spotify-card-hover: #282828;
+
+  --animate-eq-1: eq-1 0.8s ease-in-out infinite;
+  --animate-eq-2: eq-2 0.6s ease-in-out infinite;
+  --animate-eq-3: eq-3 0.9s ease-in-out infinite;
+  --animate-eq-4: eq-4 0.7s ease-in-out infinite;
+}
+
+body {
+  background: radial-gradient(circle at top left, #1e1b4b, var(--colors-aura-darker));
+  background-attachment: fixed;
+  color: #fff;
+}
+
+@keyframes eq-1 {
+  0%, 100% { height: 8px; }
+  50% { height: 28px; }
+}
+
+@keyframes eq-2 {
+  0%, 100% { height: 20px; }
+  50% { height: 8px; }
+}
+
+@keyframes eq-3 {
+  0%, 100% { height: 12px; }
+  50% { height: 32px; }
+}
+
+@keyframes eq-4 {
+  0%, 100% { height: 24px; }
+  50% { height: 10px; }
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
