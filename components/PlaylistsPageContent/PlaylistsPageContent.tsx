@@ -267,7 +267,7 @@ export function PlaylistsPageContent() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium text-white">{playlist.name}</p>
                   <p className="text-text-tertiary truncate text-xs">
-                    {playlist.description || `${playlist.song_count || 0} songs`}
+                    Protected by: {playlist.shared_by_name?.trim() || playlist.shared_by_email || 'Unknown'}
                   </p>
                 </div>
                 <span className="text-text-tertiary text-xs">{playlist.song_count || 0} songs</span>

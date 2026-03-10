@@ -13,6 +13,8 @@ export interface Playlist {
   is_owner?: boolean
   is_shared?: boolean
   shared_by?: string
+  shared_by_email?: string
+  shared_by_name?: string
 }
 
 export interface PlaylistSong {
