@@ -6,12 +6,13 @@
 import { useEffect, useRef, useState } from "react"
 import { useAuth } from "@clerk/nextjs"
 import { useFeatureFlagEnabled } from "posthog-js/react"
+
 import { CreatePlaylistModal } from "components/CreatePlaylistModal/CreatePlaylistModal"
 import { PlaylistIcon, SpinnerIcon } from "components/icons"
 import { addTrack } from "lib/api/playlists"
+import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import { usePlaylistStore } from "store/usePlaylistStore"
 import { useToastStore } from "store/useToastStore"
-import { useRequireAuth } from "lib/hooks/useRequireAuth"
 
 interface AddToPlaylistButtonProps {
   trackId: number

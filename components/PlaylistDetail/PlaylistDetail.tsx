@@ -5,14 +5,16 @@
 
 import { useEffect, useState } from "react"
 import { useAuth } from "@clerk/nextjs"
+
 import { ChevronLeftIcon, CloseIcon } from "components/icons"
+import { SharePlaylistModal } from "components/SharePlaylistModal/SharePlaylistModal"
 import { Skeleton } from "components/Skeleton/Skeleton"
 import { SongCard } from "components/SongCard/SongCard"
+
 import { getPlaylist, removeTrack } from "lib/api/playlists"
 import type { Playlist, PlaylistTrack } from "lib/api/playlists"
 import { fetchTracksByIds } from "lib/itunes/api"
 import type { ItunesTrack } from "lib/itunes/types"
-import { SharePlaylistModal } from "components/SharePlaylistModal/SharePlaylistModal"
 
 interface PlaylistDetailProps {
   playlistId: string

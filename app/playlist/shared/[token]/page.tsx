@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useAuth } from "@clerk/nextjs"
+
+import { DashboardShell } from "components/DashboardShell/DashboardShell"
 import { PlaylistDetail } from "components/PlaylistDetail/PlaylistDetail"
 import { Skeleton } from "components/Skeleton/Skeleton"
-import { getSharedWithMe, getPlaylistByToken, Playlist } from "lib/api/playlists"
-import { usePlaylistStore } from "store/usePlaylistStore"
+
+import { getPlaylistByToken, getSharedWithMe, type Playlist } from "lib/api/playlists"
 import { useRequireAuth } from "lib/hooks/useRequireAuth"
-import { DashboardShell } from "components/DashboardShell/DashboardShell"
+import { usePlaylistStore } from "store/usePlaylistStore"
 
 export default function SharedPlaylistPage() {
   const { token: shareToken } = useParams()
@@ -16,7 +18,7 @@ export default function SharedPlaylistPage() {
   const { requireAuth } = useRequireAuth()
   const router = useRouter()
 
-  const { setSharedPlaylists, sharedPlaylists, selectedPlaylistId, setSelectedPlaylistId } = usePlaylistStore()
+  const { setSharedPlaylists } = usePlaylistStore()
   const [playlist, setPlaylist] = useState<Playlist | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -39,7 +41,7 @@ export default function SharedPlaylistPage() {
         } else if (result.error) {
           setError(result.error)
         }
-      } catch (err) {
+      } catch {
         setError("An unexpected error occurred.")
       } finally {
         setIsLoading(false)

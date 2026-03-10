@@ -1,5 +1,5 @@
-import { useAuth, useClerk } from "@clerk/nextjs"
 import { useCallback } from "react"
+import { useAuth, useClerk } from "@clerk/nextjs"
 
 // Returns a guard function that checks auth before running a callback.
 // If not signed in → opens Clerk sign-in modal.

@@ -6,16 +6,15 @@
 // wednesday-dev: local useState for search, useRef for input focus
 
 import { useEffect, useRef, useState } from "react"
-
-import { HomeContent } from "components/HomeContent/HomeContent"
-import { PlaylistsView } from "components/PlaylistsView/PlaylistsView"
-import { SearchResults } from "components/SearchResults/SearchResults"
-import { Sidebar } from "components/Sidebar/Sidebar"
-import { TopNav } from "components/TopNav/TopNav"
-import { DashboardShell } from "components/DashboardShell/DashboardShell"
 import { useAuth } from "@clerk/nextjs"
 import { useFeatureFlagEnabled } from "posthog-js/react"
 
+import { DashboardShell } from "components/DashboardShell/DashboardShell"
+import { HomeContent } from "components/HomeContent/HomeContent"
+import { PlaylistsView } from "components/PlaylistsView/PlaylistsView"
+import { SearchResults } from "components/SearchResults/SearchResults"
+
+import { getSharedWithMe } from "lib/api/playlists"
 import { type ActiveView, SEARCH_DEBOUNCE_MS } from "lib/constants"
 import { useDebounce } from "lib/hooks/useDebounce"
 import { useRequireAuth } from "lib/hooks/useRequireAuth"
@@ -23,7 +22,6 @@ import { searchAlbums, searchArtists, searchSongs } from "lib/itunes/api"
 import type { ItunesAlbum, ItunesArtist, ItunesTrack } from "lib/itunes/types"
 import { isHomeView, ternary } from "lib/utils"
 import { usePlaylistStore } from "store/usePlaylistStore"
-import { getSharedWithMe } from "lib/api/playlists"
 
 
 export default function HomePage() {
@@ -36,12 +34,10 @@ export default function HomePage() {
   const [artists, setArtists] = useState<ItunesArtist[]>([])
   const [isLoadingSearch, setIsLoadingSearch] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
-
   const searchInputRef = useRef<HTMLInputElement | null>(null)
   const debouncedQuery = useDebounce(query.trim(), SEARCH_DEBOUNCE_MS)
 
-  const { setSharedPlaylists, sharedPlaylists, selectedPlaylistId, setSelectedPlaylistId } = usePlaylistStore()
+  const { setSharedPlaylists, setSelectedPlaylistId } = usePlaylistStore()
   const isPlaylistEnabled = useFeatureFlagEnabled("playlist-feature") ?? false
 
   useEffect(() => {
