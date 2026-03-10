@@ -71,6 +71,11 @@ export default function HomePage() {
   }, [debouncedQuery])
 
   function handleNavClick(view: ActiveView) {
+    if (view === "playlists") {
+      requireAuth(() => setActiveView(view))
+      return
+    }
+
     setActiveView(view)
     if (view === "search") {
       setTimeout(() => searchInputRef.current?.focus(), 50)

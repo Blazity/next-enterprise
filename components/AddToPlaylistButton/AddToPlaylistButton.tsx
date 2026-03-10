@@ -11,6 +11,7 @@ import { PlaylistIcon, SpinnerIcon } from "components/icons"
 import { addTrack } from "lib/api/playlists"
 import { usePlaylistStore } from "store/usePlaylistStore"
 import { useToastStore } from "store/useToastStore"
+import { useRequireAuth } from "lib/hooks/useRequireAuth"
 
 interface AddToPlaylistButtonProps {
   trackId: number
@@ -22,6 +23,7 @@ export function AddToPlaylistButton({ trackId }: AddToPlaylistButtonProps) {
   const [addingToId, setAddingToId] = useState<string | null>(null)
   
   const { getToken } = useAuth()
+  const { requireAuth } = useRequireAuth()
   const { playlists, isLoading } = usePlaylistStore()
   const { addToast } = useToastStore()
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -63,7 +65,7 @@ export function AddToPlaylistButton({ trackId }: AddToPlaylistButtonProps) {
       <button
         onClick={(e) => {
           e.stopPropagation()
-          setIsOpen(!isOpen)
+          requireAuth(() => setIsOpen(!isOpen))
         }}
         aria-label="Add to playlist"
         className="size-8 rounded-full border-0 bg-transparent flex items-center justify-center shrink-0 transition-colors text-muted hover:text-white hover:bg-white/10"

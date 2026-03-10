@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from "react"
 import { useAuth } from "@clerk/nextjs"
+import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import { CreatePlaylistModal } from "components/CreatePlaylistModal/CreatePlaylistModal"
 import { DeleteConfirmModal } from "components/DeleteConfirmModal/DeleteConfirmModal"
 import { ChevronRightIcon, PlaylistIcon, TrashIcon } from "components/icons"
@@ -16,6 +17,7 @@ import { useToastStore } from "store/useToastStore"
 
 export function PlaylistsView() {
   const { getToken } = useAuth()
+  const { requireAuth } = useRequireAuth()
   const { playlists, setPlaylists, isLoading, setIsLoading, removePlaylist } = usePlaylistStore()
   const { addToast } = useToastStore()
   const [selectedPlaylistId, setSelectedPlaylistId] = useState<string | null>(null)
@@ -58,7 +60,7 @@ export function PlaylistsView() {
           <p className="text-muted mt-1.5 m-0 text-sm sm:text-base">Create and manage your music collections.</p>
         </div>
         <button
-          onClick={() => setIsCreating(true)}
+          onClick={() => requireAuth(() => setIsCreating(true))}
           className="shrink-0 px-5 py-2.5 rounded-full border-0 bg-primary font-bold text-black text-sm cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-glow-sm"
         >
           New Playlist
@@ -83,7 +85,7 @@ export function PlaylistsView() {
           <p className="text-lg text-white font-medium m-0">No playlists yet</p>
           <p className="text-sm text-[#71717a] mt-2 m-0 max-w-sm mx-auto">Create your first playlist and start adding songs.</p>
           <button
-            onClick={() => setIsCreating(true)}
+            onClick={() => requireAuth(() => setIsCreating(true))}
             className="mt-6 px-5 py-2.5 rounded-full border-0 bg-primary font-bold text-black text-sm cursor-pointer hover:opacity-90 transition-opacity"
           >
             New Playlist
