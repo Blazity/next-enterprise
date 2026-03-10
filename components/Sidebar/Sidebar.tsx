@@ -4,7 +4,7 @@
 // wednesday-design: dark surface (#111111), green active indicator, DM Sans
 // wednesday-dev: NavItem extracted, active boolean prefix
 
-import { AlbumIcon, ArtistIcon, DiscoverLogoIcon, HomeIcon, MusicNoteIcon, SearchIcon } from "components/icons"
+import { AlbumIcon, ArtistIcon, DiscoverLogoIcon, HomeIcon, MusicNoteIcon, PlaylistIcon, SearchIcon } from "components/icons"
 import { cn } from "lib/cn"
 import type { ActiveView } from "lib/constants"
 
@@ -44,6 +44,7 @@ export function Sidebar({ activeView, onNavClick }: SidebarProps) {
     { label: "Home", view: "home", icon: <HomeIcon /> },
     { label: "Search", view: "search", icon: <SearchIcon width={20} height={20} /> },
     { label: "Songs", view: "songs", icon: <MusicNoteIcon /> },
+    { label: "Playlists", view: "playlists", icon: <PlaylistIcon /> },
     { label: "Albums", view: "albums", icon: <AlbumIcon /> },
     { label: "Artists", view: "artists", icon: <ArtistIcon /> },
   ]

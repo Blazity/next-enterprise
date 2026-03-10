@@ -8,6 +8,7 @@
 import { useEffect, useRef, useState } from "react"
 
 import { HomeContent } from "components/HomeContent/HomeContent"
+import { PlaylistsView } from "components/PlaylistsView/PlaylistsView"
 import { SearchResults } from "components/SearchResults/SearchResults"
 import { Sidebar } from "components/Sidebar/Sidebar"
 import { TopNav } from "components/TopNav/TopNav"
@@ -83,9 +84,11 @@ export default function HomePage() {
         />
 
         <main className="flex-1 overflow-y-auto px-8 py-7">
-          {ternary(
+          {activeView === "playlists" ? (
+            <PlaylistsView />
+          ) : ternary(
             isHomeView(activeView),
-            <HomeContent activeView={activeView as Exclude<ActiveView, "search">} />,
+            <HomeContent activeView={activeView as Exclude<ActiveView, "search" | "playlists">} />,
             <SearchResults
               songs={songs}
               albums={albums}

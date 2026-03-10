@@ -2,9 +2,9 @@
 // wednesday-dev: verb-first names, explicit return types, UPPER_SNAKE_CASE constants
 
 import { POPULAR_ARTIST_NAMES, SEARCH_LIMIT_ALBUMS, SEARCH_LIMIT_TRACKS } from "lib/itunes/constants"
-import { parseRssEntryToAlbum } from "lib/itunes/utils"
 import type { RssFeed } from "lib/itunes/rssTypes"
 import type { ItunesAlbum, ItunesArtist, ItunesSearchResponse, ItunesTrack } from "lib/itunes/types"
+import { parseRssEntryToAlbum } from "lib/itunes/utils"
 
 // ─── Internal helpers ────────────────────────────────────────────────────────
 
@@ -54,6 +54,17 @@ export async function fetchTrendingSongs(): Promise<ItunesTrack[]> {
   // 3. Re-sort to RSS chart order
   const trackMap = new Map(tracks.map((t) => [String(t.trackId), t]))
   return trackIds.map((id) => trackMap.get(id)).filter((t): t is ItunesTrack => t !== undefined)
+}
+
+export async function fetchTracksByIds(ids: number[]): Promise<ItunesTrack[]> {
+  if (!ids.length) return []
+  const lookupResponse = await fetch(`/api/itunes/lookup?ids=${ids.join(",")}`)
+  if (!lookupResponse.ok) return []
+
+  const lookupData = (await lookupResponse.json()) as ItunesSearchResponse<ItunesTrack>
+  return lookupData.results.filter(
+    (r) => (r as { wrapperType: string }).wrapperType === "track"
+  )
 }
 
 export async function fetchTopAlbums(): Promise<ItunesAlbum[]> {
