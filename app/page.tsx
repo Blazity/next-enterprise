@@ -1,178 +1,26 @@
-"use client"
+import { Metadata } from "next"
+import { Button } from "components/Button/Button"
 
-import { Flame, Music3, Search } from "lucide-react"
-import { useCallback, useEffect, useRef, useState } from "react"
-import { NowPlayingBar } from "components/NowPlayingBar/NowPlayingBar"
-import { SearchBar } from "components/SearchBar/SearchBar"
-import { TopNav } from "components/TopNav/TopNav"
-import { TrackCard } from "components/TrackCard/TrackCard"
-import { TrackList } from "components/TrackList/TrackList"
-import type { iTunesTrack } from "lib/itunes"
+import { LP_GRID_ITEMS } from "lp-items"
 
-const SUGGESTED_SEARCHES = ["Chill", "Workout", "Focus", "Party", "Pop", "Electronic"]
+export const metadata: Metadata = {
+  title: "Next.js Enterprise Boilerplate",
+  twitter: {
+    card: "summary_large_image",
+  },
+  openGraph: {
+    url: "https://next-enterprise.vercel.app/",
+    images: [
+      {
+        width: 1200,
+        height: 630,
+        url: "https://raw.githubusercontent.com/Blazity/next-enterprise/main/.github/assets/project-logo.png",
+      },
+    ],
+  },
+}
 
-export default function AuraMusicPage() {
-  const [tracks, setTracks] = useState<iTunesTrack[]>([])
-  const [recentlyPlayed, setRecentlyPlayed] = useState<iTunesTrack[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("Top Hits")
-
-  // ─── Independent Player State ─────────────────────────────────────
-  // currentTrack stores the actual track object, completely independent
-  // of the tracks[] search results array. Searching or clearing search
-  // will never affect what the player displays or plays.
-  const [currentTrack, setCurrentTrack] = useState<iTunesTrack | null>(null)
-  // playbackContext remembers which list the track was played from,
-  // so Next/Prev can step through the correct list.
-  const [playbackContext, setPlaybackContext] = useState<"search" | "recent" | null>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
-
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-
-  // ─── LocalStorage ────────────────────────────────────────────────
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("aura_recent_tracks")
-      if (stored) {
-        setRecentlyPlayed(JSON.parse(stored) as iTunesTrack[])
-      }
-    } catch (e) {
-      console.error(e)
-    }
-  }, [])
-
-  const saveToRecent = useCallback((track: iTunesTrack) => {
-    setRecentlyPlayed((prev) => {
-      const filtered = prev.filter((t) => t.trackId !== track.trackId)
-      const next = [track, ...filtered].slice(0, 8)
-      try {
-        localStorage.setItem("aura_recent_tracks", JSON.stringify(next))
-      } catch (e) {
-        console.error(e)
-      }
-      return next
-    })
-  }, [])
-
-  // ─── Search ──────────────────────────────────────────────────────
-
-  const handleSearch = useCallback(async (query: string) => {
-    if (!query.trim()) return
-
-    setIsLoading(true)
-    setSearchQuery(query)
-
-    try {
-      const res = await fetch(`/api/music/search?q=${encodeURIComponent(query)}`)
-      if (!res.ok) throw new Error("Search failed")
-      const data = (await res.json()) as { tracks: iTunesTrack[] }
-
-      setTracks(data.tracks)
-      // Player state (currentTrack, isPlaying) is NOT touched here.
-      // The user keeps listening uninterrupted.
-    } catch (err) {
-      console.error("Search error:", err)
-      setTracks([])
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
-
-  const handleClearSearch = useCallback(() => {
-    handleSearch("Top Hits")
-  }, [handleSearch])
-
-  const hasMounted = useRef(false)
-
-  // Initial load fetch
-  useEffect(() => {
-    if (!hasMounted.current) {
-      handleSearch("Top Hits")
-      hasMounted.current = true
-    }
-  }, [handleSearch])
-
-  // ─── Playback ────────────────────────────────────────────────────
-
-  const playTrack = useCallback(
-    (track: iTunesTrack) => {
-      if (!track.previewUrl) return
-
-      if (!audioRef.current) {
-        audioRef.current = new Audio()
-      }
-      const audio = audioRef.current
-
-      // If same track is already loaded, just resume
-      if (currentTrack?.trackId === track.trackId) {
-        audio.play()
-        setIsPlaying(true)
-        return
-      }
-
-      // New track — switch audio source
-      audio.pause()
-      audio.src = track.previewUrl
-      audio.play()
-      setCurrentTrack(track)
-      setIsPlaying(true)
-      saveToRecent(track)
-    },
-    [currentTrack, saveToRecent]
-  )
-
-  const handlePlayFromCard = useCallback(
-    (track: iTunesTrack, context: "search" | "recent") => {
-      setPlaybackContext(context)
-      playTrack(track)
-    },
-    [playTrack]
-  )
-
-  const handlePause = useCallback(() => {
-    audioRef.current?.pause()
-    setIsPlaying(false)
-  }, [])
-
-  const handlePlayPause = useCallback(() => {
-    if (isPlaying) {
-      handlePause()
-    } else if (currentTrack) {
-      // Resume — the audio element still has the correct src
-      audioRef.current?.play()
-      setIsPlaying(true)
-    }
-  }, [isPlaying, currentTrack, handlePause])
-
-  const handleNext = useCallback(() => {
-    if (!currentTrack || !playbackContext) return
-    const list = playbackContext === "search" ? tracks : recentlyPlayed
-    const currentIndex = list.findIndex((t) => t.trackId === currentTrack.trackId)
-    if (currentIndex !== -1 && currentIndex < list.length - 1) {
-      playTrack(list[currentIndex + 1]!)
-    }
-  }, [currentTrack, playbackContext, tracks, recentlyPlayed, playTrack])
-
-  const handlePrev = useCallback(() => {
-    if (!currentTrack || !playbackContext) return
-    const list = playbackContext === "search" ? tracks : recentlyPlayed
-    const currentIndex = list.findIndex((t) => t.trackId === currentTrack.trackId)
-    if (currentIndex > 0) {
-      playTrack(list[currentIndex - 1]!)
-    }
-  }, [currentTrack, playbackContext, tracks, recentlyPlayed, playTrack])
-
-  // Derive Next/Prev availability from current track position in active list
-  const currentList = playbackContext === "search" ? tracks : recentlyPlayed
-  const currentIndexInList = currentTrack ? currentList.findIndex((t) => t.trackId === currentTrack.trackId) : -1
-  const hasNext = currentIndexInList !== -1 && currentIndexInList < currentList.length - 1
-  const hasPrev = currentIndexInList > 0
-
-  const isHomeView = searchQuery === "Top Hits"
-
-  // ─── Render ──────────────────────────────────────────────────────
-
+export default function Web() {
   return (
     <main className="min-h-screen pb-32">
       <TopNav onHome={handleClearSearch} />
