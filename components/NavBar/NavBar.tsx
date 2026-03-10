@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 
 import { UserButton, useUser } from "@clerk/nextjs"
-import { Disc3, Home, ListMusic, Mic2, Music2, Search } from "lucide-react"
+import { Disc3, Home, ListMusic, Mic2, Music2, Search, Share2 } from "lucide-react"
 import { usePostHog } from "posthog-js/react"
 
 import { useFeatureFlag } from "@/hooks/useFeatureFlag"
@@ -44,7 +44,7 @@ export function NavBar() {
   const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
   const playlistFeatureEnabled = playlistFeatureVariant === "on"
   const { sharedPlaylists, fetchSharedPlaylists } = usePlaylistStore()
-  const showPlaylistsLink = playlistFeatureEnabled || sharedPlaylists.length > 0
+  const hasSharedPlaylists = sharedPlaylists.length > 0
 
   useEffect(() => {
     if (user?.id && !playlistFeatureEnabled) {
@@ -60,12 +60,19 @@ export function NavBar() {
     })
   }
 
-  const filteredLibraryNav = showPlaylistsLink
+  const sharedWithMeItem = { href: "/shared-playlists", labelKey: "share.sharedWithMe", Icon: Share2 }
+
+  const filteredLibraryNav = playlistFeatureEnabled
     ? libraryNav
-    : libraryNav.filter((item) => item.href !== "/playlists")
-  const filteredMobileNav = showPlaylistsLink
+    : hasSharedPlaylists
+      ? [...libraryNav.filter((item) => item.href !== "/playlists"), sharedWithMeItem]
+      : libraryNav.filter((item) => item.href !== "/playlists")
+
+  const filteredMobileNav = playlistFeatureEnabled
     ? mobileNav
-    : mobileNav.filter((item) => item.href !== "/playlists")
+    : hasSharedPlaylists
+      ? [...mobileNav.filter((item) => item.href !== "/playlists"), sharedWithMeItem]
+      : mobileNav.filter((item) => item.href !== "/playlists")
 
   return (
     <nav
