@@ -108,12 +108,20 @@ export function ArtistIcon({ className, width = 20, height = 20 }: IconProps) {
   )
 }
 
+export function EqualizerIcon({ className, width = 14, height = 14 }: IconProps) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 16 16" fill="currentColor" className={className}>
+      <rect x="2" y="6" width="3" height="10" rx="1.5" className="animate-eq-bar-1 origin-bottom" />
+      <rect x="6.5" y="3" width="3" height="13" rx="1.5" className="animate-eq-bar-2 origin-bottom" />
+      <rect x="11" y="5" width="3" height="11" rx="1.5" className="animate-eq-bar-3 origin-bottom" />
+    </svg>
+  )
+}
+
 export function DiscoverLogoIcon({ className, width = 16, height = 16 }: IconProps) {
   return (
-    <svg width={width} height={height} viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M9 18V5l12-2v13" />
-      <circle cx="6" cy="18" r="3" />
-      <circle cx="18" cy="16" r="3" />
+    <svg width={width} height={height} viewBox="0 0 512 512" fill="currentColor" className={className}>
+      <path d="M182.179 159.75h30c0-31.002 4.415-66.799-24.143-95.356-8.968-8.968-17.455-16.07-24.942-22.336C143.295 25.488 135.261 18.046 135.261 0h-30v221.406A67.11 67.11 0 0 0 67.761 210c-37.22 0-67.5 30.28-67.5 67.5s30.28 67.5 67.5 67.5c37.448 0 68.135-30.713 67.468-68.75h.032V57.781c9.458 8.262 20.077 16.341 31.562 27.825 19.029 19.031 15.356 44.009 15.356 74.144zM254.739 154.682v233.725a67.104 67.104 0 0 0-37.5-11.406c-37.22 0-67.5 30.28-67.5 67.5s30.28 67.5 67.5 67.5 67.5-30.28 67.5-67.5V238.6c49.72-9.848 147.613-29.233 197-39.014v128.82a67.104 67.104 0 0 0-37.5-11.406c-37.22 0-67.5 30.28-67.5 67.5s30.28 67.5 67.5 67.5 67.5-30.28 67.5-67.5V103.734z" />
     </svg>
   )
 }
@@ -136,6 +144,24 @@ export function ChevronLeftIcon({ className, width = 20, height = 20, strokeWidt
   )
 }
 
+export function ChevronRightIcon({ className, width = 20, height = 20, strokeWidth = 2 }: IconProps) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M9 18l6-6-6-6" />
+    </svg>
+  )
+}
+
 export function TrashIcon({ className, width = 20, height = 20, strokeWidth = 2 }: IconProps) {
   return (
     <svg
@@ -154,24 +180,6 @@ export function TrashIcon({ className, width = 20, height = 20, strokeWidth = 2 
       <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
       <line x1="10" y1="11" x2="10" y2="17" />
       <line x1="14" y1="11" x2="14" y2="17" />
-    </svg>
-  )
-}
-
-export function ChevronRightIcon({ className, width = 20, height = 20, strokeWidth = 2 }: IconProps) {
-  return (
-    <svg
-      width={width}
-      height={height}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M9 18l6-6-6-6" />
     </svg>
   )
 }

@@ -1,6 +1,6 @@
-import { ClerkProvider } from "@clerk/nextjs"
-import { DM_Sans } from "next/font/google"
 import type { Metadata } from "next"
+import { DM_Sans } from "next/font/google"
+import { ClerkProvider } from "@clerk/nextjs"
 
 import { MiniPlayer } from "components/MiniPlayer/MiniPlayer"
 import { ToastContainer } from "components/Toast/ToastContainer"

@@ -149,7 +149,7 @@ export function PlaylistsView() {
               } else {
                 addToast(res.error || "Failed to delete playlist", "error")
               }
-            } catch (_err) {
+            } catch {
               addToast("An error occurred while deleting", "error")
             } finally {
               setIsDeleting(false)

@@ -6,7 +6,7 @@
 import Image from "next/image"
 
 import { AddToPlaylistButton } from "components/AddToPlaylistButton/AddToPlaylistButton"
-import { PauseIcon, PlayIcon } from "components/icons"
+import { EqualizerIcon, PauseIcon, PlayIcon } from "components/icons"
 import { cn } from "lib/cn"
 import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import type { ItunesTrack } from "lib/itunes/types"
@@ -38,11 +38,12 @@ export function SongCard({ track }: SongCardProps) {
 
   return (
     <div
+      onClick={handlePlay}
       className={cn(
-        "flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-300 border",
+        "group flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 border active:scale-[0.98]",
         isCurrentTrack
           ? "bg-surface-elevated border-primary/20"
-          : "border-transparent hover:bg-surface-elevated"
+          : "border-transparent hover:bg-surface-elevated/80"
       )}
     >
       {/* Artwork */}
@@ -52,16 +53,19 @@ export function SongCard({ track }: SongCardProps) {
           alt={track.collectionName}
           width={48}
           height={48}
-          className="rounded-lg block"
+          className="rounded-lg block transition-transform duration-200 group-hover:scale-105"
         />
-        {isCurrentTrack && (
+        {isCurrentTrack ? (
           <div className="absolute inset-0 rounded-lg bg-black/40 flex items-center justify-center">
-            <div
-              className={cn(
-                "size-1.5 rounded-full bg-primary shadow-glow-sm",
-                isActiveAndPlaying && "animate-pulse-glow"
-              )}
-            />
+            {isActiveAndPlaying ? (
+              <EqualizerIcon />
+            ) : (
+              <PlayIcon width={14} height={14} className="text-primary" />
+            )}
+          </div>
+        ) : (
+          <div className="absolute inset-0 rounded-lg bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <PlayIcon width={14} height={14} className="text-white" />
           </div>
         )}
       </div>
@@ -86,13 +90,15 @@ export function SongCard({ track }: SongCardProps) {
 
       {/* Play button */}
       <button
-        onClick={handlePlay}
+        onClick={(e) => { e.stopPropagation(); handlePlay() }}
         disabled={!track.previewUrl}
         aria-label={isActiveAndPlaying ? "Pause" : "Play preview"}
         className={cn(
-          "size-8 rounded-full border-0 flex items-center justify-center shrink-0 transition-all",
-          isActiveAndPlaying ? "bg-gradient-brand shadow-glow-sm" : "bg-surface-elevated",
-          !track.previewUrl && "cursor-not-allowed opacity-40"
+          "size-8 rounded-full border-0 flex items-center justify-center shrink-0 transition-all duration-200",
+          isActiveAndPlaying
+            ? "bg-gradient-brand shadow-glow-sm"
+            : "bg-surface-elevated opacity-0 group-hover:opacity-100",
+          !track.previewUrl && "cursor-not-allowed !opacity-40"
         )}
       >
         {isActiveAndPlaying ? (

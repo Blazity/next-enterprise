@@ -15,6 +15,6 @@ export const SEARCH_DEBOUNCE_MS = 400
 // Clerk appearance — only override accent color, let Clerk handle the rest
 export const CLERK_APPEARANCE = {
   variables: {
-    colorPrimary: "#4ADE80",
+    colorPrimary: "#FBBF24",
   },
 } as const

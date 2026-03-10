@@ -30,15 +30,27 @@
   --color-surface: #181818;
   --color-surface-elevated: #282828;
   --color-surface-hover: #2a2a2a;
-  --color-primary: #4ade80;
-  --color-primary-hover: #3bd975;
-  --color-secondary: #0d9488;
+  --color-primary: #fbbf24;
+  --color-primary-hover: #f59e0b;
+  --color-secondary: #d97706;
   --color-muted: #a7a7a7;
   --color-border: #282828;
 
   --animate-shimmer: shimmer 1.5s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 1.2s ease-in-out infinite;
   --animate-spin-slow: spin 1s linear infinite;
+  --animate-spin-album: spin 4s linear infinite;
+  --animate-eq-bar-1: eq-bar-1 0.8s ease-in-out infinite;
+  --animate-eq-bar-2: eq-bar-2 0.6s ease-in-out infinite;
+  --animate-eq-bar-3: eq-bar-3 0.7s ease-in-out infinite;
+  --animate-waveform-1: waveform 1s ease-in-out infinite;
+  --animate-waveform-2: waveform 0.8s ease-in-out infinite 0.15s;
+  --animate-waveform-3: waveform 1.2s ease-in-out infinite 0.3s;
+  --animate-waveform-4: waveform 0.9s ease-in-out infinite 0.2s;
+  --animate-waveform-5: waveform 1.1s ease-in-out infinite 0.1s;
+  --animate-slide-up: slide-up 0.35s cubic-bezier(0.33, 1, 0.68, 1) both;
+  --animate-fade-in-up: fade-in-up 0.4s cubic-bezier(0.33, 1, 0.68, 1) both;
+  --animate-border-rotate: border-rotate 3s linear infinite;
 }
 
 /* Non-Tailwind tokens — gradients, shadows, radius, transitions */
@@ -46,15 +58,15 @@
   --color-text-muted: #a7a7a7;
   --color-text-secondary: #71717a;
 
-  --gradient-primary: linear-gradient(135deg, #4ade80 0%, #0d9488 100%);
-  --gradient-button: linear-gradient(180deg, #4ade80 0%, #3acc72 50%, #2ab862 100%);
-  --gradient-button-hover: linear-gradient(180deg, #3bd975 0%, #2ebe68 50%, #25a85c 100%);
+  --gradient-primary: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  --gradient-button: linear-gradient(180deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  --gradient-button-hover: linear-gradient(180deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
   --gradient-dark-card: linear-gradient(135deg, #18181b 0%, #27272a 100%);
 
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
-  --shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(74, 222, 128, 0.15);
-  --shadow-glow-sm: 0 0 12px rgba(74, 222, 128, 0.3);
-  --shadow-glow-md: 0 4px 12px rgba(74, 222, 128, 0.4);
+  --shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(251, 191, 36, 0.15);
+  --shadow-glow-sm: 0 0 12px rgba(251, 191, 36, 0.3);
+  --shadow-glow-md: 0 4px 12px rgba(251, 191, 36, 0.4);
 
   --radius-card: 24px;
   --radius-button: 14px;
@@ -100,6 +112,42 @@
   to { transform: rotate(360deg); }
 }
 
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes border-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Equalizer bar animations — used in EqualizerIcon and waveform visualizer */
+@keyframes eq-bar-1 {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+
+@keyframes eq-bar-2 {
+  0%, 100% { transform: scaleY(0.6); }
+  50% { transform: scaleY(0.3); }
+}
+
+@keyframes eq-bar-3 {
+  0%, 100% { transform: scaleY(0.5); }
+  50% { transform: scaleY(0.8); }
+}
+
+@keyframes waveform {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+
 /* scrollbar-hide — used on horizontal scroll rows (HorizontalRow component) */
 .scrollbar-hide {
   -ms-overflow-style: none;
@@ -112,19 +160,22 @@
 /* Custom utilities — gradients and shadows not expressible as single Tailwind values */
 @layer utilities {
   .bg-gradient-brand {
-    background: linear-gradient(135deg, #4ade80 0%, #0d9488 100%);
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
   }
   .bg-gradient-btn {
-    background: linear-gradient(180deg, #4ade80 0%, #3acc72 50%, #2ab862 100%);
+    background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
   }
   .shimmer-bg {
     background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
   }
   .shadow-glow-sm {
-    box-shadow: 0 0 12px rgba(74, 222, 128, 0.3);
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+  }
+  .shadow-glow-md {
+    box-shadow: 0 4px 20px rgba(251, 191, 36, 0.5);
   }
   .shadow-card-hover {
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(74, 222, 128, 0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(251, 191, 36, 0.15);
   }
 
   .animate-fade-in-up {

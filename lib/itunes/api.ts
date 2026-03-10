@@ -27,7 +27,18 @@ export async function searchAlbums(term: string): Promise<ItunesAlbum[]> {
 }
 
 export async function searchArtists(term: string): Promise<ItunesArtist[]> {
-  return fetchSearch<ItunesArtist>("musicArtist", term, "6")
+  const artists = await fetchSearch<ItunesArtist>("musicArtist", term, "6")
+
+  // iTunes artist search has no artwork — enrich from a track per artist
+  const enriched = await Promise.all(
+    artists.map(async (artist) => {
+      const tracks = await fetchSearch<ItunesTrack>("musicTrack", artist.artistName, "1")
+      const artworkUrl = tracks[0]?.artworkUrl100?.replace("100x100", "440x440")
+      return { ...artist, artworkUrl }
+    })
+  )
+
+  return enriched
 }
 
 // ─── Home page data (RSS + lookup) ───────────────────────────────────────────

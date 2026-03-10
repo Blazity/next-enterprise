@@ -19,7 +19,7 @@ import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import { searchAlbums, searchArtists, searchSongs } from "lib/itunes/api"
 import type { ItunesAlbum, ItunesArtist, ItunesTrack } from "lib/itunes/types"
 import { isHomeView, ternary } from "lib/utils"
- 
+
 
 export default function HomePage() {
   const { requireAuth } = useRequireAuth()
@@ -30,6 +30,7 @@ export default function HomePage() {
   const [artists, setArtists] = useState<ItunesArtist[]>([])
   const [isLoadingSearch, setIsLoadingSearch] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
   const searchInputRef = useRef<HTMLInputElement | null>(null)
   const debouncedQuery = useDebounce(query.trim(), SEARCH_DEBOUNCE_MS)
@@ -52,8 +53,8 @@ export default function HomePage() {
         setSongs(songsResult)
         setAlbums(albumsResult)
         setArtists(artistsResult)
-      } catch(error:unknown) {
-          console.error("Search failed:", error);
+      } catch (error: unknown) {
+        console.error("Search failed:", error);
       } finally {
         setIsLoadingSearch(false)
       }
@@ -74,7 +75,13 @@ export default function HomePage() {
 
   return (
     <div className="flex h-screen overflow-hidden pb-[72px] box-border bg-bg">
-      <Sidebar activeView={activeView} onNavClick={handleNavClick} />
+
+      <Sidebar
+        activeView={activeView}
+        onNavClick={handleNavClick}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
+      />
 
       <div className="flex-1 flex flex-col overflow-hidden bg-bg">
         <TopNav

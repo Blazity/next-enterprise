@@ -51,6 +51,7 @@
     "@t3-oss/env-nextjs": "^0.10.1",
     "@vercel/otel": "^1.12.0",
     "class-variance-authority": "^0.7.0",
+    "framer-motion": "^12.35.0",
     "lodash": "^4.17.21",
     "next": "15.3.8",
     "react": "^19.1.0",

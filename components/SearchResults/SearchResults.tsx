@@ -35,8 +35,14 @@ export function SearchResults({ songs, albums, artists, isLoading, hasSearched }
       {songs.length > 0 && (
         <Section title="Songs" count={songs.length}>
           <div className="flex flex-col gap-1">
-            {songs.map((track) => (
-              <SongCard key={track.trackId} track={track} />
+            {songs.map((track, i) => (
+              <div
+                key={track.trackId}
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${i * 30}ms` }}
+              >
+                <SongCard track={track} />
+              </div>
             ))}
           </div>
         </Section>
@@ -45,8 +51,14 @@ export function SearchResults({ songs, albums, artists, isLoading, hasSearched }
       {albums.length > 0 && (
         <Section title="Albums" count={albums.length}>
           <div className="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(160px,1fr))]">
-            {albums.map((album) => (
-              <AlbumCard key={album.collectionId} album={album} />
+            {albums.map((album, i) => (
+              <div
+                key={album.collectionId}
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${i * 50}ms` }}
+              >
+                <AlbumCard album={album} />
+              </div>
             ))}
           </div>
         </Section>
@@ -55,8 +67,14 @@ export function SearchResults({ songs, albums, artists, isLoading, hasSearched }
       {artists.length > 0 && (
         <Section title="Artists" count={artists.length}>
           <div className="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(140px,1fr))]">
-            {artists.map((artist) => (
-              <ArtistCard key={artist.artistId} artist={artist} />
+            {artists.map((artist, i) => (
+              <div
+                key={artist.artistId}
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${i * 50}ms` }}
+              >
+                <ArtistCard artist={artist} />
+              </div>
             ))}
           </div>
         </Section>

@@ -22,7 +22,7 @@ export function ArtistCard({ artist }: ArtistCardProps) {
   const initials = getInitials(artist.artistName)
 
   return (
-    <div className="bg-surface rounded-3xl px-4 py-6 border border-border text-center">
+    <div className="bg-surface rounded-3xl px-4 py-6 border border-border text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover active:scale-[0.97]">
       {artist.artworkUrl ? (
         <Image
           src={artist.artworkUrl}
