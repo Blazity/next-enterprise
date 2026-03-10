@@ -1,13 +1,15 @@
 "use client"
 
+import { useRef, useState } from "react"
+import type { ReactNode } from "react"
+
 import { Sidebar } from "components/Sidebar/Sidebar"
 import { TopNav } from "components/TopNav/TopNav"
-import { usePlaylistStore } from "store/usePlaylistStore"
 import type { ActiveView } from "lib/constants"
-import { useState, useRef } from "react"
+import { usePlaylistStore } from "store/usePlaylistStore"
 
 interface DashboardShellProps {
-  children: React.ReactNode
+  children: ReactNode
   activeView: ActiveView
   onNavClick: (view: ActiveView) => void
   query: string
@@ -21,7 +23,7 @@ export function DashboardShell({
   query,
   onQueryChange
 }: DashboardShellProps) {
-  const { sharedPlaylists, selectedPlaylistId, setSelectedPlaylistId } = usePlaylistStore()
+  const { setSelectedPlaylistId } = usePlaylistStore()
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -32,8 +34,6 @@ export function DashboardShell({
         onNavClick={onNavClick}
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
-        sharedPlaylists={sharedPlaylists}
-        selectedPlaylistId={selectedPlaylistId}
         onSharedPlaylistClick={(id) => {
           setSelectedPlaylistId(id)
           onNavClick("playlists")

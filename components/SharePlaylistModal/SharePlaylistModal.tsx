@@ -33,8 +33,8 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
         if (result.data) {
           setShares(result.data)
         }
-      } catch (err) {
-        console.error("Failed to load shares", err)
+      } catch {
+        console.error("Failed to load shares")
       } finally {
         setIsFetching(false)
       }
@@ -79,7 +79,7 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
       } else if (result.error) {
         addToast(result.error, "error")
       }
-    } catch (err) {
+    } catch {
       addToast("Failed to revoke share", "error")
     }
   }

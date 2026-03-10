@@ -1,24 +1,33 @@
 "use client"
 
-// PlaylistsView — acts as the main SPA container when activeView === "playlists"
-// wednesday-dev: uses Zustand store to fetch and hold the list
-
 import { useEffect, useState } from "react"
 import { useAuth } from "@clerk/nextjs"
-import { useRequireAuth } from "lib/hooks/useRequireAuth"
+
 import { CreatePlaylistModal } from "components/CreatePlaylistModal/CreatePlaylistModal"
 import { DeleteConfirmModal } from "components/DeleteConfirmModal/DeleteConfirmModal"
 import { ChevronRightIcon, PlaylistIcon, TrashIcon } from "components/icons"
 import { PlaylistDetail } from "components/PlaylistDetail/PlaylistDetail"
 import { Skeleton } from "components/Skeleton/Skeleton"
+
 import { deletePlaylist, getPlaylists, getSharedWithMe } from "lib/api/playlists"
+import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import { usePlaylistStore } from "store/usePlaylistStore"
 import { useToastStore } from "store/useToastStore"
 
 export function PlaylistsView() {
-  const { getToken, userId: currentUserId } = useAuth()
+  const { getToken } = useAuth()
   const { requireAuth } = useRequireAuth()
-  const { playlists, setPlaylists, sharedPlaylists, setSharedPlaylists, isLoading, setIsLoading, removePlaylist, selectedPlaylistId, setSelectedPlaylistId } = usePlaylistStore()
+  const { 
+    playlists, 
+    setPlaylists, 
+    sharedPlaylists, 
+    setSharedPlaylists, 
+    isLoading, 
+    setIsLoading, 
+    removePlaylist, 
+    selectedPlaylistId, 
+    setSelectedPlaylistId 
+  } = usePlaylistStore()
   const { addToast } = useToastStore()
   const [isCreating, setIsCreating] = useState(false)
   const [playlistToDelete, setPlaylistToDelete] = useState<{ id: string; name: string } | null>(null)

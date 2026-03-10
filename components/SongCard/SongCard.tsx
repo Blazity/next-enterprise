@@ -4,6 +4,7 @@
 // wednesday-dev: formatDuration helper, handlePlay event handler
 
 import Image from "next/image"
+import { useFeatureFlagEnabled } from "posthog-js/react"
 
 import { AddToPlaylistButton } from "components/AddToPlaylistButton/AddToPlaylistButton"
 import { EqualizerIcon, PauseIcon, PlayIcon } from "components/icons"
@@ -12,7 +13,6 @@ import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import type { ItunesTrack } from "lib/itunes/types"
 import { formatDuration } from "lib/itunes/utils"
 import { usePlayerStore } from "store/usePlayerStore"
-import { useFeatureFlagEnabled } from "posthog-js/react"
 
 interface SongCardProps {
   track: ItunesTrack

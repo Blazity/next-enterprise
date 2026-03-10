@@ -4,12 +4,11 @@
 // wednesday-design: dark surface (#111111), green active indicator, DM Sans
 // wednesday-dev: NavItem extracted, active boolean prefix
 
+import { useFeatureFlagEnabled } from "posthog-js/react"
 import { AlbumIcon, ArtistIcon, ChevronLeftIcon, DiscoverLogoIcon, HomeIcon, MusicNoteIcon, PlaylistIcon, SearchIcon } from "components/icons"
+import type { Playlist } from "lib/api/playlists"
 import { cn } from "lib/cn"
 import type { ActiveView } from "lib/constants"
-import { useFeatureFlagEnabled } from "posthog-js/react"
-import { usePlaylistStore } from "store/usePlaylistStore"
-import type { Playlist } from "lib/api/playlists"
 
 interface SidebarProps {
   activeView: ActiveView
