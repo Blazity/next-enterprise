@@ -1,0 +1,133 @@
+"use client"
+
+// PlaylistsView — acts as the main SPA container when activeView === "playlists"
+// wednesday-dev: uses Zustand store to fetch and hold the list
+
+import { useEffect, useState } from "react"
+import { useAuth } from "@clerk/nextjs"
+import { CreatePlaylistModal } from "components/CreatePlaylistModal/CreatePlaylistModal"
+import { ChevronRightIcon, PlaylistIcon, TrashIcon } from "components/icons"
+import { PlaylistDetail } from "components/PlaylistDetail/PlaylistDetail"
+import { Skeleton } from "components/Skeleton/Skeleton"
+import { deletePlaylist, getPlaylists } from "lib/api/playlists"
+import { usePlaylistStore } from "store/usePlaylistStore"
+
+export function PlaylistsView() {
+  const { getToken } = useAuth()
+  const { playlists, setPlaylists, isLoading, setIsLoading, removePlaylist } = usePlaylistStore()
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState<string | null>(null)
+  const [isCreating, setIsCreating] = useState(false)
+
+  useEffect(() => {
+    async function fetchAllPlaylists() {
+      setIsLoading(true)
+      try {
+        const token = await getToken()
+        const res = await getPlaylists(token)
+        if (res.data) {
+          setPlaylists(res.data)
+        }
+      } catch (err) {
+        console.error("Failed to load user playlists", err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchAllPlaylists()
+  }, [getToken, setPlaylists, setIsLoading])
+
+  if (selectedPlaylistId) {
+    return (
+      <PlaylistDetail 
+        playlistId={selectedPlaylistId} 
+        onBack={() => setSelectedPlaylistId(null)} 
+      />
+    )
+  }
+
+  return (
+    <div className="animate-fade-in-up">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-white tracking-tight m-0">Your Playlists</h1>
+          <p className="text-muted mt-1.5 m-0 text-sm sm:text-base">Create and manage your music collections.</p>
+        </div>
+        <button
+          onClick={() => setIsCreating(true)}
+          className="shrink-0 px-5 py-2.5 rounded-full border-0 bg-primary font-bold text-black text-sm cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-glow-sm"
+        >
+          New Playlist
+        </button>
+      </div>
+
+      {isLoading ? (
+        <div className="flex flex-col gap-1 max-w-2xl">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-3 py-3 px-3">
+              <Skeleton className="size-12 shrink-0 rounded-lg" />
+              <div className="flex-1 min-w-0">
+                <Skeleton className="h-4 w-32 mb-1.5" />
+                <Skeleton className="h-3 w-16" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : playlists.length === 0 ? (
+        <div className="text-center py-24 px-6 bg-surface-elevated/60 rounded-2xl border border-[#27272a] border-dashed">
+          <PlaylistIcon width={56} height={56} className="text-[#3f3f46] mx-auto mb-5" />
+          <p className="text-lg text-white font-medium m-0">No playlists yet</p>
+          <p className="text-sm text-[#71717a] mt-2 m-0 max-w-sm mx-auto">Create your first playlist and start adding songs.</p>
+          <button
+            onClick={() => setIsCreating(true)}
+            className="mt-6 px-5 py-2.5 rounded-full border-0 bg-primary font-bold text-black text-sm cursor-pointer hover:opacity-90 transition-opacity"
+          >
+            New Playlist
+          </button>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-1 max-w-2xl">
+          {playlists.map((playlist) => {
+            const trackCount = playlist._count?.tracks ?? playlist.tracks?.length ?? 0
+            return (
+              <div
+                key={playlist.id}
+                role="button"
+                tabIndex={0}
+                onClick={() => setSelectedPlaylistId(playlist.id)}
+                onKeyDown={(e) => e.key === "Enter" && setSelectedPlaylistId(playlist.id)}
+                className="flex items-center gap-3 w-full text-left py-3 px-3 rounded-xl border-0 bg-transparent hover:bg-white/5 transition-colors cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-inset"
+              >
+                <div className="size-12 shrink-0 rounded-lg bg-[#1a1a1a] flex items-center justify-center border border-[#27272a]/50 group-hover:border-primary/30 transition-colors">
+                  <PlaylistIcon width={18} height={18} className="text-muted group-hover:text-primary transition-colors" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-medium truncate m-0">{playlist.name}</p>
+                  <p className="text-xs text-muted m-0 mt-0.5">
+                    {trackCount} track{trackCount !== 1 ? "s" : ""}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={async (e) => {
+                    e.stopPropagation()
+                    if (!confirm("Delete this playlist?")) return
+                    const token = await getToken()
+                    const res = await deletePlaylist(token, playlist.id)
+                    if (!res.error) removePlaylist(playlist.id)
+                  }}
+                  className="shrink-0 size-8 rounded-lg flex items-center justify-center text-muted hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all border-0 cursor-pointer"
+                  aria-label="Delete playlist"
+                >
+                  <TrashIcon width={16} height={16} />
+                </button>
+                <ChevronRightIcon width={16} height={16} className="shrink-0 text-muted opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity" />
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {isCreating && <CreatePlaylistModal onClose={() => setIsCreating(false)} />}
+    </div>
+  )
+}

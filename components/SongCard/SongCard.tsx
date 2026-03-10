@@ -5,6 +5,7 @@
 
 import Image from "next/image"
 
+import { AddToPlaylistButton } from "components/AddToPlaylistButton/AddToPlaylistButton"
 import { PauseIcon, PlayIcon } from "components/icons"
 import { cn } from "lib/cn"
 import { useRequireAuth } from "lib/hooks/useRequireAuth"
@@ -79,6 +80,9 @@ export function SongCard({ track }: SongCardProps) {
       <span className="text-xs text-muted shrink-0 mr-2">
         {formatDuration(track.trackTimeMillis)}
       </span>
+
+      {/* Add To Playlist button */}
+      <AddToPlaylistButton trackId={track.trackId} />
 
       {/* Play button */}
       <button
