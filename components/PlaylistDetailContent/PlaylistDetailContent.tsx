@@ -79,15 +79,18 @@ export function PlaylistDetailContent() {
         return <ComingSoon titleKey="nav.playlists" />
     }
 
+    const backHref = !playlistFeatureEnabled && currentPlaylist?.is_shared ? "/shared-playlists" : "/playlists"
+    const backLabel = !playlistFeatureEnabled && currentPlaylist?.is_shared ? t("share.sharedWithMe") : t("playlist.back")
+
     if (error || !currentPlaylist) {
         return (
             <div className="mx-auto max-w-3xl px-4 py-8 md:px-6">
                 <Link
-                    href="/playlists"
+                    href={backHref}
                     className="text-text-tertiary hover:text-white mb-6 inline-flex items-center gap-2 text-sm transition-colors"
                 >
                     <ArrowLeft size={16} />
-                    {t("playlist.back")}
+                    {backLabel}
                 </Link>
                 <div className="flex min-h-[30vh] flex-col items-center justify-center text-center">
                     <ListMusic size={48} className="mb-4 text-white/20" />
@@ -104,11 +107,11 @@ export function PlaylistDetailContent() {
         <div className="mx-auto max-w-3xl px-4 py-8 md:px-6">
             {/* Back link */}
             <Link
-                href="/playlists"
+                href={backHref}
                 className="text-text-tertiary hover:text-white mb-6 inline-flex items-center gap-2 text-sm transition-colors"
             >
                 <ArrowLeft size={16} />
-                {t("playlist.back")}
+                {backLabel}
             </Link>
 
             {/* Playlist header */}
