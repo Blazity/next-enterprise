@@ -5,7 +5,9 @@ import { usePathname } from "next/navigation"
 
 import { UserButton, useUser } from "@clerk/nextjs"
 import { Disc3, Home, ListMusic, Mic2, Music2, Search } from "lucide-react"
-import { useFeatureFlagVariantKey, usePostHog } from "posthog-js/react"
+import { usePostHog } from "posthog-js/react"
+
+import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"
@@ -36,7 +38,7 @@ export function NavBar() {
   const { user } = useUser()
   const pathname = usePathname()
   const posthog = usePostHog()
-  const playlistFeatureVariant = useFeatureFlagVariantKey("playlist-add-feature")
+  const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
   const playlistFeatureEnabled = playlistFeatureVariant === "on"
 
   const captureNavClick = (href: string, section: "mobile" | "main" | "library") => {

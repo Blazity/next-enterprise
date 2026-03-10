@@ -10,27 +10,35 @@ import {
   updatePlaylist as updatePlaylistApi,
   addSongToPlaylist as addSongApi,
   removeSongFromPlaylist as removeSongApi,
+  getSharedPlaylists as getSharedPlaylistsApi,
+  sharePlaylist as sharePlaylistApi,
+  unsharePlaylist as unsharePlaylistApi,
   type Playlist,
 } from "@/lib/services/playlistService"
 import type { Song } from "@/types/music"
 
 interface PlaylistStore {
   playlists: Playlist[]
+  sharedPlaylists: Playlist[]
   currentPlaylist: Playlist | null
   isLoading: boolean
   error: string | null
 
   fetchPlaylists: (clerkId: string) => Promise<void>
-  fetchPlaylist: (id: number) => Promise<void>
+  fetchSharedPlaylists: (clerkId: string) => Promise<void>
+  fetchPlaylist: (id: number, clerkId?: string) => Promise<void>
   createPlaylist: (clerkId: string, name: string, description?: string) => Promise<Playlist>
   updatePlaylist: (id: number, data: { name?: string; description?: string }) => Promise<void>
   deletePlaylist: (id: number) => Promise<void>
   addSong: (playlistId: number, song: Song) => Promise<void>
   removeSong: (playlistId: number, trackId: string) => Promise<void>
+  sharePlaylist: (playlistId: number, email: string, sharedByClerkId: string) => Promise<void>
+  unsharePlaylist: (playlistId: number, sharedWithClerkId: string) => Promise<void>
 }
 
 export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
   playlists: [],
+  sharedPlaylists: [],
   currentPlaylist: null,
   isLoading: false,
   error: null,
@@ -45,10 +53,19 @@ export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
     }
   },
 
-  fetchPlaylist: async (id) => {
+  fetchSharedPlaylists: async (clerkId) => {
+    try {
+      const sharedPlaylists = await getSharedPlaylistsApi(clerkId)
+      set({ sharedPlaylists })
+    } catch (err) {
+      set({ error: err instanceof Error ? err.message : "Failed to load shared playlists" })
+    }
+  },
+
+  fetchPlaylist: async (id, clerkId) => {
     set({ isLoading: true, error: null })
     try {
-      const playlist = await getPlaylistApi(id)
+      const playlist = await getPlaylistApi(id, clerkId)
       set({ currentPlaylist: playlist, isLoading: false })
     } catch (err) {
       set({ error: err instanceof Error ? err.message : "Failed to load playlist", isLoading: false })
@@ -121,6 +138,28 @@ export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
       if (currentPlaylist?.id === playlistId) {
         get().fetchPlaylist(playlistId)
       }
+    }
+  },
+
+  sharePlaylist: async (playlistId, email, sharedByClerkId) => {
+    try {
+      await sharePlaylistApi(playlistId, email, sharedByClerkId)
+      set({ error: null })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed to share playlist"
+      set({ error: msg })
+      throw err
+    }
+  },
+
+  unsharePlaylist: async (playlistId, sharedWithClerkId) => {
+    try {
+      await unsharePlaylistApi(playlistId, sharedWithClerkId)
+      set({ error: null })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed to revoke share"
+      set({ error: msg })
+      throw err
     }
   },
 }))

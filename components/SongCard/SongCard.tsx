@@ -3,7 +3,9 @@
 import Image from "next/image"
 
 import { cva, type VariantProps } from "class-variance-authority"
-import { useFeatureFlagVariantKey, usePostHog } from "posthog-js/react"
+import { usePostHog } from "posthog-js/react"
+
+import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { useTranslation } from "react-i18next"
 
 import { AddToPlaylistButton } from "@/components/AddToPlaylistButton/AddToPlaylistButton"
@@ -57,7 +59,7 @@ function EqBars() {
 export function SongCard({ song, isPlaying = false, onPlay, variant, className, rank, subtitle, showAddToPlaylist = false }: SongCardProps) {
   const { t } = useTranslation()
   const posthog = usePostHog()
-  const playlistFeatureVariant = useFeatureFlagVariantKey("playlist-add-feature")
+  const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
   const playlistFeatureEnabled = playlistFeatureVariant === "on"
   const canShowPlaylist = showAddToPlaylist && playlistFeatureEnabled
 

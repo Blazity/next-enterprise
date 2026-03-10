@@ -5,8 +5,8 @@ import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 
 import { useUser } from "@clerk/nextjs"
-import { ListMusic, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react"
-import { useFeatureFlagVariantKey } from "posthog-js/react"
+import { ListMusic, MoreHorizontal, Pencil, Plus, Share2, Trash2 } from "lucide-react"
+import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { useTranslation } from "react-i18next"
 
 import { ComingSoon } from "@/components/ComingSoon/ComingSoon"
@@ -16,9 +16,9 @@ import { usePlaylistStore } from "@/store/playlistStore"
 export function PlaylistsPageContent() {
   const { t } = useTranslation()
   const { user } = useUser()
-  const playlistFeatureVariant = useFeatureFlagVariantKey("playlist-add-feature")
+  const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
   const playlistFeatureEnabled = playlistFeatureVariant === "on"
-  const { playlists, isLoading, error, fetchPlaylists, createPlaylist, updatePlaylist, deletePlaylist } =
+  const { playlists, sharedPlaylists, isLoading, error, fetchPlaylists, fetchSharedPlaylists, createPlaylist, updatePlaylist, deletePlaylist } =
     usePlaylistStore()
 
   const [showCreate, setShowCreate] = useState(false)
@@ -30,8 +30,11 @@ export function PlaylistsPageContent() {
   const [menuOpenId, setMenuOpenId] = useState<number | null>(null)
 
   useEffect(() => {
-    if (user?.id) fetchPlaylists(user.id)
-  }, [user?.id, fetchPlaylists])
+    if (user?.id) {
+      fetchPlaylists(user.id)
+      fetchSharedPlaylists(user.id)
+    }
+  }, [user?.id, fetchPlaylists, fetchSharedPlaylists])
 
   const handleCreate = useCallback(async () => {
     if (!user?.id || !newName.trim()) return
@@ -245,6 +248,33 @@ export function PlaylistsPageContent() {
             </Link>
           ))}
         </div>
+      )}
+
+      {/* Shared with me */}
+      {sharedPlaylists.length > 0 && (
+        <>
+          <h2 className="mb-4 mt-10 text-lg font-semibold text-white">{t("share.sharedWithMe")}</h2>
+          <div className="space-y-2">
+            {sharedPlaylists.map((playlist) => (
+              <Link
+                key={playlist.id}
+                href={`/playlist/${playlist.id}`}
+                className="group relative flex items-center gap-4 rounded-xl px-4 py-3.5 transition-colors hover:bg-white/[0.04]"
+              >
+                <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-500/5">
+                  <Share2 size={22} className="text-blue-400" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium text-white">{playlist.name}</p>
+                  <p className="text-text-tertiary truncate text-xs">
+                    {playlist.description || `${playlist.song_count || 0} songs`}
+                  </p>
+                </div>
+                <span className="text-text-tertiary text-xs">{playlist.song_count || 0} songs</span>
+              </Link>
+            ))}
+          </div>
+        </>
       )}
     </div>
   )

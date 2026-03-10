@@ -10,6 +10,9 @@ export interface Playlist {
   song_count?: number
   created_at: string
   songs?: PlaylistSong[]
+  is_owner?: boolean
+  is_shared?: boolean
+  shared_by?: string
 }
 
 export interface PlaylistSong {
@@ -56,8 +59,9 @@ export async function getUserPlaylists(clerkId: string): Promise<Playlist[]> {
   return res.json() as Promise<Playlist[]>
 }
 
-export async function getPlaylist(id: number): Promise<Playlist> {
-  const res = await fetch(`${API_URL}/api/playlists/${id}`)
+export async function getPlaylist(id: number, clerkId?: string): Promise<Playlist> {
+  const params = clerkId ? `?clerk_id=${encodeURIComponent(clerkId)}` : ""
+  const res = await fetch(`${API_URL}/api/playlists/${id}${params}`)
   if (!res.ok) throw new Error("Failed to fetch playlist")
   return res.json() as Promise<Playlist>
 }
@@ -111,4 +115,29 @@ export async function addSongToPlaylist(playlistId: number, song: Song): Promise
 export async function removeSongFromPlaylist(playlistId: number, trackId: string): Promise<void> {
   const res = await fetch(`${API_URL}/api/playlists/${playlistId}/songs/${trackId}`, { method: "DELETE" })
   if (!res.ok) throw new Error("Failed to remove song")
+}
+
+export async function sharePlaylist(playlistId: number, email: string, sharedByClerkId: string): Promise<void> {
+  const res = await fetch(`${API_URL}/api/playlists/${playlistId}/share`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, shared_by_clerk_id: sharedByClerkId }),
+  })
+  if (!res.ok) {
+    const err = (await res.json()) as { error?: string }
+    throw new Error(err.error || "Failed to share playlist")
+  }
+}
+
+export async function unsharePlaylist(playlistId: number, sharedWithClerkId: string): Promise<void> {
+  const res = await fetch(`${API_URL}/api/playlists/${playlistId}/share/${encodeURIComponent(sharedWithClerkId)}`, {
+    method: "DELETE",
+  })
+  if (!res.ok) throw new Error("Failed to revoke share")
+}
+
+export async function getSharedPlaylists(clerkId: string): Promise<Playlist[]> {
+  const res = await fetch(`${API_URL}/api/playlists/shared/${encodeURIComponent(clerkId)}`)
+  if (!res.ok) throw new Error("Failed to fetch shared playlists")
+  return res.json() as Promise<Playlist[]>
 }

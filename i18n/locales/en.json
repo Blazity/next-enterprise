@@ -98,5 +98,14 @@
   "addToPlaylist.create": "Create new playlist",
   "addToPlaylist.added": "Added to {{name}}",
   "addToPlaylist.alreadyAdded": "Already in this playlist",
-  "addToPlaylist.error": "Failed to add song"
+  "addToPlaylist.error": "Failed to add song",
+
+  "share.button": "Share",
+  "share.title": "Share Playlist",
+  "share.emailPlaceholder": "Enter user's email address",
+  "share.sharing": "Sharing...",
+  "share.success": "Playlist shared successfully!",
+  "share.error": "Failed to share playlist",
+  "share.sharedWithMe": "Shared with Me",
+  "share.sharedPlaylist": "Shared playlist"
 }

@@ -6,11 +6,12 @@ import { useParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 
 import { useUser } from "@clerk/nextjs"
-import { ArrowLeft, Clock, ListMusic, Music, Search, Trash2 } from "lucide-react"
-import { useFeatureFlagVariantKey } from "posthog-js/react"
+import { ArrowLeft, Clock, ListMusic, Music, Search, Share2, Trash2 } from "lucide-react"
+import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { useTranslation } from "react-i18next"
 
 import { ComingSoon } from "@/components/ComingSoon/ComingSoon"
+import { SharePlaylistDialog } from "@/components/SharePlaylistDialog/SharePlaylistDialog"
 import { cn } from "@/lib/utils"
 import { useMusicStore } from "@/store/musicStore"
 import { usePlaylistStore } from "@/store/playlistStore"
@@ -21,7 +22,7 @@ export function PlaylistDetailContent() {
     const { slug } = useParams<{ slug: string }>()
     const playlistId = Number(slug)
     const { user } = useUser()
-    const playlistFeatureVariant = useFeatureFlagVariantKey("playlist-add-feature")
+    const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
     const playlistFeatureEnabled = playlistFeatureVariant === "on"
 
     const { currentPlaylist, isLoading, error, fetchPlaylist, removeSong } = usePlaylistStore()
@@ -30,8 +31,8 @@ export function PlaylistDetailContent() {
     const [removingTrackId, setRemovingTrackId] = useState<string | null>(null)
 
     useEffect(() => {
-        if (playlistId) fetchPlaylist(playlistId)
-    }, [playlistId, fetchPlaylist])
+        if (playlistId && user?.id) fetchPlaylist(playlistId, user.id)
+    }, [playlistId, user?.id, fetchPlaylist])
 
     const handleRemove = useCallback(
         async (trackId: string) => {
@@ -97,6 +98,7 @@ export function PlaylistDetailContent() {
     }
 
     const songs = currentPlaylist.songs || []
+    const isOwner = currentPlaylist.is_owner !== false
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-8 md:px-6">
@@ -124,6 +126,21 @@ export function PlaylistDetailContent() {
                     </p>
                 </div>
             </div>
+
+            {/* Share button – owner only */}
+            {isOwner && user?.id && (
+                <div className="mb-6">
+                    <SharePlaylistDialog playlistId={playlistId} sharedByClerkId={user.id} />
+                </div>
+            )}
+
+            {/* Shared indicator */}
+            {!isOwner && (
+                <p className="text-text-tertiary mb-6 flex items-center gap-2 text-xs">
+                    <Share2 size={14} className="text-blue-400" />
+                    {t("share.sharedPlaylist")}
+                </p>
+            )}
 
             {/* Song list */}
             {songs.length === 0 ? (
@@ -210,7 +227,8 @@ export function PlaylistDetailContent() {
                                     </span>
                                 )}
 
-                                {/* Remove button */}
+                                {/* Remove button – owner only */}
+                                {isOwner && (
                                 <button
                                     onClick={() => handleRemove(song.track_id)}
                                     disabled={isRemoving}
@@ -219,6 +237,7 @@ export function PlaylistDetailContent() {
                                 >
                                     <Trash2 size={16} />
                                 </button>
+                                )}
                             </div>
                         )
                     })}
