@@ -1,26 +1,30 @@
 "use client"
 
+import Image from "next/image"
 import { useCallback, useEffect, useState } from "react"
 
 import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 
 import { useUser } from "@clerk/nextjs"
-import { ListMusic, Music } from "lucide-react"
+import { Clock, ListMusic, Music, User } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
-import { claimPlaylistByToken, getPlaylistByToken, type Playlist } from "@/lib/services/playlistService"
+import { getPlaylistByToken, type Playlist } from "@/lib/services/playlistService"
+import { useMusicStore } from "@/store/musicStore"
+import { PLAY_STATE } from "@/types/music"
 
-type PageState = "loading" | "preview" | "claiming" | "not-found"
+type PageState = "loading" | "preview" | "not-found"
 
 export default function ShareLinkPage() {
   const { t } = useTranslation()
   const { token } = useParams<{ token: string }>()
-  const router = useRouter()
   const { user, isLoaded: isUserLoaded } = useUser()
 
   const [state, setState] = useState<PageState>("loading")
   const [playlist, setPlaylist] = useState<Playlist | null>(null)
+
+  const { currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
 
   // Fetch the playlist metadata by token
   useEffect(() => {
@@ -41,33 +45,34 @@ export default function ShareLinkPage() {
     return () => { cancelled = true }
   }, [token])
 
-  // If user is signed in and playlist loaded, auto-claim
-  const handleClaim = useCallback(async () => {
-    if (!user?.id || !token) return
-    setState("claiming")
-    try {
-      const result = await claimPlaylistByToken(token, user.id)
-      router.push(`/shared-playlists/${result.playlist_id}`)
-    } catch {
-      setState("not-found")
-    }
-  }, [user?.id, token, router])
-
-  useEffect(() => {
-    if (isUserLoaded && user?.id && state === "preview") {
-      handleClaim()
-    }
-  }, [isUserLoaded, user?.id, state, handleClaim])
+  const handlePlaySong = useCallback(
+    (song: NonNullable<Playlist["songs"]>[number]) => {
+      if (!song) return
+      const mapped = {
+        id: song.track_id,
+        title: song.title,
+        artist: { id: song.artist_name, name: song.artist_name },
+        albumArt: song.album_art || "/placeholder.png",
+        duration: song.duration || 0,
+        previewUrl: song.preview_url || undefined,
+        collectionName: song.collection_name || undefined,
+      }
+      if (currentlyPlaying?.id === mapped.id) {
+        togglePlay()
+      } else {
+        setPlayingTrack(mapped)
+      }
+    },
+    [currentlyPlaying, togglePlay, setPlayingTrack]
+  )
 
   // --- Loading state ---
-  if (state === "loading" || (state === "claiming")) {
+  if (state === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#0f0a1e] via-[#1a0a2e] to-[#0a1628]">
         <div className="flex flex-col items-center gap-4">
           <div className="size-10 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-          <p className="text-sm text-white/60">
-            {state === "claiming" ? t("share.preview.claiming") : t("share.preview.loading")}
-          </p>
+          <p className="text-sm text-white/60">{t("share.preview.loading")}</p>
         </div>
       </div>
     )
@@ -93,7 +98,115 @@ export default function ShareLinkPage() {
     )
   }
 
-  // --- Preview (user not signed in) ---
+  const songs = playlist?.songs || []
+  const isSignedIn = isUserLoaded && !!user
+
+  // --- Signed-in: full inline playlist view ---
+  if (isSignedIn && playlist) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#0f0a1e] via-[#1a0a2e] to-[#0a1628] px-4 py-8">
+        <div className="mx-auto max-w-3xl">
+          {/* Owner attribution */}
+          <div className="mb-6 flex items-center gap-2 text-sm text-white/50">
+            <User size={14} />
+            <span>{playlist.owner_name ? `${playlist.owner_name}'s playlist` : "Shared playlist"}</span>
+          </div>
+
+          {/* Playlist header */}
+          <div className="mb-8 flex items-start gap-5">
+            <div className="flex size-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/30 to-purple-500/10 shadow-lg shadow-purple-500/10">
+              <ListMusic size={36} className="text-purple-400" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-2xl font-bold text-white">{playlist.name}</h1>
+              {playlist.description && (
+                <p className="mt-1 text-sm text-white/50">{playlist.description}</p>
+              )}
+              <p className="mt-2 text-xs text-white/40">
+                {t("playlist.songs", { count: songs.length })}
+              </p>
+            </div>
+          </div>
+
+          {/* Song list */}
+          {songs.length === 0 ? (
+            <div className="flex min-h-[30vh] flex-col items-center justify-center text-center">
+              <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-white/[0.04]">
+                <Music size={28} className="text-white/20" />
+              </div>
+              <p className="text-lg font-medium text-white/60">{t("playlist.emptySongs")}</p>
+            </div>
+          ) : (
+            <div className="overflow-hidden rounded-xl bg-white/[0.03]">
+              {songs.map((song, index) => {
+                const isPlaying = currentlyPlaying?.id === song.track_id && playState === PLAY_STATE.PLAYING
+                return (
+                  <div
+                    key={song.id}
+                    className={`group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-white/[0.04] ${
+                      index < songs.length - 1 ? "border-b border-white/[0.06]" : ""
+                    }`}
+                  >
+                    <span
+                      className={`w-5 text-center text-sm tabular-nums ${
+                        isPlaying ? "font-bold text-purple-400" : "text-white/30"
+                      }`}
+                    >
+                      {index + 1}
+                    </span>
+
+                    <button
+                      onClick={() => handlePlaySong(song)}
+                      className="relative size-11 shrink-0 overflow-hidden rounded-lg"
+                    >
+                      {song.album_art ? (
+                        <Image
+                          src={song.album_art}
+                          alt={`${song.title} album art`}
+                          fill
+                          className="object-cover"
+                          sizes="44px"
+                        />
+                      ) : (
+                        <div className="flex size-full items-center justify-center bg-white/[0.06]">
+                          <Music size={18} className="text-white/30" />
+                        </div>
+                      )}
+                      {isPlaying && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                          <div className="flex items-end gap-[2px]">
+                            <span className="animate-eq-1 inline-block w-[3px] rounded-full bg-purple-400" />
+                            <span className="animate-eq-2 inline-block w-[3px] rounded-full bg-purple-400" />
+                            <span className="animate-eq-3 inline-block w-[3px] rounded-full bg-purple-400" />
+                          </div>
+                        </div>
+                      )}
+                    </button>
+
+                    <div className="min-w-0 flex-1 cursor-pointer" onClick={() => handlePlaySong(song)}>
+                      <p className={`truncate text-[13px] font-medium ${isPlaying ? "text-purple-400" : "text-white/80"}`}>
+                        {song.title}
+                      </p>
+                      <p className="truncate text-xs text-white/40">{song.artist_name}</p>
+                    </div>
+
+                    {song.duration != null && (
+                      <span className="flex items-center gap-1 text-xs tabular-nums text-white/30">
+                        <Clock size={12} />
+                        {Math.floor(song.duration / 60)}:{String(song.duration % 60).padStart(2, "0")}
+                      </span>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // --- Not signed in: Preview card with sign-up CTA ---
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#0f0a1e] via-[#1a0a2e] to-[#0a1628] px-4">
       <div className="w-full max-w-md">
@@ -106,7 +219,9 @@ export default function ShareLinkPage() {
             </div>
             <div className="text-center">
               <p className="mb-1 text-xs font-medium uppercase tracking-wider text-white/40">
-                {t("share.preview.title")}
+                {playlist?.owner_name
+                  ? `${playlist.owner_name}'s playlist`
+                  : t("share.preview.title")}
               </p>
               <h1 className="text-2xl font-bold text-white">{playlist?.name}</h1>
               {playlist?.description && (
@@ -119,9 +234,9 @@ export default function ShareLinkPage() {
           </div>
 
           {/* Song preview list (first 5) */}
-          {playlist?.songs && playlist.songs.length > 0 && (
+          {songs.length > 0 && (
             <div className="border-t border-white/[0.06] px-4 py-3">
-              {playlist.songs.slice(0, 5).map((song, i) => (
+              {songs.slice(0, 5).map((song, i) => (
                 <div
                   key={song.id}
                   className="flex items-center gap-3 rounded-lg px-2 py-2"
@@ -133,9 +248,9 @@ export default function ShareLinkPage() {
                   </div>
                 </div>
               ))}
-              {playlist.songs.length > 5 && (
+              {songs.length > 5 && (
                 <p className="px-2 py-1 text-xs text-white/30">
-                  +{playlist.songs.length - 5} more
+                  +{songs.length - 5} more
                 </p>
               )}
             </div>

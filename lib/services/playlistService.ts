@@ -15,6 +15,7 @@ export interface Playlist {
   shared_by?: string
   shared_by_email?: string
   shared_by_name?: string
+  owner_name?: string
 }
 
 export interface PlaylistSong {
