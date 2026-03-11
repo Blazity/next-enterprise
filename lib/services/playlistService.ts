@@ -57,14 +57,14 @@ export async function syncUser(user: {
 }
 
 export async function getUserPlaylists(clerkId: string): Promise<Playlist[]> {
-  const res = await fetch(`${API_URL}/api/playlists/user/${encodeURIComponent(clerkId)}`)
+  const res = await fetch(`${API_URL}/api/playlists/user/${encodeURIComponent(clerkId)}`, { cache: 'no-store' })
   if (!res.ok) throw new Error("Failed to fetch playlists")
   return res.json() as Promise<Playlist[]>
 }
 
 export async function getPlaylist(id: number, clerkId?: string): Promise<Playlist> {
   const params = clerkId ? `?clerk_id=${encodeURIComponent(clerkId)}` : ""
-  const res = await fetch(`${API_URL}/api/playlists/${id}${params}`)
+  const res = await fetch(`${API_URL}/api/playlists/${id}${params}`, { cache: 'no-store' })
   if (!res.ok) throw new Error("Failed to fetch playlist")
   return res.json() as Promise<Playlist>
 }
@@ -162,7 +162,7 @@ export async function unsharePlaylist(playlistId: number, sharedWithClerkId: str
 }
 
 export async function getSharedPlaylists(clerkId: string): Promise<Playlist[]> {
-  const res = await fetch(`${API_URL}/api/playlists/shared/${encodeURIComponent(clerkId)}`)
+  const res = await fetch(`${API_URL}/api/playlists/shared/${encodeURIComponent(clerkId)}`, { cache: 'no-store' })
   if (!res.ok) throw new Error("Failed to fetch shared playlists")
   return res.json() as Promise<Playlist[]>
 }
@@ -184,7 +184,7 @@ export async function createShareLink(
 }
 
 export async function getPlaylistByToken(token: string): Promise<Playlist> {
-  const res = await fetch(`${API_URL}/api/playlists/shared-by-token/${encodeURIComponent(token)}`)
+  const res = await fetch(`${API_URL}/api/playlists/shared-by-token/${encodeURIComponent(token)}`, { cache: 'no-store' })
   if (!res.ok) throw new Error("Invalid or expired share link")
   return res.json() as Promise<Playlist>
 }

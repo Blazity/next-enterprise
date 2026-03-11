@@ -70,9 +70,11 @@ export function NavBar() {
     (playlistFeatureEnabled && hasAnyPlaylists) ||
     (!playlistFeatureEnabled && (hasSharedPlaylists || hasOwnedPlaylists))
   const playlistNavItem = showPlaylistNav
-    ? playlistFeatureEnabled
-      ? { href: "/playlists", labelKey: "nav.playlists" as const, Icon: ListMusic }
-      : { href: "/playlists", labelKey: "share.sharedWithMe" as const, Icon: Share2 }
+    ? { 
+        href: "/playlists", 
+        labelKey: (playlistFeatureEnabled || hasOwnedPlaylists) ? "nav.playlists" as const : "share.sharedWithMe" as const, 
+        Icon: (playlistFeatureEnabled || hasOwnedPlaylists) ? ListMusic : Share2 
+      }
     : null
 
   const shareLinkNavItem =
@@ -105,12 +107,9 @@ export function NavBar() {
       <div className="flex items-center gap-2 overflow-x-auto px-2 py-2 md:hidden">
         {filteredMobileNav.map((item) => {
           const isActive = pathname === item.href
-          const label =
-            "labelParam" in item
-              ? item.labelParam
-                ? t(item.labelKey, { name: item.labelParam })
-                : t(item.labelKey)
-              : t(item.labelKey)
+          const label = "labelParam" in item 
+            ? t(item.labelKey, { name: item.labelParam || t("share.unknownOwner") }) 
+            : t(item.labelKey)
           return (
             <Link
               key={item.href}
@@ -188,12 +187,9 @@ export function NavBar() {
           <div className="space-y-0.5">
             {filteredLibraryNav.map((item) => {
               const isActive = pathname === item.href
-              const label =
-                "labelParam" in item
-                  ? item.labelParam
-                    ? t(item.labelKey, { name: item.labelParam })
-                    : t(item.labelKey)
-                  : t(item.labelKey)
+              const label = "labelParam" in item
+                ? t(item.labelKey, { name: item.labelParam || t("share.unknownOwner") })
+                : t(item.labelKey)
               return (
                 <Link
                   key={item.href}
