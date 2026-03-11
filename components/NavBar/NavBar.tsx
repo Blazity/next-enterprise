@@ -66,7 +66,7 @@ export function NavBar() {
     })
   }
 
-  const showPlaylistNav = playlistFeatureEnabled || hasAnyPlaylists
+  const showPlaylistNav = true // Always show — the page handles visibility internally
   const playlistNavItem = showPlaylistNav
     ? { 
         href: "/playlists", 

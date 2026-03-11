@@ -53,13 +53,13 @@ export default function InviteAcceptClient() {
           // Redirect to the specific shared playlist
           router.replace(`/playlist/${metadata.playlistInvitationPlaylistId}`)
         } else {
-          // Fallback: redirect to home
-          router.replace("/")
+          // Fallback: redirect to playlists
+          router.replace("/playlists")
         }
       } catch (err) {
         console.error("Failed to resolve invitation:", err)
         // Even if sync fails, still redirect to home
-        router.replace("/")
+        router.replace("/playlists")
       }
     },
     [router]

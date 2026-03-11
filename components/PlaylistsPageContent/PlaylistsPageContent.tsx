@@ -88,10 +88,8 @@ export function PlaylistsPageContent() {
     )
   }
 
-  // If the flag is off and user has neither owned nor shared playlists, show Coming Soon
-  if (!playlistFeatureEnabled && !hasSharedPlaylists && !hasOwnedPlaylists) {
-    return <ComingSoon titleKey="nav.playlists" />
-  }
+  // Feature flag only controls Create button — the page always renders
+  // so invited users can see their shared playlists
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 md:px-6">
