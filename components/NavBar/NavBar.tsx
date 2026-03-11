@@ -66,9 +66,7 @@ export function NavBar() {
     })
   }
 
-  const showPlaylistNav =
-    (playlistFeatureEnabled && hasAnyPlaylists) ||
-    (!playlistFeatureEnabled && (hasSharedPlaylists || hasOwnedPlaylists))
+  const showPlaylistNav = playlistFeatureEnabled || hasAnyPlaylists
   const playlistNavItem = showPlaylistNav
     ? { 
         href: "/playlists", 
