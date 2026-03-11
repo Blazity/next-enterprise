@@ -18,7 +18,5 @@ export async function GET(request: NextRequest) {
       { error: "Failed to search tracks" },
       { status: 500 }
     )
-      { status: 500 }
-    )
   }
 }
