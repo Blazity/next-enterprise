@@ -15,7 +15,9 @@ export async function GET(request: NextRequest) {
     console.error("iTunes search error:", error)
     const err = error as Error
     return NextResponse.json(
-      { error: "Failed to search tracks", details: err?.message, stack: err?.stack },
+      { error: "Failed to search tracks" },
+      { status: 500 }
+    )
       { status: 500 }
     )
   }
