@@ -28,6 +28,18 @@ const config: NextConfig = {
     { source: "/health", destination: "/api/health" },
     { source: "/ping", destination: "/api/health" },
   ],
+  redirects: async () => [
+    {
+      source: "/shared-playlists",
+      destination: "/playlists",
+      permanent: true,
+    },
+    {
+      source: "/shared-playlists/:path*",
+      destination: "/playlists",
+      permanent: true,
+    },
+  ],
 }
 
 export default env.ANALYZE ? withBundleAnalyzer({ enabled: env.ANALYZE })(config) : config
