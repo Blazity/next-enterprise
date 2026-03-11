@@ -37,8 +37,8 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
       const token = await getToken()
       const result = await getPlaylistShares(token, playlistId)
       if (result.data) {
-        // Find public link (sharedWith is null)
-        const publicShare = result.data.find(s => !s.sharedWith)
+        // Find public link (sharedWith is null or enriched to "Public Link")
+        const publicShare = result.data.find(s => !s.sharedWith || s.sharedWith === "Public Link")
         if (publicShare) {
           const frontendUrl = window.location.origin
           setPublicLink(`${frontendUrl}/playlist/shared/${publicShare.token}`)
@@ -46,8 +46,8 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
           setPublicLink(null)
         }
         
-        // Private shares only
-        setShares(result.data.filter(s => !!s.sharedWith && s.shareType === "private"))
+        // Private shares only — exclude undefined, null, and the public link sentinel
+        setShares(result.data.filter(s => s != null && !!s.sharedWith && s.sharedWith !== "Public Link" && s.shareType === "private"))
       }
     } catch {
       console.error("Failed to load shares")
