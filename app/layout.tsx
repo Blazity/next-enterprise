@@ -9,8 +9,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Spotify Preview Player",
-  description: "Search for tracks and play 30-second preview clips powered by the Spotify Web API",
+  title: "AuraMusic Preview Player",
+  description: "Search for tracks and play 30-second preview clips powered by the iTunes Search API",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
