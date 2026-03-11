@@ -17,7 +17,7 @@ export function PlaylistsPageContent() {
   const { t } = useTranslation()
   const { user } = useUser()
   const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
-  const playlistFeatureEnabled = playlistFeatureVariant === "on"
+  const playlistFeatureEnabled = playlistFeatureVariant === "on" || playlistFeatureVariant === true
   const { playlists, sharedPlaylists, isLoading, error, fetchPlaylists, fetchSharedPlaylists, createPlaylist, updatePlaylist, deletePlaylist } =
     usePlaylistStore()
 

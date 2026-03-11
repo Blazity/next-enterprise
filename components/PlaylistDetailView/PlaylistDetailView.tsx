@@ -28,7 +28,7 @@ const config = {
         headerGradient: "from-accent/30 to-accent/10 shadow-red-500/10",
     },
     shared: {
-        backHref: "/shared-playlists",
+        backHref: "/playlists",
         backLabelKey: "share.sharedWithMe",
         HeaderIcon: Share2,
         headerIconClass: "text-blue-400",

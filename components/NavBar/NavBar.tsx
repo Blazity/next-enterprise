@@ -42,7 +42,7 @@ export function NavBar() {
   const pathname = usePathname()
   const posthog = usePostHog()
   const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
-  const playlistFeatureEnabled = playlistFeatureVariant === "on"
+  const playlistFeatureEnabled = playlistFeatureVariant === "on" || playlistFeatureVariant === true
   const { sharedPlaylists, fetchSharedPlaylists } = usePlaylistStore()
   const hasSharedPlaylists = sharedPlaylists.length > 0
 
@@ -63,7 +63,7 @@ export function NavBar() {
   const playlistNavItem = playlistFeatureEnabled
     ? { href: "/playlists", labelKey: "nav.playlists", Icon: ListMusic }
     : hasSharedPlaylists
-      ? { href: "/shared-playlists", labelKey: "share.sharedWithMe", Icon: Share2 }
+      ? { href: "/playlists", labelKey: "share.sharedWithMe", Icon: Share2 }
       : null
 
   const resolveNav = (items: typeof libraryNav) =>

@@ -60,7 +60,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
   const { t } = useTranslation()
   const posthog = usePostHog()
   const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
-  const playlistFeatureEnabled = playlistFeatureVariant === "on"
+  const playlistFeatureEnabled = playlistFeatureVariant === "on" || playlistFeatureVariant === true
   const canShowPlaylist = showAddToPlaylist && playlistFeatureEnabled
 
   const handlePlayAction = (source: "card" | "button" | "keyboard") => {
