@@ -146,10 +146,23 @@ export async function reorderTracks(token: string | null, playlistId: string, tr
   })
 }
 
+export interface ShareResponse {
+  status: 'shared' | 'invited'
+  message: string
+  share?: PlaylistShare
+}
+
 export async function sharePlaylist(token: string | null, id: string, email: string) {
-  return fetchApi<{ shareUrl: string; share: PlaylistShare }>(`/api/playlists/${id}/share`, token, {
+  return fetchApi<ShareResponse>(`/api/playlists/${id}/share`, token, {
     method: "POST",
     body: JSON.stringify({ email }),
+  })
+}
+
+export async function claimShare(token: string | null, pendingPlaylistId: string, sharedBy: string) {
+  return fetchApi<{ playlistId: string }>('/api/playlists/claim-share', token, {
+    method: 'POST',
+    body: JSON.stringify({ pendingPlaylistId, sharedBy }),
   })
 }
 

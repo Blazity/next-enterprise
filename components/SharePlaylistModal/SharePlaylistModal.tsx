@@ -74,8 +74,14 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
       if (result.error) {
         setError(result.error)
       } else if (result.data) {
-        setShares((prev) => [...prev, result.data!.share])
-        addToast("Playlist shared successfully")
+        if (result.data.status === 'shared') {
+          addToast("Playlist shared! They've been notified.")
+        } else if (result.data.status === 'invited') {
+          addToast("Invite sent! They'll get access when they join Sonara.")
+        }
+        
+        // Refresh shares list to reflect any changes if applicable
+        loadShares()
         setEmail("")
       }
     } catch (err: unknown) {

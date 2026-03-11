@@ -1,7 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
 
 // All routes are public — auth is checked client-side per action (play, search)
-const isPublicRoute = createRouteMatcher(["/", "/api/itunes/(.*)", "/playlist/shared/(.*)"])
+const isPublicRoute = createRouteMatcher(["/", "/api/itunes/(.*)", "/playlist/shared/(.*)", "/accept-share(.*)", "/sign-up(.*)"])
 
 export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
