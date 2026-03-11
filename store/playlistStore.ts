@@ -14,6 +14,7 @@ import {
   sharePlaylist as sharePlaylistApi,
   unsharePlaylist as unsharePlaylistApi,
   createShareLink as createShareLinkApi,
+  inviteToPlaylist as inviteToPlaylistApi,
   type Playlist,
 } from "@/lib/services/playlistService"
 import type { Song } from "@/types/music"
@@ -36,6 +37,7 @@ interface PlaylistStore {
   sharePlaylist: (playlistId: number, email: string, sharedByClerkId: string) => Promise<{ pending?: boolean }>
   unsharePlaylist: (playlistId: number, sharedWithClerkId: string, clerkId: string) => Promise<void>
   createShareLink: (playlistId: number, clerkId: string) => Promise<{ token: string; url: string }>
+  inviteToPlaylist: (playlistId: number, email: string, sharedByClerkId: string) => Promise<{ invitation_id: string; pending: boolean }>
 }
 
 export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
@@ -173,6 +175,18 @@ export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
       return result
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to create share link"
+      set({ error: msg })
+      throw err
+    }
+  },
+
+  inviteToPlaylist: async (playlistId, email, sharedByClerkId) => {
+    try {
+      const result = await inviteToPlaylistApi(playlistId, email, sharedByClerkId)
+      set({ error: null })
+      return result
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed to send invitation"
       set({ error: msg })
       throw err
     }

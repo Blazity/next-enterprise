@@ -16,13 +16,12 @@ interface SharePlaylistDialogProps {
 
 export function SharePlaylistDialog({ playlistId, sharedByClerkId }: SharePlaylistDialogProps) {
   const { t } = useTranslation()
-  const { sharePlaylist } = usePlaylistStore()
+  const { inviteToPlaylist } = usePlaylistStore()
   const [open, setOpen] = useState(false)
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [errorMsg, setErrorMsg] = useState("")
 
-  const [successPending, setSuccessPending] = useState(false)
   const handleShare = useCallback(async () => {
     const trimmed = email.trim()
     if (!trimmed) return
@@ -33,21 +32,19 @@ export function SharePlaylistDialog({ playlistId, sharedByClerkId }: SharePlayli
     }
     setStatus("loading")
     setErrorMsg("")
-    setSuccessPending(false)
     try {
-      const result = await sharePlaylist(playlistId, trimmed, sharedByClerkId)
+      await inviteToPlaylist(playlistId, trimmed, sharedByClerkId)
       setStatus("success")
-      setSuccessPending(result?.pending ?? false)
       setEmail("")
       setTimeout(() => {
         setStatus("idle")
         setOpen(false)
-      }, 1500)
+      }, 2000)
     } catch (err) {
       setStatus("error")
       setErrorMsg(err instanceof Error ? err.message : t("share.error"))
     }
-  }, [email, playlistId, sharedByClerkId, sharePlaylist, t])
+  }, [email, playlistId, sharedByClerkId, inviteToPlaylist, t])
 
   if (!open) {
     return (
@@ -97,7 +94,7 @@ export function SharePlaylistDialog({ playlistId, sharedByClerkId }: SharePlayli
       {status === "error" && <p className="mb-3 text-xs text-red-400">{errorMsg}</p>}
       {status === "success" && (
         <p className="mb-3 text-xs text-green-400">
-          {successPending ? t("share.successPending") : t("share.success")}
+          Invitation sent! They&apos;ll receive an email shortly.
         </p>
       )}
 

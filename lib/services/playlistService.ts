@@ -204,3 +204,34 @@ export async function claimPlaylistByToken(
   }
   return res.json() as Promise<{ playlist_id: number }>
 }
+
+export async function inviteToPlaylist(
+  playlistId: number,
+  email: string,
+  sharedByClerkId: string
+): Promise<{ invitation_id: string; pending: boolean }> {
+  const res = await fetch(`${API_URL}/api/playlists/${playlistId}/invite`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, shared_by_clerk_id: sharedByClerkId }),
+  })
+  if (!res.ok) {
+    const err = (await res.json()) as { error?: string }
+    throw new Error(err.error || "Failed to send invitation")
+  }
+  return res.json() as Promise<{ invitation_id: string; pending: boolean }>
+}
+
+export async function resolveInvitation(
+  invitationId: string,
+  clerkId?: string
+): Promise<{ playlist_id: number; shared_by_clerk_id: string; email: string }> {
+  const params = new URLSearchParams({ invitation_id: invitationId })
+  if (clerkId) params.set("clerk_id", clerkId)
+  const res = await fetch(`${API_URL}/api/invitations/resolve?${params.toString()}`, { cache: 'no-store' })
+  if (!res.ok) {
+    const err = (await res.json()) as { error?: string }
+    throw new Error(err.error || "Failed to resolve invitation")
+  }
+  return res.json() as Promise<{ playlist_id: number; shared_by_clerk_id: string; email: string }>
+}
