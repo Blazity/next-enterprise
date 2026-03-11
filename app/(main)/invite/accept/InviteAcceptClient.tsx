@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 
 import { useRouter, useSearchParams } from "next/navigation"
 
-import { useSignIn, useSignUp, useUser } from "@clerk/nextjs"
+import { useClerk, useSignIn, useSignUp, useUser } from "@clerk/nextjs"
 import { Loader2, Music } from "lucide-react"
 
 import { resolveInvitation, syncUser } from "@/lib/services/playlistService"
@@ -14,6 +14,7 @@ type PageState = "loading" | "authenticating" | "resolving" | "redirecting" | "e
 export default function InviteAcceptClient() {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const { setActive } = useClerk()
   const { user, isLoaded: isUserLoaded, isSignedIn } = useUser()
   const { signUp, isLoaded: isSignUpLoaded } = useSignUp()
   const { signIn, isLoaded: isSignInLoaded } = useSignIn()
@@ -100,11 +101,13 @@ export default function InviteAcceptClient() {
           // New user — create account via ticket
           const result = await signUp!.create({ strategy: "ticket", ticket })
 
-          if (result.status === "complete") {
-            // Redirect so Clerk picks up the new session before we resolve
+          if (result.status === "complete" && result.createdSessionId) {
+            // Set the session as active so the user is logged in
+            await setActive({ session: result.createdSessionId })
+            // Give Clerk a moment to propagate the session, then redirect
             setTimeout(() => {
               window.location.href = `/invite/accept?resolved=1`
-            }, 1000)
+            }, 500)
           } else {
             setState("error")
             setErrorMsg("Account creation did not complete. Please try signing up manually.")
@@ -113,12 +116,12 @@ export default function InviteAcceptClient() {
           // Existing user — sign in via ticket
           const result = await signIn!.create({ strategy: "ticket", ticket })
 
-          if (result.status === "complete") {
-            if (result.createdSessionId) {
-              setTimeout(() => {
-                window.location.href = `/invite/accept?resolved=1`
-              }, 1000)
-            }
+          if (result.status === "complete" && result.createdSessionId) {
+            // Set the session as active so the user is logged in
+            await setActive({ session: result.createdSessionId })
+            setTimeout(() => {
+              window.location.href = `/invite/accept?resolved=1`
+            }, 500)
           } else {
             setState("error")
             setErrorMsg("Sign-in did not complete. Please try signing in manually.")
