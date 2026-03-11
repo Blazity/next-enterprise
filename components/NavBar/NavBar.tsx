@@ -63,7 +63,7 @@ export function NavBar() {
   const playlistNavItem = playlistFeatureEnabled
     ? { href: "/playlists", labelKey: "nav.playlists", Icon: ListMusic }
     : hasSharedPlaylists
-      ? { href: "/playlists", labelKey: "share.sharedWithMe", Icon: Share2 }
+      ? { href: "/shared-playlists", labelKey: "share.sharedWithMe", Icon: Share2 }
       : null
 
   const resolveNav = (items: typeof libraryNav) =>
