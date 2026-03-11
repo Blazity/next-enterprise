@@ -133,7 +133,11 @@ export async function removeSongFromPlaylist(playlistId: number, trackId: string
   }
 }
 
-export async function sharePlaylist(playlistId: number, email: string, sharedByClerkId: string): Promise<void> {
+export async function sharePlaylist(
+  playlistId: number,
+  email: string,
+  sharedByClerkId: string
+): Promise<{ pending?: boolean }> {
   const res = await fetch(`${API_URL}/api/playlists/${playlistId}/share`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -143,6 +147,7 @@ export async function sharePlaylist(playlistId: number, email: string, sharedByC
     const err = (await res.json()) as { error?: string }
     throw new Error(err.error || "Failed to share playlist")
   }
+  return res.json().catch(() => ({})) as Promise<{ pending?: boolean }>
 }
 
 export async function unsharePlaylist(playlistId: number, sharedWithClerkId: string, clerkId: string): Promise<void> {

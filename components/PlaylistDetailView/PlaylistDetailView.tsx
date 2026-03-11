@@ -164,7 +164,18 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
                             try {
                                 const result = await createShareLink(playlistId, user.id)
                                 const fullUrl = `${window.location.origin}${result.url}`
-                                await navigator.clipboard.writeText(fullUrl)
+                                try {
+                                    await navigator.clipboard.writeText(fullUrl)
+                                } catch {
+                                    const textArea = document.createElement("textarea")
+                                    textArea.value = fullUrl
+                                    textArea.style.position = "fixed"
+                                    textArea.style.left = "-9999px"
+                                    document.body.appendChild(textArea)
+                                    textArea.select()
+                                    document.execCommand("copy")
+                                    document.body.removeChild(textArea)
+                                }
                                 setLinkCopied(true)
                                 setTimeout(() => setLinkCopied(false), 2000)
                             } catch {

@@ -33,7 +33,7 @@ interface PlaylistStore {
   deletePlaylist: (id: number, clerkId: string) => Promise<void>
   addSong: (playlistId: number, song: Song, clerkId: string) => Promise<void>
   removeSong: (playlistId: number, trackId: string, clerkId: string) => Promise<void>
-  sharePlaylist: (playlistId: number, email: string, sharedByClerkId: string) => Promise<void>
+  sharePlaylist: (playlistId: number, email: string, sharedByClerkId: string) => Promise<{ pending?: boolean }>
   unsharePlaylist: (playlistId: number, sharedWithClerkId: string, clerkId: string) => Promise<void>
   createShareLink: (playlistId: number, clerkId: string) => Promise<{ token: string; url: string }>
 }
@@ -145,8 +145,9 @@ export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
 
   sharePlaylist: async (playlistId, email, sharedByClerkId) => {
     try {
-      await sharePlaylistApi(playlistId, email, sharedByClerkId)
+      const result = await sharePlaylistApi(playlistId, email, sharedByClerkId)
       set({ error: null })
+      return result
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to share playlist"
       set({ error: msg })

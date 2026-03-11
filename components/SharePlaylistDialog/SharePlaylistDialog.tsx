@@ -3,6 +3,8 @@
 import { useCallback, useState } from "react"
 
 import { Share2, X } from "lucide-react"
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 import { useTranslation } from "react-i18next"
 
 import { usePlaylistStore } from "@/store/playlistStore"
@@ -20,13 +22,22 @@ export function SharePlaylistDialog({ playlistId, sharedByClerkId }: SharePlayli
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [errorMsg, setErrorMsg] = useState("")
 
+  const [successPending, setSuccessPending] = useState(false)
   const handleShare = useCallback(async () => {
-    if (!email.trim()) return
+    const trimmed = email.trim()
+    if (!trimmed) return
+    if (!EMAIL_REGEX.test(trimmed)) {
+      setErrorMsg(t("share.invalidEmail"))
+      setStatus("error")
+      return
+    }
     setStatus("loading")
     setErrorMsg("")
+    setSuccessPending(false)
     try {
-      await sharePlaylist(playlistId, email.trim(), sharedByClerkId)
+      const result = await sharePlaylist(playlistId, trimmed, sharedByClerkId)
       setStatus("success")
+      setSuccessPending(result?.pending ?? false)
       setEmail("")
       setTimeout(() => {
         setStatus("idle")
@@ -71,14 +82,24 @@ export function SharePlaylistDialog({ playlistId, sharedByClerkId }: SharePlayli
         type="email"
         placeholder={t("share.emailPlaceholder")}
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => {
+          setEmail(e.target.value)
+          if (status === "error") {
+            setErrorMsg("")
+            setStatus("idle")
+          }
+        }}
         onKeyDown={(e) => e.key === "Enter" && handleShare()}
         autoFocus
         className="mb-3 w-full rounded-lg border border-white/[0.1] bg-white/[0.05] px-4 py-2.5 text-sm text-white placeholder-white/40 outline-none focus:border-white/20"
       />
 
       {status === "error" && <p className="mb-3 text-xs text-red-400">{errorMsg}</p>}
-      {status === "success" && <p className="mb-3 text-xs text-green-400">{t("share.success")}</p>}
+      {status === "success" && (
+        <p className="mb-3 text-xs text-green-400">
+          {successPending ? t("share.successPending") : t("share.success")}
+        </p>
+      )}
 
       <button
         onClick={handleShare}

@@ -15,6 +15,6 @@ export const useShareLinkStore = create<ShareLinkState>((set) => ({
   ownerName: null,
   href: null,
   setShareLink: (token, ownerName) =>
-    set({ token, ownerName: ownerName || "Someone", href: `/s/${token}` }),
+    set({ token, ownerName: ownerName || null, href: `/s/${token}` }),
   clearShareLink: () => set({ token: null, ownerName: null, href: null }),
 }))

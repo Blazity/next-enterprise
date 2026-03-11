@@ -21,6 +21,7 @@ export function PlaylistsPageContent() {
   const { playlists, sharedPlaylists, isLoading, error, fetchPlaylists, fetchSharedPlaylists, createPlaylist, updatePlaylist, deletePlaylist } =
     usePlaylistStore()
   const hasSharedPlaylists = sharedPlaylists.length > 0
+  const hasOwnedPlaylists = playlists.length > 0
 
   const [showCreate, setShowCreate] = useState(false)
   const [newName, setNewName] = useState("")
@@ -87,8 +88,8 @@ export function PlaylistsPageContent() {
     )
   }
 
-  // If the flag is off and there are no shared playlists at all, show Coming Soon
-  if (!playlistFeatureEnabled && !hasSharedPlaylists) {
+  // If the flag is off and user has neither owned nor shared playlists, show Coming Soon
+  if (!playlistFeatureEnabled && !hasSharedPlaylists && !hasOwnedPlaylists) {
     return <ComingSoon titleKey="nav.playlists" />
   }
 

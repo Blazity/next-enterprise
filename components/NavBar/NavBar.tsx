@@ -44,16 +44,19 @@ export function NavBar() {
   const posthog = usePostHog()
   const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
   const playlistFeatureEnabled = playlistFeatureVariant === "on" || playlistFeatureVariant === true
-  const { sharedPlaylists, fetchSharedPlaylists } = usePlaylistStore()
+  const { playlists, sharedPlaylists, fetchPlaylists, fetchSharedPlaylists } = usePlaylistStore()
   const { href: shareLinkHref, ownerName: shareLinkOwnerName } = useShareLinkStore()
   const hasSharedPlaylists = sharedPlaylists.length > 0
+  const hasOwnedPlaylists = playlists.length > 0
+  const hasAnyPlaylists = hasOwnedPlaylists || hasSharedPlaylists
   const hasShareLinkPreview = !!shareLinkHref
 
   useEffect(() => {
     if (user?.id) {
+      fetchPlaylists(user.id)
       fetchSharedPlaylists(user.id)
     }
-  }, [user?.id, fetchSharedPlaylists])
+  }, [user?.id, fetchPlaylists, fetchSharedPlaylists])
 
   const captureNavClick = (href: string, section: "mobile" | "main" | "library") => {
     posthog?.capture("nav_item_clicked", {
@@ -63,17 +66,20 @@ export function NavBar() {
     })
   }
 
-  const playlistNavItem = playlistFeatureEnabled
-    ? { href: "/playlists", labelKey: "nav.playlists", Icon: ListMusic }
-    : hasSharedPlaylists
-      ? { href: "/playlists", labelKey: "share.sharedWithMe", Icon: Share2 }
-      : null
+  const showPlaylistNav =
+    (playlistFeatureEnabled && hasAnyPlaylists) ||
+    (!playlistFeatureEnabled && (hasSharedPlaylists || hasOwnedPlaylists))
+  const playlistNavItem = showPlaylistNav
+    ? playlistFeatureEnabled
+      ? { href: "/playlists", labelKey: "nav.playlists" as const, Icon: ListMusic }
+      : { href: "/playlists", labelKey: "share.sharedWithMe" as const, Icon: Share2 }
+    : null
 
   const shareLinkNavItem =
     hasShareLinkPreview && shareLinkHref
       ? {
           href: shareLinkHref,
-          labelKey: "share.navItem" as const,
+          labelKey: (shareLinkOwnerName ? "share.navItem" : "share.navItemUnknown") as const,
           labelParam: shareLinkOwnerName,
           Icon: Share2,
         }
@@ -99,7 +105,12 @@ export function NavBar() {
       <div className="flex items-center gap-2 overflow-x-auto px-2 py-2 md:hidden">
         {filteredMobileNav.map((item) => {
           const isActive = pathname === item.href
-          const label = "labelParam" in item ? t(item.labelKey, { name: item.labelParam }) : t(item.labelKey)
+          const label =
+            "labelParam" in item
+              ? item.labelParam
+                ? t(item.labelKey, { name: item.labelParam })
+                : t(item.labelKey)
+              : t(item.labelKey)
           return (
             <Link
               key={item.href}
@@ -177,6 +188,12 @@ export function NavBar() {
           <div className="space-y-0.5">
             {filteredLibraryNav.map((item) => {
               const isActive = pathname === item.href
+              const label =
+                "labelParam" in item
+                  ? item.labelParam
+                    ? t(item.labelKey, { name: item.labelParam })
+                    : t(item.labelKey)
+                  : t(item.labelKey)
               return (
                 <Link
                   key={item.href}
@@ -198,7 +215,7 @@ export function NavBar() {
                     )}
                     strokeWidth={isActive ? 2.2 : 1.7}
                   />
-                  <span>{t(item.labelKey)}</span>
+                  <span>{label}</span>
                 </Link>
               )
             })}

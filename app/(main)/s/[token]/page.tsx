@@ -52,8 +52,9 @@ export default function ShareLinkPage() {
 
     return () => {
       cancelled = true
+      clearShareLink()
     }
-  }, [token, setShareLink])
+  }, [token, setShareLink, clearShareLink])
 
   const handlePlaySong = useCallback(
     (song: NonNullable<Playlist["songs"]>[number]) => {
@@ -279,7 +280,7 @@ export default function ShareLinkPage() {
               )}
             </div>
             <span className="rounded-full bg-white/[0.08] px-3 py-1 text-xs font-medium text-white/60">
-              {t("share.preview.songCount", { count: playlist?.song_count || 0 })}
+              {t("share.preview.songCount", { count: songs.length })}
             </span>
           </div>
 
