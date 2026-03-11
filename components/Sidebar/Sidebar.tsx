@@ -5,17 +5,27 @@
 // wednesday-dev: NavItem extracted, active boolean prefix
 
 import { useFeatureFlagEnabled } from "posthog-js/react"
-import { AlbumIcon, ArtistIcon, ChevronLeftIcon, DiscoverLogoIcon, HomeIcon, MusicNoteIcon, PlaylistIcon, SearchIcon } from "components/icons"
-import type { Playlist } from "lib/api/playlists"
+import { 
+  AlbumIcon, 
+  ArtistIcon, 
+  ChevronLeftIcon, 
+  DiscoverLogoIcon, 
+  HomeIcon, 
+  LinkIcon,
+  MusicNoteIcon, 
+  PlaylistIcon, 
+  SearchIcon,
+  UsersIcon
+} from "components/icons"
 import { cn } from "lib/cn"
 import type { ActiveView } from "lib/constants"
+import { usePlaylistStore } from "store/usePlaylistStore"
 
 interface SidebarProps {
   activeView: ActiveView
   onNavClick: (view: ActiveView) => void
   isCollapsed: boolean
   onToggleCollapse: () => void
-  sharedPlaylists?: (Playlist & { sharedBy: string; shareId: string })[]
   onSharedPlaylistClick?: (id: string) => void
   selectedPlaylistId?: string | null
 }
@@ -53,10 +63,10 @@ export function Sidebar({
   onNavClick, 
   isCollapsed, 
   onToggleCollapse,
-  sharedPlaylists = [],
   onSharedPlaylistClick,
   selectedPlaylistId
 }: SidebarProps) {
+  const { playlists, sharedPlaylists } = usePlaylistStore()
   const isPlaylistEnabled = useFeatureFlagEnabled("playlist-feature") ?? false
 
   const navItems: { label: string; view: ActiveView; icon: React.ReactNode }[] = [
@@ -115,47 +125,60 @@ export function Sidebar({
           />
         ))}
 
-        {/* Shared with you section */}
-        {isPlaylistEnabled && sharedPlaylists.length > 0 && (
+        {/* Unified Playlists section */}
+        {isPlaylistEnabled && (playlists.length > 0 || sharedPlaylists.length > 0) && (
           <div className="mt-6">
             {!isCollapsed && (
               <p className="px-4 text-[10px] font-bold text-muted uppercase tracking-[0.12em] mb-2">
-                Shared with you
+                Your Library
               </p>
             )}
             <div className="flex flex-col gap-0.5">
-              {sharedPlaylists.slice(0, 2).map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => onSharedPlaylistClick?.(p.id)}
-                  title={isCollapsed ? `${p.name} (from ${p.sharedBy})` : undefined}
-                  className={cn(
-                    "flex items-center gap-3.5 w-full bg-transparent border-0 rounded-lg cursor-pointer text-sm text-left relative transition-all duration-200",
-                    isCollapsed ? "px-0 py-2.5 justify-center" : "px-4 py-2.5",
-                    activeView === "playlists" && selectedPlaylistId === p.id 
-                      ? "text-white font-bold bg-white/5" 
-                      : "text-muted font-normal hover:text-white hover:bg-white/5"
-                  )}
-                >
-                  {activeView === "playlists" && selectedPlaylistId === p.id && (
-                    <span className="absolute left-0 top-[20%] bottom-[20%] w-[3px] rounded-r-sm bg-primary" />
-                  )}
-                  <PlaylistIcon className={cn("shrink-0 size-4", (activeView === "playlists" && selectedPlaylistId === p.id) ? "opacity-100 text-primary" : "opacity-70")} />
-                  {!isCollapsed && (
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate m-0">{p.name}</p>
-                      <p className="text-[10px] text-muted truncate m-0 font-normal">from {p.sharedBy}</p>
-                    </div>
-                  )}
-                </button>
-              ))}
+              {[...playlists, ...sharedPlaylists].slice(0, 10).map((p) => {
+                const isShared = 'sharedBy' in p && !!p.sharedBy
+                const isActive = activeView === "playlists" && selectedPlaylistId === p.id
+                return (
+                  <button
+                    key={p.id}
+                    onClick={() => onSharedPlaylistClick?.(p.id)}
+                    title={isCollapsed ? (isShared ? `${p.name} (from ${p.sharedBy})` : p.name) : undefined}
+                    className={cn(
+                      "flex items-center gap-3.5 w-full bg-transparent border-0 rounded-lg cursor-pointer text-sm text-left relative transition-all duration-200",
+                      isCollapsed ? "px-0 py-2.5 justify-center" : "px-4 py-2.5",
+                      isActive 
+                        ? "text-white font-bold bg-white/5" 
+                        : "text-muted font-normal hover:text-white hover:bg-white/5"
+                    )}
+                  >
+                    {isActive && (
+                      <span className="absolute left-0 top-[20%] bottom-[20%] w-[3px] rounded-r-sm bg-primary" />
+                    )}
+                    <PlaylistIcon className={cn("shrink-0 size-4", isActive ? "opacity-100 text-primary" : "opacity-70")} />
+                    {!isCollapsed && (
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate m-0">{p.name}</p>
+                        {isShared && (
+                          <p className="text-[10px] text-muted truncate m-0 font-normal flex items-center gap-1">
+                            from {p.sharedBy}
+                            {p.shareType === "private" ? (
+                              <UsersIcon width={9} height={9} className="opacity-60" />
+                            ) : (
+                              <LinkIcon width={9} height={9} className="opacity-60" />
+                            )}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </button>
+                )
+              })}
 
-              {!isCollapsed && sharedPlaylists.length > 2 && (
+              {!isCollapsed && (playlists.length + sharedPlaylists.length) > 10 && (
                 <button
                   onClick={() => onNavClick("playlists")}
                   className="mx-4 mt-1 text-[11px] font-bold text-muted hover:text-white transition-colors border-0 bg-transparent cursor-pointer text-left w-fit"
                 >
-                  View all ({sharedPlaylists.length})
+                  View all ({playlists.length + sharedPlaylists.length})
                 </button>
               )}
             </div>

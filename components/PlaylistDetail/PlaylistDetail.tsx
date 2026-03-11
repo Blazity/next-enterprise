@@ -6,7 +6,7 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "@clerk/nextjs"
 
-import { ChevronLeftIcon, CloseIcon } from "components/icons"
+import { ChevronLeftIcon, CloseIcon, LinkIcon, UsersIcon } from "components/icons"
 import { SharePlaylistModal } from "components/SharePlaylistModal/SharePlaylistModal"
 import { Skeleton } from "components/Skeleton/Skeleton"
 import { SongCard } from "components/SongCard/SongCard"
@@ -19,28 +19,39 @@ import type { ItunesTrack } from "lib/itunes/types"
 interface PlaylistDetailProps {
   playlistId: string
   onBack: () => void
+  initialData?: Playlist
 }
 
-export function PlaylistDetail({ playlistId, onBack }: PlaylistDetailProps) {
+export function PlaylistDetail({ playlistId, onBack, initialData }: PlaylistDetailProps) {
   const { getToken } = useAuth()
-  const [playlist, setPlaylist] = useState<Playlist | null>(null)
+  const [playlist, setPlaylist] = useState<Playlist | null>(initialData || null)
   const [enrichedTracks, setEnrichedTracks] = useState<ItunesTrack[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(!initialData)
   const [isSharing, setIsSharing] = useState(false)
   const { userId: currentUserId } = useAuth()
 
   useEffect(() => {
     async function loadDetail() {
+      if (initialData && enrichedTracks.length > 0) return
+      
       setIsLoading(true)
       try {
         const token = await getToken()
-        const res = await getPlaylist(token, playlistId)
-        if (res.data) {
-          setPlaylist(res.data)
+        let currentPlaylist: Playlist | undefined = initialData
 
-          if (res.data.tracks && res.data.tracks.length > 0) {
+        if (!currentPlaylist) {
+          const res = await getPlaylist(token, playlistId)
+          if (res.data) {
+            currentPlaylist = res.data
+          }
+        }
+
+        if (currentPlaylist) {
+          setPlaylist(currentPlaylist)
+
+          if (currentPlaylist.tracks && currentPlaylist.tracks.length > 0) {
             // map them
-            const trackIds = res.data.tracks.map((t: PlaylistTrack) => t.trackId)
+            const trackIds = currentPlaylist.tracks.map((t: PlaylistTrack) => t.trackId)
             const itunesTracks = await fetchTracksByIds(trackIds)
             // Re-order based on playlist tracks array
             const trackMap = new Map(itunesTracks.map(t => [t.trackId, t]))
@@ -118,16 +129,24 @@ export function PlaylistDetail({ playlistId, onBack }: PlaylistDetailProps) {
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col">
               {playlist.userId !== currentUserId && (
-                <div className="flex items-center gap-1.5 mb-1">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
-                    Shared Playlist
-                  </span>
+                <div className="flex items-center mb-2">
+                  {playlist.shareType === "private" ? (
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-bold uppercase tracking-wide">
+                      <UsersIcon width={10} height={10} />
+                      <span>Shared</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wide">
+                      <LinkIcon width={10} height={10} />
+                      <span>Public</span>
+                    </div>
+                  )}
                 </div>
               )}
-              <h1 className="text-4xl font-extrabold text-white m-0 tracking-tight">{playlist.name}</h1>
+              <h1 className="text-4xl font-extrabold text-white m-0 tracking-tight leading-tight">{playlist.name}</h1>
               {playlist.sharedBy && (
-                <p className="text-primary text-sm font-medium mt-1 m-0">
-                  from {playlist.sharedBy}
+                <p className="text-[#a1a1aa] text-sm font-medium mt-1 m-0 flex items-center gap-1">
+                  Curated by <span className="text-primary">{playlist.sharedBy}</span>
                 </p>
               )}
             </div>

@@ -5,11 +5,12 @@ import { useAuth } from "@clerk/nextjs"
 
 import { CreatePlaylistModal } from "components/CreatePlaylistModal/CreatePlaylistModal"
 import { DeleteConfirmModal } from "components/DeleteConfirmModal/DeleteConfirmModal"
-import { ChevronRightIcon, PlaylistIcon, TrashIcon } from "components/icons"
+import { ChevronRightIcon, LinkIcon, PlaylistIcon, TrashIcon, UsersIcon } from "components/icons"
 import { PlaylistDetail } from "components/PlaylistDetail/PlaylistDetail"
 import { Skeleton } from "components/Skeleton/Skeleton"
 
 import { deletePlaylist, getPlaylists, getSharedWithMe } from "lib/api/playlists"
+import { cn } from "lib/cn"
 import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import { usePlaylistStore } from "store/usePlaylistStore"
 import { useToastStore } from "store/useToastStore"
@@ -108,27 +109,39 @@ export function PlaylistsView() {
         </div>
       ) : (
         <div className="flex flex-col gap-1 max-w-2xl">
-          {playlists.length > 0 ? (
-            playlists.map((playlist) => {
-              const trackCount = playlist._count?.tracks ?? playlist.tracks?.length ?? 0
-              return (
-                <div
-                  key={playlist.id}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => setSelectedPlaylistId(playlist.id)}
-                  onKeyDown={(e) => e.key === "Enter" && setSelectedPlaylistId(playlist.id)}
-                  className="flex items-center gap-3 w-full text-left py-3 px-3 rounded-xl border-0 bg-transparent hover:bg-white/5 transition-colors cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-inset"
-                >
-                  <div className="size-12 shrink-0 rounded-lg bg-[#1a1a1a] flex items-center justify-center border border-[#27272a]/50 group-hover:border-primary/30 transition-colors">
-                    <PlaylistIcon width={18} height={18} className="text-muted group-hover:text-primary transition-colors" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white font-medium truncate m-0">{playlist.name}</p>
-                    <p className="text-xs text-muted m-0 mt-0.5">
-                      {trackCount} track{trackCount !== 1 ? "s" : ""}
-                    </p>
-                  </div>
+          {[...playlists, ...sharedPlaylists].map((playlist) => {
+            const trackCount = playlist._count?.tracks ?? playlist.tracks?.length ?? 0
+            const isShared = !!playlist.sharedBy
+            return (
+              <div
+                key={playlist.id}
+                role="button"
+                tabIndex={0}
+                onClick={() => setSelectedPlaylistId(playlist.id)}
+                onKeyDown={(e) => e.key === "Enter" && setSelectedPlaylistId(playlist.id)}
+                className="flex items-center gap-3 w-full text-left py-3 px-3 rounded-xl border-0 bg-transparent hover:bg-white/5 transition-colors cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-inset"
+              >
+                <div className="size-12 shrink-0 rounded-lg bg-[#1a1a1a] flex items-center justify-center border border-[#27272a]/50 group-hover:border-primary/30 transition-colors">
+                  <PlaylistIcon width={18} height={18} className={cn("text-muted transition-colors", isShared ? "text-primary/70 group-hover:text-primary" : "group-hover:text-primary")} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-medium truncate m-0">{playlist.name}</p>
+                  <p className="text-xs text-muted m-0 mt-0.5 flex items-center gap-1.5">
+                    {trackCount} track{trackCount !== 1 ? "s" : ""}
+                    {isShared && (
+                      <span className="flex items-center gap-1">
+                        • from {playlist.sharedBy}
+                        {playlist.shareType === "private" ? (
+                          <UsersIcon width={10} height={10} className="text-primary/60" />
+                        ) : (
+                          <LinkIcon width={10} height={10} className="text-primary/60" />
+                        )}
+                      </span>
+                    )}
+                  </p>
+                </div>
+                
+                {!isShared && (
                   <button
                     type="button"
                     onClick={(e) => {
@@ -140,50 +153,12 @@ export function PlaylistsView() {
                   >
                     <TrashIcon width={16} height={16} />
                   </button>
-                  <ChevronRightIcon width={16} height={16} className="shrink-0 text-muted opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity" />
-                </div>
-              )
-            })
-          ) : (
-             <div className="px-3 py-6 bg-white/5 border border-dashed border-white/10 rounded-xl text-center">
-                <p className="text-xs text-muted m-0">You haven&apos;t created any playlists yet.</p>
-             </div>
-          )}
-
-          {sharedPlaylists.length > 0 && (
-            <div className="mt-8">
-              <h2 className="text-xs font-bold text-muted uppercase tracking-[0.15em] mb-4 px-3">Shared with you</h2>
-              <div className="flex flex-col gap-1">
-                {sharedPlaylists.map((playlist) => {
-                  const trackCount = playlist._count?.tracks ?? playlist.tracks?.length ?? 0
-                  return (
-                    <div
-                      key={playlist.id}
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => setSelectedPlaylistId(playlist.id)}
-                      onKeyDown={(e) => e.key === "Enter" && setSelectedPlaylistId(playlist.id)}
-                      className="flex items-center gap-3 w-full text-left py-3 px-3 rounded-xl border-0 bg-transparent hover:bg-white/5 transition-colors cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-inset"
-                    >
-                      <div className="size-12 shrink-0 rounded-lg bg-[#1a1a1a] flex items-center justify-center border border-[#27272a]/50 group-hover:border-primary/30 transition-colors">
-                        <PlaylistIcon width={18} height={18} className="text-muted group-hover:text-primary transition-colors" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="text-white font-medium truncate m-0">{playlist.name}</p>
-
-                        </div>
-                        <p className="text-xs text-muted m-0 mt-0.5">
-                          {trackCount} track{trackCount !== 1 ? "s" : ""} • from {playlist.sharedBy}
-                        </p>
-                      </div>
-                      <ChevronRightIcon width={16} height={16} className="shrink-0 text-muted opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity" />
-                    </div>
-                  )
-                })}
+                )}
+                
+                <ChevronRightIcon width={16} height={16} className="shrink-0 text-muted opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity" />
               </div>
-            </div>
-          )}
+            )
+          })}
         </div>
       )}
 
