@@ -97,34 +97,30 @@ export default function InviteAcceptClient() {
       setState("authenticating")
 
       try {
+        let sessionId: string | null = null
+        let userId: string | null = null
+
         if (status === "sign_up" || !status) {
           // New user — create account via ticket
           const result = await signUp!.create({ strategy: "ticket", ticket })
-
-          if (result.status === "complete" && result.createdSessionId) {
-            // Set the session as active so the user is logged in
-            await setActive({ session: result.createdSessionId })
-            // Give Clerk a moment to propagate the session, then redirect
-            setTimeout(() => {
-              window.location.href = `/invite/accept?resolved=1`
-            }, 500)
+          if (result.status === "complete") {
+            sessionId = result.createdSessionId
+            userId = result.createdUserId
           } else {
             setState("error")
             setErrorMsg("Account creation did not complete. Please try signing up manually.")
+            return
           }
         } else if (status === "sign_in") {
           // Existing user — sign in via ticket
           const result = await signIn!.create({ strategy: "ticket", ticket })
-
-          if (result.status === "complete" && result.createdSessionId) {
-            // Set the session as active so the user is logged in
-            await setActive({ session: result.createdSessionId })
-            setTimeout(() => {
-              window.location.href = `/invite/accept?resolved=1`
-            }, 500)
+          if (result.status === "complete") {
+            sessionId = result.createdSessionId
+            userId = result.identifier || null
           } else {
             setState("error")
             setErrorMsg("Sign-in did not complete. Please try signing in manually.")
+            return
           }
         } else if (status === "complete") {
           if (isSignedIn && user) {
@@ -132,7 +128,21 @@ export default function InviteAcceptClient() {
           } else {
             setState("loading")
           }
+          return
         }
+
+        if (!sessionId) {
+          setState("error")
+          setErrorMsg("Authentication failed. Please try again.")
+          return
+        }
+
+        // Set the session as active (establishes the cookie)
+        await setActive({ session: sessionId })
+
+        // Redirect to playlists — the session is now active
+        setState("redirecting")
+        router.replace("/playlists")
       } catch (err) {
         console.error("Ticket auth error:", err)
         setState("error")
@@ -155,15 +165,10 @@ export default function InviteAcceptClient() {
     status,
     signUp,
     signIn,
+    setActive,
+    router,
     resolveAndRedirect,
   ])
-
-  // Handle the "resolved=1" redirect after sign-in
-  useEffect(() => {
-    if (searchParams.get("resolved") === "1" && isUserLoaded && isSignedIn && user) {
-      resolveAndRedirect(user.id, user)
-    }
-  }, [searchParams, isUserLoaded, isSignedIn, user, resolveAndRedirect])
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#0f0a1e] via-[#1a0a2e] to-[#0a1628]">
