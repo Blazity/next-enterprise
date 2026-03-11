@@ -79,22 +79,28 @@ export async function createPlaylist(clerkId: string, name: string, description?
   return res.json() as Promise<Playlist>
 }
 
-export async function updatePlaylist(id: number, data: { name?: string; description?: string }): Promise<Playlist> {
+export async function updatePlaylist(id: number, data: { name?: string; description?: string }, clerkId: string): Promise<Playlist> {
   const res = await fetch(`${API_URL}/api/playlists/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ ...data, clerk_id: clerkId }),
   })
-  if (!res.ok) throw new Error("Failed to update playlist")
+  if (!res.ok) {
+    const err = (await res.json()) as { error?: string }
+    throw new Error(err.error || "Failed to update playlist")
+  }
   return res.json() as Promise<Playlist>
 }
 
-export async function deletePlaylist(id: number): Promise<void> {
-  const res = await fetch(`${API_URL}/api/playlists/${id}`, { method: "DELETE" })
-  if (!res.ok) throw new Error("Failed to delete playlist")
+export async function deletePlaylist(id: number, clerkId: string): Promise<void> {
+  const res = await fetch(`${API_URL}/api/playlists/${id}?clerk_id=${encodeURIComponent(clerkId)}`, { method: "DELETE" })
+  if (!res.ok) {
+    const err = (await res.json()) as { error?: string }
+    throw new Error(err.error || "Failed to delete playlist")
+  }
 }
 
-export async function addSongToPlaylist(playlistId: number, song: Song): Promise<PlaylistSong> {
+export async function addSongToPlaylist(playlistId: number, song: Song, clerkId: string): Promise<PlaylistSong> {
   const res = await fetch(`${API_URL}/api/playlists/${playlistId}/songs`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -106,6 +112,7 @@ export async function addSongToPlaylist(playlistId: number, song: Song): Promise
       preview_url: song.previewUrl,
       collection_name: song.collectionName,
       duration: song.duration,
+      clerk_id: clerkId,
     }),
   })
   if (!res.ok) {
@@ -115,9 +122,15 @@ export async function addSongToPlaylist(playlistId: number, song: Song): Promise
   return res.json() as Promise<PlaylistSong>
 }
 
-export async function removeSongFromPlaylist(playlistId: number, trackId: string): Promise<void> {
-  const res = await fetch(`${API_URL}/api/playlists/${playlistId}/songs/${trackId}`, { method: "DELETE" })
-  if (!res.ok) throw new Error("Failed to remove song")
+export async function removeSongFromPlaylist(playlistId: number, trackId: string, clerkId: string): Promise<void> {
+  const res = await fetch(
+    `${API_URL}/api/playlists/${playlistId}/songs/${encodeURIComponent(trackId)}?clerk_id=${encodeURIComponent(clerkId)}`,
+    { method: "DELETE" }
+  )
+  if (!res.ok) {
+    const err = (await res.json()) as { error?: string }
+    throw new Error(err.error || "Failed to remove song")
+  }
 }
 
 export async function sharePlaylist(playlistId: number, email: string, sharedByClerkId: string): Promise<void> {
@@ -132,11 +145,15 @@ export async function sharePlaylist(playlistId: number, email: string, sharedByC
   }
 }
 
-export async function unsharePlaylist(playlistId: number, sharedWithClerkId: string): Promise<void> {
-  const res = await fetch(`${API_URL}/api/playlists/${playlistId}/share/${encodeURIComponent(sharedWithClerkId)}`, {
-    method: "DELETE",
-  })
-  if (!res.ok) throw new Error("Failed to revoke share")
+export async function unsharePlaylist(playlistId: number, sharedWithClerkId: string, clerkId: string): Promise<void> {
+  const res = await fetch(
+    `${API_URL}/api/playlists/${playlistId}/share/${encodeURIComponent(sharedWithClerkId)}?clerk_id=${encodeURIComponent(clerkId)}`,
+    { method: "DELETE" }
+  )
+  if (!res.ok) {
+    const err = (await res.json()) as { error?: string }
+    throw new Error(err.error || "Failed to revoke share")
+  }
 }
 
 export async function getSharedPlaylists(clerkId: string): Promise<Playlist[]> {

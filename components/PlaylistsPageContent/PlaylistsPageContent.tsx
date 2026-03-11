@@ -50,25 +50,26 @@ export function PlaylistsPageContent() {
   }, [user?.id, newName, newDesc, createPlaylist])
 
   const handleUpdate = useCallback(async () => {
-    if (!editingId || !editName.trim()) return
+    if (!editingId || !editName.trim() || !user?.id) return
     try {
-      await updatePlaylist(editingId, { name: editName.trim(), description: editDesc.trim() || undefined })
+      await updatePlaylist(editingId, { name: editName.trim(), description: editDesc.trim() || undefined }, user.id)
       setEditingId(null)
     } catch {
       /* error is in store */
     }
-  }, [editingId, editName, editDesc, updatePlaylist])
+  }, [editingId, editName, editDesc, updatePlaylist, user?.id])
 
   const handleDelete = useCallback(
     async (id: number) => {
+      if (!user?.id) return
       try {
-        await deletePlaylist(id)
+        await deletePlaylist(id, user.id)
         setMenuOpenId(null)
       } catch {
         /* error is in store */
       }
     },
-    [deletePlaylist]
+    [deletePlaylist, user?.id]
   )
 
   const startEdit = (playlist: { id: number; name: string; description: string | null }) => {

@@ -59,8 +59,9 @@ export function AddToPlaylistButton({ song, className, dropdownPosition = "botto
 
     const handleAdd = useCallback(
         async (playlistId: number) => {
+            if (!user?.id) return
             try {
-                await addSong(playlistId, song)
+                await addSong(playlistId, song, user.id)
                 setFeedback({ playlistId, type: "success" })
                 posthog?.capture("playlist_song_added", {
                     playlist_id: playlistId,
@@ -85,14 +86,14 @@ export function AddToPlaylistButton({ song, className, dropdownPosition = "botto
                 }
             }
         },
-        [addSong, posthog, song]
+        [addSong, posthog, song, user?.id]
     )
 
     const handleQuickCreate = useCallback(async () => {
         if (!user?.id || !newName.trim()) return
         try {
             const created = await createPlaylist(user.id, newName.trim())
-            await addSong(created.id, song)
+            await addSong(created.id, song, user.id)
             setFeedback({ playlistId: created.id, type: "success" })
             posthog?.capture("playlist_created_and_song_added", {
                 playlist_id: created.id,

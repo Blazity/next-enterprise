@@ -29,12 +29,12 @@ interface PlaylistStore {
   fetchSharedPlaylists: (clerkId: string) => Promise<void>
   fetchPlaylist: (id: number, clerkId?: string) => Promise<void>
   createPlaylist: (clerkId: string, name: string, description?: string) => Promise<Playlist>
-  updatePlaylist: (id: number, data: { name?: string; description?: string }) => Promise<void>
-  deletePlaylist: (id: number) => Promise<void>
-  addSong: (playlistId: number, song: Song) => Promise<void>
-  removeSong: (playlistId: number, trackId: string) => Promise<void>
+  updatePlaylist: (id: number, data: { name?: string; description?: string }, clerkId: string) => Promise<void>
+  deletePlaylist: (id: number, clerkId: string) => Promise<void>
+  addSong: (playlistId: number, song: Song, clerkId: string) => Promise<void>
+  removeSong: (playlistId: number, trackId: string, clerkId: string) => Promise<void>
   sharePlaylist: (playlistId: number, email: string, sharedByClerkId: string) => Promise<void>
-  unsharePlaylist: (playlistId: number, sharedWithClerkId: string) => Promise<void>
+  unsharePlaylist: (playlistId: number, sharedWithClerkId: string, clerkId: string) => Promise<void>
   createShareLink: (playlistId: number, clerkId: string) => Promise<{ token: string; url: string }>
 }
 
@@ -86,24 +86,24 @@ export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
     }
   },
 
-  updatePlaylist: async (id, data) => {
-    const updated = await updatePlaylistApi(id, data)
+  updatePlaylist: async (id, data, clerkId) => {
+    const updated = await updatePlaylistApi(id, data, clerkId)
     set((state) => ({
       playlists: state.playlists.map((p) => (p.id === id ? { ...p, ...updated } : p)),
       currentPlaylist: state.currentPlaylist?.id === id ? { ...state.currentPlaylist, ...updated } : state.currentPlaylist,
     }))
   },
 
-  deletePlaylist: async (id) => {
-    await deletePlaylistApi(id)
+  deletePlaylist: async (id, clerkId) => {
+    await deletePlaylistApi(id, clerkId)
     set((state) => ({
       playlists: state.playlists.filter((p) => p.id !== id),
       currentPlaylist: state.currentPlaylist?.id === id ? null : state.currentPlaylist,
     }))
   },
 
-  addSong: async (playlistId, song) => {
-    await addSongApi(playlistId, song)
+  addSong: async (playlistId, song, clerkId) => {
+    await addSongApi(playlistId, song, clerkId)
     // Update song count in playlists list
     set((state) => ({
       playlists: state.playlists.map((p) =>
@@ -117,7 +117,7 @@ export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
     }
   },
 
-  removeSong: async (playlistId, trackId) => {
+  removeSong: async (playlistId, trackId, clerkId) => {
     // Optimistically update UI
     const { currentPlaylist } = get()
     if (currentPlaylist?.id === playlistId && currentPlaylist.songs) {
@@ -134,11 +134,11 @@ export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
       ),
     }))
     try {
-      await removeSongApi(playlistId, trackId)
+      await removeSongApi(playlistId, trackId, clerkId)
     } catch {
       // Revert on failure — re-fetch
-      if (currentPlaylist?.id === playlistId) {
-        get().fetchPlaylist(playlistId)
+      if (currentPlaylist?.id === playlistId && clerkId) {
+        get().fetchPlaylist(playlistId, clerkId)
       }
     }
   },
@@ -154,9 +154,9 @@ export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
     }
   },
 
-  unsharePlaylist: async (playlistId, sharedWithClerkId) => {
+  unsharePlaylist: async (playlistId, sharedWithClerkId, clerkId) => {
     try {
-      await unsharePlaylistApi(playlistId, sharedWithClerkId)
+      await unsharePlaylistApi(playlistId, sharedWithClerkId, clerkId)
       set({ error: null })
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to revoke share"

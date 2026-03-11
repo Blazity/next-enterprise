@@ -6,7 +6,7 @@ import { useParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 
 import { useUser } from "@clerk/nextjs"
-import { ArrowLeft, Check, Clock, Link2, ListMusic, Music, Search, Share2, Trash2 } from "lucide-react"
+import { ArrowLeft, Check, Clock, Link2, ListMusic, Music, Search, Share2, Trash2, User } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { SharePlaylistDialog } from "@/components/SharePlaylistDialog/SharePlaylistDialog"
@@ -41,7 +41,6 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
     const { slug } = useParams<{ slug: string }>()
     const playlistId = Number(slug)
     const { user } = useUser()
-    const { backHref, backLabelKey, HeaderIcon, headerIconClass, headerGradient } = config[variant]
 
     const { currentPlaylist, isLoading, error, fetchPlaylist, removeSong, createShareLink } = usePlaylistStore()
     const { currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
@@ -56,14 +55,15 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
 
     const handleRemove = useCallback(
         async (trackId: string) => {
+            if (!user?.id) return
             setRemovingTrackId(trackId)
             try {
-                await removeSong(playlistId, trackId)
+                await removeSong(playlistId, trackId, user.id)
             } finally {
                 setRemovingTrackId(null)
             }
         },
-        [playlistId, removeSong]
+        [playlistId, removeSong, user?.id]
     )
 
     const handlePlaySong = useCallback(
@@ -96,14 +96,15 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
     }
 
     if (error || !currentPlaylist) {
+        const { backHref: errBackHref, backLabelKey: errBackLabelKey } = config[variant]
         return (
             <div className="mx-auto max-w-3xl px-4 py-8 md:px-6">
                 <Link
-                    href={backHref}
+                    href={errBackHref}
                     className="text-text-tertiary hover:text-white mb-6 inline-flex items-center gap-2 text-sm transition-colors"
                 >
                     <ArrowLeft size={16} />
-                    {t(backLabelKey)}
+                    {t(errBackLabelKey)}
                 </Link>
                 <div className="flex min-h-[30vh] flex-col items-center justify-center text-center">
                     <ListMusic size={48} className="mb-4 text-white/20" />
@@ -114,25 +115,35 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
     }
 
     const songs = currentPlaylist.songs || []
-    const isOwner = variant === "owned" && currentPlaylist.is_owner !== false
+    const isOwner = currentPlaylist.clerk_id === user?.id
+    const effectiveVariant = currentPlaylist.is_owner === false ? "shared" : "owned"
+    const { backHref: effBackHref, backLabelKey: effBackLabelKey, HeaderIcon: EffHeaderIcon, headerIconClass: effHeaderIconClass, headerGradient: effHeaderGradient } = config[effectiveVariant]
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-8 md:px-6">
             <Link
-                href={backHref}
+                href={effBackHref}
                 className="text-text-tertiary hover:text-white mb-6 inline-flex items-center gap-2 text-sm transition-colors"
             >
                 <ArrowLeft size={16} />
-                {t(backLabelKey)}
+                {t(effBackLabelKey)}
             </Link>
 
             {/* Playlist header */}
             <div className="mb-8 flex items-start gap-5">
-                <div className={cn("flex size-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg", headerGradient)}>
-                    <HeaderIcon size={36} className={headerIconClass} />
+                <div className={cn("flex size-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg", effHeaderGradient)}>
+                    <EffHeaderIcon size={36} className={effHeaderIconClass} />
                 </div>
                 <div className="min-w-0">
                     <h1 className="text-2xl font-bold text-white">{currentPlaylist.name}</h1>
+                    {!isOwner && (currentPlaylist.shared_by_name || currentPlaylist.shared_by_email) && (
+                        <p className="text-text-tertiary mt-1 text-sm flex items-center gap-1.5">
+                            <User size={14} className="text-blue-400 shrink-0" />
+                            {t("share.attribution", {
+                                name: currentPlaylist.shared_by_name?.trim() || currentPlaylist.shared_by_email || t("share.unknownOwner"),
+                            })}
+                        </p>
+                    )}
                     {currentPlaylist.description && (
                         <p className="text-text-tertiary mt-1 text-sm">{currentPlaylist.description}</p>
                     )}
@@ -180,12 +191,14 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
                 </div>
             )}
 
-            {/* Shared indicator */}
-            {variant === "shared" && (
-                <p className="text-text-tertiary mb-6 flex items-center gap-2 text-xs">
-                    <Share2 size={14} className="text-blue-400" />
-                    {t("share.sharedPlaylist")}
-                </p>
+            {/* Shared playlist: Saved to Library indicator */}
+            {effectiveVariant === "shared" && (
+                <div className="mb-6 flex items-center gap-3">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-green-500/10 px-3 py-1.5 text-xs text-green-400">
+                        <Check size={14} />
+                        {t("share.savedToLibrary")}
+                    </span>
+                </div>
             )}
 
             {/* Song list */}
@@ -195,7 +208,7 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
                         <Music size={28} className="text-white/20" />
                     </div>
                     <p className="text-lg font-medium text-white/60">{t("playlist.emptySongs")}</p>
-                    {variant === "owned" && (
+                    {effectiveVariant === "owned" && (
                         <>
                             <p className="text-text-tertiary mt-1 max-w-xs text-sm">{t("playlist.emptyHint")}</p>
                             <Link
