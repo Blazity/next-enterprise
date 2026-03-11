@@ -4,25 +4,28 @@ import Image from "next/image"
 import { useCallback, useEffect, useState } from "react"
 
 import Link from "next/link"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 
 import { useUser } from "@clerk/nextjs"
-import { Clock, ListMusic, Music, User } from "lucide-react"
+import { ArrowLeft, BookmarkCheck, BookmarkPlus, Clock, ListMusic, Loader2, Music, User } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
-import { getPlaylistByToken, type Playlist } from "@/lib/services/playlistService"
+import { claimPlaylistByToken, getPlaylistByToken, type Playlist } from "@/lib/services/playlistService"
 import { useMusicStore } from "@/store/musicStore"
 import { PLAY_STATE } from "@/types/music"
 
 type PageState = "loading" | "preview" | "not-found"
+type SaveState = "idle" | "saving" | "saved" | "already"
 
 export default function ShareLinkPage() {
   const { t } = useTranslation()
   const { token } = useParams<{ token: string }>()
   const { user, isLoaded: isUserLoaded } = useUser()
+  const router = useRouter()
 
   const [state, setState] = useState<PageState>("loading")
   const [playlist, setPlaylist] = useState<Playlist | null>(null)
+  const [saveState, setSaveState] = useState<SaveState>("idle")
 
   const { currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
 
@@ -66,6 +69,22 @@ export default function ShareLinkPage() {
     [currentlyPlaying, togglePlay, setPlayingTrack]
   )
 
+  const handleSave = useCallback(async () => {
+    if (!user?.id || !token || saveState !== "idle") return
+    setSaveState("saving")
+    try {
+      await claimPlaylistByToken(token, user.id)
+      setSaveState("saved")
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : ""
+      if (msg.toLowerCase().includes("already")) {
+        setSaveState("already")
+      } else {
+        setSaveState("idle")
+      }
+    }
+  }, [user?.id, token, saveState])
+
   // --- Loading state ---
   if (state === "loading") {
     return (
@@ -106,6 +125,27 @@ export default function ShareLinkPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#0f0a1e] via-[#1a0a2e] to-[#0a1628] px-4 py-8">
         <div className="mx-auto max-w-3xl">
+          {/* Top nav: back + save */}
+          <div className="mb-6 flex items-center justify-between">
+            <button
+              onClick={() => router.push("/playlists")}
+              className="flex items-center gap-2 text-sm text-white/50 transition-colors hover:text-white"
+            >
+              <ArrowLeft size={16} />
+              Back to Playlists
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={saveState !== "idle"}
+              className="flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 text-sm text-white/70 transition-all hover:border-white/[0.2] hover:text-white disabled:opacity-60"
+            >
+              {saveState === "saving" && <><Loader2 size={15} className="animate-spin" /> Saving…</>}
+              {saveState === "saved" && <><BookmarkCheck size={15} className="text-green-400" /> <span className="text-green-400">Saved to Library</span></>}
+              {saveState === "already" && <><BookmarkCheck size={15} className="text-white/40" /> Already in Library</>}
+              {saveState === "idle" && <><BookmarkPlus size={15} /> Save to Library</>}
+            </button>
+          </div>
+
           {/* Owner attribution */}
           <div className="mb-6 flex items-center gap-2 text-sm text-white/50">
             <User size={14} />
