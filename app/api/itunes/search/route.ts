@@ -3,8 +3,8 @@ import type { NextRequest } from "next/server"
 import { env } from "@/env.mjs"
 import { cacheGet, cacheSet } from "@/lib/redis"
 
-// Cache TTL for iTunes search results (5 minutes)
-const ITUNES_CACHE_TTL = 300
+// Cache TTL for iTunes search results (24 hours — trending/top picks refresh daily)
+const ITUNES_CACHE_TTL = 86400
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
