@@ -1,13 +1,9 @@
-import { Metadata } from "next"
+"use client"
 
+import { RecentSongs } from "@/components/RecentSongs/RecentSongs"
 import { SearchBar } from "@/components/SearchBar/SearchBar"
 import { TrendingList } from "@/components/TrendingList/TrendingList"
 import en from "@/i18n/locales/en.json"
-
-export const metadata: Metadata = {
-  title: en["meta.searchTitle"],
-  description: en["meta.searchDescription"],
-}
 
 export default function SearchPage() {
   return (
@@ -15,8 +11,10 @@ export default function SearchPage() {
       <div className="mx-auto max-w-2xl space-y-6">
         <h1 className="text-text-primary text-2xl font-bold">{en["search.pageTitle"]}</h1>
         <SearchBar />
+        <RecentSongs />
         <TrendingList />
       </div>
     </div>
   )
 }
+

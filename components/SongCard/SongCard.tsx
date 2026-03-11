@@ -2,15 +2,16 @@
 
 import Image from "next/image"
 
+import { useUser } from "@clerk/nextjs"
 import { cva, type VariantProps } from "class-variance-authority"
 import { usePostHog } from "posthog-js/react"
-
-import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { useTranslation } from "react-i18next"
 
 import { AddToPlaylistButton } from "@/components/AddToPlaylistButton/AddToPlaylistButton"
 import { PlayButton } from "@/components/PlayButton/PlayButton"
+import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { cn } from "@/lib/utils"
+import { useMusicStore } from "@/store/musicStore"
 import type { Song } from "@/types/music"
 
 const songCard = cva(["group", "relative", "transition-all", "duration-200"], {
@@ -59,6 +60,8 @@ function EqBars() {
 export function SongCard({ song, isPlaying = false, onPlay, variant, className, rank, subtitle, showAddToPlaylist = false }: SongCardProps) {
   const { t } = useTranslation()
   const posthog = usePostHog()
+  const { user } = useUser()
+  const { addRecentSong } = useMusicStore()
   const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
   const playlistFeatureEnabled = playlistFeatureVariant === "on" || playlistFeatureVariant === true
   const canShowPlaylist = showAddToPlaylist && playlistFeatureEnabled
@@ -71,6 +74,12 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
       source,
       was_playing: isPlaying,
     })
+    
+    // Save to Recent Songs history if user is logged in
+    if (user?.id) {
+      addRecentSong(user.id, song)
+    }
+    
     onPlay?.()
   }
 

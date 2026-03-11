@@ -101,11 +101,10 @@ export default function InviteAcceptClient() {
           const result = await signUp!.create({ strategy: "ticket", ticket })
 
           if (result.status === "complete") {
-            if (result.createdUserId) {
-              setTimeout(() => {
-                resolveAndRedirect(result.createdUserId!, undefined)
-              }, 1000)
-            }
+            // Redirect so Clerk picks up the new session before we resolve
+            setTimeout(() => {
+              window.location.href = `/invite/accept?resolved=1`
+            }, 1000)
           } else {
             setState("error")
             setErrorMsg("Account creation did not complete. Please try signing up manually.")

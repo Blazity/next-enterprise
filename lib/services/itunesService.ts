@@ -5,23 +5,23 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:300
 
 // --- Search History (Redis-backed via backend) ---
 
-export async function fetchSearchHistory(clerkId: string): Promise<string[]> {
+export async function fetchSearchHistory(clerkId: string): Promise<Song[]> {
   try {
     const res = await fetch(`${BACKEND_URL}/api/search-history/${encodeURIComponent(clerkId)}`)
     if (!res.ok) return []
-    const data = (await res.json()) as { searches: string[] }
+    const data = (await res.json()) as { searches: Song[] }
     return data.searches
   } catch {
     return []
   }
 }
 
-export async function saveSearchQuery(clerkId: string, query: string): Promise<void> {
+export async function saveRecentSong(clerkId: string, song: Song): Promise<void> {
   try {
     await fetch(`${BACKEND_URL}/api/search-history`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ clerk_id: clerkId, query }),
+      body: JSON.stringify({ clerk_id: clerkId, song }),
     })
   } catch {
     // Best-effort — don't block the UI
