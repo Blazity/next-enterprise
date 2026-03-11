@@ -2,67 +2,66 @@
 
 import { useEffect, useRef, useState } from "react"
 
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 import { useUser } from "@clerk/nextjs"
 import { Loader2, Music } from "lucide-react"
 
 import { syncUser } from "@/lib/services/playlistService"
 
-/**
- * InviteAcceptClient — handles the post-signup redirect for Clerk invitations.
- *
- * Flow:
- * 1. User clicks invite email → Clerk hosted sign-up
- * 2. Clerk redirects to /invite/accept after sign-up
- * 3. This component syncs user (resolves pending shares) → redirects to /playlists
- * 4. Playlists page shows the shared playlist
- */
 export default function InviteAcceptClient() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { user, isLoaded, isSignedIn } = useUser()
 
   const [error, setError] = useState("")
   const processedRef = useRef(false)
+  const redirectedRef = useRef(false)
+
+  const ticket = searchParams.get("__clerk_ticket")
 
   useEffect(() => {
     if (!isLoaded) return
     if (processedRef.current) return
 
-    // User must be signed in (Clerk sends them here after sign-up/sign-in)
-    if (!isSignedIn || !user) {
-      // Not signed in — show error. This shouldn't happen in normal flow
-      // because Clerk's invitation redirects here after authentication.
-      setError("Please sign in first to accept this invitation.")
+    // ✅ SIGNED IN → sync user and redirect to playlists
+    if (isSignedIn && user) {
+      processedRef.current = true
+
+      syncUser({
+        id: user.id,
+        username: user.username,
+        emailAddresses: user.emailAddresses.map((e: { emailAddress: string }) => ({
+          emailAddress: e.emailAddress,
+        })),
+        firstName: user.firstName,
+        lastName: user.lastName,
+        imageUrl: user.imageUrl,
+      })
+        .then(() => router.replace("/playlists"))
+        .catch(() => router.replace("/playlists"))
       return
     }
 
-    processedRef.current = true
+    // ❌ NOT SIGNED IN + HAS TICKET → redirect to /sign-up with ticket
+    // Clerk's <SignUp> component will process the __clerk_ticket automatically
+    // After sign-up, redirect_url brings them back here
+    if (ticket && !redirectedRef.current) {
+      redirectedRef.current = true
+      const params = new URLSearchParams()
+      params.set("__clerk_ticket", ticket)
+      params.set("redirect_url", "/invite/accept")
+      const status = searchParams.get("__clerk_status")
+      if (status) params.set("__clerk_status", status)
+      window.location.href = `/sign-up?${params.toString()}`
+      return
+    }
 
-    // Sync user to our backend — this resolves pending playlist shares
-    // by matching the user's email against pendingPlaylistShares table
-    syncUser({
-      id: user.id,
-      username: user.username,
-      emailAddresses: user.emailAddresses.map((e: { emailAddress: string }) => ({
-        emailAddress: e.emailAddress,
-      })),
-      firstName: user.firstName,
-      lastName: user.lastName,
-      imageUrl: user.imageUrl,
-    })
-      .then(() => {
-        // Redirect to playlists — the shared playlist will be visible there
-        // Feature flag (playlist-add-feature) only controls create/edit/delete
-        // Viewing shared playlists works regardless of flag state
-        router.replace("/playlists")
-      })
-      .catch((err) => {
-        console.error("Failed to sync user:", err)
-        // Still redirect even if sync fails — user can manually navigate
-        router.replace("/playlists")
-      })
-  }, [isLoaded, isSignedIn, user, router])
+    // ❌ NOT SIGNED IN + NO TICKET → invalid link
+    if (!ticket) {
+      setError("Invalid or expired invitation link.")
+    }
+  }, [isLoaded, isSignedIn, user, ticket, router, searchParams])
 
   if (error) {
     return (
@@ -73,10 +72,10 @@ export default function InviteAcceptClient() {
           </div>
           <p className="max-w-sm text-lg font-medium text-white/60">{error}</p>
           <button
-            onClick={() => router.push("/sign-in")}
+            onClick={() => router.push("/")}
             className="mt-2 rounded-full bg-purple-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-purple-700"
           >
-            Sign In
+            Go Home
           </button>
         </div>
       </div>
