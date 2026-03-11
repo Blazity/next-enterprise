@@ -20,6 +20,7 @@ export function PlaylistsPageContent() {
   const playlistFeatureEnabled = playlistFeatureVariant === "on" || playlistFeatureVariant === true
   const { playlists, sharedPlaylists, isLoading, error, fetchPlaylists, fetchSharedPlaylists, createPlaylist, updatePlaylist, deletePlaylist } =
     usePlaylistStore()
+  const hasSharedPlaylists = sharedPlaylists.length > 0
 
   const [showCreate, setShowCreate] = useState(false)
   const [newName, setNewName] = useState("")
@@ -85,7 +86,8 @@ export function PlaylistsPageContent() {
     )
   }
 
-  if (!playlistFeatureEnabled) {
+  // If the flag is off and there are no shared playlists at all, show Coming Soon
+  if (!playlistFeatureEnabled && !hasSharedPlaylists) {
     return <ComingSoon titleKey="nav.playlists" />
   }
 
@@ -93,19 +95,21 @@ export function PlaylistsPageContent() {
     <div className="mx-auto max-w-3xl px-4 py-8 md:px-6">
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-white">{t("nav.playlists")}</h1>
-        <button
-          onClick={() => setShowCreate(true)}
-          className="bg-accent hover:bg-accent-hover flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
-        >
-          <Plus size={18} />
-          New Playlist
-        </button>
+        {playlistFeatureEnabled && (
+          <button
+            onClick={() => setShowCreate(true)}
+            className="bg-accent hover:bg-accent-hover flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
+          >
+            <Plus size={18} />
+            New Playlist
+          </button>
+        )}
       </div>
 
       {error && <p className="mb-4 rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</p>}
 
-      {/* Create form */}
-      {showCreate && (
+      {/* Create form — only visible when feature is enabled */}
+      {playlistFeatureEnabled && showCreate && (
         <div className="mb-6 rounded-xl border border-white/[0.08] bg-white/[0.03] p-5">
           <h2 className="mb-4 text-lg font-semibold text-white">Create New Playlist</h2>
           <input
@@ -147,8 +151,8 @@ export function PlaylistsPageContent() {
         </div>
       )}
 
-      {/* Playlist list */}
-      {playlists.length === 0 && !showCreate ? (
+      {/* Playlist list — only visible when feature is enabled */}
+      {playlistFeatureEnabled && (playlists.length === 0 && !showCreate ? (
         <div className="flex min-h-[30vh] flex-col items-center justify-center text-center">
           <ListMusic size={48} className="mb-4 text-white/20" />
           <p className="text-lg font-medium text-white/60">No playlists yet</p>
@@ -248,7 +252,7 @@ export function PlaylistsPageContent() {
             </Link>
           ))}
         </div>
-      )}
+      ))}
 
       {/* Shared with me */}
       {sharedPlaylists.length > 0 && (

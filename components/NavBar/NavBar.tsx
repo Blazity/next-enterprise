@@ -47,10 +47,10 @@ export function NavBar() {
   const hasSharedPlaylists = sharedPlaylists.length > 0
 
   useEffect(() => {
-    if (user?.id && !playlistFeatureEnabled) {
+    if (user?.id) {
       fetchSharedPlaylists(user.id)
     }
-  }, [user?.id, playlistFeatureEnabled, fetchSharedPlaylists])
+  }, [user?.id, fetchSharedPlaylists])
 
   const captureNavClick = (href: string, section: "mobile" | "main" | "library") => {
     posthog?.capture("nav_item_clicked", {
