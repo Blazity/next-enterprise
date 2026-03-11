@@ -143,3 +143,41 @@ export async function getSharedPlaylists(clerkId: string): Promise<Playlist[]> {
   if (!res.ok) throw new Error("Failed to fetch shared playlists")
   return res.json() as Promise<Playlist[]>
 }
+
+export async function createShareLink(
+  playlistId: number,
+  clerkId: string
+): Promise<{ token: string; url: string }> {
+  const res = await fetch(`${API_URL}/api/playlists/${playlistId}/share-link`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ clerk_id: clerkId }),
+  })
+  if (!res.ok) {
+    const err = (await res.json()) as { error?: string }
+    throw new Error(err.error || "Failed to create share link")
+  }
+  return res.json() as Promise<{ token: string; url: string }>
+}
+
+export async function getPlaylistByToken(token: string): Promise<Playlist> {
+  const res = await fetch(`${API_URL}/api/playlists/shared-by-token/${encodeURIComponent(token)}`)
+  if (!res.ok) throw new Error("Invalid or expired share link")
+  return res.json() as Promise<Playlist>
+}
+
+export async function claimPlaylistByToken(
+  token: string,
+  clerkId: string
+): Promise<{ playlist_id: number }> {
+  const res = await fetch(`${API_URL}/api/playlists/claim-by-token/${encodeURIComponent(token)}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ clerk_id: clerkId }),
+  })
+  if (!res.ok) {
+    const err = (await res.json()) as { error?: string }
+    throw new Error(err.error || "Failed to claim playlist")
+  }
+  return res.json() as Promise<{ playlist_id: number }>
+}

@@ -6,7 +6,7 @@ import { useParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 
 import { useUser } from "@clerk/nextjs"
-import { ArrowLeft, Clock, ListMusic, Music, Search, Share2, Trash2 } from "lucide-react"
+import { ArrowLeft, Check, Clock, Link2, ListMusic, Music, Search, Share2, Trash2 } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { SharePlaylistDialog } from "@/components/SharePlaylistDialog/SharePlaylistDialog"
@@ -43,10 +43,12 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
     const { user } = useUser()
     const { backHref, backLabelKey, HeaderIcon, headerIconClass, headerGradient } = config[variant]
 
-    const { currentPlaylist, isLoading, error, fetchPlaylist, removeSong } = usePlaylistStore()
+    const { currentPlaylist, isLoading, error, fetchPlaylist, removeSong, createShareLink } = usePlaylistStore()
     const { currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
 
     const [removingTrackId, setRemovingTrackId] = useState<string | null>(null)
+    const [linkCopied, setLinkCopied] = useState(false)
+    const [creatingLink, setCreatingLink] = useState(false)
 
     useEffect(() => {
         if (playlistId && user?.id) fetchPlaylist(playlistId, user.id)
@@ -140,10 +142,41 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
                 </div>
             </div>
 
-            {/* Share button – owner only */}
+            {/* Share buttons – owner only */}
             {isOwner && user?.id && (
-                <div className="mb-6">
+                <div className="mb-6 flex flex-wrap items-center gap-3">
                     <SharePlaylistDialog playlistId={playlistId} sharedByClerkId={user.id} />
+                    <button
+                        onClick={async () => {
+                            if (creatingLink || !user?.id) return
+                            setCreatingLink(true)
+                            try {
+                                const result = await createShareLink(playlistId, user.id)
+                                const fullUrl = `${window.location.origin}${result.url}`
+                                await navigator.clipboard.writeText(fullUrl)
+                                setLinkCopied(true)
+                                setTimeout(() => setLinkCopied(false), 2000)
+                            } catch {
+                                // error is handled by the store
+                            } finally {
+                                setCreatingLink(false)
+                            }
+                        }}
+                        disabled={creatingLink}
+                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/60 transition-colors hover:bg-white/[0.06] hover:text-white disabled:opacity-40"
+                    >
+                        {linkCopied ? (
+                            <>
+                                <Check size={16} className="text-green-400" />
+                                <span className="text-green-400">{t("share.linkCopied")}</span>
+                            </>
+                        ) : (
+                            <>
+                                <Link2 size={16} />
+                                {creatingLink ? t("share.creatingLink") : t("share.copyLink")}
+                            </>
+                        )}
+                    </button>
                 </div>
             )}
 

@@ -107,5 +107,15 @@
   "share.success": "Playlist shared successfully!",
   "share.error": "Failed to share playlist",
   "share.sharedWithMe": "Shared with Me",
-  "share.sharedPlaylist": "Shared playlist"
+  "share.sharedPlaylist": "Shared playlist",
+  "share.copyLink": "Copy share link",
+  "share.linkCopied": "Link copied!",
+  "share.creatingLink": "Creating link...",
+  "share.preview.title": "You've been invited to a playlist",
+  "share.preview.songCount": "{{count}} songs",
+  "share.preview.signUp": "Sign up to listen",
+  "share.preview.signIn": "Sign in to listen",
+  "share.preview.notFound": "This share link is invalid or has expired",
+  "share.preview.loading": "Loading playlist...",
+  "share.preview.claiming": "Adding to your library..."
 }

@@ -13,6 +13,7 @@ import {
   getSharedPlaylists as getSharedPlaylistsApi,
   sharePlaylist as sharePlaylistApi,
   unsharePlaylist as unsharePlaylistApi,
+  createShareLink as createShareLinkApi,
   type Playlist,
 } from "@/lib/services/playlistService"
 import type { Song } from "@/types/music"
@@ -34,6 +35,7 @@ interface PlaylistStore {
   removeSong: (playlistId: number, trackId: string) => Promise<void>
   sharePlaylist: (playlistId: number, email: string, sharedByClerkId: string) => Promise<void>
   unsharePlaylist: (playlistId: number, sharedWithClerkId: string) => Promise<void>
+  createShareLink: (playlistId: number, clerkId: string) => Promise<{ token: string; url: string }>
 }
 
 export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
@@ -158,6 +160,18 @@ export const usePlaylistStore = create<PlaylistStore>((set, get) => ({
       set({ error: null })
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to revoke share"
+      set({ error: msg })
+      throw err
+    }
+  },
+
+  createShareLink: async (playlistId, clerkId) => {
+    try {
+      const result = await createShareLinkApi(playlistId, clerkId)
+      set({ error: null })
+      return result
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed to create share link"
       set({ error: msg })
       throw err
     }
