@@ -152,12 +152,14 @@ export function PlaylistsPageContent() {
         </div>
       )}
 
-      {/* Playlist list — only visible when feature is enabled */}
-      {playlistFeatureEnabled && (playlists.length === 0 && !showCreate ? (
+      {/* Playlist list — always visible so users see what they own/claimed */}
+      {playlists.length === 0 && !showCreate ? (
         <div className="flex min-h-[30vh] flex-col items-center justify-center text-center">
           <ListMusic size={48} className="mb-4 text-white/20" />
           <p className="text-lg font-medium text-white/60">No playlists yet</p>
-          <p className="text-text-tertiary mt-1 text-sm">Create your first playlist to get started</p>
+          {playlistFeatureEnabled && (
+            <p className="text-text-tertiary mt-1 text-sm">Create your first playlist to get started</p>
+          )}
         </div>
       ) : (
         <div className="space-y-2">
@@ -253,7 +255,7 @@ export function PlaylistsPageContent() {
             </Link>
           ))}
         </div>
-      ))}
+      )}
 
       {/* Shared with me */}
       {sharedPlaylists.length > 0 && (

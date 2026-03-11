@@ -12,6 +12,8 @@ import { useTranslation } from "react-i18next"
 
 import { claimPlaylistByToken, getPlaylistByToken, type Playlist } from "@/lib/services/playlistService"
 import { useMusicStore } from "@/store/musicStore"
+import { usePlaylistStore } from "@/store/playlistStore"
+import { useShareLinkStore } from "@/store/shareLinkStore"
 import { PLAY_STATE } from "@/types/music"
 
 type PageState = "loading" | "preview" | "not-found"
@@ -28,6 +30,8 @@ export default function ShareLinkPage() {
   const [saveState, setSaveState] = useState<SaveState>("idle")
 
   const { currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
+  const { fetchPlaylists } = usePlaylistStore()
+  const { setShareLink, clearShareLink } = useShareLinkStore()
 
   // Fetch the playlist metadata by token
   useEffect(() => {
@@ -39,14 +43,17 @@ export default function ShareLinkPage() {
         if (!cancelled) {
           setPlaylist(data)
           setState("preview")
+          setShareLink(token, data.owner_name || null)
         }
       })
       .catch(() => {
         if (!cancelled) setState("not-found")
       })
 
-    return () => { cancelled = true }
-  }, [token])
+    return () => {
+      cancelled = true
+    }
+  }, [token, setShareLink])
 
   const handlePlaySong = useCallback(
     (song: NonNullable<Playlist["songs"]>[number]) => {
@@ -73,8 +80,11 @@ export default function ShareLinkPage() {
     if (!user?.id || !token || saveState !== "idle") return
     setSaveState("saving")
     try {
-      await claimPlaylistByToken(token, user.id)
+      const { playlist_id } = await claimPlaylistByToken(token, user.id)
       setSaveState("saved")
+      clearShareLink()
+      await fetchPlaylists(user.id)
+      router.push(`/playlist/${playlist_id}`)
     } catch (err) {
       const msg = err instanceof Error ? err.message : ""
       if (msg.toLowerCase().includes("already")) {
@@ -83,7 +93,7 @@ export default function ShareLinkPage() {
         setSaveState("idle")
       }
     }
-  }, [user?.id, token, saveState])
+  }, [user?.id, token, saveState, fetchPlaylists, router, clearShareLink])
 
   // --- Loading state ---
   if (state === "loading") {

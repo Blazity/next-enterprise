@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next"
 
 import { cn } from "@/lib/utils"
 import { usePlaylistStore } from "@/store/playlistStore"
+import { useShareLinkStore } from "@/store/shareLinkStore"
 
 const mainNav = [
   { href: "/", labelKey: "nav.home", Icon: Home },
@@ -44,7 +45,9 @@ export function NavBar() {
   const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
   const playlistFeatureEnabled = playlistFeatureVariant === "on" || playlistFeatureVariant === true
   const { sharedPlaylists, fetchSharedPlaylists } = usePlaylistStore()
+  const { href: shareLinkHref, ownerName: shareLinkOwnerName } = useShareLinkStore()
   const hasSharedPlaylists = sharedPlaylists.length > 0
+  const hasShareLinkPreview = !!shareLinkHref
 
   useEffect(() => {
     if (user?.id) {
@@ -66,8 +69,23 @@ export function NavBar() {
       ? { href: "/playlists", labelKey: "share.sharedWithMe", Icon: Share2 }
       : null
 
-  const resolveNav = (items: typeof libraryNav) =>
-    items.flatMap((item) => (item.href === "/playlists" ? (playlistNavItem ? [playlistNavItem] : []) : [item]))
+  const shareLinkNavItem =
+    hasShareLinkPreview && shareLinkHref
+      ? {
+          href: shareLinkHref,
+          labelKey: "share.navItem" as const,
+          labelParam: shareLinkOwnerName,
+          Icon: Share2,
+        }
+      : null
+
+  const resolveNav = (items: typeof libraryNav) => {
+    const resolved = items.flatMap((item) => (item.href === "/playlists" ? (playlistNavItem ? [playlistNavItem] : []) : [item]))
+    if (shareLinkNavItem) {
+      resolved.push(shareLinkNavItem)
+    }
+    return resolved
+  }
 
   const filteredLibraryNav = resolveNav(libraryNav)
   const filteredMobileNav = resolveNav(mobileNav)
@@ -81,6 +99,7 @@ export function NavBar() {
       <div className="flex items-center gap-2 overflow-x-auto px-2 py-2 md:hidden">
         {filteredMobileNav.map((item) => {
           const isActive = pathname === item.href
+          const label = "labelParam" in item ? t(item.labelKey, { name: item.labelParam }) : t(item.labelKey)
           return (
             <Link
               key={item.href}
@@ -93,7 +112,7 @@ export function NavBar() {
               )}
             >
               <item.Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
-              <span>{t(item.labelKey)}</span>
+              <span className="truncate max-w-[68px]">{label}</span>
             </Link>
           )
         })}
@@ -139,7 +158,9 @@ export function NavBar() {
                   )}
                   strokeWidth={isActive ? 2.2 : 1.7}
                 />
-                <span>{t(item.labelKey)}</span>
+                <span className="truncate">
+                  {"labelParam" in item ? t(item.labelKey, { name: item.labelParam }) : t(item.labelKey)}
+                </span>
               </Link>
             )
           })}

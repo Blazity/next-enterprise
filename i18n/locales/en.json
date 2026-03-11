@@ -111,6 +111,7 @@
   "share.attribution": "{{name}}'s Playlist",
   "share.unknownOwner": "Unknown",
   "share.savedToLibrary": "Saved to Library",
+  "share.navItem": "{{name}}'s Playlist",
   "share.copyLink": "Copy share link",
   "share.linkCopied": "Link copied!",
   "share.creatingLink": "Creating link...",
