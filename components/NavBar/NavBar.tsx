@@ -81,7 +81,7 @@ export function NavBar() {
     hasShareLinkPreview && shareLinkHref
       ? {
           href: shareLinkHref,
-          labelKey: (shareLinkOwnerName ? "share.navItem" : "share.navItemUnknown") as const,
+        labelKey: shareLinkOwnerName ? ("share.navItem" as const) : ("share.navItemUnknown" as const),
           labelParam: shareLinkOwnerName,
           Icon: Share2,
         }
