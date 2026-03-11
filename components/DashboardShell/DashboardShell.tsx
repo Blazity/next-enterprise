@@ -23,7 +23,7 @@ export function DashboardShell({
   query,
   onQueryChange
 }: DashboardShellProps) {
-  const { setSelectedPlaylistId } = usePlaylistStore()
+  const { selectedPlaylistId, setSelectedPlaylistId } = usePlaylistStore()
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -38,6 +38,7 @@ export function DashboardShell({
           setSelectedPlaylistId(id)
           onNavClick("playlists")
         }}
+        selectedPlaylistId={selectedPlaylistId}
       />
 
       <div className="flex-1 flex flex-col overflow-hidden bg-bg">

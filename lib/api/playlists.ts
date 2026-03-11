@@ -12,7 +12,8 @@ export interface PlaylistShare {
   id: string
   playlistId: string
   sharedBy: string
-  sharedWith: string
+  sharedWith: string | null
+  shareType: "private" | "public_follow"
   token: string
   createdAt: string
 }
@@ -26,6 +27,8 @@ export interface Playlist {
   updatedAt: string
   tracks?: PlaylistTrack[]
   sharedBy?: string
+  shareType?: "private" | "public_follow"
+  shareId?: string
   /** From list endpoint when tracks are not included */
   _count?: { 
     tracks: number
@@ -143,10 +146,23 @@ export async function reorderTracks(token: string | null, playlistId: string, tr
   })
 }
 
+export interface ShareResponse {
+  status: 'shared' | 'invited'
+  message: string
+  share?: PlaylistShare
+}
+
 export async function sharePlaylist(token: string | null, id: string, email: string) {
-  return fetchApi<{ shareUrl: string; share: PlaylistShare }>(`/api/playlists/${id}/share`, token, {
+  return fetchApi<ShareResponse>(`/api/playlists/${id}/share`, token, {
     method: "POST",
     body: JSON.stringify({ email }),
+  })
+}
+
+export async function claimShare(token: string | null, pendingPlaylistId: string, sharedBy: string) {
+  return fetchApi<{ playlistId: string }>('/api/playlists/claim-share', token, {
+    method: 'POST',
+    body: JSON.stringify({ pendingPlaylistId, sharedBy }),
   })
 }
 
@@ -166,4 +182,26 @@ export async function revokeShare(token: string | null, playlistId: string, shar
   return fetchApi<{ success: boolean }>(`/api/playlists/${playlistId}/share/${shareId}`, token, {
     method: "DELETE",
   })
+}
+
+export async function enablePublicLink(token: string | null, id: string) {
+  return fetchApi<{ publicShareUrl: string; token: string }>(`/api/playlists/${id}/share/public`, token, {
+    method: "POST",
+  })
+}
+
+export async function revokePublicLink(token: string | null, id: string) {
+  return fetchApi<{ success: boolean }>(`/api/playlists/${id}/share/public`, token, {
+    method: "DELETE",
+  })
+}
+
+export async function followPlaylist(token: string | null, id: string) {
+  return fetchApi<{ success: boolean }>(`/api/playlists/${id}/follow`, token, {
+    method: "POST",
+  })
+}
+
+export async function getPublicPlaylist(shareToken: string) {
+  return fetchApi<Playlist & { isFollowing?: boolean; isPublic?: boolean }>(`/api/playlists/public/${shareToken}`, null)
 }
