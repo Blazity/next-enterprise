@@ -1,6 +1,35 @@
 import { mapITunesTrackToSong } from "@/lib/itunes"
 import type { ITunesSearchResponse, Song } from "@/types/music"
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001"
+
+// --- Search History (Redis-backed via backend) ---
+
+export async function fetchSearchHistory(clerkId: string): Promise<string[]> {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/search-history/${encodeURIComponent(clerkId)}`)
+    if (!res.ok) return []
+    const data = (await res.json()) as { searches: string[] }
+    return data.searches
+  } catch {
+    return []
+  }
+}
+
+export async function saveSearchQuery(clerkId: string, query: string): Promise<void> {
+  try {
+    await fetch(`${BACKEND_URL}/api/search-history`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clerk_id: clerkId, query }),
+    })
+  } catch {
+    // Best-effort — don't block the UI
+  }
+}
+
+// --- iTunes API ---
+
 export async function searchTracks(query: string, limit = 25): Promise<Song[]> {
   const res = await fetch(`/api/itunes/search?term=${encodeURIComponent(query)}&limit=${limit}`)
   if (!res.ok) throw new Error("Search failed")

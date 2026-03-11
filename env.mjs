@@ -9,6 +9,7 @@ export const env = createEnv({
       .transform((value) => value === "true"),
     CLERK_SECRET_KEY: z.string().min(1),
     ITUNES_API_BASE_URL: z.string().url().default("https://itunes.apple.com/search"),
+    REDIS_URL: z.string().default("redis://localhost:6379"),
   },
   client: {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
@@ -23,6 +24,7 @@ export const env = createEnv({
     ANALYZE: process.env.ANALYZE,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     ITUNES_API_BASE_URL: process.env.ITUNES_API_BASE_URL,
+    REDIS_URL: process.env.REDIS_URL,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,

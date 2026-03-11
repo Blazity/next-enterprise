@@ -2,7 +2,12 @@
 
 import { create } from "zustand"
 
-import { fetchPopularContent as fetchPopularContentService, searchTracks } from "@/lib/services/itunesService"
+import {
+  fetchPopularContent as fetchPopularContentService,
+  searchTracks,
+  fetchSearchHistory as fetchSearchHistoryApi,
+  saveSearchQuery as saveSearchQueryApi,
+} from "@/lib/services/itunesService"
 import { PLAY_STATE, type PlayState, type Song } from "@/types/music"
 
 interface MusicStore {
@@ -27,6 +32,7 @@ interface MusicStore {
   isRepeating: boolean
   queue: Song[]
   history: Song[]
+  searchHistory: string[]
 
   setVolume: (volume: number) => void
   toggleMute: () => void
@@ -42,6 +48,8 @@ interface MusicStore {
   playPrevious: () => void
   searchItunes: (query: string) => Promise<void>
   fetchPopularContent: () => Promise<void>
+  fetchSearchHistory: (clerkId: string) => Promise<void>
+  saveSearchToHistory: (clerkId: string, query: string) => Promise<void>
 }
 
 export const useMusicStore = create<MusicStore>((set, get) => ({
@@ -66,6 +74,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   isRepeating: false,
   queue: [],
   history: [],
+  searchHistory: [],
 
   setVolume: (volume) => set({ volume, isMuted: volume === 0 }),
   toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
@@ -191,5 +200,24 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
         isLoadingHome: false,
       })
     }
+  },
+
+  fetchSearchHistory: async (clerkId: string) => {
+    try {
+      const searches = await fetchSearchHistoryApi(clerkId)
+      set({ searchHistory: searches })
+    } catch {
+      // Best-effort
+    }
+  },
+
+  saveSearchToHistory: async (clerkId: string, query: string) => {
+    if (!query.trim()) return
+    await saveSearchQueryApi(clerkId, query.trim())
+    // Optimistically update local state
+    set((state) => {
+      const filtered = state.searchHistory.filter((q) => q !== query.trim())
+      return { searchHistory: [query.trim(), ...filtered].slice(0, 5) }
+    })
   },
 }))

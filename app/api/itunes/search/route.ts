@@ -1,6 +1,10 @@
 import type { NextRequest } from "next/server"
 
 import { env } from "@/env.mjs"
+import { cacheGet, cacheSet } from "@/lib/redis"
+
+// Cache TTL for iTunes search results (5 minutes)
+const ITUNES_CACHE_TTL = 300
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
@@ -11,6 +15,13 @@ export async function GET(request: NextRequest) {
   }
 
   const limit = searchParams.get("limit") || "25"
+
+  // Check Redis cache first
+  const cacheKey = `itunes:search:${term.toLowerCase()}:${limit}`
+  const cached = await cacheGet(cacheKey)
+  if (cached) {
+    return Response.json(cached)
+  }
 
   const url = new URL(env.ITUNES_API_BASE_URL)
   url.searchParams.set("term", term)
@@ -28,6 +39,10 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json()
+
+    // Cache the response in Redis
+    await cacheSet(cacheKey, data, ITUNES_CACHE_TTL)
+
     return Response.json(data)
   } catch {
     return Response.json({ error: "Failed to fetch from iTunes" }, { status: 502 })
