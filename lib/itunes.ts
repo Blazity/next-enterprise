@@ -45,7 +45,8 @@ export async function searchTracks(query: string, limit: number = 15): Promise<i
   })
 
   const response = await fetch(`https://itunes.apple.com/search?${params.toString()}`, {
-    cache: "no-store", // Ensure fresh results
+    cache: "no-store",
+    signal: AbortSignal.timeout(5000),
   })
 
   if (!response.ok) {
