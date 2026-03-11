@@ -213,11 +213,12 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 
   addRecentSong: async (clerkId: string, song: Song) => {
     if (!song || !song.id) return
-    await saveRecentSongApi(clerkId, song)
-    // Optimistically update local state
+    // Optimistically update local state FIRST (instant UI feedback)
     set((state) => {
       const filtered = state.recentSongs.filter((s) => s.id !== song.id)
       return { recentSongs: [song, ...filtered].slice(0, 5) }
     })
+    // Fire-and-forget API call to persist to Redis (don't block UI)
+    saveRecentSongApi(clerkId, song).catch(() => {})
   },
 }))
