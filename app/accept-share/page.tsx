@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useAuth, useUser } from "@clerk/nextjs"
 
 import { DashboardShell } from "components/DashboardShell/DashboardShell"
-import { SpinnerIcon, ChevronRightIcon } from "components/icons"
+import { ChevronRightIcon, SpinnerIcon } from "components/icons"
 import { claimShare } from "lib/api/playlists"
 
 export default function AcceptSharePage() {
