@@ -46,6 +46,10 @@ export function SearchBar({ onSearch, onClear, isLoading = false }: SearchBarPro
   )
 
   const handleClear = useCallback(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current)
+      debounceRef.current = null
+    }
     setValue("")
     if (onClear) onClear()
     inputRef.current?.focus()
