@@ -78,10 +78,10 @@ export default function InviteAcceptClient() {
     if (processedRef.current) return
     if (!isUserLoaded || !isSignUpLoaded || !isSignInLoaded) return
 
-    // If already signed in and no ticket, just resolve
-    if (isSignedIn && !ticket) {
+    // If already signed in, just resolve (regardless of ticket presence)
+    if (isSignedIn && user) {
       processedRef.current = true
-      resolveAndRedirect(user!.id, user!)
+      resolveAndRedirect(user.id, user)
       return
     }
 
