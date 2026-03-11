@@ -4,8 +4,8 @@ import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useAuth } from "@clerk/nextjs"
 
-import { SpinnerIcon } from "components/icons"
 import { DashboardShell } from "components/DashboardShell/DashboardShell"
+import { SpinnerIcon } from "components/icons"
 import { PlaylistDetail } from "components/PlaylistDetail/PlaylistDetail"
 import { Skeleton } from "components/Skeleton/Skeleton"
 
