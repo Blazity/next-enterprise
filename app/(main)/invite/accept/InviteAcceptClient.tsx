@@ -4,171 +4,76 @@ import { useCallback, useEffect, useRef, useState } from "react"
 
 import { useRouter, useSearchParams } from "next/navigation"
 
-import { useClerk, useSignIn, useSignUp, useUser } from "@clerk/nextjs"
+import { useUser } from "@clerk/nextjs"
 import { Loader2, Music } from "lucide-react"
 
-import { resolveInvitation, syncUser } from "@/lib/services/playlistService"
+import { syncUser } from "@/lib/services/playlistService"
 
-type PageState = "loading" | "authenticating" | "resolving" | "redirecting" | "error"
+type PageState = "loading" | "resolving" | "redirecting" | "error"
 
 export default function InviteAcceptClient() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const { setActive } = useClerk()
   const { user, isLoaded: isUserLoaded, isSignedIn } = useUser()
-  const { signUp, isLoaded: isSignUpLoaded } = useSignUp()
-  const { signIn, isLoaded: isSignInLoaded } = useSignIn()
 
   const [state, setState] = useState<PageState>("loading")
   const [errorMsg, setErrorMsg] = useState("")
   const processedRef = useRef(false)
 
   const ticket = searchParams.get("__clerk_ticket")
-  const status = searchParams.get("__clerk_status")
 
-  // After authentication completes, resolve the invitation and redirect to the playlist
+  // After the user is signed in, sync them and redirect to playlists
   const resolveAndRedirect = useCallback(
-    async (clerkId: string, clerkUser?: typeof user) => {
+    async (clerkUser: NonNullable<typeof user>) => {
+      if (processedRef.current) return
+      processedRef.current = true
       setState("resolving")
+
       try {
-        // Sync user to our DB first
-        if (clerkUser) {
-          await syncUser({
-            id: clerkUser.id,
-            username: clerkUser.username,
-            emailAddresses: clerkUser.emailAddresses.map((e: { emailAddress: string }) => ({
-              emailAddress: e.emailAddress,
-            })),
-            firstName: clerkUser.firstName,
-            lastName: clerkUser.lastName,
-            imageUrl: clerkUser.imageUrl,
-          })
-        }
+        // Sync user to our backend DB
+        await syncUser({
+          id: clerkUser.id,
+          username: clerkUser.username,
+          emailAddresses: clerkUser.emailAddresses.map((e: { emailAddress: string }) => ({
+            emailAddress: e.emailAddress,
+          })),
+          firstName: clerkUser.firstName,
+          lastName: clerkUser.lastName,
+          imageUrl: clerkUser.imageUrl,
+        })
 
-        // Clerk puts the publicMetadata on the user after invitation acceptance.
-        const metadata = clerkUser?.publicMetadata as
-          | { playlistInvitationPlaylistId?: number; playlistInvitationSharedBy?: string }
-          | undefined
-
-        if (metadata?.playlistInvitationPlaylistId) {
-          // We have the playlist ID directly from metadata — resolve via backend
-          // to create the share record
-          const invitationId = searchParams.get("__clerk_invitation_id")
-          if (invitationId) {
-            await resolveInvitation(invitationId, clerkId)
-          }
-          setState("redirecting")
-          router.replace(`/playlist/${metadata.playlistInvitationPlaylistId}`)
-          return
-        }
-
-        // Fallback: redirect to playlists page
         setState("redirecting")
         router.replace("/playlists")
       } catch (err) {
         console.error("Failed to resolve invitation:", err)
         setState("error")
-        setErrorMsg("Failed to process the invitation. The link may have expired.")
+        setErrorMsg("Failed to process the invitation.")
       }
     },
-    [router, searchParams]
+    [router]
   )
 
   useEffect(() => {
-    if (processedRef.current) return
-    if (!isUserLoaded || !isSignUpLoaded || !isSignInLoaded) return
+    if (!isUserLoaded) return
 
-    // If already signed in, just resolve (regardless of ticket presence)
     if (isSignedIn && user) {
-      processedRef.current = true
-      resolveAndRedirect(user.id, user)
+      // User is authenticated — resolve invitation and go to playlists
+      resolveAndRedirect(user)
       return
     }
 
-    if (!ticket) {
-      setState("error")
-      setErrorMsg("Invalid invitation link. No ticket found.")
+    // User is NOT signed in and has a ticket — redirect to Clerk sign-up
+    // Clerk's <SignUp> component natively handles __clerk_ticket
+    if (ticket) {
+      const signUpUrl = `/sign-up?redirect_url=${encodeURIComponent("/invite/accept")}&__clerk_ticket=${encodeURIComponent(ticket)}`
+      window.location.href = signUpUrl
       return
     }
 
-    processedRef.current = true
-
-    const processTicket = async () => {
-      setState("authenticating")
-
-      try {
-        let sessionId: string | null = null
-        let userId: string | null = null
-
-        if (status === "sign_up" || !status) {
-          // New user — create account via ticket
-          const result = await signUp!.create({ strategy: "ticket", ticket })
-          if (result.status === "complete") {
-            sessionId = result.createdSessionId
-            userId = result.createdUserId
-          } else {
-            setState("error")
-            setErrorMsg("Account creation did not complete. Please try signing up manually.")
-            return
-          }
-        } else if (status === "sign_in") {
-          // Existing user — sign in via ticket
-          const result = await signIn!.create({ strategy: "ticket", ticket })
-          if (result.status === "complete") {
-            sessionId = result.createdSessionId
-            userId = result.identifier || null
-          } else {
-            setState("error")
-            setErrorMsg("Sign-in did not complete. Please try signing in manually.")
-            return
-          }
-        } else if (status === "complete") {
-          if (isSignedIn && user) {
-            resolveAndRedirect(user.id, user)
-          } else {
-            setState("loading")
-          }
-          return
-        }
-
-        if (!sessionId) {
-          setState("error")
-          setErrorMsg("Authentication failed. Please try again.")
-          return
-        }
-
-        // Set the session as active (establishes the cookie)
-        await setActive({ session: sessionId })
-
-        // Redirect to playlists — the session is now active
-        setState("redirecting")
-        router.replace("/playlists")
-      } catch (err) {
-        console.error("Ticket auth error:", err)
-        setState("error")
-        setErrorMsg(
-          err instanceof Error
-            ? err.message
-            : "Failed to process invitation. The link may have expired or already been used."
-        )
-      }
-    }
-
-    processTicket()
-  }, [
-    isUserLoaded,
-    isSignUpLoaded,
-    isSignInLoaded,
-    isSignedIn,
-    user,
-    ticket,
-    status,
-    signUp,
-    signIn,
-    setActive,
-    router,
-    resolveAndRedirect,
-  ])
+    // No ticket, not signed in — invalid link
+    setState("error")
+    setErrorMsg("Invalid invitation link.")
+  }, [isUserLoaded, isSignedIn, user, ticket, resolveAndRedirect])
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#0f0a1e] via-[#1a0a2e] to-[#0a1628]">
@@ -191,8 +96,7 @@ export default function InviteAcceptClient() {
             <Loader2 size={40} className="animate-spin text-purple-400" />
             <p className="text-sm text-white/60">
               {state === "loading" && "Loading..."}
-              {state === "authenticating" && "Setting up your account..."}
-              {state === "resolving" && "Finding your playlist..."}
+              {state === "resolving" && "Setting up your playlist..."}
               {state === "redirecting" && "Taking you to your playlist..."}
             </p>
           </>
