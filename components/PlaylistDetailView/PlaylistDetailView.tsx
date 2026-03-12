@@ -232,15 +232,7 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
                 </div>
             )}
 
-            {/* Shared playlist: Saved to Library indicator */}
-            {effectiveVariant === "shared" && (
-                <div className="mb-6 flex items-center gap-3">
-                    <span className="inline-flex items-center gap-2 rounded-full bg-green-500/10 px-3 py-1.5 text-xs text-green-400">
-                        <Check size={14} />
-                        {t("share.savedToLibrary")}
-                    </span>
-                </div>
-            )}
+
 
             {/* Song list */}
             {songs.length === 0 ? (

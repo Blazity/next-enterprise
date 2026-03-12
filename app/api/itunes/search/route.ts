@@ -20,7 +20,13 @@ export async function GET(request: NextRequest) {
   const cacheKey = `itunes:search:${term.toLowerCase()}:${limit}`
   const cached = await cacheGet(cacheKey)
   if (cached) {
-    return Response.json(cached)
+    return new Response(JSON.stringify(cached), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Cache": "HIT",
+      },
+    })
   }
 
   const url = new URL(env.ITUNES_API_BASE_URL)
@@ -43,7 +49,13 @@ export async function GET(request: NextRequest) {
     // Cache the response in Redis
     await cacheSet(cacheKey, data, ITUNES_CACHE_TTL)
 
-    return Response.json(data)
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Cache": "MISS",
+      },
+    })
   } catch {
     return Response.json({ error: "Failed to fetch from iTunes" }, { status: 502 })
   }
