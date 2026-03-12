@@ -7,6 +7,7 @@
 import { useEffect, useState } from "react"
 import { useFeatureFlagEnabled } from "posthog-js/react"
 
+import { AuthButton } from "components/AuthButton/AuthButton"
 import {
   AlbumIcon,
   ArtistIcon,
@@ -18,7 +19,6 @@ import {
   PlaylistIcon,
   UsersIcon
 } from "components/icons"
-import { AuthButton } from "components/AuthButton/AuthButton"
 import { ThemeToggle } from "components/ThemeToggle/ThemeToggle"
 import { cn } from "lib/cn"
 import type { ActiveView } from "lib/constants"

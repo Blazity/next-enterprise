@@ -6,8 +6,8 @@ import type { ReactNode } from "react"
 import { Sidebar } from "components/Sidebar/Sidebar"
 import { TopNav } from "components/TopNav/TopNav"
 import type { ActiveView } from "lib/constants"
-import { usePlaylistStore } from "store/usePlaylistStore"
 import { useAppStore } from "store/useAppStore"
+import { usePlaylistStore } from "store/usePlaylistStore"
 
 interface DashboardShellProps {
   children: ReactNode

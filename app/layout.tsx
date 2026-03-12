@@ -1,14 +1,14 @@
 import { Suspense } from "react"
 import type { Metadata } from "next"
 import { DM_Sans } from "next/font/google"
-import { ClerkProvider } from "@clerk/nextjs"
+
 
 import { MiniPlayer } from "components/MiniPlayer/MiniPlayer"
 import PostHogPageView from "components/Providers/PostHogPageView"
 import { PostHogProvider } from "components/Providers/PostHogProvider"
 import { ThemeProvider } from "components/Providers/ThemeProvider"
-import { ClerkThemeProvider } from "../components/Providers/ClerkThemeProvider"
 import { ToastContainer } from "components/Toast/ToastContainer"
+import { ClerkThemeProvider } from "../components/Providers/ClerkThemeProvider"
 
 import "styles/tailwind.css"
 

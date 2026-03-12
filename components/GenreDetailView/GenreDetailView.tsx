@@ -7,9 +7,9 @@ import { ChevronLeftIcon } from "components/icons"
 import { Skeleton } from "components/Skeleton/Skeleton"
 import { SongCard } from "components/SongCard/SongCard"
 
+import { GENRES } from "lib/genres"
 import { fetchSongsByGenre } from "lib/itunes/api"
 import type { ItunesTrack } from "lib/itunes/types"
-import { GENRES } from "lib/genres"
 
 interface GenreDetailViewProps {
   genreName: string

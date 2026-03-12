@@ -141,28 +141,28 @@ export async function fetchPodcastWithEpisodes(podcastId: string): Promise<{ pod
   const response = await fetch(`/api/itunes/lookup?id=${podcastId}&media=podcast&entity=podcastEpisode&limit=50&_=${Date.now()}`)
   if (!response.ok) return null
   
-  const data = await response.json() as { results: any[] }
+  const data = await response.json() as { results: Array<Record<string, unknown>> }
   
   // iTunes returns the podcast with kind='podcast' or collectionType='Podcast'
   // It is usually the first item with a matching ID or different wrapperType than the episodes
-  const podcastData = data.results.find((r: any) => 
-    r.kind === "podcast" || 
-    r.collectionType === "Podcast" || 
-    (r.collectionId === Number(podcastId) && r.wrapperType !== "podcastEpisode")
+  const podcastData = data.results.find((r) => 
+    r["kind"] === "podcast" || 
+    r["collectionType"] === "Podcast" || 
+    (r["collectionId"] === Number(podcastId) && r["wrapperType"] !== "podcastEpisode")
   )
-  const episodesData = data.results.filter((r: any) => r.wrapperType === "podcastEpisode" || r.kind === "podcast-episode")
+  const episodesData = data.results.filter((r) => r["wrapperType"] === "podcastEpisode" || r["kind"] === "podcast-episode")
   
   if (!podcastData) return null
   
-  const podcast = podcastData as ItunesAlbum
-  const episodes = episodesData.map((ep: any) => {
-    const track = ep as ItunesTrack
+  const podcast = podcastData as unknown as ItunesAlbum
+  const episodes = episodesData.map((ep) => {
+    const track = ep as unknown as ItunesTrack
     if (track.episodeUrl && !track.previewUrl) {
       track.previewUrl = track.episodeUrl
     }
     // Also use artworkUrl600 as artworkUrl100 if missing, though typically present
-    if (!track.artworkUrl100 && ep.artworkUrl600) {
-      track.artworkUrl100 = ep.artworkUrl600.replace('600x600', '100x100')
+    if (!track.artworkUrl100 && typeof ep["artworkUrl600"] === "string") {
+      track.artworkUrl100 = ep["artworkUrl600"].replace('600x600', '100x100')
     } else if (!track.artworkUrl100 && podcast.artworkUrl100) {
       track.artworkUrl100 = podcast.artworkUrl100
     }

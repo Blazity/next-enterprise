@@ -177,7 +177,7 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
              
              {publicLink ? (
                 <div className="animate-fade-in">
-                    <div className="flex items-center gap-2 bg-black/40 border border-border rounded-lg px-3 py-2 text-xs text-muted">
+                    <div className="flex items-center gap-2 bg-black/5 dark:bg-black/40 border border-border rounded-lg px-3 py-2 text-xs text-muted">
                         <span className="flex-1 truncate">{publicLink}</span>
                         <button
                             onClick={() => copyToClipboard(publicLink)}
@@ -212,7 +212,7 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="friend@example.com"
-                className="flex-1 bg-surface-elevated border border-border rounded-xl px-4 py-2.5 text-primary placeholder:text-[#52525b] focus:outline-none focus:border-primary transition-colors text-sm"
+                className="flex-1 bg-surface-elevated border border-border rounded-xl px-4 py-2.5 text-primary placeholder:text-muted focus:outline-none focus:border-primary transition-colors text-sm"
                 disabled={isSubmitting}
                 required
               />
@@ -222,7 +222,7 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
                 className={cn(
                   "px-6 rounded-full border-0 text-sm font-bold text-bg transition-all duration-200 cursor-pointer flex items-center justify-center min-w-[80px]",
                   !email.trim() || isSubmitting
-                    ? "bg-[#3f3f46] text-muted cursor-not-allowed"
+                    ? "bg-black/10 dark:bg-white/10 text-muted cursor-not-allowed"
                     : "bg-primary hover:scale-105 active:scale-95"
                 )}
               >
@@ -233,7 +233,7 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
                 )}
               </button>
             </form>
-            {error && <p className="text-red-400 text-xs mt-2 m-0">{error}</p>}
+            {error && <p className="text-red-600 dark:text-red-400 text-xs mt-2 m-0">{error}</p>}
           </div>
 
           {/* Shared With List */}
@@ -260,7 +260,7 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
                     </div>
                     <button
                       onClick={() => handleRevoke(share.id)}
-                      className="size-8 rounded-lg border-0 bg-transparent text-muted hover:text-red-400 hover:bg-red-400/10 transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 focus:opacity-100"
+                      className="size-8 rounded-lg border-0 bg-transparent text-muted hover:text-red-600 dark:hover:text-red-400 hover:bg-red-500/10 transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 focus:opacity-100"
                       title="Revoke access"
                     >
                       <TrashIcon width={14} height={14} />

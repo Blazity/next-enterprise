@@ -3,19 +3,18 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 
-import { GENRES } from "lib/genres"
-
-
+import { PauseIcon, PlayIcon } from "components/icons"
 import { Skeleton } from "components/Skeleton/Skeleton"
 import { SongCard } from "components/SongCard/SongCard"
 
-import { PauseIcon, PlayIcon } from "components/icons"
 import { cn } from "lib/cn"
 import type { ActiveView } from "lib/constants"
+import { GENRES } from "lib/genres"
 import { useRequireAuth } from "lib/hooks/useRequireAuth"
-import { fetchPopularArtists, fetchTopAlbums, fetchTrendingSongs, fetchTopPodcasts, fetchSongsByGenre } from "lib/itunes/api"
+import { fetchPopularArtists, fetchTopAlbums, fetchTopPodcasts, fetchTrendingSongs } from "lib/itunes/api"
 import type { ItunesAlbum, ItunesArtist, ItunesTrack } from "lib/itunes/types"
 import { extractReleaseYear } from "lib/itunes/utils"
+
 import { usePlayerStore } from "store/usePlayerStore"
 
 
@@ -30,7 +29,7 @@ interface HomeContentProps {
 
 
 
-export function HomeContent({ activeView, activeId, onNavClick }: HomeContentProps) {
+export function HomeContent({ activeView, onNavClick }: HomeContentProps) {
   const [trendingSongs, setTrendingSongs] = useState<ItunesTrack[]>([])
   const [topAlbums, setTopAlbums] = useState<ItunesAlbum[]>([])
   const [popularArtists, setPopularArtists] = useState<ItunesArtist[]>([])
@@ -144,13 +143,11 @@ export function HomeContent({ activeView, activeId, onNavClick }: HomeContentPro
 
 
   // Home view — new standard layout
-  const featuredSong = trendingSongs[0]
   const restSongs = trendingSongs.slice(1, 6)
   const albumsToShow = topAlbums
   const artistsToShow = popularArtists
   const discoverSongs = trendingSongs.slice(6, 12)
 
-  const featuredArtwork = featuredSong?.artworkUrl100 ? featuredSong.artworkUrl100.replace("100x100", "800x800") : ""
 
   return (
     <div className="flex flex-col pb-24 animate-in fade-in duration-500">
@@ -252,7 +249,7 @@ export function HomeContent({ activeView, activeId, onNavClick }: HomeContentPro
           <div className="flex overflow-x-auto pb-6 -mx-6 px-6 gap-6 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {albumsToShow.map(album => (
               <div key={album.collectionId} className="w-[140px] md:w-[160px] shrink-0 snap-center">
-                <AlbumTile album={album} compact onNavClick={onNavClick} />
+                <AlbumTile album={album} onNavClick={onNavClick} />
               </div>
             ))}
           </div>
@@ -286,7 +283,7 @@ export function HomeContent({ activeView, activeId, onNavClick }: HomeContentPro
               <div key={podcast.collectionId} className="w-[140px] md:w-[160px] shrink-0 snap-center">
                 <AlbumTile
                   album={podcast}
-                  compact
+
                   onNavClick={() => onNavClick("podcast_detail", String(podcast.collectionId))}
                 />
               </div>
@@ -298,7 +295,7 @@ export function HomeContent({ activeView, activeId, onNavClick }: HomeContentPro
   )
 }
 
-function AlbumTile({ album, compact, onNavClick }: { album: ItunesAlbum; compact?: boolean, onNavClick?: (view: ActiveView, id?: string) => void }) {
+function AlbumTile({ album, onNavClick }: { album: ItunesAlbum; onNavClick?: (view: ActiveView, id?: string) => void }) {
   const artworkUrl = album.artworkUrl100.replace("100x100", "300x300")
   const year = extractReleaseYear(album.releaseDate)
 

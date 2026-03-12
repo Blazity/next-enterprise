@@ -18,16 +18,16 @@ import { useToastStore } from "store/useToastStore"
 export function PlaylistsView() {
   const { getToken } = useAuth()
   const { requireAuth } = useRequireAuth()
-  const { 
-    playlists, 
-    setPlaylists, 
-    sharedPlaylists, 
-    setSharedPlaylists, 
-    isLoading, 
-    setIsLoading, 
-    removePlaylist, 
-    selectedPlaylistId, 
-    setSelectedPlaylistId 
+  const {
+    playlists,
+    setPlaylists,
+    sharedPlaylists,
+    setSharedPlaylists,
+    isLoading,
+    setIsLoading,
+    removePlaylist,
+    selectedPlaylistId,
+    setSelectedPlaylistId
   } = usePlaylistStore()
   const { addToast } = useToastStore()
   const [isCreating, setIsCreating] = useState(false)
@@ -121,8 +121,7 @@ export function PlaylistsView() {
                 onKeyDown={(e) => e.key === "Enter" && setSelectedPlaylistId(playlist.id)}
                 className="flex items-center gap-3 w-full text-left py-3 px-3 rounded-xl border-0 bg-transparent hover:bg-primary/5 transition-colors cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-inset"
               >
-                <div className="size-12 shrink-0 rounded-lg bg-[#1a1a1a] flex items-center justify-center border border-border/50 group-hover:border-primary/30 transition-colors">
-                  <PlaylistIcon width={18} height={18} className={cn("text-muted transition-colors", isShared ? "text-primary/70 group-hover:text-primary" : "group-hover:text-primary")} />
+                <div className="size-12 shrink-0 rounded-lg bg-surface-elevated flex items-center justify-center border border-border/50 group-hover:border-primary/30 transition-colors">                  <PlaylistIcon width={18} height={18} className={cn("text-muted transition-colors", isShared ? "text-primary/70 group-hover:text-primary" : "group-hover:text-primary")} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-primary font-medium truncate m-0">{playlist.name}</p>
@@ -140,7 +139,7 @@ export function PlaylistsView() {
                     )}
                   </p>
                 </div>
-                
+
                 {!isShared && (
                   <button
                     type="button"
@@ -154,7 +153,7 @@ export function PlaylistsView() {
                     <TrashIcon width={16} height={16} />
                   </button>
                 )}
-                
+
                 <ChevronRightIcon width={16} height={16} className="shrink-0 text-muted opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity" />
               </div>
             )

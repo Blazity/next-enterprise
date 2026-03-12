@@ -1,9 +1,9 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { ClerkProvider } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
 
 export function ClerkThemeProvider({ children }: { children: React.ReactNode }) {
   const { theme, resolvedTheme } = useTheme()
