@@ -26,22 +26,22 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Animated gradient orbs — fixed overlay to prevent layout shift */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <motion.div
-          className="absolute top-[-20%] left-[-10%] h-[700px] w-[700px] rounded-full bg-[#fc3c44]/30 blur-[150px]"
+          className="absolute top-[-20%] left-[-10%] h-[700px] w-[700px] rounded-full bg-[#06b6d4]/20 blur-[150px]"
           animate={{ x: [0, 80, 0], y: [0, 60, 0], scale: [1, 1.3, 1] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute right-[-10%] bottom-[-20%] h-[700px] w-[700px] rounded-full bg-[#6366f1]/30 blur-[150px]"
+          className="absolute right-[-10%] bottom-[-20%] h-[700px] w-[700px] rounded-full bg-[#3b82f6]/20 blur-[150px]"
           animate={{ x: [0, -70, 0], y: [0, -50, 0], scale: [1.3, 1, 1.3] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute top-[20%] right-[15%] h-[500px] w-[500px] rounded-full bg-[#f472b6]/25 blur-[130px]"
+          className="absolute top-[20%] right-[15%] h-[500px] w-[500px] rounded-full bg-[#8b5cf6]/20 blur-[130px]"
           animate={{ x: [0, -60, 0], y: [0, 70, 0], scale: [1, 1.4, 1] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-[10%] left-[20%] h-[400px] w-[400px] rounded-full bg-[#a855f7]/20 blur-[120px]"
+          className="absolute bottom-[10%] left-[20%] h-[400px] w-[400px] rounded-full bg-[#0ea5e9]/20 blur-[120px]"
           animate={{ x: [0, 50, 0], y: [0, -40, 0], scale: [1.1, 1, 1.1] }}
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -67,7 +67,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       >
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#fc3c44] to-[#f472b6] shadow-lg shadow-[#fc3c44]/25">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 shadow-lg shadow-cyan-500/25">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2" />
               <circle cx="12" cy="12" r="3" fill="white" />

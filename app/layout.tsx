@@ -15,8 +15,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <ClerkProvider
       appearance={{
-        variables: { colorPrimary: "#6366f1" },
-        elements: { card: "bg-[#1a1a2e]", formButtonPrimary: "bg-[#6366f1] hover:bg-[#5558dd]" },
+        variables: { colorPrimary: "#06b6d4" },
+        elements: { card: "bg-[#0f172a]", formButtonPrimary: "bg-[#06b6d4] hover:bg-[#0891b2]" },
       }}
     >
       <html lang="en" className={cn("dark", "font-sans", "overflow-hidden", geist.variable)}>
