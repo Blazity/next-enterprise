@@ -40,16 +40,22 @@ export function useAudioPlayer() {
       return
     }
 
+    // New song selected
     if (currentlyPlaying.id !== prevSongIdRef.current) {
       loadingNewTrackRef.current = true
       audio.pause()
       audio.src = currentlyPlaying.previewUrl
       audio.load()
-      audio.play().catch(() => {})
+      
+      // Only auto-play if the state says we should be playing
+      if (playState === PLAY_STATE.PLAYING) {
+        audio.play().catch(() => {})
+      }
       prevSongIdRef.current = currentlyPlaying.id
       return
     }
 
+    // Same song, just play/pause toggled
     if (playState === PLAY_STATE.PLAYING) {
       audio.play().catch(() => {})
     } else if (playState === PLAY_STATE.PAUSED) {

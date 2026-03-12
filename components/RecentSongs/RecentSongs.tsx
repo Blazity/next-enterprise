@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs"
 import { Clock, Music2, Pause, Play, X } from "lucide-react"
 
 import { useMusicStore } from "@/store/musicStore"
+import { PLAY_STATE } from "@/types/music"
 
 /**
  * RecentSongs — Spotify-style horizontal scroll of recently played song cards.
@@ -13,12 +14,13 @@ import { useMusicStore } from "@/store/musicStore"
  */
 export function RecentSongs() {
   const { user } = useUser()
-  const { recentSongs, removeRecentSong, playingTrack, isPlaying, setPlayingTrack, togglePlay } = useMusicStore()
+  const { recentSongs, removeRecentSong, currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
+  const isPlaying = playState === PLAY_STATE.PLAYING
 
   if (!user || !recentSongs || recentSongs.length === 0) return null
 
   const handlePlay = (song: typeof recentSongs[0]) => {
-    if (playingTrack?.id === song.id) {
+    if (currentlyPlaying?.id === song.id) {
       togglePlay()
     } else {
       setPlayingTrack(song)
@@ -78,7 +80,7 @@ export function RecentSongs() {
               {/* Play/Pause button overlay on hover */}
               <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-all duration-200 group-hover:bg-black/30">
                 <div className="flex size-10 translate-y-2 items-center justify-center rounded-full bg-accent text-white opacity-0 shadow-xl transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-                  {playingTrack?.id === song.id && isPlaying ? (
+                  {currentlyPlaying?.id === song.id && isPlaying ? (
                     <Pause size={16} fill="currentColor" />
                   ) : (
                     <Play size={16} className="ml-0.5" fill="currentColor" />
