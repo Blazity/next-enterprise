@@ -50,6 +50,7 @@ interface MusicStore {
   fetchPopularContent: () => Promise<void>
   fetchSearchHistory: (clerkId: string) => Promise<void>
   addRecentSong: (clerkId: string, song: Song) => Promise<void>
+  removeRecentSong: (clerkId: string, songId: string) => Promise<void>
 }
 
 export const useMusicStore = create<MusicStore>((set, get) => ({
@@ -220,5 +221,16 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
     })
     // Fire-and-forget API call to persist to Redis (don't block UI)
     saveRecentSongApi(clerkId, song).catch(() => {})
+  },
+
+  removeRecentSong: async (clerkId: string, songId: string) => {
+    // Optimistically update local state FIRST (instant UI feedback)
+    set((state) => ({
+      recentSongs: state.recentSongs.filter((s) => s.id !== songId)
+    }))
+    // Fire-and-forget API call to persist to Redis (don't block UI)
+    import("@/lib/services/itunesService").then(({ removeRecentSong }) => {
+      removeRecentSong(clerkId, songId).catch(() => {})
+    })
   },
 }))

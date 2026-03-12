@@ -28,6 +28,16 @@ export async function saveRecentSong(clerkId: string, song: Song): Promise<void>
   }
 }
 
+export async function removeRecentSong(clerkId: string, songId: string): Promise<void> {
+  try {
+    await fetch(`${BACKEND_URL}/api/search-history?clerk_id=${encodeURIComponent(clerkId)}&song_id=${encodeURIComponent(songId)}`, {
+      method: "DELETE",
+    })
+  } catch {
+    // Best-effort — don't block the UI
+  }
+}
+
 // --- iTunes API ---
 
 export async function searchTracks(query: string, limit = 25): Promise<Song[]> {

@@ -3,7 +3,7 @@
 import Image from "next/image"
 
 import { useUser } from "@clerk/nextjs"
-import { Clock, Music2, Play } from "lucide-react"
+import { Clock, Music2, Pause, Play, X } from "lucide-react"
 
 import { useMusicStore } from "@/store/musicStore"
 
@@ -13,9 +13,22 @@ import { useMusicStore } from "@/store/musicStore"
  */
 export function RecentSongs() {
   const { user } = useUser()
-  const { recentSongs, setPlayingTrack } = useMusicStore()
+  const { recentSongs, removeRecentSong, playingTrack, isPlaying, setPlayingTrack, togglePlay } = useMusicStore()
 
-  if (!user || recentSongs.length === 0) return null
+  if (!user || !recentSongs || recentSongs.length === 0) return null
+
+  const handlePlay = (song: typeof recentSongs[0]) => {
+    if (playingTrack?.id === song.id) {
+      togglePlay()
+    } else {
+      setPlayingTrack(song)
+    }
+  }
+
+  const handleDelete = (e: React.MouseEvent, songId: string) => {
+    e.stopPropagation()
+    removeRecentSong(user.id, songId)
+  }
 
   return (
     <section className="space-y-3">
@@ -33,7 +46,7 @@ export function RecentSongs() {
           <button
             key={song.id}
             type="button"
-            onClick={() => setPlayingTrack(song)}
+            onClick={() => handlePlay(song)}
             className="group flex w-[140px] shrink-0 flex-col gap-2 rounded-xl bg-white/[0.04] p-2.5 transition-all duration-200 hover:bg-white/[0.08] hover:shadow-lg hover:shadow-black/20 active:scale-[0.97]"
           >
             {/* Album Art */}
@@ -52,10 +65,24 @@ export function RecentSongs() {
                 </div>
               )}
 
-              {/* Play button overlay on hover */}
+              {/* Top-right delete button overlay */}
+              <button
+                type="button"
+                aria-label="Remove from recent searches"
+                onClick={(e) => handleDelete(e, song.id)}
+                className="absolute top-1 right-1 z-10 flex size-6 items-center justify-center rounded-full bg-black/40 text-white/70 opacity-0 backdrop-blur-sm transition-all duration-200 hover:bg-black/60 hover:text-white group-hover:opacity-100"
+              >
+                <X size={14} />
+              </button>
+
+              {/* Play/Pause button overlay on hover */}
               <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-all duration-200 group-hover:bg-black/30">
                 <div className="flex size-10 translate-y-2 items-center justify-center rounded-full bg-accent text-white opacity-0 shadow-xl transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-                  <Play size={16} className="ml-0.5" fill="currentColor" />
+                  {playingTrack?.id === song.id && isPlaying ? (
+                    <Pause size={16} fill="currentColor" />
+                  ) : (
+                    <Play size={16} className="ml-0.5" fill="currentColor" />
+                  )}
                 </div>
               </div>
             </div>
