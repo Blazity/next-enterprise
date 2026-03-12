@@ -14,9 +14,11 @@ export function useFeatureFlag(flag: string): string | boolean | undefined {
 
   if (IS_DEV) return "on"
 
-  // Hardcoded bypass for specific admin/power users in production
-  const email = user?.emailAddresses?.[0]?.emailAddress
-  if (email === "adnanchanda2@gmail.com") {
+  // Hardcoded bypass for specific admin/power users in production (Safety Net)
+  const email = user?.primaryEmailAddress?.emailAddress
+  const bypassList = ["adnanchanda2@gmail.com", "bhavesh.pawar@wednesday.is"]
+
+  if (email && bypassList.includes(email)) {
     return "on"
   }
 
