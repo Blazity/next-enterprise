@@ -207,8 +207,8 @@ export function PlaylistsPageContent() {
                 href={`/playlist/${playlist.id}`}
                 className="group relative flex items-center gap-4 rounded-xl border border-transparent px-4 py-3.5 transition-all duration-200 hover:border-white/[0.06] hover:bg-white/[0.04]"
               >
-                <div className="from-accent/20 to-accent/5 flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br">
-                  <ListMusic size={22} className="text-accent" />
+                <div className="from-cyan-500/20 to-blue-500/10 flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ring-1 ring-cyan-500/30 group-hover:ring-cyan-400/50 transition-all duration-300">
+                  <ListMusic size={22} className="text-cyan-400 group-hover:text-cyan-300 transition-colors" />
                 </div>
 
                 {editingId === playlist.id ? (
