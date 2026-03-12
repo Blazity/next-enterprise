@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback } from "react"
+import { useCallback, useEffect, useRef } from "react"
 
 import Image from "next/image"
 
@@ -21,6 +21,8 @@ function formatTime(seconds: number): string {
 
 export function NowPlaying() {
   const { t } = useTranslation()
+  const progressBarRef = useRef<HTMLDivElement>(null)
+  
   const {
     currentlyPlaying,
     playState,
@@ -62,6 +64,26 @@ export function NowPlaying() {
     [duration, currentTime]
   )
 
+  // Use a ref-based subscription to the audio element to bypass React re-renders for the progress bar
+  useEffect(() => {
+    let rafId: number
+    const audio = document.querySelector("audio") // The global audio element is not easily accessible here without a hack, but `useAudioPlayer` binds to a single Audio instance. 
+                                                  // Alternatively, we subscribe to store updates directly but without triggering React re-renders.
+    
+    // Subscribe to store state changes WITHOUT triggering component re-renders
+    const unsubscribe = useMusicStore.subscribe(
+      (state) => state.currentTime,
+      (time) => {
+        if (progressBarRef.current && duration > 0) {
+          const prog = (time / duration) * 100
+          progressBarRef.current.style.width = `${prog}%`
+        }
+      }
+    )
+
+    return () => unsubscribe()
+  }, [duration])
+
   return (
     <AnimatePresence>
       {currentlyPlaying && (
@@ -80,7 +102,7 @@ export function NowPlaying() {
             <div className="flex shrink-0 items-center gap-1.5">
               <button
                 className={`hidden cursor-pointer rounded-full p-2 transition-all duration-200 md:block ${
-                  isShuffled ? "text-accent bg-accent/10" : "text-text-tertiary hover:text-white hover:bg-white/[0.06]"
+                  isShuffled ? "text-[#00e5ff] bg-[#00e5ff]/10 shadow-[0_0_15px_rgba(0,229,255,0.4)] ring-1 ring-[#00e5ff]/30" : "text-text-tertiary hover:text-white hover:bg-white/[0.06]"
                 }`}
                 aria-label={t("player.shuffle")}
                 onClick={toggleShuffle}
@@ -112,7 +134,7 @@ export function NowPlaying() {
               </button>
               <button
                 className={`hidden cursor-pointer rounded-full p-2 transition-all duration-200 md:block ${
-                  isRepeating ? "text-accent bg-accent/10" : "text-text-tertiary hover:text-white hover:bg-white/[0.06]"
+                  isRepeating ? "text-[#00e5ff] bg-[#00e5ff]/10 shadow-[0_0_15px_rgba(0,229,255,0.4)] ring-1 ring-[#00e5ff]/30" : "text-text-tertiary hover:text-white hover:bg-white/[0.06]"
                 }`}
                 aria-label={t("player.repeat")}
                 onClick={toggleRepeat}
@@ -201,11 +223,12 @@ export function NowPlaying() {
             onKeyDown={handleProgressKeyDown}
           >
             <div
-              className="bg-gradient-to-r from-accent to-accent-hover h-full transition-[width] relative"
+              ref={progressBarRef}
+              className="bg-gradient-to-r from-accent to-accent-hover h-full relative"
               style={{ width: `${progress}%` }}
             >
               {/* Glow dot at progress head */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 size-2.5 rounded-full bg-white opacity-0 shadow-[0_0_8px_rgba(252,60,68,0.8)] transition-opacity group-hover:opacity-100" />
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 size-2.5 rounded-full bg-white opacity-0 shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-opacity group-hover:opacity-100" />
             </div>
           </div>
         </motion.div>

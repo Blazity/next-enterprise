@@ -70,7 +70,7 @@ export function HeroSection() {
     if (currentlyPlaying?.id === songId) {
       togglePlay()
     } else {
-      setPlayingTrack(song)
+      setPlayingTrack(song, [...featuredSongs, ...trendingSongs])
     }
   }
 

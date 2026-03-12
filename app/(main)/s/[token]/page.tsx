@@ -71,7 +71,18 @@ export default function ShareLinkPage() {
       if (currentlyPlaying?.id === mapped.id) {
         togglePlay()
       } else {
-        setPlayingTrack(mapped)
+        setPlayingTrack(
+          mapped,
+          playlist.songs?.map((s) => ({
+            id: s.track_id,
+            title: s.title,
+            artist: { id: s.artist_name, name: s.artist_name },
+            albumArt: s.album_art || "/placeholder.png",
+            duration: s.duration || 0,
+            previewUrl: s.preview_url || undefined,
+            collectionName: s.collection_name || undefined,
+          }))
+        )
       }
     },
     [currentlyPlaying, togglePlay, setPlayingTrack]

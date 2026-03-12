@@ -55,7 +55,7 @@ export function ArtistsPageContent() {
         if (currentlyPlaying?.id === songId) {
           togglePlay()
         } else {
-          setPlayingTrack(song)
+          setPlayingTrack(song, artist.songs)
         }
         return
       }

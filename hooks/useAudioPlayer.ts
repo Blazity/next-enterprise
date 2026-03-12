@@ -76,6 +76,8 @@ export function useAudioPlayer() {
 
     const tick = () => {
       if (!audio.paused && !loadingNewTrackRef.current) {
+        // Still fire the time to global state for the text labels (0:00 / 3:00)
+        // Zustand batches these or the ref-subscription will handle it faster than React re-renders anyway.
         store().setCurrentTime(audio.currentTime)
         if (audio.duration && isFinite(audio.duration)) {
           store().setDuration(audio.duration)
@@ -91,7 +93,7 @@ export function useAudioPlayer() {
         return
       }
       store().setCurrentTime(store().duration)
-      store().togglePlay()
+      store().playNext()
     }
 
     const handleLoadedMetadata = () => {

@@ -10,6 +10,15 @@ import {
 } from "@/lib/services/itunesService"
 import { PLAY_STATE, type PlayState, type Song } from "@/types/music"
 
+function shuffleArray<T>(array: T[]): T[] {
+  const newArr = [...array]
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]]
+  }
+  return newArr
+}
+
 interface MusicStore {
   searchQuery: string
   featuredSongs: Song[]
@@ -31,6 +40,7 @@ interface MusicStore {
   isShuffled: boolean
   isRepeating: boolean
   queue: Song[]
+  originalCollection: Song[]
   history: Song[]
   recentSongs: Song[]
 
@@ -38,7 +48,7 @@ interface MusicStore {
   toggleMute: () => void
   setBuffering: (isBuffering: boolean) => void
   setSearchQuery: (query: string) => void
-  setPlayingTrack: (song: Song | null) => void
+  setPlayingTrack: (song: Song | null, collection?: Song[]) => void
   togglePlay: () => void
   setCurrentTime: (time: number) => void
   setDuration: (duration: number) => void
@@ -74,6 +84,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   isShuffled: false,
   isRepeating: false,
   queue: [],
+  originalCollection: [],
   history: [],
   recentSongs: [],
 
@@ -88,15 +99,27 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
     }
   },
 
-  setPlayingTrack: (song) => {
+  setPlayingTrack: (song, collection) => {
     if (!song) {
       set({ currentlyPlaying: null, playState: PLAY_STATE.IDLE, currentTime: 0, duration: 0 })
       return
     }
     const state = get()
-    const pool = state.searchResults.length > 0 ? state.searchResults : [...state.featuredSongs, ...state.trendingSongs]
-    const queue = pool.filter((s) => s.id !== song.id)
+    const pool = collection && collection.length > 0 
+      ? collection 
+      : (state.searchResults.length > 0 ? state.searchResults : [...state.featuredSongs, ...state.trendingSongs])
+
+    let queue = pool.filter((s) => s.id !== song.id)
+    if (state.isShuffled) {
+      queue = [...queue]
+      for (let i = queue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [queue[i], queue[j]] = [queue[j], queue[i]]
+      }
+    }
+
     const history = state.currentlyPlaying ? [state.currentlyPlaying, ...state.history] : state.history
+    
     set({
       currentlyPlaying: song,
       playState: PLAY_STATE.PLAYING,
@@ -104,6 +127,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
       duration: 0,
       isBuffering: true,
       queue,
+      originalCollection: pool,
       history,
     })
   },
@@ -116,30 +140,74 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   setCurrentTime: (time) => set({ currentTime: time }),
   setDuration: (duration) => set({ duration }),
 
-  toggleShuffle: () => set((state) => ({ isShuffled: !state.isShuffled, isRepeating: false })),
+  toggleShuffle: () => set((state) => {
+    const isShuffled = !state.isShuffled
+    let newQueue = state.queue
+    if (isShuffled) {
+      newQueue = [...state.queue]
+      for (let i = newQueue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newQueue[i], newQueue[j]] = [newQueue[j], newQueue[i]]
+      }
+    } else {
+      if (state.currentlyPlaying) {
+        const currentIndex = state.originalCollection.findIndex(s => s.id === state.currentlyPlaying?.id)
+        if (currentIndex !== -1) {
+          newQueue = state.originalCollection.slice(currentIndex + 1)
+        } else {
+          newQueue = state.originalCollection
+        }
+      } else {
+        newQueue = state.originalCollection
+      }
+    }
+    return { isShuffled, isRepeating: false, queue: newQueue }
+  }),
   toggleRepeat: () => set((state) => ({ isRepeating: !state.isRepeating, isShuffled: false })),
 
   playNext: () => {
-    const { queue, isShuffled, isRepeating, currentlyPlaying } = get()
+    const { queue, originalCollection, isShuffled, isRepeating, currentlyPlaying } = get()
     if (isRepeating && currentlyPlaying) {
       set({ currentTime: 0, playState: PLAY_STATE.PLAYING })
       return
     }
     const history = currentlyPlaying ? [currentlyPlaying, ...get().history] : get().history
+    
     if (queue.length === 0) {
+      if (isShuffled && originalCollection.length > 1) {
+        const newPool = originalCollection.filter(s => s.id !== currentlyPlaying?.id)
+        const newQueue = [...newPool]
+        for (let i = newQueue.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [newQueue[i], newQueue[j]] = [newQueue[j], newQueue[i]]
+        }
+        if (newQueue.length > 0 && newQueue[0]) {
+          const nextSong = newQueue[0]
+          set({
+            currentlyPlaying: nextSong,
+            playState: PLAY_STATE.PLAYING,
+            currentTime: 0,
+            duration: 0,
+            isBuffering: true,
+            queue: newQueue.slice(1),
+            history,
+          })
+          return
+        }
+      }
       set({ currentlyPlaying: null, playState: PLAY_STATE.IDLE, currentTime: 0, duration: 0, history })
       return
     }
-    const index = isShuffled ? Math.floor(Math.random() * queue.length) : 0
-    const nextSong = queue[index]!
-    const remaining = queue.filter((_, i) => i !== index)
+
+    const nextSong = queue[0]
+    if (!nextSong) return
     set({
       currentlyPlaying: nextSong,
       playState: PLAY_STATE.PLAYING,
       currentTime: 0,
       duration: 0,
       isBuffering: true,
-      queue: remaining,
+      queue: queue.slice(1),
       history,
     })
   },

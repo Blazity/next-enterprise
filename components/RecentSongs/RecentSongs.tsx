@@ -24,7 +24,7 @@ export function RecentSongs() {
     if (currentlyPlaying?.id === song.id) {
       togglePlay()
     } else {
-      setPlayingTrack(song)
+      setPlayingTrack(song, recentSongs)
     }
   }
 
