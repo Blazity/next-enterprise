@@ -5,6 +5,10 @@ import { I18nProvider } from "@/components/I18nProvider/I18nProvider"
 import { PostHogProvider } from "@/components/PostHogProvider/PostHogProvider"
 
 import "styles/tailwind.css"
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -15,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         elements: { card: "bg-[#1a1a2e]", formButtonPrimary: "bg-[#6366f1] hover:bg-[#5558dd]" },
       }}
     >
-      <html lang="en" className="dark">
+      <html lang="en" className={cn("dark", "font-sans", geist.variable)}>
         <body className="bg-surface text-text-primary antialiased">
           <PostHogProvider>
             <I18nProvider>
