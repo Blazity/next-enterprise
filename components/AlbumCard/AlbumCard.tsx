@@ -3,19 +3,28 @@
 
 import Image from "next/image"
 
+import type { ActiveView } from "lib/constants"
 import type { ItunesAlbum } from "lib/itunes/types"
 import { extractReleaseYear } from "lib/itunes/utils"
 
 interface AlbumCardProps {
   album: ItunesAlbum
+  onNavClick?: (view: ActiveView, id?: string) => void
 }
 
-export function AlbumCard({ album }: AlbumCardProps) {
+export function AlbumCard({ album, onNavClick }: AlbumCardProps) {
   const artworkUrl = album.artworkUrl100.replace("100x100", "300x300")
   const year = extractReleaseYear(album.releaseDate)
 
+  function handleClick() {
+    if (onNavClick) onNavClick("album_detail", String(album.collectionId))
+  }
+
   return (
-    <div className="bg-surface rounded-3xl p-4 border border-border transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover active:scale-[0.97]">
+    <div 
+      onClick={handleClick}
+      className="bg-surface rounded-3xl p-4 border border-border transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover active:scale-[0.97] cursor-pointer"
+    >
       <Image
         src={artworkUrl}
         alt={album.collectionName}

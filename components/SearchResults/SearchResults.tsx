@@ -6,6 +6,7 @@ import { ArtistCard } from "components/ArtistCard/ArtistCard"
 import { Skeleton } from "components/Skeleton/Skeleton"
 import { SongCard } from "components/SongCard/SongCard"
 
+import type { ActiveView } from "lib/constants"
 import type { ItunesAlbum, ItunesArtist, ItunesTrack } from "lib/itunes/types"
 
 interface SearchResultsProps {
@@ -14,9 +15,10 @@ interface SearchResultsProps {
   artists: ItunesArtist[]
   isLoading: boolean
   hasSearched: boolean
+  onNavClick: (view: ActiveView, id?: string) => void
 }
 
-export function SearchResults({ songs, albums, artists, isLoading, hasSearched }: SearchResultsProps) {
+export function SearchResults({ songs, albums, artists, isLoading, hasSearched, onNavClick }: SearchResultsProps) {
   if (isLoading) return <SearchSkeletons />
 
   const hasResults = songs.length > 0 || albums.length > 0 || artists.length > 0
@@ -57,7 +59,7 @@ export function SearchResults({ songs, albums, artists, isLoading, hasSearched }
                 className="animate-fade-in-up"
                 style={{ animationDelay: `${i * 50}ms` }}
               >
-                <AlbumCard album={album} />
+                <AlbumCard album={album} onNavClick={onNavClick} />
               </div>
             ))}
           </div>
@@ -73,7 +75,7 @@ export function SearchResults({ songs, albums, artists, isLoading, hasSearched }
                 className="animate-fade-in-up"
                 style={{ animationDelay: `${i * 50}ms` }}
               >
-                <ArtistCard artist={artist} />
+                <ArtistCard artist={artist} onNavClick={onNavClick} />
               </div>
             ))}
           </div>

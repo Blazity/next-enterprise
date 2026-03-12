@@ -166,6 +166,7 @@ function HomeContentWrapper() {
           artists={artists}
           isLoading={isLoadingSearch}
           hasSearched={hasSearched}
+          onNavClick={handleNavClick}
         />
       )}
     </DashboardShell>
