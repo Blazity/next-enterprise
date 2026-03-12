@@ -43,32 +43,39 @@ function PostHogPageView() {
 }
 
 function PostHogIdentify() {
-  const { user } = useUser()
-  const { isSignedIn } = useAuth()
+  const { user, isLoaded: isUserLoaded, isSignedIn } = useUser()
   const posthogClient = usePostHog()
 
   useEffect(() => {
-    if (!posthogClient) return
+    if (!posthogClient || !isUserLoaded) return
 
     if (isSignedIn && user) {
       const email = user.primaryEmailAddress?.emailAddress
       const name = user.fullName
 
+      if (process.env.NODE_ENV !== "production") {
+        console.log("[PostHog] Identifying user:", { id: user.id, email })
+      }
+
       posthogClient.identify(user.id, {
         email,
         name,
+        $email: email, // Standard PostHog person property
       })
 
       // Ensure person-property based flag conditions (e.g. email) are available immediately.
-      posthogClient.setPersonPropertiesForFlags({ email, name }, false)
+      posthogClient.setPersonPropertiesForFlags({ email, name, $email: email }, false)
 
       // Re-evaluate flags for the identified person so targeting rules apply immediately.
       posthogClient.reloadFeatureFlags()
-    } else {
+    } else if (isUserLoaded && !isSignedIn) {
+      if (process.env.NODE_ENV !== "production") {
+        console.log("[PostHog] User signed out or not logged in, resetting client.")
+      }
       posthogClient.reset()
       posthogClient.reloadFeatureFlags()
     }
-  }, [posthogClient, isSignedIn, user])
+  }, [posthogClient, isUserLoaded, isSignedIn, user])
 
   return null
 }
