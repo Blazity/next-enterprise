@@ -7,9 +7,11 @@ import { useCallback, useEffect, useState } from "react"
 
 import { useUser } from "@clerk/nextjs"
 import { ArrowLeft, Check, Clock, Link2, ListMusic, Music, Search, Share2, Trash2, User } from "lucide-react"
+import { motion } from "framer-motion"
 import { useTranslation } from "react-i18next"
 
 import { SharePlaylistDialog } from "@/components/SharePlaylistDialog/SharePlaylistDialog"
+import { Spotlight } from "@/components/ui/spotlight"
 import { cn } from "@/lib/utils"
 import { useMusicStore } from "@/store/musicStore"
 import { usePlaylistStore } from "@/store/playlistStore"
@@ -24,17 +26,34 @@ const config = {
         backHref: "/playlists",
         backLabelKey: "playlist.back",
         HeaderIcon: ListMusic,
-        headerIconClass: "text-accent",
-        headerGradient: "from-accent/30 to-accent/10 shadow-red-500/10",
+        headerIconClass: "text-white drop-shadow-md",
+        headerGradient: "from-cyan-500 via-blue-500 to-indigo-500 shadow-cyan-500/30",
     },
     shared: {
         backHref: "/playlists",
         backLabelKey: "share.sharedWithMe",
         HeaderIcon: Share2,
-        headerIconClass: "text-blue-400",
-        headerGradient: "from-blue-500/30 to-blue-500/10 shadow-blue-500/10",
+        headerIconClass: "text-white drop-shadow-md",
+        headerGradient: "from-blue-600 to-cyan-500 shadow-blue-500/30",
     },
 } as const
+
+const stagger = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: { staggerChildren: 0.05 },
+    },
+}
+
+const item = {
+    hidden: { opacity: 0, y: 12 },
+    show: {
+        opacity: 1,
+        y: 0,
+        transition: { type: "spring", stiffness: 300, damping: 24 } as const,
+    },
+}
 
 export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
     const { t } = useTranslation()
@@ -120,21 +139,32 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
     const { backHref: effBackHref, backLabelKey: effBackLabelKey, HeaderIcon: EffHeaderIcon, headerIconClass: effHeaderIconClass, headerGradient: effHeaderGradient } = config[effectiveVariant]
 
     return (
-        <div className="mx-auto max-w-3xl px-4 py-8 md:px-6">
-            <Link
-                href={effBackHref}
-                className="text-text-tertiary hover:text-white mb-6 inline-flex items-center gap-2 text-sm transition-colors"
-            >
-                <ArrowLeft size={16} />
-                {t(effBackLabelKey)}
-            </Link>
+        <div className="relative mx-auto max-w-3xl px-4 py-8 md:px-6">
+            <div className="absolute inset-x-0 top-0 z-0 h-[600px] pointer-events-none overflow-hidden">
+                <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="rgba(252, 60, 68, 0.07)" />
+            </div>
 
-            {/* Playlist header */}
+            <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="relative z-10"
+            >
+                <Link
+                    href={effBackHref}
+                    className="text-text-tertiary hover:text-white mb-6 inline-flex items-center gap-2 text-sm transition-colors"
+                >
+                    <ArrowLeft size={16} />
+                    {t(effBackLabelKey)}
+                </Link>
+
+                {/* Playlist header */}
             <div className="mb-8 flex items-start gap-5">
-                <div className={cn("flex size-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg", effHeaderGradient)}>
-                    <EffHeaderIcon size={36} className={effHeaderIconClass} />
+                <div className={cn("relative flex size-24 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br shadow-xl", effHeaderGradient)}>
+                    <div className={cn("absolute inset-0 animate-pulse rounded-2xl bg-gradient-to-br blur-md opacity-40", effHeaderGradient)} />
+                    <EffHeaderIcon size={40} className={cn("relative z-10", effHeaderIconClass)} />
                 </div>
-                <div className="min-w-0">
+                <div className="min-w-0 py-1">
                     <h1 className="text-2xl font-bold text-white">{currentPlaylist.name}</h1>
                     {!isOwner && (currentPlaylist.shared_by_name || currentPlaylist.shared_by_email) && (
                         <p className="text-text-tertiary mt-1 text-sm flex items-center gap-1.5">
@@ -233,15 +263,21 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
                     )}
                 </div>
             ) : (
-                <div className="bg-surface-elevated overflow-hidden rounded-xl">
+                <motion.div
+                    variants={stagger}
+                    initial="hidden"
+                    animate="show"
+                    className="bg-surface-list overflow-hidden rounded-xl border border-white/[0.08] shadow-lg shadow-black/20 backdrop-blur-sm"
+                >
                     {songs.map((song, index) => {
                         const isPlaying = currentlyPlaying?.id === song.track_id && playState === PLAY_STATE.PLAYING
                         const isRemoving = removingTrackId === song.track_id
                         return (
-                            <div
+                            <motion.div
+                                variants={item}
                                 key={song.id}
                                 className={cn(
-                                    "group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-white/[0.04]",
+                                    "group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-white/[0.08]",
                                     index < songs.length - 1 && "border-b border-white/[0.06]",
                                     isRemoving && "pointer-events-none opacity-40"
                                 )}
@@ -307,11 +343,12 @@ export function PlaylistDetailView({ variant }: PlaylistDetailViewProps) {
                                         <Trash2 size={16} />
                                     </button>
                                 )}
-                            </div>
+                            </motion.div>
                         )
                     })}
-                </div>
+                </motion.div>
             )}
+            </motion.div>
         </div>
     )
 }

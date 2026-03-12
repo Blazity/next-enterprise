@@ -65,7 +65,7 @@ export function TrendingList() {
     <section className="space-y-4">
       <div className="flex items-center gap-2.5">
         {!searchQuery.trim() && (
-          <div className="bg-accent flex size-7 items-center justify-center rounded-md">
+          <div className="from-accent to-accent-hover flex size-7 items-center justify-center rounded-md bg-gradient-to-br shadow-md shadow-red-500/15">
             <TrendingUp size={14} className="text-white" />
           </div>
         )}
@@ -81,7 +81,7 @@ export function TrendingList() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="bg-surface-elevated flex items-center justify-center rounded-xl py-14"
+              className="bg-surface-list flex items-center justify-center rounded-xl border border-white/[0.08] py-14 backdrop-blur-sm"
             >
               <div className="text-text-tertiary flex items-center gap-2 text-sm">
                 <Loader2 size={16} className="animate-spin" />
@@ -96,7 +96,7 @@ export function TrendingList() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="bg-surface-elevated flex flex-col items-center gap-3 rounded-xl py-14 text-center"
+              className="bg-surface-list flex flex-col items-center gap-3 rounded-xl border border-white/[0.08] py-14 text-center backdrop-blur-sm"
             >
               <p className="text-text-tertiary text-sm">{t("trending.error")}</p>
             </motion.div>,
@@ -108,7 +108,7 @@ export function TrendingList() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="bg-surface-elevated flex flex-col items-center gap-3 rounded-xl py-14 text-center"
+              className="bg-surface-list flex flex-col items-center gap-3 rounded-xl border border-white/[0.08] py-14 text-center backdrop-blur-sm"
             >
               <SearchX size={32} className="text-text-tertiary" />
               <p className="text-text-tertiary text-sm">{t("trending.noResults")}</p>
@@ -121,7 +121,7 @@ export function TrendingList() {
               variants={stagger}
               initial="hidden"
               animate="show"
-              className="bg-surface-elevated rounded-xl"
+              className="bg-surface-list overflow-hidden rounded-xl border border-white/[0.08] backdrop-blur-sm shadow-lg shadow-black/20"
             >
               {displayedSongs.map((song, index) => (
                 <motion.div

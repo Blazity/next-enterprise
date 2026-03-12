@@ -9,6 +9,7 @@ import { Mic2, RefreshCw, WifiOff } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { SongCard } from "@/components/SongCard/SongCard"
+import { Spotlight } from "@/components/ui/spotlight"
 import { type ArtistWithSongs, fetchArtistsBrowse } from "@/lib/services/itunesService"
 import { useMusicStore } from "@/store/musicStore"
 import { PLAY_STATE } from "@/types/music"
@@ -62,16 +63,26 @@ export function ArtistsPageContent() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="from-accent to-accent-hover flex size-10 items-center justify-center rounded-xl bg-gradient-to-br shadow-lg shadow-red-500/20">
-          <Mic2 size={20} className="text-white" />
+    <div className="relative space-y-6">
+      <div className="absolute inset-x-0 top-0 h-[600px] overflow-hidden pointer-events-none z-0">
+        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="rgba(6, 182, 212, 0.07)" />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="flex items-center gap-3"
+      >
+        <div className="from-accent to-accent-hover relative flex size-10 items-center justify-center rounded-xl bg-gradient-to-br shadow-lg shadow-cyan-500/20">
+          <div className="from-accent/20 to-accent-hover/20 absolute inset-0 animate-pulse rounded-xl bg-gradient-to-br blur-md" />
+          <Mic2 size={20} className="relative z-10 text-white" />
         </div>
         <div>
           <h1 className="text-text-primary text-2xl font-bold">{t("artists.title")}</h1>
           <p className="text-text-tertiary text-sm">{t("artists.subtitle", { count: artists.length })}</p>
         </div>
-      </div>
+      </motion.div>
 
       <AnimatePresence mode="wait">
         {error && artists.length === 0 ? (
@@ -91,7 +102,7 @@ export function ArtistsPageContent() {
             </div>
             <button
               onClick={load}
-              className="bg-accent hover:bg-accent-hover inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-white transition-colors"
+              className="bg-accent hover:bg-accent-hover inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-accent/20 transition-all duration-200 hover:shadow-accent/30"
             >
               <RefreshCw size={14} />
               {t("hero.retry")}
@@ -132,13 +143,15 @@ export function ArtistsPageContent() {
             {artists.map((artist) => (
               <motion.div key={artist.id} variants={fadeUp}>
                 <div className="mb-2 flex items-center gap-3 px-1">
-                  <Image
-                    src={artist.image}
-                    alt={artist.name}
-                    width={40}
-                    height={40}
-                    className="size-10 rounded-full object-cover"
-                  />
+                  <div className="relative size-10 overflow-hidden rounded-full ring-1 ring-white/10">
+                    <Image
+                      src={artist.image}
+                      alt={artist.name}
+                      width={40}
+                      height={40}
+                      className="size-10 rounded-full object-cover"
+                    />
+                  </div>
                   <div>
                     <h2 className="text-sm font-semibold text-white">{artist.name}</h2>
                     <p className="text-text-tertiary text-xs">
@@ -146,7 +159,7 @@ export function ArtistsPageContent() {
                     </p>
                   </div>
                 </div>
-                <div className="bg-surface-elevated rounded-xl">
+                <div className="bg-surface-list overflow-hidden rounded-xl border border-white/[0.08] backdrop-blur-sm shadow-lg shadow-black/20">
                   {artist.songs.map((song, index) => (
                     <div
                       key={song.id}

@@ -12,6 +12,10 @@ import { useTranslation } from "react-i18next"
 
 import { PlayButton } from "@/components/PlayButton/PlayButton"
 import { SongCard } from "@/components/SongCard/SongCard"
+import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card"
+import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards"
+import { Spotlight } from "@/components/ui/spotlight"
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect"
 import { cn } from "@/lib/utils"
 import { useMusicStore } from "@/store/musicStore"
 import { PLAY_STATE } from "@/types/music"
@@ -126,11 +130,14 @@ export function HeroSection() {
   }
 
   return (
-    <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-10">
+    <>
+      <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-10 relative">
+        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+      
       {/* Greeting header */}
       <motion.header variants={fadeUp}>
-        <h1 className="text-text-primary text-3xl font-bold tracking-tight">{greeting}</h1>
-        <p className="text-text-tertiary mt-1 text-sm">{t("hero.madeForYou")}</p>
+        <TextGenerateEffect words={greeting} className="text-3xl font-bold tracking-tight" />
+        <p className="text-text-tertiary mt-1 text-sm z-10 relative">{t("hero.madeForYou")}</p>
       </motion.header>
 
       {/* Top Picks for You */}
@@ -146,14 +153,20 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 + i * 0.08, duration: 0.4 }}
             >
-              <SongCard
-                song={song}
-                variant="featured"
-                subtitle={i === 0 ? t("hero.featuredStation") : undefined}
-                isPlaying={currentlyPlaying?.id === song.id && playState === PLAY_STATE.PLAYING}
-                onPlay={() => handlePlay(song.id)}
-                showAddToPlaylist
-              />
+              <CardContainer containerClassName="py-0" className="w-full">
+                <CardBody className="h-auto w-full">
+                  <CardItem translateZ="20" className="w-full">
+                    <SongCard
+                      song={song}
+                      variant="featured"
+                      subtitle={i === 0 ? t("hero.featuredStation") : undefined}
+                      isPlaying={currentlyPlaying?.id === song.id && playState === PLAY_STATE.PLAYING}
+                      onPlay={() => handlePlay(song.id)}
+                      showAddToPlaylist
+                    />
+                  </CardItem>
+                </CardBody>
+              </CardContainer>
             </motion.div>
           ))}
         </div>
@@ -171,80 +184,73 @@ export function HeroSection() {
             aria-hidden="true"
           />
         </Link>
-        <ul
-          className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-2 md:-mx-0 md:gap-5 md:px-0"
-          role="list"
-          aria-label={t("hero.recentlyPlayed")}
-        >
-          {recentlyPlayed.map((song, i) => {
+        <InfiniteMovingCards
+          items={recentlyPlayed}
+          direction="left"
+          speed="normal"
+          className=""
+          renderItem={(song: typeof recentlyPlayed[0]) => {
             const isActive = currentlyPlaying?.id === song.id && playState === PLAY_STATE.PLAYING
             return (
-              <motion.li
-                key={song.id}
-                className="w-40 shrink-0"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + i * 0.05, duration: 0.35 }}
+              <div
+                className="group cursor-pointer focus-visible:outline-none w-full"
+                onClick={() => handlePlay(song.id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    handlePlay(song.id)
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={t("songCard.playSong", { title: song.title, artist: song.artist.name })}
               >
-                <div
-                  className="group cursor-pointer focus-visible:outline-none"
-                  onClick={() => handlePlay(song.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault()
-                      handlePlay(song.id)
-                    }
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={t("songCard.playSong", { title: song.title, artist: song.artist.name })}
-                >
-                  <div className="relative aspect-square w-full overflow-hidden rounded-xl shadow-lg shadow-black/20">
-                    <Image
-                      src={song.albumArt}
-                      alt=""
-                      role="presentation"
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="160px"
-                    />
-                    {/* Hover overlay with play button */}
-                    <div
-                      className={cn(
-                        "absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity duration-200",
-                        isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
-                      )}
-                    >
-                      {isActive ? (
-                        <div className="flex items-end gap-[2px]" aria-label={t("hero.nowPlaying")}>
-                          <span className="animate-eq-1 bg-accent inline-block w-[3px] rounded-full" />
-                          <span className="animate-eq-2 bg-accent inline-block w-[3px] rounded-full" />
-                          <span className="animate-eq-3 bg-accent inline-block w-[3px] rounded-full" />
-                        </div>
-                      ) : (
-                        <PlayButton isPlaying={false} onToggle={() => handlePlay(song.id)} size="sm" tabIndex={-1} />
-                      )}
-                    </div>
-                    {/* Active ring indicator */}
-                    {isActive && <div className="ring-accent pointer-events-none absolute inset-0 rounded-xl ring-2" />}
+                <div className="relative aspect-square w-full overflow-hidden rounded-xl shadow-lg shadow-black/20">
+                  <Image
+                    src={song.albumArt}
+                    alt=""
+                    role="presentation"
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="160px"
+                  />
+                  {/* Hover overlay with play button */}
+                  <div
+                    className={cn(
+                      "absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity duration-200",
+                      isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+                    )}
+                  >
+                    {isActive ? (
+                      <div className="flex items-end gap-[2px]" aria-label={t("hero.nowPlaying")}>
+                        <span className="animate-eq-1 bg-accent inline-block w-[3px] rounded-full" />
+                        <span className="animate-eq-2 bg-accent inline-block w-[3px] rounded-full" />
+                        <span className="animate-eq-3 bg-accent inline-block w-[3px] rounded-full" />
+                      </div>
+                    ) : (
+                      <PlayButton isPlaying={false} onToggle={() => handlePlay(song.id)} size="sm" tabIndex={-1} />
+                    )}
                   </div>
-                  <div className="mt-2.5 space-y-0.5 px-0.5">
-                    <p
-                      className={cn(
-                        "truncate text-[13px] font-semibold",
-                        isActive ? "text-accent" : "text-text-primary"
-                      )}
-                    >
-                      {song.title}
-                    </p>
-                    <p className="text-text-tertiary truncate text-[11px]">{song.artist.name}</p>
-                  </div>
+                  {/* Active ring indicator */}
+                  {isActive && <div className="ring-accent pointer-events-none absolute inset-0 rounded-xl ring-2" />}
                 </div>
-              </motion.li>
+                <div className="mt-2.5 space-y-0.5 px-0.5">
+                  <p
+                    className={cn(
+                      "truncate text-[13px] font-semibold",
+                      isActive ? "text-accent" : "text-text-primary"
+                    )}
+                  >
+                    {song.title}
+                  </p>
+                  <p className="text-text-tertiary truncate text-[11px]">{song.artist.name}</p>
+                </div>
+              </div>
             )
-          })}
-        </ul>
+          }}
+        />
       </motion.section>
     </motion.div>
+    </>
   )
 }

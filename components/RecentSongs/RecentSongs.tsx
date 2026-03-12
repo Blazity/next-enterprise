@@ -3,6 +3,7 @@
 import Image from "next/image"
 
 import { useUser } from "@clerk/nextjs"
+import { motion } from "framer-motion"
 import { Clock, Music2, Pause, Play, X } from "lucide-react"
 
 import { useMusicStore } from "@/store/musicStore"
@@ -33,10 +34,17 @@ export function RecentSongs() {
   }
 
   return (
-    <section className="space-y-3">
+    <motion.section
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.1 }}
+      className="space-y-3"
+    >
       {/* Header */}
       <div className="flex items-center gap-2">
-        <Clock size={16} className="text-white/40" />
+        <div className="flex size-6 items-center justify-center rounded-md bg-white/[0.06]">
+          <Clock size={13} className="text-white/50" />
+        </div>
         <h2 className="text-sm font-semibold tracking-wide text-white/60 uppercase">
           Recent Searches
         </h2>
@@ -44,12 +52,15 @@ export function RecentSongs() {
 
       {/* Horizontal scrollable card row */}
       <div className="scrollbar-hide -mx-1 flex gap-3 overflow-x-auto px-1 pb-1">
-        {recentSongs.map((song) => (
-          <button
+        {recentSongs.map((song, i) => (
+          <motion.button
             key={song.id}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: i * 0.04 }}
             type="button"
             onClick={() => handlePlay(song)}
-            className="group flex w-[140px] shrink-0 flex-col gap-2 rounded-xl bg-white/[0.04] p-2.5 transition-all duration-200 hover:bg-white/[0.08] hover:shadow-lg hover:shadow-black/20 active:scale-[0.97]"
+            className="group flex w-[140px] shrink-0 flex-col gap-2 rounded-xl border border-transparent bg-white/[0.04] p-2.5 transition-all duration-200 hover:border-white/[0.08] hover:bg-white/[0.08] hover:shadow-lg hover:shadow-black/20 active:scale-[0.97]"
           >
             {/* Album Art */}
             <div className="relative aspect-square w-full overflow-hidden rounded-lg shadow-md">
@@ -79,7 +90,7 @@ export function RecentSongs() {
 
               {/* Play/Pause button overlay on hover */}
               <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-all duration-200 group-hover:bg-black/30">
-                <div className="flex size-10 translate-y-2 items-center justify-center rounded-full bg-accent text-white opacity-0 shadow-xl transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
+                <div className="flex size-10 translate-y-2 items-center justify-center rounded-full bg-accent text-white opacity-0 shadow-xl shadow-accent/30 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
                   {currentlyPlaying?.id === song.id && isPlaying ? (
                     <Pause size={16} fill="currentColor" />
                   ) : (
@@ -98,9 +109,9 @@ export function RecentSongs() {
                 {song.artist.name}
               </p>
             </div>
-          </button>
+          </motion.button>
         ))}
       </div>
-    </section>
+    </motion.section>
   )
 }

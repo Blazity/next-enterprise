@@ -19,8 +19,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         elements: { card: "bg-[#1a1a2e]", formButtonPrimary: "bg-[#6366f1] hover:bg-[#5558dd]" },
       }}
     >
-      <html lang="en" className={cn("dark", "font-sans", geist.variable)}>
-        <body className="bg-surface text-text-primary antialiased">
+      <html lang="en" className={cn("dark", "font-sans", "overflow-hidden", geist.variable)}>
+        <body className="bg-surface text-text-primary antialiased overflow-hidden h-screen w-screen">
           <PostHogProvider>
             <I18nProvider>
               <AudioProvider>{children}</AudioProvider>

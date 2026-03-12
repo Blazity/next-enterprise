@@ -94,7 +94,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
   if (variant === "trending") {
     return (
       <div
-        className={cn(songCard({ variant }), className)}
+        className={cn(songCard({ variant }), isPlaying && "bg-accent/[0.06]", className)}
         onClick={() => handlePlayAction("card")}
         onKeyDown={handleKeyDown}
         role="button"
@@ -111,7 +111,10 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
             {rank}
           </span>
         )}
-        <div className="relative size-11 shrink-0 overflow-hidden rounded-lg">
+        <div className={cn(
+          "relative size-11 shrink-0 overflow-hidden rounded-lg transition-shadow duration-300",
+          isPlaying && "shadow-md shadow-accent/20 ring-1 ring-accent/30"
+        )}>
           <Image src={song.albumArt} alt={`${song.title} album art`} fill className="object-cover" sizes="44px" />
           {isPlaying && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50">
@@ -147,7 +150,10 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
       aria-label={songLabel}
     >
       <div className="relative aspect-square w-full">
-        <div className="absolute inset-0 overflow-hidden rounded-xl">
+        <div className={cn(
+          "absolute inset-0 overflow-hidden rounded-xl transition-shadow duration-500",
+          isPlaying && "shadow-xl shadow-accent/20 ring-1 ring-accent/20"
+        )}>
           <Image
             src={song.albumArt}
             alt={`${song.title} album art`}
@@ -156,7 +162,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
             sizes="(min-width: 768px) 33vw, 100vw"
           />
           {/* Bottom gradient with text overlay */}
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-5 pt-16">
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-5 pt-16">
             <p className="text-lg font-bold text-white drop-shadow-lg">{song.title}</p>
             <p className="text-sm text-white/70">{song.artist.name}</p>
             {subtitle && <p className="mt-0.5 text-xs text-white/50">{subtitle}</p>}
@@ -172,7 +178,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
         </div>
         {/* Playing indicator */}
         {isPlaying && (
-          <div className="absolute bottom-20 left-4 z-10 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1">
+          <div className="absolute bottom-20 left-4 z-10 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 backdrop-blur-sm">
             <EqBars />
             <span className="text-accent text-[11px] font-medium">{t("songCard.playing")}</span>
           </div>

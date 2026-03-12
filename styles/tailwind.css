@@ -24,16 +24,17 @@
 }
 
 @theme {
-  --color-surface: #1a1a1a;
-  --color-surface-elevated: #232323;
-  --color-surface-hover: #2a2a2a;
-  --color-surface-sidebar: #1e1e1e;
-  --color-accent: #fc3c44;
-  --color-accent-hover: #ff5a5f;
+  --color-surface: #050a0f;
+  --color-surface-elevated: rgba(255, 255, 255, 0.06);
+  --color-surface-hover: rgba(255, 255, 255, 0.12);
+  --color-surface-sidebar: rgba(255, 255, 255, 0.04);
+  --color-surface-list: rgba(255, 255, 255, 0.07);
+  --color-accent: #06b6d4;
+  --color-accent-hover: #22d3ee;
   --color-text-primary: #ffffff;
-  --color-text-secondary: #a1a1a1;
-  --color-text-tertiary: #6a6a6a;
-  --color-border: rgba(255, 255, 255, 0.08);
+  --color-text-secondary: #cbd5e1;
+  --color-text-tertiary: #94a3b8;
+  --color-border: rgba(255, 255, 255, 0.12);
 
   --animate-fade-in: fade-in 0.4s ease both;
   --animate-slide-up: slide-up 0.4s ease both;

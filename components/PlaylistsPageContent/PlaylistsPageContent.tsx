@@ -5,13 +5,24 @@ import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 
 import { useUser } from "@clerk/nextjs"
+import { AnimatePresence, motion } from "framer-motion"
 import { ListMusic, MoreHorizontal, Pencil, Plus, Share2, Trash2 } from "lucide-react"
 import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { useTranslation } from "react-i18next"
 
 import { ComingSoon } from "@/components/ComingSoon/ComingSoon"
+import { Spotlight } from "@/components/ui/spotlight"
 import { cn } from "@/lib/utils"
 import { usePlaylistStore } from "@/store/playlistStore"
+
+const stagger = {
+  show: { transition: { staggerChildren: 0.04 } },
+}
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+}
 
 export function PlaylistsPageContent() {
   const { t } = useTranslation()
@@ -88,184 +99,225 @@ export function PlaylistsPageContent() {
     )
   }
 
-  // Feature flag only controls Create button — the page always renders
-  // so invited users can see their shared playlists
-
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 md:px-6">
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">{t("nav.playlists")}</h1>
+    <div className="relative mx-auto max-w-3xl px-4 py-8 md:px-6">
+      <div className="absolute inset-x-0 top-0 h-[600px] overflow-hidden pointer-events-none z-0">
+        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="rgba(252, 60, 68, 0.07)" />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="mb-8 flex items-center justify-between"
+      >
+        <div className="flex items-center gap-3">
+          <div className="from-cyan-500 via-blue-500 to-indigo-500 relative flex size-12 items-center justify-center rounded-xl bg-gradient-to-br shadow-xl shadow-cyan-500/30">
+            <div className="from-cyan-500/40 via-blue-500/40 to-indigo-500/40 absolute inset-0 animate-pulse rounded-xl bg-gradient-to-br blur-md" />
+            <ListMusic size={24} className="relative z-10 text-white drop-shadow-md" />
+          </div>
+          <h1 className="text-3xl font-bold tracking-tight text-white">{t("nav.playlists")}</h1>
+        </div>
         {playlistFeatureEnabled && (
           <button
             onClick={() => setShowCreate(true)}
-            className="bg-accent hover:bg-accent-hover flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
+            className="from-cyan-600 to-blue-500 hover:from-cyan-500 hover:to-blue-400 relative overflow-hidden flex items-center gap-2 rounded-xl bg-gradient-to-r px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-500/25 transition-all duration-300 hover:scale-105 hover:shadow-cyan-500/40 active:scale-95"
           >
-            <Plus size={18} />
-            New Playlist
+            <div className="absolute inset-0 bg-white/20 opacity-0 hover:opacity-100 transition-opacity" />
+            <Plus size={18} className="relative z-10" />
+            <span className="relative z-10">New Playlist</span>
           </button>
         )}
-      </div>
+      </motion.div>
 
       {error && <p className="mb-4 rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</p>}
 
-      {/* Create form — only visible when feature is enabled */}
-      {playlistFeatureEnabled && showCreate && (
-        <div className="mb-6 rounded-xl border border-white/[0.08] bg-white/[0.03] p-5">
-          <h2 className="mb-4 text-lg font-semibold text-white">Create New Playlist</h2>
-          <input
-            type="text"
-            placeholder="Playlist name"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleCreate()}
-            autoFocus
-            className="mb-3 w-full rounded-lg border border-white/[0.1] bg-white/[0.05] px-4 py-2.5 text-sm text-white placeholder-white/40 outline-none focus:border-white/20"
-          />
-          <input
-            type="text"
-            placeholder="Description (optional)"
-            value={newDesc}
-            onChange={(e) => setNewDesc(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleCreate()}
-            className="mb-4 w-full rounded-lg border border-white/[0.1] bg-white/[0.05] px-4 py-2.5 text-sm text-white placeholder-white/40 outline-none focus:border-white/20"
-          />
-          <div className="flex gap-3">
-            <button
-              onClick={handleCreate}
-              disabled={!newName.trim()}
-              className="bg-accent hover:bg-accent-hover rounded-lg px-5 py-2 text-sm font-medium text-white transition-colors disabled:opacity-40"
-            >
-              Create
-            </button>
-            <button
-              onClick={() => {
-                setShowCreate(false)
-                setNewName("")
-                setNewDesc("")
-              }}
-              className="rounded-lg px-5 py-2 text-sm font-medium text-white/60 transition-colors hover:text-white"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Create form */}
+      <AnimatePresence>
+        {playlistFeatureEnabled && showCreate && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mb-6 overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.03]"
+          >
+            <div className="p-5">
+              <h2 className="mb-4 text-lg font-semibold text-white">Create New Playlist</h2>
+              <input
+                type="text"
+                placeholder="Playlist name"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+                autoFocus
+                className="mb-3 w-full rounded-lg border border-white/[0.1] bg-white/[0.05] px-4 py-2.5 text-sm text-white placeholder-white/40 outline-none transition-colors focus:border-accent/40"
+              />
+              <input
+                type="text"
+                placeholder="Description (optional)"
+                value={newDesc}
+                onChange={(e) => setNewDesc(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+                className="mb-4 w-full rounded-lg border border-white/[0.1] bg-white/[0.05] px-4 py-2.5 text-sm text-white placeholder-white/40 outline-none transition-colors focus:border-accent/40"
+              />
+              <div className="flex gap-3">
+                <button
+                  onClick={handleCreate}
+                  disabled={!newName.trim()}
+                  className="bg-accent hover:bg-accent-hover rounded-lg px-5 py-2 text-sm font-medium text-white shadow-lg shadow-accent/20 transition-all duration-200 disabled:opacity-40 disabled:shadow-none"
+                >
+                  Create
+                </button>
+                <button
+                  onClick={() => {
+                    setShowCreate(false)
+                    setNewName("")
+                    setNewDesc("")
+                  }}
+                  className="rounded-lg px-5 py-2 text-sm font-medium text-white/60 transition-colors hover:text-white"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Playlist list — always visible so users see what they own/claimed */}
+      {/* Playlist list */}
       {playlists.length === 0 && !showCreate ? (
-        <div className="flex min-h-[30vh] flex-col items-center justify-center text-center">
-          <ListMusic size={48} className="mb-4 text-white/20" />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex min-h-[30vh] flex-col items-center justify-center text-center"
+        >
+          <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-white/[0.04]">
+            <ListMusic size={32} className="text-white/20" />
+          </div>
           <p className="text-lg font-medium text-white/60">No playlists yet</p>
           {playlistFeatureEnabled && (
             <p className="text-text-tertiary mt-1 text-sm">Create your first playlist to get started</p>
           )}
-        </div>
+        </motion.div>
       ) : (
-        <div className="space-y-2">
+        <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-2">
           {playlists.map((playlist) => (
-            <Link
-              key={playlist.id}
-              href={`/playlist/${playlist.id}`}
-              className="group relative flex items-center gap-4 rounded-xl px-4 py-3.5 transition-colors hover:bg-white/[0.04]"
-            >
-              <div className="from-accent/20 to-accent/5 flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br">
-                <ListMusic size={22} className="text-accent" />
-              </div>
+            <motion.div key={playlist.id} variants={fadeUp}>
+              <Link
+                href={`/playlist/${playlist.id}`}
+                className="group relative flex items-center gap-4 rounded-xl border border-transparent px-4 py-3.5 transition-all duration-200 hover:border-white/[0.06] hover:bg-white/[0.04]"
+              >
+                <div className="from-accent/20 to-accent/5 flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br">
+                  <ListMusic size={22} className="text-accent" />
+                </div>
 
-              {editingId === playlist.id ? (
-                <div className="flex flex-1 flex-col gap-2" onClick={(e) => e.preventDefault()}>
-                  <input
-                    type="text"
-                    value={editName}
-                    onChange={(e) => setEditName(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleUpdate()}
-                    autoFocus
-                    className="rounded-lg border border-white/[0.1] bg-white/[0.05] px-3 py-1.5 text-sm text-white outline-none focus:border-white/20"
-                  />
-                  <input
-                    type="text"
-                    value={editDesc}
-                    onChange={(e) => setEditDesc(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleUpdate()}
-                    placeholder="Description"
-                    className="rounded-lg border border-white/[0.1] bg-white/[0.05] px-3 py-1.5 text-sm text-white placeholder-white/40 outline-none focus:border-white/20"
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault()
-                        handleUpdate()
-                      }}
-                      className="bg-accent rounded-md px-3 py-1 text-xs font-medium text-white"
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault()
-                        setEditingId(null)
-                      }}
-                      className="rounded-md px-3 py-1 text-xs text-white/60 hover:text-white"
-                    >
-                      Cancel
-                    </button>
+                {editingId === playlist.id ? (
+                  <div className="flex flex-1 flex-col gap-2" onClick={(e) => e.preventDefault()}>
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleUpdate()}
+                      autoFocus
+                      className="rounded-lg border border-white/[0.1] bg-white/[0.05] px-3 py-1.5 text-sm text-white outline-none focus:border-accent/40"
+                    />
+                    <input
+                      type="text"
+                      value={editDesc}
+                      onChange={(e) => setEditDesc(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleUpdate()}
+                      placeholder="Description"
+                      className="rounded-lg border border-white/[0.1] bg-white/[0.05] px-3 py-1.5 text-sm text-white placeholder-white/40 outline-none focus:border-accent/40"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleUpdate()
+                        }}
+                        className="bg-accent rounded-md px-3 py-1 text-xs font-medium text-white"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          setEditingId(null)
+                        }}
+                        className="rounded-md px-3 py-1 text-xs text-white/60 hover:text-white"
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-white">{playlist.name}</p>
-                  <p className="text-text-tertiary truncate text-xs">
-                    {playlist.description || `${playlist.song_count || 0} songs`}
-                  </p>
-                </div>
-              )}
-
-              <span className="text-text-tertiary text-xs">{playlist.song_count || 0} songs</span>
-
-              {/* Menu */}
-              <div className="relative" onClick={(e) => e.preventDefault()}>
-                <button
-                  onClick={() => setMenuOpenId(menuOpenId === playlist.id ? null : playlist.id)}
-                  className={cn(
-                    "rounded-lg p-2 text-white/40 transition-colors hover:bg-white/[0.06] hover:text-white",
-                    "opacity-100 md:opacity-0 md:group-hover:opacity-100",
-                    menuOpenId === playlist.id && "opacity-100"
-                  )}
-                >
-                  <MoreHorizontal size={18} />
-                </button>
-                {menuOpenId === playlist.id && (
-                  <div className="absolute right-0 z-10 mt-1 w-36 rounded-lg border border-white/[0.08] bg-[#1a1a2e] py-1 shadow-xl">
-                    <button
-                      onClick={() => startEdit(playlist)}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white/80 hover:bg-white/[0.06]"
-                    >
-                      <Pencil size={14} /> Rename
-                    </button>
-                    <button
-                      onClick={() => handleDelete(playlist.id)}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-red-400 hover:bg-white/[0.06]"
-                    >
-                      <Trash2 size={14} /> Delete
-                    </button>
+                ) : (
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-white">{playlist.name}</p>
+                    <p className="text-text-tertiary truncate text-xs">
+                      {playlist.description || `${playlist.song_count || 0} songs`}
+                    </p>
                   </div>
                 )}
-              </div>
-            </Link>
+
+                <span className="text-text-tertiary text-xs">{playlist.song_count || 0} songs</span>
+
+                {/* Menu */}
+                <div className="relative" onClick={(e) => e.preventDefault()}>
+                  <button
+                    onClick={() => setMenuOpenId(menuOpenId === playlist.id ? null : playlist.id)}
+                    className={cn(
+                      "rounded-lg p-2 text-white/40 transition-all duration-200 hover:bg-white/[0.06] hover:text-white",
+                      "opacity-100 md:opacity-0 md:group-hover:opacity-100",
+                      menuOpenId === playlist.id && "opacity-100"
+                    )}
+                  >
+                    <MoreHorizontal size={18} />
+                  </button>
+                  <AnimatePresence>
+                    {menuOpenId === playlist.id && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: -4 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -4 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 z-10 mt-1 w-36 overflow-hidden rounded-lg border border-white/[0.08] bg-[#1a1a2e] py-1 shadow-xl shadow-black/40"
+                      >
+                        <button
+                          onClick={() => startEdit(playlist)}
+                          className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white/80 transition-colors hover:bg-white/[0.06]"
+                        >
+                          <Pencil size={14} /> Rename
+                        </button>
+                        <button
+                          onClick={() => handleDelete(playlist.id)}
+                          className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-red-400 transition-colors hover:bg-white/[0.06]"
+                        >
+                          <Trash2 size={14} /> Delete
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
 
       {/* Shared with me */}
       {sharedPlaylists.length > 0 && (
-        <>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
           <h2 className="mb-4 mt-10 text-lg font-semibold text-white">{t("share.sharedWithMe")}</h2>
           <div className="space-y-2">
             {sharedPlaylists.map((playlist) => (
               <Link
                 key={playlist.id}
                 href={`/playlist/${playlist.id}`}
-                className="group relative flex items-center gap-4 rounded-xl px-4 py-3.5 transition-colors hover:bg-white/[0.04]"
+                className="group relative flex items-center gap-4 rounded-xl border border-transparent px-4 py-3.5 transition-all duration-200 hover:border-white/[0.06] hover:bg-white/[0.04]"
               >
                 <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-500/5">
                   <Share2 size={22} className="text-blue-400" />
@@ -280,7 +332,7 @@ export function PlaylistsPageContent() {
               </Link>
             ))}
           </div>
-        </>
+        </motion.div>
       )}
     </div>
   )

@@ -13,7 +13,7 @@ const playButton = cva(
     "justify-center",
     "rounded-full",
     "transition-all",
-    "duration-150",
+    "duration-200",
     "focus-visible:outline-none",
     "focus-visible:ring-2",
     "focus-visible:ring-accent",
@@ -50,7 +50,14 @@ export function PlayButton({ isPlaying, onToggle, size = "md", className, ...pro
       type="button"
       aria-label={isPlaying ? t("playButton.pause") : t("playButton.play")}
       onClick={onToggle}
-      className={cn(playButton({ size }), "bg-white/10 text-white hover:bg-white/20 active:scale-90", className)}
+      className={cn(
+        playButton({ size }),
+        isPlaying
+          ? "bg-accent text-white shadow-lg shadow-accent/30 hover:bg-accent-hover hover:shadow-accent/40"
+          : "bg-white/10 text-white hover:bg-white/20 hover:shadow-lg hover:shadow-black/20",
+        "active:scale-90",
+        className
+      )}
       {...props}
     >
       {isPlaying ? (

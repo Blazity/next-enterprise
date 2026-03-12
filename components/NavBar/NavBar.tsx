@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 
 import { UserButton, useUser } from "@clerk/nextjs"
+import { motion } from "framer-motion"
 import { Disc3, Home, ListMusic, Mic2, Music2, Search, Share2 } from "lucide-react"
 import { usePostHog } from "posthog-js/react"
 
@@ -15,6 +16,20 @@ import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
 import { usePlaylistStore } from "@/store/playlistStore"
 import { useShareLinkStore } from "@/store/shareLinkStore"
+
+const sidebarVariants = {
+  hidden: { x: -20, opacity: 0 },
+  show: {
+    x: 0,
+    opacity: 1,
+    transition: { staggerChildren: 0.04, delayChildren: 0.1 },
+  },
+}
+
+const itemVariant = {
+  hidden: { x: -12, opacity: 0 },
+  show: { x: 0, opacity: 1, transition: { duration: 0.3, ease: [0, 0, 0.2, 1] as const } },
+} as const
 
 const mainNav = [
   { href: "/", labelKey: "nav.home", Icon: Home },
@@ -99,7 +114,7 @@ export function NavBar() {
   return (
     <nav
       aria-label={t("nav.streamify")}
-      className="bg-surface-sidebar/95 md:bg-surface-sidebar fixed inset-x-0 bottom-0 z-50 border-t border-white/[0.06] backdrop-blur-xl md:static md:inset-x-auto md:z-auto md:w-[240px] md:shrink-0 md:border-t-0 md:border-r md:border-white/[0.06] md:backdrop-blur-none"
+      className="bg-surface-sidebar fixed inset-x-0 bottom-0 z-50 border-t border-white/[0.08] backdrop-blur-2xl md:static md:inset-x-auto md:z-auto md:w-[240px] md:shrink-0 md:border-t-0 md:border-r md:border-white/[0.08]"
     >
       {/* ── Mobile bottom tab bar ── */}
       <div className="flex items-center gap-2 overflow-x-auto px-2 py-2 md:hidden">
@@ -115,12 +130,19 @@ export function NavBar() {
               onClick={() => captureNavClick(item.href, "mobile")}
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex min-w-[68px] shrink-0 flex-col items-center gap-0.5 rounded-md px-2 py-1 text-[10px] font-medium transition-colors",
-                isActive ? "text-accent" : "text-text-tertiary"
+                "relative flex min-w-[68px] shrink-0 flex-col items-center gap-0.5 rounded-md px-2 py-1.5 text-[10px] font-medium transition-all duration-200",
+                isActive ? "text-accent" : "text-text-tertiary active:scale-95"
               )}
             >
-              <item.Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
-              <span className="truncate max-w-[68px]">{label}</span>
+              {isActive && (
+                <motion.div
+                  layoutId="mobile-tab-indicator"
+                  className="bg-accent/15 absolute inset-0 rounded-lg"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              <item.Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} className="relative z-10" />
+              <span className="relative z-10 truncate max-w-[68px]">{label}</span>
             </Link>
           )
         })}
@@ -130,58 +152,79 @@ export function NavBar() {
       </div>
 
       {/* ── Desktop sidebar ── */}
-      <div className="hidden h-full flex-col md:flex">
+      <motion.div
+        variants={sidebarVariants}
+        initial="hidden"
+        animate="show"
+        className="hidden h-full flex-col md:flex"
+      >
         {/* Brand */}
-        <div className="flex items-center gap-2.5 px-5 pt-6 pb-5">
-          <div className="from-accent to-accent-hover flex size-9 items-center justify-center rounded-xl bg-gradient-to-br shadow-lg shadow-red-500/20">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <motion.div variants={itemVariant} className="flex items-center gap-2.5 px-5 pt-6 pb-5">
+          <div className="from-accent to-accent-hover relative flex size-9 items-center justify-center rounded-xl bg-gradient-to-br shadow-lg shadow-cyan-500/25">
+            <div className="from-accent/30 to-accent-hover/30 absolute inset-0 animate-pulse rounded-xl bg-gradient-to-br blur-md" />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="relative z-10">
               <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2" />
               <circle cx="12" cy="12" r="3" fill="white" />
               <path d="M12 2a10 10 0 0 1 10 10" stroke="white" strokeWidth="2" strokeLinecap="round" />
             </svg>
           </div>
           <span className="text-[17px] font-bold tracking-tight text-white">{t("nav.streamify")}</span>
-        </div>
+        </motion.div>
 
         {/* Main navigation */}
         <div className="space-y-0.5 px-3">
           {mainNav.map((item) => {
             const isActive = pathname === item.href
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => captureNavClick(item.href, "main")}
-                aria-current={isActive ? "page" : undefined}
-                className={cn(
-                  "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
-                  isActive ? "bg-white/[0.08] text-white" : "text-text-secondary hover:bg-white/[0.04] hover:text-white"
-                )}
-              >
-                <item.Icon
-                  size={20}
+              <motion.div key={item.href} variants={itemVariant}>
+                <Link
+                  href={item.href}
+                  onClick={() => captureNavClick(item.href, "main")}
+                  aria-current={isActive ? "page" : undefined}
                   className={cn(
-                    "shrink-0 transition-colors",
-                    isActive ? "text-accent" : "text-text-tertiary group-hover:text-white"
+                    "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                    isActive ? "text-white" : "text-text-secondary hover:bg-white/[0.04] hover:text-white"
                   )}
-                  strokeWidth={isActive ? 2.2 : 1.7}
-                />
-                <span className="truncate">
-                  {"labelParam" in item ? t(item.labelKey, { name: item.labelParam }) : t(item.labelKey)}
-                </span>
-              </Link>
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-active-bg"
+                      className="absolute inset-0 rounded-lg bg-white/[0.08]"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                  <item.Icon
+                    size={20}
+                    className={cn(
+                      "relative z-10 shrink-0 transition-all duration-200",
+                      isActive ? "text-accent drop-shadow-[0_0_6px_rgba(6,182,212,0.5)]" : "text-text-tertiary group-hover:text-white"
+                    )}
+                    strokeWidth={isActive ? 2.2 : 1.7}
+                  />
+                  <span className="relative z-10 truncate">
+                    {"labelParam" in item ? t(item.labelKey, { name: item.labelParam }) : t(item.labelKey)}
+                  </span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-active-dot"
+                      className="bg-accent absolute left-0 h-5 w-[3px] rounded-r-full shadow-[0_0_8px_rgba(6,182,212,0.6)]"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              </motion.div>
             )
           })}
         </div>
 
         {/* Divider */}
-        <div className="mx-5 my-4 h-px bg-white/[0.06]" />
+        <div className="mx-5 my-4 h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
 
         {/* Library section */}
         <div className="flex-1 overflow-y-auto px-3">
-          <div className="mb-2 flex items-center justify-between px-3">
+          <motion.div variants={itemVariant} className="mb-2 flex items-center justify-between px-3">
             <p className="text-text-tertiary text-[11px] font-semibold tracking-widest uppercase">{t("nav.library")}</p>
-          </div>
+          </motion.div>
           <div className="space-y-0.5">
             {filteredLibraryNav.map((item) => {
               const isActive = pathname === item.href
@@ -189,35 +232,50 @@ export function NavBar() {
                 ? t(item.labelKey, { name: item.labelParam || t("share.unknownOwner") })
                 : t(item.labelKey)
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => captureNavClick(item.href, "library")}
-                  aria-current={isActive ? "page" : undefined}
-                  className={cn(
-                    "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
-                    isActive
-                      ? "bg-white/[0.08] text-white"
-                      : "text-text-secondary hover:bg-white/[0.04] hover:text-white"
-                  )}
-                >
-                  <item.Icon
-                    size={20}
+                <motion.div key={item.href} variants={itemVariant}>
+                  <Link
+                    href={item.href}
+                    onClick={() => captureNavClick(item.href, "library")}
+                    aria-current={isActive ? "page" : undefined}
                     className={cn(
-                      "shrink-0 transition-colors",
-                      isActive ? "text-accent" : "text-text-tertiary group-hover:text-white"
+                      "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                      isActive
+                        ? "text-white"
+                        : "text-text-secondary hover:bg-white/[0.04] hover:text-white"
                     )}
-                    strokeWidth={isActive ? 2.2 : 1.7}
-                  />
-                  <span>{label}</span>
-                </Link>
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="nav-active-bg"
+                        className="absolute inset-0 rounded-lg bg-white/[0.08]"
+                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      />
+                    )}
+                    <item.Icon
+                      size={20}
+                      className={cn(
+                        "relative z-10 shrink-0 transition-all duration-200",
+                        isActive ? "text-accent drop-shadow-[0_0_6px_rgba(6,182,212,0.5)]" : "text-text-tertiary group-hover:text-white"
+                      )}
+                      strokeWidth={isActive ? 2.2 : 1.7}
+                    />
+                    <span className="relative z-10">{label}</span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="nav-active-dot"
+                        className="bg-accent absolute left-0 h-5 w-[3px] rounded-r-full shadow-[0_0_8px_rgba(6,182,212,0.6)]"
+                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      />
+                    )}
+                  </Link>
+                </motion.div>
               )
             })}
           </div>
         </div>
 
         {/* User profile — pinned to bottom */}
-        <div className="mt-auto border-t border-white/[0.06] px-4 py-3">
+        <motion.div variants={itemVariant} className="mt-auto border-t border-white/[0.06] px-4 py-3">
           <div className="flex items-center gap-3">
             <UserButton />
             {user?.firstName && (
@@ -227,8 +285,8 @@ export function NavBar() {
               </div>
             )}
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </nav>
   )
 }
