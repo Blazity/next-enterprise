@@ -26,20 +26,22 @@
   Animations: animate-shimmer, animate-pulse-glow, animate-spin-slow
 */
 @theme {
-  --color-bg: #121212;
-  --color-surface: #181818;
-  --color-surface-elevated: #282828;
-  --color-surface-hover: #2a2a2a;
-  --color-primary: #f5f5f0;
-  --color-primary-hover: #e8e8e0;
-  --color-secondary: #d6d6c2;
-  --color-muted: #a7a7a7;
-  --color-border: #282828;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-hover: var(--surface-hover);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
 
   --animate-shimmer: shimmer 1.5s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 1.2s ease-in-out infinite;
+  --animate-pulse-scale: pulse-scale 2s ease-in-out infinite;
   --animate-spin-slow: spin 1s linear infinite;
   --animate-spin-album: spin 4s linear infinite;
+  --animate-spin-very-slow: spin 8s linear infinite;
   --animate-eq-bar-1: eq-bar-1 0.8s ease-in-out infinite;
   --animate-eq-bar-2: eq-bar-2 0.6s ease-in-out infinite;
   --animate-eq-bar-3: eq-bar-3 0.7s ease-in-out infinite;
@@ -53,8 +55,42 @@
   --animate-border-rotate: border-rotate 3s linear infinite;
 }
 
-/* Non-Tailwind tokens — gradients, shadows, radius, transitions */
 :root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-elevated: #f5f5f5;
+  --surface-hover: #fafafa;
+  --primary: #000000;
+  --primary-hover: #171717;
+  --secondary: #171717;
+  --muted: #404040;
+  --border: #f0f0f0;
+
+  --color-text-muted: #404040;
+  --color-text-secondary: #525252;
+
+  --gradient-primary: linear-gradient(135deg, #000000 0%, #171717 100%);
+  --gradient-button: linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #171717 100%);
+  --gradient-button-hover: linear-gradient(180deg, #171717 0%, #262626 50%, #404040 100%);
+  --gradient-dark-card: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.03);
+  --shadow-card-hover: 0 12px 24px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.01);
+  --shadow-glow-sm: 0 0 8px rgba(0, 0, 0, 0.06);
+  --shadow-glow-md: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.dark {
+  --bg: #121212;
+  --surface: #181818;
+  --surface-elevated: #282828;
+  --surface-hover: #2a2a2a;
+  --primary: #f5f5f0;
+  --primary-hover: #e8e8e0;
+  --secondary: #d6d6c2;
+  --muted: #a7a7a7;
+  --border: #282828;
+
   --color-text-muted: #a7a7a7;
   --color-text-secondary: #71717a;
 
@@ -67,7 +103,10 @@
   --shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(245, 245, 240, 0.15);
   --shadow-glow-sm: 0 0 12px rgba(245, 245, 240, 0.3);
   --shadow-glow-md: 0 4px 12px rgba(245, 245, 240, 0.4);
+}
 
+/* Non-Tailwind tokens — radius, transitions (Shared) */
+:root {
   --radius-card: 24px;
   --radius-button: 14px;
   --radius-badge: 100px;
@@ -80,7 +119,7 @@
 @layer base {
   body {
     background-color: var(--color-bg);
-    color: white;
+    color: var(--primary);
     font-family: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
@@ -105,6 +144,11 @@
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.6; }
   50% { opacity: 1; }
+}
+
+@keyframes pulse-scale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 @keyframes spin {
@@ -160,22 +204,28 @@
 /* Custom utilities — gradients and shadows not expressible as single Tailwind values */
 @layer utilities {
   .bg-gradient-brand {
-    background: linear-gradient(135deg, #f5f5f0 0%, #d6d6c2 100%);
+    background: var(--gradient-primary);
   }
   .bg-gradient-btn {
-    background: linear-gradient(180deg, #f5f5f0 0%, #e8e8e0 50%, #d6d6c2 100%);
+    background: var(--gradient-button);
   }
   .shimmer-bg {
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, var(--surface-hover) 50%, transparent 100%);
   }
   .shadow-glow-sm {
-    box-shadow: 0 0 12px rgba(245, 245, 240, 0.3);
+    box-shadow: var(--shadow-glow-sm);
   }
   .shadow-glow-md {
-    box-shadow: 0 4px 20px rgba(245, 245, 240, 0.5);
+    box-shadow: var(--shadow-glow-md);
+  }
+  .shadow-glow-lg {
+    box-shadow: 0 0 32px rgba(0, 0, 0, 0.25);
+  }
+  .dark .shadow-glow-lg {
+    box-shadow: 0 0 32px rgba(245, 245, 240, 0.35);
   }
   .shadow-card-hover {
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(245, 245, 240, 0.15);
+    box-shadow: var(--shadow-card-hover);
   }
 
   .animate-fade-in-up {

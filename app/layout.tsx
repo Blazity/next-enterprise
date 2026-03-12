@@ -6,8 +6,9 @@ import { ClerkProvider } from "@clerk/nextjs"
 import { MiniPlayer } from "components/MiniPlayer/MiniPlayer"
 import PostHogPageView from "components/Providers/PostHogPageView"
 import { PostHogProvider } from "components/Providers/PostHogProvider"
+import { ThemeProvider } from "components/Providers/ThemeProvider"
+import { ClerkThemeProvider } from "../components/Providers/ClerkThemeProvider"
 import { ToastContainer } from "components/Toast/ToastContainer"
-import { CLERK_APPEARANCE } from "lib/constants"
 
 import "styles/tailwind.css"
 
@@ -25,19 +26,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider appearance={CLERK_APPEARANCE}>
-      <html lang="en" className={dmSans.variable}>
-        <body className={`${dmSans.variable} font-sans antialiased bg-bg text-white`}>
-          <PostHogProvider>
-            <Suspense fallback={null}>
-              <PostHogPageView />
-            </Suspense>
-            {children}
-          </PostHogProvider>
-          <ToastContainer />
-          <MiniPlayer />
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className={dmSans.variable} suppressHydrationWarning>
+      <body className={`${dmSans.variable} font-sans antialiased`}>
+        <ThemeProvider>
+          <ClerkThemeProvider>
+            <PostHogProvider>
+              <Suspense fallback={null}>
+                <PostHogPageView />
+              </Suspense>
+              {children}
+            </PostHogProvider>
+            <ToastContainer />
+            <MiniPlayer />
+          </ClerkThemeProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   )
 }
