@@ -16,8 +16,8 @@ export function ToastContainer() {
           key={toast.id}
           className={cn(
             "pointer-events-auto min-w-[280px] max-w-md p-4 rounded-xl border shadow-2xl flex items-center justify-between gap-4 animate-fade-in-up",
-            toast.type === "success" && "bg-[#121212] border-primary/20 text-primary",
-            toast.type === "error" && "bg-red-500/10 border-red-500/20 text-red-200",
+            toast.type === "success" && "bg-surface-elevated border-primary/20 text-primary",
+            toast.type === "error" && "bg-red-50 dark:bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-200",
             toast.type === "info" && "bg-surface-elevated border-border text-primary"
           )}
         >
