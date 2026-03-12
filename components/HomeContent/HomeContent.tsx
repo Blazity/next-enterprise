@@ -19,15 +19,16 @@ import { isVisibleInView } from "lib/utils"
 import { usePlayerStore } from "store/usePlayerStore"
 
 interface HomeContentProps {
-  activeView: Exclude<ActiveView, "search" | "playlists">
+  activeView: Exclude<ActiveView, "search" | "playlists" | "album_detail" | "artist_detail">
   onPlaylistClick: (id: string) => void
+  onNavClick: (view: ActiveView, id?: string) => void
 }
 
 const FEATURED_SONG_COUNT = 3
 const ALBUM_GRID_COUNT = 6
 const ARTIST_DISPLAY_COUNT = 6
 
-export function HomeContent({ activeView }: HomeContentProps) {
+export function HomeContent({ activeView, onNavClick }: HomeContentProps) {
   const [trendingSongs, setTrendingSongs] = useState<ItunesTrack[]>([])
   const [topAlbums, setTopAlbums] = useState<ItunesAlbum[]>([])
   const [popularArtists, setPopularArtists] = useState<ItunesArtist[]>([])
@@ -83,7 +84,7 @@ export function HomeContent({ activeView }: HomeContentProps) {
         <h2 className="text-xl font-bold text-white tracking-[-0.01em] mb-4">Top Albums</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {topAlbums.map((album) => (
-            <AlbumTile key={album.collectionId} album={album} />
+            <AlbumTile key={album.collectionId} album={album} onNavClick={onNavClick} />
           ))}
         </div>
       </section>
@@ -96,7 +97,7 @@ export function HomeContent({ activeView }: HomeContentProps) {
         <h2 className="text-xl font-bold text-white tracking-[-0.01em] mb-4">Popular Artists</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {popularArtists.map((artist) => (
-            <ArtistTile key={artist.artistId} artist={artist} />
+            <ArtistTile key={artist.artistId} artist={artist} onNavClick={onNavClick} />
           ))}
         </div>
       </section>
@@ -114,7 +115,7 @@ export function HomeContent({ activeView }: HomeContentProps) {
     <BentoGrid>
       {/* Hero — Featured Song (large, 2 cols) */}
       {featuredSong && (
-        <BentoCard colSpan={2} rowSpan={2} className="p-0 relative">
+        <BentoCard colSpan={2} rowSpan={2} className="p-0 md:p-0 xl:p-0 relative">
           <div className="absolute inset-0">
             <Image
               src={featuredArtwork}
@@ -125,17 +126,17 @@ export function HomeContent({ activeView }: HomeContentProps) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
           </div>
-          <div className="relative z-10 flex flex-col justify-end h-full p-6 md:p-8">
+          <div className="relative z-10 flex flex-col justify-end h-full p-6 md:p-8 lg:p-10">
             <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-primary mb-2">
               Trending Now
             </span>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-1 line-clamp-2">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 line-clamp-2">
               {featuredSong.trackName}
             </h2>
-            <p className="text-sm text-white/70 mb-5">
+            <p className="text-sm md:text-base text-white/70 mb-6">
               {featuredSong.artistName} &middot; {featuredSong.collectionName}
             </p>
-            <div className="flex flex-col gap-0.5 max-w-md">
+            <div className="flex flex-col gap-1 md:gap-2 max-w-md">
               {restSongs.map((track) => (
                 <GlassSongRow key={track.trackId} track={track} />
               ))}
@@ -147,12 +148,17 @@ export function HomeContent({ activeView }: HomeContentProps) {
       {/* Top Artists */}
       {isVisibleInView(activeView, "artists") && artistsToShow.length > 0 && (
         <BentoCard rowSpan={2} className="flex flex-col">
-          <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-muted mb-4">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-muted mb-5">
             Popular Artists
           </h3>
-          <div className="flex flex-col gap-3 flex-1">
+          <div className="flex flex-col gap-3 md:gap-4 flex-1">
             {artistsToShow.map((artist, index) => (
-              <ArtistRow key={artist.artistId} artist={artist} rank={index + 1} />
+              <ArtistRow 
+                key={artist.artistId} 
+                artist={artist} 
+                rank={index + 1} 
+                onNavClick={onNavClick}
+              />
             ))}
           </div>
         </BentoCard>
@@ -161,13 +167,13 @@ export function HomeContent({ activeView }: HomeContentProps) {
 
       {/* Top Albums — full width mosaic */}
       {isVisibleInView(activeView, "albums") && albumsToShow.length > 0 && (
-        <BentoCard colSpan={3} className="p-5">
-          <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-muted mb-3">
+        <BentoCard colSpan={3} className="p-5 md:p-7 xl:p-8">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-muted mb-4 md:mb-5">
             Top Albums
           </h3>
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 md:gap-4 lg:gap-5">
             {albumsToShow.map((album) => (
-              <AlbumTile key={album.collectionId} album={album} compact />
+              <AlbumTile key={album.collectionId} album={album} compact onNavClick={onNavClick} />
             ))}
           </div>
         </BentoCard>
@@ -243,7 +249,15 @@ function GlassSongRow({ track }: { track: ItunesTrack }) {
   )
 }
 
-function ArtistRow({ artist, rank }: { artist: ItunesArtist; rank: number }) {
+function ArtistRow({ 
+  artist, 
+  rank, 
+  onNavClick 
+}: { 
+  artist: ItunesArtist; 
+  rank: number;
+  onNavClick?: (view: ActiveView, id?: string) => void
+}) {
   const initials = artist.artistName
     .split(" ")
     .slice(0, 2)
@@ -251,8 +265,17 @@ function ArtistRow({ artist, rank }: { artist: ItunesArtist; rank: number }) {
     .join("")
     .toUpperCase()
 
+  const handleClick = () => {
+    if (onNavClick) {
+      onNavClick("artist_detail", String(artist.artistId))
+    }
+  }
+
   return (
-    <div className="flex items-center gap-3 group/artist">
+    <div 
+      onClick={handleClick}
+      className="flex items-center gap-3 group/artist cursor-pointer hover:bg-white/5 transition-colors p-1 rounded-lg"
+    >
       <span className="w-4 text-xs text-muted text-right shrink-0">{rank}</span>
       {artist.artworkUrl ? (
         <Image
@@ -268,7 +291,9 @@ function ArtistRow({ artist, rank }: { artist: ItunesArtist; rank: number }) {
         </div>
       )}
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-white truncate m-0">{artist.artistName}</p>
+        <p className="text-sm font-medium text-white truncate m-0 group-hover/artist:text-primary transition-colors">
+          {artist.artistName}
+        </p>
         <p className="text-[11px] text-muted m-0 uppercase tracking-[0.06em]">
           {artist.primaryGenreName}
         </p>
@@ -277,13 +302,19 @@ function ArtistRow({ artist, rank }: { artist: ItunesArtist; rank: number }) {
   )
 }
 
-function AlbumTile({ album, compact }: { album: ItunesAlbum; compact?: boolean }) {
+function AlbumTile({ album, compact, onNavClick }: { album: ItunesAlbum; compact?: boolean, onNavClick?: (view: ActiveView, id?: string) => void }) {
   const artworkUrl = album.artworkUrl100.replace("100x100", "300x300")
   const year = extractReleaseYear(album.releaseDate)
 
+  function handleClick() {
+    if (onNavClick) onNavClick("album_detail", String(album.collectionId))
+  }
+
   return (
-    <div className={cn(
-      "group/album relative overflow-hidden rounded-xl transition-all duration-200",
+    <div 
+      onClick={handleClick}
+      className={cn(
+      "group/album relative overflow-hidden rounded-xl transition-all duration-200 cursor-pointer",
       "hover:scale-105 hover:z-10",
       compact ? "aspect-square" : "bg-surface border border-border rounded-3xl p-4"
     )}>
@@ -312,7 +343,7 @@ function AlbumTile({ album, compact }: { album: ItunesAlbum; compact?: boolean }
   )
 }
 
-function ArtistTile({ artist }: { artist: ItunesArtist }) {
+function ArtistTile({ artist, onNavClick }: { artist: ItunesArtist, onNavClick?: (view: ActiveView, id?: string) => void }) {
   const initials = artist.artistName
     .split(" ")
     .slice(0, 2)
@@ -320,8 +351,15 @@ function ArtistTile({ artist }: { artist: ItunesArtist }) {
     .join("")
     .toUpperCase()
 
+  function handleClick() {
+    if (onNavClick) onNavClick("artist_detail", String(artist.artistId))
+  }
+
   return (
-    <div className="bg-surface rounded-3xl px-4 py-6 border border-border text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover">
+    <div 
+      onClick={handleClick}
+      className="bg-surface rounded-3xl px-4 py-6 border border-border text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover cursor-pointer"
+    >
       {artist.artworkUrl ? (
         <Image
           src={artist.artworkUrl}

@@ -1,6 +1,6 @@
 // App-level constants — non-iTunes, non-i18n
 
-export const ACTIVE_VIEWS = ["home", "search", "songs", "albums", "artists", "playlists"] as const
+export const ACTIVE_VIEWS = ["home", "search", "songs", "albums", "artists", "playlists", "album_detail", "artist_detail"] as const
 export type ActiveView = (typeof ACTIVE_VIEWS)[number]
 
 // Typing placeholder animation speeds (ms)
@@ -15,6 +15,7 @@ export const SEARCH_DEBOUNCE_MS = 400
 // Clerk appearance — only override accent color, let Clerk handle the rest
 export const CLERK_APPEARANCE = {
   variables: {
-    colorPrimary: "#FBBF24",
+    colorPrimary: "#f5f5f0",
+    colorTextOnPrimaryBackground: "#111111",
   },
 } as const

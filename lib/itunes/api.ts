@@ -108,3 +108,37 @@ export async function fetchPopularArtists(): Promise<ItunesArtist[]> {
       return [artist]
     })
 }
+
+export async function fetchAlbumWithTracks(albumId: string): Promise<{ album: ItunesAlbum; tracks: ItunesTrack[] } | null> {
+  const response = await fetch(`/api/itunes/lookup?id=${albumId}&entity=song`)
+  if (!response.ok) return null
+
+  const data = (await response.json()) as ItunesSearchResponse<ItunesAlbum | ItunesTrack>
+  
+  const album = data.results.find((r) => r.wrapperType === "collection") as ItunesAlbum | undefined
+  const tracks = data.results.filter((r) => r.wrapperType === "track") as ItunesTrack[]
+  
+  if (!album) return null
+
+  return { album, tracks }
+}
+
+export async function fetchArtistWithTopSongs(artistId: string): Promise<{ artist: ItunesArtist; tracks: ItunesTrack[] } | null> {
+  const response = await fetch(`/api/itunes/lookup?id=${artistId}&entity=song`)
+  if (!response.ok) return null
+  
+  const data = (await response.json()) as ItunesSearchResponse<ItunesArtist | ItunesTrack>
+  
+  const artist = data.results.find((r) => r.wrapperType === "artist") as ItunesArtist | undefined
+  const tracks = data.results.filter((r) => r.wrapperType === "track") as ItunesTrack[]
+  
+  if (!artist) return null
+  
+  // iTunes artist entity usually lacks artwork, fallback to the top track's artwork
+  const firstTrack = tracks[0]
+  if (!artist.artworkUrl && firstTrack) {
+    artist.artworkUrl = firstTrack.artworkUrl100?.replace("100x100", "440x440")
+  }
+  
+  return { artist, tracks }
+}

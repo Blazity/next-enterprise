@@ -4,7 +4,6 @@ import { DM_Sans } from "next/font/google"
 import { ClerkProvider } from "@clerk/nextjs"
 
 import { MiniPlayer } from "components/MiniPlayer/MiniPlayer"
-import MusicCursor from "components/MusicCursor/MusicCursor"
 import PostHogPageView from "components/Providers/PostHogPageView"
 import { PostHogProvider } from "components/Providers/PostHogProvider"
 import { ToastContainer } from "components/Toast/ToastContainer"
@@ -37,7 +36,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </PostHogProvider>
           <ToastContainer />
           <MiniPlayer />
-          <MusicCursor />
         </body>
       </html>
     </ClerkProvider>

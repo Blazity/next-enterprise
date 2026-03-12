@@ -30,9 +30,9 @@
   --color-surface: #181818;
   --color-surface-elevated: #282828;
   --color-surface-hover: #2a2a2a;
-  --color-primary: #fbbf24;
-  --color-primary-hover: #f59e0b;
-  --color-secondary: #d97706;
+  --color-primary: #f5f5f0;
+  --color-primary-hover: #e8e8e0;
+  --color-secondary: #d6d6c2;
   --color-muted: #a7a7a7;
   --color-border: #282828;
 
@@ -58,15 +58,15 @@
   --color-text-muted: #a7a7a7;
   --color-text-secondary: #71717a;
 
-  --gradient-primary: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-  --gradient-button: linear-gradient(180deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
-  --gradient-button-hover: linear-gradient(180deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  --gradient-primary: linear-gradient(135deg, #f5f5f0 0%, #d6d6c2 100%);
+  --gradient-button: linear-gradient(180deg, #f5f5f0 0%, #e8e8e0 50%, #d6d6c2 100%);
+  --gradient-button-hover: linear-gradient(180deg, #e8e8e0 0%, #d6d6c2 50%, #c2c2b3 100%);
   --gradient-dark-card: linear-gradient(135deg, #18181b 0%, #27272a 100%);
 
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
-  --shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(251, 191, 36, 0.15);
-  --shadow-glow-sm: 0 0 12px rgba(251, 191, 36, 0.3);
-  --shadow-glow-md: 0 4px 12px rgba(251, 191, 36, 0.4);
+  --shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(245, 245, 240, 0.15);
+  --shadow-glow-sm: 0 0 12px rgba(245, 245, 240, 0.3);
+  --shadow-glow-md: 0 4px 12px rgba(245, 245, 240, 0.4);
 
   --radius-card: 24px;
   --radius-button: 14px;
@@ -160,22 +160,22 @@
 /* Custom utilities — gradients and shadows not expressible as single Tailwind values */
 @layer utilities {
   .bg-gradient-brand {
-    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+    background: linear-gradient(135deg, #f5f5f0 0%, #d6d6c2 100%);
   }
   .bg-gradient-btn {
-    background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+    background: linear-gradient(180deg, #f5f5f0 0%, #e8e8e0 50%, #d6d6c2 100%);
   }
   .shimmer-bg {
     background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
   }
   .shadow-glow-sm {
-    box-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+    box-shadow: 0 0 12px rgba(245, 245, 240, 0.3);
   }
   .shadow-glow-md {
-    box-shadow: 0 4px 20px rgba(251, 191, 36, 0.5);
+    box-shadow: 0 4px 20px rgba(245, 245, 240, 0.5);
   }
   .shadow-card-hover {
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(251, 191, 36, 0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(245, 245, 240, 0.15);
   }
 
   .animate-fade-in-up {

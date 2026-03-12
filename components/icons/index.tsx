@@ -118,6 +118,26 @@ export function EqualizerIcon({ className, width = 14, height = 14 }: IconProps)
   )
 }
 
+export function MenuIcon({ className, width = 20, height = 20, strokeWidth = 2 }: IconProps) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
+  )
+}
+
 export function DiscoverLogoIcon({ className, width = 16, height = 16 }: IconProps) {
   return (
     <svg width={width} height={height} viewBox="0 0 512 512" fill="currentColor" className={className}>

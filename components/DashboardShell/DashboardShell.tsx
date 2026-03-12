@@ -11,7 +11,7 @@ import { usePlaylistStore } from "store/usePlaylistStore"
 interface DashboardShellProps {
   children: ReactNode
   activeView: ActiveView
-  onNavClick: (view: ActiveView) => void
+  onNavClick: (view: ActiveView, id?: string) => void
   query: string
   onQueryChange: (value: string) => void
 }
@@ -25,30 +25,46 @@ export function DashboardShell({
 }: DashboardShellProps) {
   const { selectedPlaylistId, setSelectedPlaylistId } = usePlaylistStore()
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 
   return (
-    <div className="flex h-screen overflow-hidden pb-[72px] box-border bg-bg">
+    <div className="flex h-screen overflow-hidden pb-[110px] md:pb-[96px] box-border bg-bg">
+      {/* Backdrop for mobile */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] md:hidden transition-opacity duration-300"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       <Sidebar
         activeView={activeView}
-        onNavClick={onNavClick}
+        onNavClick={(view) => {
+          onNavClick(view)
+          setIsMobileMenuOpen(false)
+        }}
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
         onSharedPlaylistClick={(id) => {
           setSelectedPlaylistId(id)
           onNavClick("playlists")
+          setIsMobileMenuOpen(false)
         }}
         selectedPlaylistId={selectedPlaylistId}
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
       />
 
-      <div className="flex-1 flex flex-col overflow-hidden bg-bg">
+      <div className="flex-1 flex flex-col overflow-hidden bg-bg relative">
         <TopNav
           query={query}
           inputRef={searchInputRef}
           onChange={onQueryChange}
+          onMenuClick={() => setIsMobileMenuOpen(true)}
         />
 
-        <main className="flex-1 overflow-y-auto px-8 py-7">
+        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-5 md:py-7">
           {children}
         </main>
       </div>

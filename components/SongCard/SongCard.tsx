@@ -77,13 +77,13 @@ export function SongCard({ track }: SongCardProps) {
         <p className={cn("text-sm font-medium truncate m-0", isCurrentTrack ? "text-primary" : "text-white")}>
           {track.trackName}
         </p>
-        <p className="text-xs text-muted truncate mt-0.5 m-0">
-          {track.artistName} · {track.collectionName}
+        <p className="text-[11px] md:text-xs text-muted truncate mt-0.5 m-0 uppercase tracking-wide">
+          {track.artistName} <span className="hidden sm:inline">· {track.collectionName}</span>
         </p>
       </div>
 
-      {/* Duration */}
-      <span className="text-xs text-muted shrink-0 mr-2">
+      {/* Duration - Hide on very small screens to save space */}
+      <span className="hidden sm:block text-xs text-muted shrink-0 mr-2">
         {formatDuration(track.trackTimeMillis)}
       </span>
 
@@ -104,7 +104,7 @@ export function SongCard({ track }: SongCardProps) {
         )}
       >
         {isActiveAndPlaying ? (
-          <PauseIcon width={12} height={12} className="text-white" />
+          <PauseIcon width={12} height={12} className="text-[#111111]" />
         ) : (
           <PlayIcon width={12} height={12} className={isCurrentTrack ? "text-primary" : "text-muted"} />
         )}

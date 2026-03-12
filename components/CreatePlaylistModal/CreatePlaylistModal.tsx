@@ -54,11 +54,11 @@ export function CreatePlaylistModal({ onClose }: CreatePlaylistModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full max-w-md bg-surface border border-[#27272a] rounded-2xl shadow-xl overflow-hidden animate-fade-in-up">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#27272a]">
-          <h2 className="text-xl font-bold text-white m-0">Create Playlist</h2>
+        <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-[#27272a]">
+          <h2 className="text-lg md:text-xl font-bold text-white m-0">Create Playlist</h2>
           <button
             onClick={onClose}
             className="size-8 rounded-full border-0 bg-transparent flex items-center justify-center text-muted hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
@@ -68,7 +68,7 @@ export function CreatePlaylistModal({ onClose }: CreatePlaylistModalProps) {
         </div>
 
         {/* Body */}
-        <form onSubmit={handleSubmit} className="p-6">
+        <form onSubmit={handleSubmit} className="p-4 md:p-6">
           <div className="flex flex-col gap-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-white mb-2">

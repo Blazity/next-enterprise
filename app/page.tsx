@@ -5,17 +5,20 @@
 // wednesday-design: dark surfaces, green accents, card rows, premium feel
 // wednesday-dev: local useState for search, useRef for input focus
 
-import { useEffect, useRef, useState } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useAuth } from "@clerk/nextjs"
 import { useFeatureFlagEnabled } from "posthog-js/react"
 
+import { AlbumDetailView } from "components/AlbumDetailView/AlbumDetailView"
+import { ArtistDetailView } from "components/ArtistDetailView/ArtistDetailView"
 import { DashboardShell } from "components/DashboardShell/DashboardShell"
 import { HomeContent } from "components/HomeContent/HomeContent"
 import { PlaylistsView } from "components/PlaylistsView/PlaylistsView"
 import { SearchResults } from "components/SearchResults/SearchResults"
 
 import { getSharedWithMe } from "lib/api/playlists"
-import { type ActiveView, SEARCH_DEBOUNCE_MS } from "lib/constants"
+import { ACTIVE_VIEWS, type ActiveView, SEARCH_DEBOUNCE_MS } from "lib/constants"
 import { useDebounce } from "lib/hooks/useDebounce"
 import { useRequireAuth } from "lib/hooks/useRequireAuth"
 import { searchAlbums, searchArtists, searchSongs } from "lib/itunes/api"
@@ -25,9 +28,22 @@ import { usePlaylistStore } from "store/usePlaylistStore"
 
 
 export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="h-screen bg-bg" />}>
+      <HomeContentWrapper />
+    </Suspense>
+  )
+}
+
+function HomeContentWrapper() {
   const { getToken, isSignedIn } = useAuth()
   const { requireAuth } = useRequireAuth()
-  const [activeView, setActiveView] = useState<ActiveView>("home")
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  
+  const viewParam = searchParams.get("view") as ActiveView | null
+  const activeView = viewParam && ACTIVE_VIEWS.includes(viewParam) ? viewParam : "home"
+
   const [query, setQuery] = useState("")
   const [songs, setSongs] = useState<ItunesTrack[]>([])
   const [albums, setAlbums] = useState<ItunesAlbum[]>([])
@@ -42,9 +58,9 @@ export default function HomePage() {
 
   useEffect(() => {
     if (activeView === "playlists" && !isPlaylistEnabled) {
-      setActiveView("home")
+      router.replace("/?view=home", { scroll: false })
     }
-  }, [activeView, isPlaylistEnabled])
+  }, [activeView, isPlaylistEnabled, router])
 
   useEffect(() => {
     async function loadShared() {
@@ -67,7 +83,9 @@ export default function HomePage() {
   useEffect(() => {
     if (!debouncedQuery) return
     requireAuth(async () => {
-      setActiveView("search")
+      if (activeView !== "search") {
+        router.push("/?view=search", { scroll: false })
+      }
       setIsLoadingSearch(true)
       setHasSearched(true)
 
@@ -89,13 +107,16 @@ export default function HomePage() {
     })
   }, [debouncedQuery])
 
-  function handleNavClick(view: ActiveView) {
+  function handleNavClick(view: ActiveView, id?: string) {
     if (view === "playlists") {
-      requireAuth(() => setActiveView(view))
+      requireAuth(() => router.push(`/?view=${view}`, { scroll: false }))
       return
     }
 
-    setActiveView(view)
+    let url = `/?view=${view}`
+    if (id) url += `&id=${id}`
+    router.push(url, { scroll: false })
+    
     if (view === "search") {
       setTimeout(() => searchInputRef.current?.focus(), 50)
     }
@@ -103,7 +124,9 @@ export default function HomePage() {
 
   function handleQueryChange(value: string) {
     setQuery(value)
-    if (!value) setActiveView("home")
+    if (!value && activeView === "search") {
+      router.push("/?view=home", { scroll: false })
+    }
   }
 
   return (
@@ -115,14 +138,19 @@ export default function HomePage() {
     >
       {activeView === "playlists" ? (
         <PlaylistsView />
+      ) : activeView === "album_detail" ? (
+        <AlbumDetailView onBack={() => handleNavClick("albums")} />
+      ) : activeView === "artist_detail" ? (
+        <ArtistDetailView onBack={() => handleNavClick("artists")} />
       ) : ternary(
         isHomeView(activeView),
         <HomeContent 
-          activeView={activeView as Exclude<ActiveView, "search" | "playlists">} 
+          activeView={activeView as Exclude<ActiveView, "search" | "playlists" | "album_detail" | "artist_detail">} 
           onPlaylistClick={(id) => {
             setSelectedPlaylistId(id)
-            setActiveView("playlists")
+            handleNavClick("playlists")
           }}
+          onNavClick={handleNavClick}
         />,
         <SearchResults
           songs={songs}

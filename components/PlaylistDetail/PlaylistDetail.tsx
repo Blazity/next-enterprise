@@ -143,7 +143,7 @@ export function PlaylistDetail({ playlistId, onBack, initialData }: PlaylistDeta
                   )}
                 </div>
               )}
-              <h1 className="text-4xl font-extrabold text-white m-0 tracking-tight leading-tight">{playlist.name}</h1>
+              <h2 className="text-xl md:text-3xl font-extrabold text-white m-0 tracking-tight leading-tight line-clamp-2">{playlist.name}</h2>
               {playlist.sharedBy && (
                 <p className="text-[#a1a1aa] text-sm font-medium mt-1 m-0 flex items-center gap-1">
                   Curated by <span className="text-primary">{playlist.sharedBy}</span>
@@ -191,15 +191,16 @@ export function PlaylistDetail({ playlistId, onBack, initialData }: PlaylistDeta
           </div>
         ) : (
           enrichedTracks.map((track, i) => (
-            <div key={`${track.trackId}-${i}`} className="group relative pr-12">
+            <div key={`${track.trackId}-${i}`} className="group relative pr-10 sm:pr-12">
               <SongCard track={track} />
               <button
                 onClick={() => handleRemove(track.trackId)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 size-8 rounded-full bg-red-500/10 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center border-0 cursor-pointer hover:bg-red-500/20"
+                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 size-7 sm:size-8 rounded-full bg-red-500/10 text-red-400 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center border-0 cursor-pointer hover:bg-red-500/20"
                 aria-label="Remove track"
                 title="Remove track"
               >
-                <CloseIcon width={12} height={12} /> {/* Just using an icon for removal indicator */}
+                <CloseIcon width={10} height={10} className="sm:hidden" />
+                <CloseIcon width={12} height={12} className="hidden sm:block" />
               </button>
             </div>
           ))

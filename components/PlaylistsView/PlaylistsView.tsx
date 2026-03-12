@@ -72,7 +72,7 @@ export function PlaylistsView() {
     <div className="animate-fade-in-up">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight m-0">Your Playlists</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight m-0">Your Playlists</h1>
           <p className="text-muted mt-1.5 m-0 text-sm sm:text-base">Create and manage your music collections.</p>
         </div>
         <button
@@ -148,7 +148,7 @@ export function PlaylistsView() {
                       e.stopPropagation()
                       setPlaylistToDelete({ id: playlist.id, name: playlist.name })
                     }}
-                    className="shrink-0 size-8 rounded-lg flex items-center justify-center text-muted hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all border-0 cursor-pointer"
+                    className="shrink-0 size-8 rounded-lg flex items-center justify-center text-muted hover:text-red-400 hover:bg-red-500/10 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-all border-0 cursor-pointer"
                     aria-label="Delete playlist"
                   >
                     <TrashIcon width={16} height={16} />

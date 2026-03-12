@@ -136,11 +136,11 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
-      <div className="w-full max-w-md bg-surface border border-[#27272a] rounded-2xl shadow-xl overflow-hidden animate-fade-in-up">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+      <div className="w-full max-w-md bg-surface border border-[#27272a] rounded-2xl shadow-xl overflow-hidden animate-fade-in-up max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#27272a]">
-          <h2 className="text-xl font-bold text-white m-0 truncate pr-4">Share "{playlistName}"</h2>
+        <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-[#27272a] shrink-0">
+          <h2 className="text-lg md:text-xl font-bold text-white m-0 truncate pr-4">Share "{playlistName}"</h2>
           <button
             onClick={onClose}
             className="size-8 rounded-full border-0 bg-transparent flex items-center justify-center text-muted hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
@@ -149,7 +149,7 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
           </button>
         </div>
 
-        <div className="p-6">
+        <div className="p-4 md:p-6 overflow-y-auto flex-1 custom-scrollbar">
           {/* Public Link Section */}
           <div className="mb-6 p-4 bg-[#111111] border border-[#27272a] rounded-xl">
              <div className="flex items-center justify-between mb-3">

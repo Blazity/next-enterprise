@@ -45,7 +45,7 @@ export function BentoCard({ children, className, colSpan = 1, rowSpan = 1 }: Ben
   return (
     <div
       className={cn(
-        "group relative overflow-hidden rounded-3xl border border-border bg-surface p-6",
+        "group relative overflow-hidden rounded-3xl md:rounded-[2rem] border border-border bg-surface p-5 md:p-7 xl:p-8",
         "transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover",
         COL_SPAN_MAP[colSpan],
         ROW_SPAN_MAP[rowSpan],

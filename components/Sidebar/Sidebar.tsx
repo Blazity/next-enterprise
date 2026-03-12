@@ -13,8 +13,7 @@ import {
   HomeIcon, 
   LinkIcon,
   MusicNoteIcon, 
-  PlaylistIcon, 
-  SearchIcon,
+  PlaylistIcon,
   UsersIcon
 } from "components/icons"
 import { cn } from "lib/cn"
@@ -28,6 +27,8 @@ interface SidebarProps {
   onToggleCollapse: () => void
   onSharedPlaylistClick?: (id: string) => void
   selectedPlaylistId?: string | null
+  isOpen?: boolean
+  onClose?: () => void
 }
 
 interface NavItemProps {
@@ -61,17 +62,18 @@ function NavItem({ label, isActive, isCollapsed, icon, onClick }: NavItemProps) 
 export function Sidebar({ 
   activeView, 
   onNavClick, 
-  isCollapsed, 
+  isCollapsed,
   onToggleCollapse,
   onSharedPlaylistClick,
-  selectedPlaylistId
+  selectedPlaylistId,
+  isOpen,
+  onClose
 }: SidebarProps) {
   const { playlists, sharedPlaylists } = usePlaylistStore()
   const isPlaylistEnabled = useFeatureFlagEnabled("playlist-feature") ?? false
 
   const navItems: { label: string; view: ActiveView; icon: React.ReactNode }[] = [
     { label: "Home", view: "home", icon: <HomeIcon /> },
-    { label: "Search", view: "search", icon: <SearchIcon width={20} height={20} /> },
     { label: "Songs", view: "songs", icon: <MusicNoteIcon /> },
     ...(isPlaylistEnabled ? [{ label: "Playlists", view: "playlists" as ActiveView, icon: <PlaylistIcon /> }] : []),
     { label: "Albums", view: "albums", icon: <AlbumIcon /> },
@@ -81,8 +83,11 @@ export function Sidebar({
   return (
     <aside
       className={cn(
-        "shrink-0 bg-[#111111] flex flex-col py-4 px-2 overflow-y-auto overflow-x-hidden transition-[width] duration-300 ease-out",
-        isCollapsed ? "w-[60px]" : "w-[220px]"
+        "shrink-0 bg-[#111111] flex flex-col py-4 px-2 overflow-y-auto overflow-x-hidden transition-[width,transform] duration-300 ease-out z-[100]",
+        isCollapsed ? "w-[60px]" : "w-[220px]",
+        // Mobile behavior
+        "fixed md:relative inset-y-0 left-0 -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none",
+        isOpen && "translate-x-0"
       )}
     >
       {/* Logo + collapse toggle */}
@@ -91,25 +96,32 @@ export function Sidebar({
         isCollapsed ? "px-0 justify-center" : "px-4 gap-2.5"
       )}>
         <div className="size-[30px] rounded-lg bg-gradient-brand flex items-center justify-center shrink-0 shadow-glow-sm">
-          <DiscoverLogoIcon className="text-white" />
+          <DiscoverLogoIcon className="text-[#111111]" />
         </div>
         {!isCollapsed && (
           <span className="text-[15px] font-bold text-white truncate">Sonara</span>
         )}
         {!isCollapsed && <div className="flex-1" />}
+        
+        {/* Mobile close button / Desktop collapse toggle */}
         <button
-          onClick={onToggleCollapse}
+          onClick={onClose || onToggleCollapse}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           className={cn(
-            "size-6 rounded-md bg-transparent border-0 cursor-pointer flex items-center justify-center text-muted hover:text-white transition-all duration-300 shrink-0",
+            "size-8 md:size-6 rounded-md bg-white/5 md:bg-transparent border-0 cursor-pointer flex items-center justify-center text-muted hover:text-white transition-all duration-300 shrink-0",
             isCollapsed && "mt-4"
           )}
         >
           <ChevronLeftIcon
             width={14}
             height={14}
-            className={cn("transition-transform duration-300", isCollapsed && "rotate-180")}
+            className={cn("transition-transform duration-300", isCollapsed && "rotate-180", onClose ? "hidden md:flex" : "flex")}
           />
+          {onClose && (
+            <span className="md:hidden">
+              <ChevronLeftIcon width={16} height={16} />
+            </span>
+          )}
         </button>
       </div>
 
