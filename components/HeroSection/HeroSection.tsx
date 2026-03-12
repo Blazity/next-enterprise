@@ -132,7 +132,9 @@ export function HeroSection() {
   return (
     <>
       <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-10 relative">
+      <div className="absolute inset-x-0 top-0 h-[600px] overflow-hidden pointer-events-none z-0">
         <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+      </div>
       
       {/* Greeting header */}
       <motion.header variants={fadeUp}>
@@ -193,7 +195,7 @@ export function HeroSection() {
             const isActive = currentlyPlaying?.id === song.id && playState === PLAY_STATE.PLAYING
             return (
               <div
-                className="group cursor-pointer focus-visible:outline-none w-full"
+                className="group cursor-pointer focus-visible:outline-none w-full transition-transform duration-300 hover:scale-[1.03] hover:z-30 relative"
                 onClick={() => handlePlay(song.id)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
@@ -205,13 +207,13 @@ export function HeroSection() {
                 tabIndex={0}
                 aria-label={t("songCard.playSong", { title: song.title, artist: song.artist.name })}
               >
-                <div className="relative aspect-square w-full overflow-hidden rounded-xl shadow-lg shadow-black/20">
+                <div className="relative aspect-square w-full overflow-hidden rounded-xl shadow-lg shadow-black/20 transition-all duration-300 group-hover:shadow-black/40 group-hover:shadow-2xl">
                   <Image
                     src={song.albumArt}
                     alt=""
                     role="presentation"
                     fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                     sizes="160px"
                   />
                   {/* Hover overlay with play button */}
