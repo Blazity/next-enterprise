@@ -24,7 +24,7 @@ export function AlbumCard({ album }: AlbumCardProps) {
         className="rounded-xl block w-full h-auto aspect-square object-cover"
       />
       <div className="mt-3">
-        <p className="text-sm font-semibold text-white truncate m-0">
+        <p className="text-sm font-semibold text-primary truncate m-0">
           {album.collectionName}
         </p>
         <p className="text-xs text-muted mt-1 m-0 truncate">

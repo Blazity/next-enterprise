@@ -105,7 +105,7 @@ export function PlaylistDetail({ playlistId, onBack, initialData }: PlaylistDeta
   if (!playlist) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-xl font-bold text-white mb-2">Playlist not found</h2>
+        <h2 className="text-xl font-bold text-primary mb-2">Playlist not found</h2>
         <button onClick={onBack} className="text-primary hover:underline bg-transparent border-0 cursor-pointer">
           Playlists
         </button>
@@ -120,7 +120,7 @@ export function PlaylistDetail({ playlistId, onBack, initialData }: PlaylistDeta
         <div className="flex flex-col gap-1.5">
           <button
             onClick={onBack}
-            className="flex items-center gap-1.5 p-0 -ml-0.5 rounded-lg border-0 bg-transparent text-[13px] font-medium text-[#71717a] hover:text-white transition-colors cursor-pointer w-fit"
+            className="flex items-center gap-1.5 p-0 -ml-0.5 rounded-lg border-0 bg-transparent text-[13px] font-medium text-muted hover:text-primary transition-colors cursor-pointer w-fit"
             aria-label="Back to playlists"
           >
             <ChevronLeftIcon width={14} height={14} strokeWidth={2.5} />
@@ -143,9 +143,9 @@ export function PlaylistDetail({ playlistId, onBack, initialData }: PlaylistDeta
                   )}
                 </div>
               )}
-              <h2 className="text-xl md:text-3xl font-extrabold text-white m-0 tracking-tight leading-tight line-clamp-2">{playlist.name}</h2>
+              <h2 className="text-xl md:text-3xl font-extrabold text-primary m-0 tracking-tight leading-tight line-clamp-2">{playlist.name}</h2>
               {playlist.sharedBy && (
-                <p className="text-[#a1a1aa] text-sm font-medium mt-1 m-0 flex items-center gap-1">
+                <p className="text-muted text-sm font-medium mt-1 m-0 flex items-center gap-1">
                   Curated by <span className="text-primary">{playlist.sharedBy}</span>
                 </p>
               )}
@@ -162,7 +162,7 @@ export function PlaylistDetail({ playlistId, onBack, initialData }: PlaylistDeta
         </div>
         
         {playlist.description && (
-          <p className="text-sm text-[#a1a1aa] mt-3 m-0 max-w-2xl leading-relaxed">
+          <p className="text-sm text-muted mt-3 m-0 max-w-2xl leading-relaxed">
             {playlist.description}
           </p>
         )}
@@ -185,9 +185,9 @@ export function PlaylistDetail({ playlistId, onBack, initialData }: PlaylistDeta
       {/* Tracks List */}
       <div className="flex flex-col gap-2">
         {enrichedTracks.length === 0 ? (
-          <div className="text-center py-20 bg-surface-elevated rounded-2xl border border-[#27272a] border-dashed">
+          <div className="text-center py-20 bg-surface-elevated rounded-2xl border border-border border-dashed">
             <p className="text-muted m-0">This playlist is empty.</p>
-            <p className="text-sm text-[#71717a] mt-2 m-0">Search for songs and add them here!</p>
+            <p className="text-sm text-muted mt-2 m-0">Search for songs and add them here!</p>
           </div>
         ) : (
           enrichedTracks.map((track, i) => (

@@ -32,12 +32,12 @@ export function ArtistCard({ artist }: ArtistCardProps) {
           className="size-20 rounded-full object-cover mx-auto mb-3.5 shadow-glow-sm"
         />
       ) : (
-        <div className="size-20 rounded-full bg-gradient-brand flex items-center justify-center mx-auto mb-3.5 shadow-glow-sm text-2xl font-bold text-[#111111]">
+        <div className="size-20 rounded-full bg-gradient-brand flex items-center justify-center mx-auto mb-3.5 shadow-glow-sm text-2xl font-bold text-bg">
           {initials}
         </div>
       )}
 
-      <p className="text-sm font-semibold text-white truncate m-0">
+      <p className="text-sm font-semibold text-primary truncate m-0">
         {artist.artistName}
       </p>
       <p className="text-[11px] text-muted mt-1 m-0 uppercase tracking-[0.08em]">

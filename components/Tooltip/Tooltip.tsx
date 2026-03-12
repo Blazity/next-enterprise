@@ -9,7 +9,7 @@ import { twMerge } from "tailwind-merge"
 const tooltipContent = cva([], {
   variants: {
     intent: {
-      primary: ["rounded-md", "bg-zinc-700", "font-sans", "text-white"],
+      primary: ["rounded-md", "bg-zinc-700", "font-sans", "text-primary"],
     },
     size: {
       md: ["px-4", "py-2.5", "text-xs"],

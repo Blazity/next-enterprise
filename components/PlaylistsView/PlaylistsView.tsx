@@ -72,12 +72,12 @@ export function PlaylistsView() {
     <div className="animate-fade-in-up">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight m-0">Your Playlists</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-primary tracking-tight m-0">Your Playlists</h1>
           <p className="text-muted mt-1.5 m-0 text-sm sm:text-base">Create and manage your music collections.</p>
         </div>
         <button
           onClick={() => requireAuth(() => setIsCreating(true))}
-          className="shrink-0 px-5 py-2.5 rounded-full border-0 bg-primary font-bold text-black text-sm cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-glow-sm"
+          className="shrink-0 px-5 py-2.5 rounded-full border-0 bg-primary font-bold text-bg text-sm cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-glow-sm"
         >
           New Playlist
         </button>
@@ -96,13 +96,13 @@ export function PlaylistsView() {
           ))}
         </div>
       ) : (playlists.length === 0 && sharedPlaylists.length === 0) ? (
-        <div className="text-center py-24 px-6 bg-surface-elevated/60 rounded-2xl border border-[#27272a] border-dashed">
-          <PlaylistIcon width={56} height={56} className="text-[#3f3f46] mx-auto mb-5" />
-          <p className="text-lg text-white font-medium m-0">No playlists yet</p>
-          <p className="text-sm text-[#71717a] mt-2 m-0 max-w-sm mx-auto">Create your first playlist and start adding songs.</p>
+        <div className="text-center py-24 px-6 bg-surface-elevated/60 rounded-2xl border border-border border-dashed">
+          <PlaylistIcon width={56} height={56} className="text-muted/60 mx-auto mb-5" />
+          <p className="text-lg text-primary font-medium m-0">No playlists yet</p>
+          <p className="text-sm text-muted mt-2 m-0 max-w-sm mx-auto">Create your first playlist and start adding songs.</p>
           <button
             onClick={() => requireAuth(() => setIsCreating(true))}
-            className="mt-6 px-5 py-2.5 rounded-full border-0 bg-primary font-bold text-black text-sm cursor-pointer hover:opacity-90 transition-opacity"
+            className="mt-6 px-5 py-2.5 rounded-full border-0 bg-primary font-bold text-bg text-sm cursor-pointer hover:opacity-90 transition-opacity"
           >
             New Playlist
           </button>
@@ -119,13 +119,13 @@ export function PlaylistsView() {
                 tabIndex={0}
                 onClick={() => setSelectedPlaylistId(playlist.id)}
                 onKeyDown={(e) => e.key === "Enter" && setSelectedPlaylistId(playlist.id)}
-                className="flex items-center gap-3 w-full text-left py-3 px-3 rounded-xl border-0 bg-transparent hover:bg-white/5 transition-colors cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-inset"
+                className="flex items-center gap-3 w-full text-left py-3 px-3 rounded-xl border-0 bg-transparent hover:bg-primary/5 transition-colors cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-inset"
               >
-                <div className="size-12 shrink-0 rounded-lg bg-[#1a1a1a] flex items-center justify-center border border-[#27272a]/50 group-hover:border-primary/30 transition-colors">
+                <div className="size-12 shrink-0 rounded-lg bg-[#1a1a1a] flex items-center justify-center border border-border/50 group-hover:border-primary/30 transition-colors">
                   <PlaylistIcon width={18} height={18} className={cn("text-muted transition-colors", isShared ? "text-primary/70 group-hover:text-primary" : "group-hover:text-primary")} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white font-medium truncate m-0">{playlist.name}</p>
+                  <p className="text-primary font-medium truncate m-0">{playlist.name}</p>
                   <p className="text-xs text-muted m-0 mt-0.5 flex items-center gap-1.5">
                     {trackCount} track{trackCount !== 1 ? "s" : ""}
                     {isShared && (

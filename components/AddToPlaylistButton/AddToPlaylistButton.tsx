@@ -69,25 +69,25 @@ export function AddToPlaylistButton({ trackId }: AddToPlaylistButtonProps) {
           requireAuth(() => setIsOpen(!isOpen))
         }}
         aria-label="Add to playlist"
-        className="size-8 rounded-full border-0 bg-transparent flex items-center justify-center shrink-0 transition-colors text-muted hover:text-white hover:bg-white/10"
+        className="size-8 rounded-full border-0 bg-transparent flex items-center justify-center shrink-0 transition-colors text-muted hover:text-primary hover:bg-primary/10"
       >
         <PlaylistIcon width={16} height={16} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-10 w-48 bg-surface-elevated border border-[#27272a] rounded-xl shadow-xl overflow-hidden z-20 py-1 animate-fade-in-up">
+        <div className="absolute right-0 bottom-10 w-48 bg-surface-elevated border border-border rounded-xl shadow-xl overflow-hidden z-[300] py-1 animate-fade-in-up">
           <button
             onClick={(e) => {
               e.stopPropagation()
               setIsOpen(false)
               setIsCreating(true)
             }}
-            className="w-full px-4 py-2.5 bg-transparent border-0 text-left text-sm font-medium text-primary hover:bg-white/5 cursor-pointer flex items-center justify-between"
+            className="w-full px-4 py-2.5 bg-transparent border-0 text-left text-sm font-medium text-primary hover:bg-primary/5 cursor-pointer flex items-center justify-between"
           >
             Create New Playlist
           </button>
           
-          <div className="my-1 border-t border-[#27272a]" />
+          <div className="my-1 border-t border-border" />
 
           {isLoading ? (
             <div className="px-4 py-3 text-center">
@@ -103,7 +103,7 @@ export function AddToPlaylistButton({ trackId }: AddToPlaylistButtonProps) {
                     handleAddToPlaylist(p.id)
                   }}
                   disabled={addingToId === p.id}
-                  className="w-full px-4 py-2.5 bg-transparent border-0 text-left text-sm text-white hover:bg-white/5 cursor-pointer flex items-center justify-between gap-2"
+                  className="w-full px-4 py-2.5 bg-transparent border-0 text-left text-sm text-primary hover:bg-primary/5 cursor-pointer flex items-center justify-between gap-2"
                 >
                   <span className="truncate">{p.name}</span>
                   {addingToId === p.id && (

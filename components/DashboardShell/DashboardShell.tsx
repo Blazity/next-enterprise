@@ -7,6 +7,7 @@ import { Sidebar } from "components/Sidebar/Sidebar"
 import { TopNav } from "components/TopNav/TopNav"
 import type { ActiveView } from "lib/constants"
 import { usePlaylistStore } from "store/usePlaylistStore"
+import { useAppStore } from "store/useAppStore"
 
 interface DashboardShellProps {
   children: ReactNode
@@ -24,16 +25,16 @@ export function DashboardShell({
   onQueryChange
 }: DashboardShellProps) {
   const { selectedPlaylistId, setSelectedPlaylistId } = usePlaylistStore()
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const { isSidebarCollapsed, toggleSidebar } = useAppStore()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 
   return (
-    <div className="flex h-screen overflow-hidden pb-[110px] md:pb-[96px] box-border bg-bg">
+    <div className="flex h-screen overflow-hidden box-border bg-bg">
       {/* Backdrop for mobile */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] md:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-black/40 dark:bg-black/40 dark:bg-black/60 backdrop-blur-sm z-[90] md:hidden transition-opacity duration-300"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
@@ -45,7 +46,7 @@ export function DashboardShell({
           setIsMobileMenuOpen(false)
         }}
         isCollapsed={isSidebarCollapsed}
-        onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
+        onToggleCollapse={toggleSidebar}
         onSharedPlaylistClick={(id) => {
           setSelectedPlaylistId(id)
           onNavClick("playlists")
@@ -64,7 +65,7 @@ export function DashboardShell({
           onMenuClick={() => setIsMobileMenuOpen(true)}
         />
 
-        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-5 md:py-7">
+        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-5 md:py-7 pb-[110px] md:pb-[96px]">
           {children}
         </main>
       </div>

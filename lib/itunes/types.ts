@@ -2,8 +2,8 @@
 // API docs: https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/
 
 export interface ItunesTrack {
-  wrapperType: "track"
-  kind: "song"
+  wrapperType: "track" | string
+  kind: "song" | "podcast-episode" | string
   trackId: number
   trackName: string
   artistId: number
@@ -11,6 +11,8 @@ export interface ItunesTrack {
   collectionName: string
   artworkUrl100: string
   previewUrl: string | null
+  episodeUrl?: string
+  description?: string
   trackTimeMillis: number
   collectionId: number
   trackNumber: number

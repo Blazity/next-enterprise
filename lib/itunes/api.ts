@@ -67,6 +67,20 @@ export async function fetchTrendingSongs(): Promise<ItunesTrack[]> {
   return trackIds.map((id) => trackMap.get(id)).filter((t): t is ItunesTrack => t !== undefined)
 }
 
+export async function fetchTopPodcasts(): Promise<ItunesAlbum[]> {
+  const rssResponse = await fetch("/api/itunes/rss?feed=toppodcasts&limit=20")
+  if (!rssResponse.ok) return []
+
+  const rssData = (await rssResponse.json()) as RssFeed
+  const entries = rssData.feed?.entry ?? []
+  // Parse like albums — podcasts in the RSS feed are collections
+  return entries.map(parseRssEntryToAlbum)
+}
+
+export async function fetchSongsByGenre(genre: string): Promise<ItunesTrack[]> {
+  return fetchSearch<ItunesTrack>("musicTrack", genre, "25")
+}
+
 export async function fetchTracksByIds(ids: number[]): Promise<ItunesTrack[]> {
   if (!ids.length) return []
   const lookupResponse = await fetch(`/api/itunes/lookup?ids=${ids.join(",")}`)
@@ -121,6 +135,41 @@ export async function fetchAlbumWithTracks(albumId: string): Promise<{ album: It
   if (!album) return null
 
   return { album, tracks }
+}
+
+export async function fetchPodcastWithEpisodes(podcastId: string): Promise<{ podcast: ItunesAlbum; episodes: ItunesTrack[] } | null> {
+  const response = await fetch(`/api/itunes/lookup?id=${podcastId}&media=podcast&entity=podcastEpisode&limit=50&_=${Date.now()}`)
+  if (!response.ok) return null
+  
+  const data = await response.json() as { results: any[] }
+  
+  // iTunes returns the podcast with kind='podcast' or collectionType='Podcast'
+  // It is usually the first item with a matching ID or different wrapperType than the episodes
+  const podcastData = data.results.find((r: any) => 
+    r.kind === "podcast" || 
+    r.collectionType === "Podcast" || 
+    (r.collectionId === Number(podcastId) && r.wrapperType !== "podcastEpisode")
+  )
+  const episodesData = data.results.filter((r: any) => r.wrapperType === "podcastEpisode" || r.kind === "podcast-episode")
+  
+  if (!podcastData) return null
+  
+  const podcast = podcastData as ItunesAlbum
+  const episodes = episodesData.map((ep: any) => {
+    const track = ep as ItunesTrack
+    if (track.episodeUrl && !track.previewUrl) {
+      track.previewUrl = track.episodeUrl
+    }
+    // Also use artworkUrl600 as artworkUrl100 if missing, though typically present
+    if (!track.artworkUrl100 && ep.artworkUrl600) {
+      track.artworkUrl100 = ep.artworkUrl600.replace('600x600', '100x100')
+    } else if (!track.artworkUrl100 && podcast.artworkUrl100) {
+      track.artworkUrl100 = podcast.artworkUrl100
+    }
+    return track
+  })
+
+  return { podcast, episodes }
 }
 
 export async function fetchArtistWithTopSongs(artistId: string): Promise<{ artist: ItunesArtist; tracks: ItunesTrack[] } | null> {

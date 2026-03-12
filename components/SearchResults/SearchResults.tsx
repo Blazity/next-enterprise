@@ -25,7 +25,7 @@ export function SearchResults({ songs, albums, artists, isLoading, hasSearched }
     return (
       <div className="text-center px-6 py-20">
         <p className="text-lg text-muted m-0">No results found</p>
-        <p className="text-sm text-[#71717a] mt-2 m-0">Try a different search term</p>
+        <p className="text-sm text-muted mt-2 m-0">Try a different search term</p>
       </div>
     )
   }
@@ -95,7 +95,7 @@ function Section({
   return (
     <section className="mb-10">
       <div className="flex items-baseline gap-2.5 mb-4">
-        <h2 className="text-xl font-bold text-white tracking-[-0.01em] m-0">{title}</h2>
+        <h2 className="text-xl font-bold text-primary tracking-[-0.01em] m-0">{title}</h2>
         <span className="text-[13px] text-muted">{count} results</span>
       </div>
       {children}

@@ -136,14 +136,14 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
   }
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
-      <div className="w-full max-w-md bg-surface border border-[#27272a] rounded-2xl shadow-xl overflow-hidden animate-fade-in-up max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/40 dark:bg-black/40 dark:bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+      <div className="w-full max-w-md bg-surface border border-border rounded-2xl shadow-xl overflow-hidden animate-fade-in-up max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-[#27272a] shrink-0">
-          <h2 className="text-lg md:text-xl font-bold text-white m-0 truncate pr-4">Share "{playlistName}"</h2>
+        <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-border shrink-0">
+          <h2 className="text-lg md:text-xl font-bold text-primary m-0 truncate pr-4">Share "{playlistName}"</h2>
           <button
             onClick={onClose}
-            className="size-8 rounded-full border-0 bg-transparent flex items-center justify-center text-muted hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+            className="size-8 rounded-full border-0 bg-transparent flex items-center justify-center text-muted hover:text-primary hover:bg-primary/5 transition-colors cursor-pointer"
           >
             <CloseIcon width={20} height={20} />
           </button>
@@ -151,24 +151,24 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
 
         <div className="p-4 md:p-6 overflow-y-auto flex-1 custom-scrollbar">
           {/* Public Link Section */}
-          <div className="mb-6 p-4 bg-[#111111] border border-[#27272a] rounded-xl">
+          <div className="mb-6 p-4 bg-surface-elevated border border-border rounded-xl">
              <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2.5">
                     <LinkIcon className={cn("transition-colors", publicLink ? "text-primary" : "text-muted")} width={18} height={18} />
-                    <span className="text-sm font-bold text-white uppercase tracking-wider">Public Link</span>
+                    <span className="text-sm font-bold text-primary uppercase tracking-wider">Public Link</span>
                 </div>
                 <button
                     onClick={togglePublicLink}
                     disabled={isTogglingPublic}
                     className={cn(
                         "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none",
-                        publicLink ? "bg-primary" : "bg-[#27272a]",
+                        publicLink ? "bg-primary" : "bg-border",
                         isTogglingPublic && "opacity-50 cursor-not-allowed"
                     )}
                 >
                     <span
                         className={cn(
-                            "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out",
+                            "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-primary shadow ring-0 transition duration-200 ease-in-out",
                             publicLink ? "translate-x-5" : "translate-x-0"
                         )}
                     />
@@ -177,7 +177,7 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
              
              {publicLink ? (
                 <div className="animate-fade-in">
-                    <div className="flex items-center gap-2 bg-black/40 border border-[#27272a] rounded-lg px-3 py-2 text-xs text-[#a1a1aa]">
+                    <div className="flex items-center gap-2 bg-black/40 border border-border rounded-lg px-3 py-2 text-xs text-muted">
                         <span className="flex-1 truncate">{publicLink}</span>
                         <button
                             onClick={() => copyToClipboard(publicLink)}
@@ -187,21 +187,21 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
                             <CopyIcon width={14} height={14} />
                         </button>
                     </div>
-                    <p className="text-[10px] text-[#71717a] mt-2 m-0 italic flex items-center gap-1">
+                    <p className="text-[10px] text-muted mt-2 m-0 italic flex items-center gap-1">
                         <span className="size-1 rounded-full bg-green-500" />
                         Anyone with the link can view this playlist.
                     </p>
                 </div>
              ) : (
-                <p className="text-xs text-[#71717a] m-0">Enable public link to share with anyone without an account.</p>
+                <p className="text-xs text-muted m-0">Enable public link to share with anyone without an account.</p>
              )}
           </div>
 
-          <div className="h-px bg-[#27272a] mb-6" />
+          <div className="h-px bg-border mb-6" />
 
           {/* Share Form Section */}
           <div className="mb-8">
-            <label htmlFor="email" className="block text-sm font-medium text-white mb-3">
+            <label htmlFor="email" className="block text-sm font-medium text-primary mb-3">
               Invite People
             </label>
             <form onSubmit={handleShare} className="flex gap-2">
@@ -212,7 +212,7 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="friend@example.com"
-                className="flex-1 bg-[#111111] border border-[#27272a] rounded-xl px-4 py-2.5 text-white placeholder:text-[#52525b] focus:outline-none focus:border-primary transition-colors text-sm"
+                className="flex-1 bg-surface-elevated border border-border rounded-xl px-4 py-2.5 text-primary placeholder:text-[#52525b] focus:outline-none focus:border-primary transition-colors text-sm"
                 disabled={isSubmitting}
                 required
               />
@@ -220,14 +220,14 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
                 type="submit"
                 disabled={!email.trim() || isSubmitting}
                 className={cn(
-                  "px-6 rounded-full border-0 text-sm font-bold text-black transition-all duration-200 cursor-pointer flex items-center justify-center min-w-[80px]",
+                  "px-6 rounded-full border-0 text-sm font-bold text-bg transition-all duration-200 cursor-pointer flex items-center justify-center min-w-[80px]",
                   !email.trim() || isSubmitting
-                    ? "bg-[#3f3f46] text-[#71717a] cursor-not-allowed"
+                    ? "bg-[#3f3f46] text-muted cursor-not-allowed"
                     : "bg-primary hover:scale-105 active:scale-95"
                 )}
               >
                 {isSubmitting ? (
-                  <SpinnerIcon className="animate-spin text-black" width={16} height={16} />
+                  <SpinnerIcon className="animate-spin text-bg" width={16} height={16} />
                 ) : (
                   "Share"
                 )}
@@ -244,23 +244,23 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
                 <SpinnerIcon className="animate-spin text-muted" width={20} height={20} />
               </div>
             ) : shares.length === 0 ? (
-              <p className="text-xs text-muted italic m-0 py-4 border-t border-[#27272a]/30">No private shares yet.</p>
+              <p className="text-xs text-muted italic m-0 py-4 border-t border-border/30">No private shares yet.</p>
             ) : (
               <div className="flex flex-col gap-1 max-h-40 overflow-y-auto pr-1 custom-scrollbar">
                 {shares.map((share) => (
-                  <div key={share.id} className="flex items-center justify-between p-2 rounded-xl border border-transparent hover:bg-white/[0.03] last:border-0 group">
+                  <div key={share.id} className="flex items-center justify-between p-2 rounded-xl border border-transparent hover:bg-primary/[0.03] last:border-0 group">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="size-8 rounded-full bg-white/5 flex items-center justify-center text-[11px] font-bold text-primary border border-white/5 capitalize shrink-0">
+                      <div className="size-8 rounded-full bg-primary/5 flex items-center justify-center text-[11px] font-bold text-primary border border-white/5 capitalize shrink-0">
                         {share.sharedWith?.[0] || "?"}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm text-white truncate m-0 font-medium">{share.sharedWith}</p>
+                        <p className="text-sm text-primary truncate m-0 font-medium">{share.sharedWith}</p>
                         <p className="text-[10px] text-muted m-0">Invited on {new Date(share.createdAt).toLocaleDateString()}</p>
                       </div>
                     </div>
                     <button
                       onClick={() => handleRevoke(share.id)}
-                      className="size-8 rounded-lg border-0 bg-transparent text-[#71717a] hover:text-red-400 hover:bg-red-400/10 transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 focus:opacity-100"
+                      className="size-8 rounded-lg border-0 bg-transparent text-muted hover:text-red-400 hover:bg-red-400/10 transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 focus:opacity-100"
                       title="Revoke access"
                     >
                       <TrashIcon width={14} height={14} />
@@ -272,10 +272,10 @@ export function SharePlaylistModal({ playlistId, playlistName, onClose }: ShareP
           </div>
         </div>
 
-        <div className="px-6 py-4 bg-[#111111]/50 border-t border-[#27272a] flex justify-end">
+        <div className="px-6 py-4 bg-surface-elevated/50 border-t border-border flex justify-end">
           <button
             onClick={onClose}
-            className="px-6 py-2 rounded-full border border-[#27272a] bg-transparent text-sm font-bold text-white hover:bg-white/5 transition-colors cursor-pointer"
+            className="px-6 py-2 rounded-full border border-border bg-transparent text-sm font-bold text-primary hover:bg-primary/5 transition-colors cursor-pointer"
           >
             Done
           </button>

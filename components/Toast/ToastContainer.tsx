@@ -16,9 +16,9 @@ export function ToastContainer() {
           key={toast.id}
           className={cn(
             "pointer-events-auto min-w-[280px] max-w-md p-4 rounded-xl border shadow-2xl flex items-center justify-between gap-4 animate-fade-in-up",
-            toast.type === "success" && "bg-[#121212] border-primary/20 text-white",
+            toast.type === "success" && "bg-[#121212] border-primary/20 text-primary",
             toast.type === "error" && "bg-red-500/10 border-red-500/20 text-red-200",
-            toast.type === "info" && "bg-surface-elevated border-[#27272a] text-white"
+            toast.type === "info" && "bg-surface-elevated border-border text-primary"
           )}
         >
           <div className="flex items-center gap-3">
@@ -29,7 +29,7 @@ export function ToastContainer() {
           </div>
           <button
             onClick={() => removeToast(toast.id)}
-            className="shrink-0 size-6 rounded-lg bg-transparent border-0 flex items-center justify-center text-muted hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+            className="shrink-0 size-6 rounded-lg bg-transparent border-0 flex items-center justify-center text-muted hover:text-primary hover:bg-primary/5 transition-colors cursor-pointer"
           >
             <CloseIcon width={14} height={14} />
           </button>

@@ -5,7 +5,6 @@
 
 import { type RefObject } from "react"
 
-import { AuthButton } from "components/AuthButton/AuthButton"
 import { CloseIcon, MenuIcon, SearchIcon } from "components/icons"
 import { useTypingPlaceholder } from "lib/hooks/useTypingPlaceholder"
 
@@ -20,11 +19,11 @@ export function TopNav({ query, inputRef, onChange, onMenuClick }: TopNavProps) 
   const typingPlaceholder = useTypingPlaceholder()
 
   return (
-    <header className="h-16 shrink-0 bg-[rgba(18,18,18,0.95)] backdrop-blur-md border-b border-border flex items-center px-4 md:px-8 gap-4 sticky top-0 z-[15]">
+    <header className="h-16 shrink-0 bg-bg/95 backdrop-blur-md border-b border-border flex items-center px-4 md:px-8 gap-4 sticky top-0 z-[15]">
       {onMenuClick && (
         <button
           onClick={onMenuClick}
-          className="md:hidden size-10 rounded-full flex items-center justify-center text-muted hover:text-white hover:bg-white/5 transition-all border-0 bg-transparent cursor-pointer"
+          className="md:hidden size-10 rounded-full flex items-center justify-center text-muted hover:text-primary hover:bg-surface-hover transition-all border-0 bg-transparent cursor-pointer"
           aria-label="Open menu"
         >
           <MenuIcon />
@@ -41,7 +40,7 @@ export function TopNav({ query, inputRef, onChange, onMenuClick }: TopNavProps) 
             onChange={(e) => onChange(e.target.value)}
             placeholder={typingPlaceholder || "What do you want to play?"}
             aria-label="Search music"
-            className="flex-1 bg-transparent border-0 outline-none text-white text-sm"
+            className="flex-1 bg-transparent border-0 outline-none text-primary text-sm placeholder:text-primary/50"
           />
 
           {query && (
@@ -49,16 +48,12 @@ export function TopNav({ query, inputRef, onChange, onMenuClick }: TopNavProps) 
               type="button"
               onClick={() => onChange("")}
               aria-label="Clear search"
-              className="bg-transparent border-0 cursor-pointer text-muted hover:text-white flex items-center shrink-0 p-0 transition-colors"
+              className="bg-transparent border-0 cursor-pointer text-muted hover:text-primary flex items-center shrink-0 p-0 transition-colors"
             >
               <CloseIcon width={14} height={14} />
             </button>
           )}
         </div>
-      </div>
-
-      <div className="ml-auto flex items-center gap-3">
-         <AuthButton />
       </div>
     </header>
   )

@@ -93,7 +93,7 @@ export default function AcceptSharePage() {
                 <SpinnerIcon className="animate-spin text-primary relative" width={48} height={48} />
             </div>
             <div className="space-y-1">
-                <h1 className="text-2xl font-bold text-white">
+                <h1 className="text-2xl font-bold text-primary">
                 {!isSignedIn ? "Verifying Session" : "Claiming Your Playlist"}
                 </h1>
                 <p className="text-muted text-sm italic">Synchronizing with your library...</p>
@@ -109,13 +109,13 @@ export default function AcceptSharePage() {
 
             <div className="relative size-32 rounded-3xl bg-surface-elevated border border-white/5 flex items-center justify-center shadow-2xl rotate-3">
                 <span className="text-6xl -rotate-3">🎵</span>
-                <div className="absolute -bottom-2 -right-2 size-10 rounded-full bg-primary flex items-center justify-center text-black text-xl font-bold border-4 border-bg">
+                <div className="absolute -bottom-2 -right-2 size-10 rounded-full bg-primary flex items-center justify-center text-bg text-xl font-bold border-4 border-bg">
                     ✓
                 </div>
             </div>
             
             <div className="space-y-3 relative">
-              <h1 className="text-4xl font-black text-white tracking-tight">Playlist Claimed!</h1>
+              <h1 className="text-4xl font-black text-primary tracking-tight">Playlist Claimed!</h1>
               <p className="text-muted text-lg leading-relaxed px-4">
                 We've successfully added the shared tracks to your collection. Your musical journey continues.
               </p>
@@ -123,7 +123,7 @@ export default function AcceptSharePage() {
 
             <button 
               onClick={() => router.push("/")} 
-              className="group w-full py-4 px-6 rounded-2xl bg-surface-elevated text-white font-bold text-lg border border-white/10 hover:bg-white/5 hover:border-white/20 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-3 shadow-2xl overflow-hidden relative"
+              className="group w-full py-4 px-6 rounded-2xl bg-surface-elevated text-primary font-bold text-lg border border-white/10 hover:bg-primary/5 hover:border-white/20 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-3 shadow-2xl overflow-hidden relative"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
               <span>Go to My Library</span>
@@ -138,14 +138,14 @@ export default function AcceptSharePage() {
                 ✕
             </div>
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold text-white">Share Link Expired</h1>
+              <h1 className="text-3xl font-bold text-primary">Share Link Expired</h1>
               <p className="text-muted leading-relaxed">
                 {errorMsg || "We couldn't process this claim. Please ask the owner to share the playlist with you again."}
               </p>
             </div>
             <button 
               onClick={() => router.push("/")} 
-              className="px-10 py-3 rounded-xl bg-white/5 text-white font-medium hover:bg-white/10 transition-all cursor-pointer border border-white/10"
+              className="px-10 py-3 rounded-xl bg-primary/5 text-primary font-medium hover:bg-primary/10 transition-all cursor-pointer border border-white/10"
             >
               Back to Sonara
             </button>
@@ -154,7 +154,7 @@ export default function AcceptSharePage() {
 
         {status === "nothing" && (
           <div className="flex flex-col items-center gap-4">
-             <div className="size-16 rounded-full bg-white/5 flex items-center justify-center">
+             <div className="size-16 rounded-full bg-primary/5 flex items-center justify-center">
                  <SpinnerIcon className="animate-spin text-muted" width={32} height={32} />
              </div>
              <p className="text-muted">No pending playlist found. Redirecting...</p>

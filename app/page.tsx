@@ -16,6 +16,8 @@ import { DashboardShell } from "components/DashboardShell/DashboardShell"
 import { HomeContent } from "components/HomeContent/HomeContent"
 import { PlaylistsView } from "components/PlaylistsView/PlaylistsView"
 import { SearchResults } from "components/SearchResults/SearchResults"
+import { PodcastDetailView } from "components/PodcastDetailView/PodcastDetailView"
+import { GenreDetailView } from "components/GenreDetailView/GenreDetailView"
 
 import { getSharedWithMe } from "lib/api/playlists"
 import { ACTIVE_VIEWS, type ActiveView, SEARCH_DEBOUNCE_MS } from "lib/constants"
@@ -43,6 +45,7 @@ function HomeContentWrapper() {
   
   const viewParam = searchParams.get("view") as ActiveView | null
   const activeView = viewParam && ACTIVE_VIEWS.includes(viewParam) ? viewParam : "home"
+  const activeId = searchParams.get("id") ?? undefined
 
   const [query, setQuery] = useState("")
   const [songs, setSongs] = useState<ItunesTrack[]>([])
@@ -142,10 +145,15 @@ function HomeContentWrapper() {
         <AlbumDetailView onBack={() => handleNavClick("albums")} />
       ) : activeView === "artist_detail" ? (
         <ArtistDetailView onBack={() => handleNavClick("artists")} />
+      ) : activeView === "podcast_detail" && activeId ? (
+        <PodcastDetailView podcastId={activeId} onBack={() => handleNavClick("podcasts")} />
+      ) : activeView === "genre_detail" && activeId ? (
+        <GenreDetailView genreName={activeId} onBack={() => handleNavClick("home")} />
       ) : ternary(
         isHomeView(activeView),
         <HomeContent 
           activeView={activeView as Exclude<ActiveView, "search" | "playlists" | "album_detail" | "artist_detail">} 
+          activeId={activeId}
           onPlaylistClick={(id) => {
             setSelectedPlaylistId(id)
             handleNavClick("playlists")

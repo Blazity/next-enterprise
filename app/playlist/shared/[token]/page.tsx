@@ -101,11 +101,11 @@ export default function SharedPlaylistPage() {
     return (
       <div className="min-h-screen bg-bg flex items-center justify-center p-8">
         <div className="text-center max-w-md">
-          <h1 className="text-2xl font-bold text-white mb-4">Link Expired</h1>
+          <h1 className="text-2xl font-bold text-primary mb-4">Link Expired</h1>
           <p className="text-muted mb-8">{error}</p>
           <button
             onClick={() => router.push("/")}
-            className="px-6 py-2.5 rounded-full border-0 bg-primary font-bold text-black cursor-pointer hover:scale-105 transition-transform"
+            className="px-6 py-2.5 rounded-full border-0 bg-primary font-bold text-bg cursor-pointer hover:scale-105 transition-transform"
           >
             Go Home
           </button>
@@ -130,7 +130,7 @@ export default function SharedPlaylistPage() {
                 <button
                     onClick={handleFollow}
                     disabled={isFollowing}
-                    className="px-4 py-1.5 rounded-full border-0 bg-primary font-bold text-black text-xs cursor-pointer hover:scale-105 transition-transform disabled:opacity-50 flex items-center gap-1.5"
+                    className="px-4 py-1.5 rounded-full border-0 bg-primary font-bold text-bg text-xs cursor-pointer hover:scale-105 transition-transform disabled:opacity-50 flex items-center gap-1.5"
                 >
                     {isFollowing ? <SpinnerIcon className="animate-spin" width={14} height={14} /> : null}
                     Add to my playlists

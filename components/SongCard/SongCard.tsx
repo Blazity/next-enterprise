@@ -67,14 +67,14 @@ export function SongCard({ track }: SongCardProps) {
           </div>
         ) : (
           <div className="absolute inset-0 rounded-lg bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <PlayIcon width={14} height={14} className="text-white" />
+            <PlayIcon width={14} height={14} className="text-primary" />
           </div>
         )}
       </div>
 
       {/* Track info */}
       <div className="flex-1 min-w-0">
-        <p className={cn("text-sm font-medium truncate m-0", isCurrentTrack ? "text-primary" : "text-white")}>
+        <p className={cn("text-sm font-medium truncate m-0", isCurrentTrack ? "text-primary" : "text-primary/90")}>
           {track.trackName}
         </p>
         <p className="text-[11px] md:text-xs text-muted truncate mt-0.5 m-0 uppercase tracking-wide">
@@ -104,7 +104,7 @@ export function SongCard({ track }: SongCardProps) {
         )}
       >
         {isActiveAndPlaying ? (
-          <PauseIcon width={12} height={12} className="text-[#111111]" />
+          <PauseIcon width={12} height={12} className="text-bg" />
         ) : (
           <PlayIcon width={12} height={12} className={isCurrentTrack ? "text-primary" : "text-muted"} />
         )}

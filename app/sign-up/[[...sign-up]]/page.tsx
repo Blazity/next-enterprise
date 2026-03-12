@@ -20,7 +20,7 @@ export default function SignUpPage() {
     >
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 py-10 animate-fade-in">
         <div className="mb-10 space-y-2">
-          <h1 className="text-3xl font-bold text-white">Join Sonara</h1>
+          <h1 className="text-3xl font-bold text-primary">Join Sonara</h1>
           <p className="text-muted">Create a free account to start managing your playlists.</p>
         </div>
         <SignUp

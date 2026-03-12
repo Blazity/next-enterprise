@@ -11,6 +11,10 @@ const config: NextConfig = {
         protocol: "https",
         hostname: "*.mzstatic.com",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
     ],
   },
   logging: {

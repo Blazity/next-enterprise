@@ -4,9 +4,18 @@ export const SEARCH_LIMIT_TRACKS = "12"
 export const SEARCH_LIMIT_ALBUMS = "12"
 export const POPULAR_ARTIST_NAMES = [
   "Taylor Swift",
-  "Drake",
   "The Weeknd",
+  "Drake",
+  "Kendrick Lamar",
+  "SZA",
+  "Travis Scott",
   "Beyonce",
   "Adele",
-  "Ed Sheeran",
+  "Post Malone",
+  "Bad Bunny",
+  "Harry Styles",
+  "Dua Lipa",
+  "Bruno Mars",
+  "Rihanna",
+  "Kanye West",
 ]

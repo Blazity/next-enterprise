@@ -10,6 +10,8 @@ export async function GET(request: NextRequest) {
   const ids = searchParams.get("ids")
   const id = searchParams.get("id")
   const entity = searchParams.get("entity")
+  const media = searchParams.get("media")
+  const limit = searchParams.get("limit")
 
   const lookupId = ids ?? id
   if (!lookupId) {
@@ -19,6 +21,8 @@ export async function GET(request: NextRequest) {
   const url = new URL(`${ITUNES_BASE_URL}/lookup`)
   url.searchParams.set("id", lookupId)
   if (entity) url.searchParams.set("entity", entity)
+  if (media) url.searchParams.set("media", media)
+  if (limit) url.searchParams.set("limit", limit)
 
   const response = await fetch(url.toString(), { next: { revalidate: 60 } })
 

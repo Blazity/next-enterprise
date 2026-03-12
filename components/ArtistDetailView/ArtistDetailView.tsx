@@ -99,7 +99,7 @@ export function ArtistDetailView({ onBack }: ArtistDetailViewProps) {
       {/* Back button */}
       <button 
         onClick={onBack}
-        className="flex items-center gap-2 text-sm text-muted hover:text-white transition-colors w-fit bg-transparent border-0 cursor-pointer p-0"
+        className="flex items-center gap-2 text-sm text-muted hover:text-primary transition-colors w-fit bg-transparent border-0 cursor-pointer p-0"
       >
         <ChevronLeftIcon width={16} height={16} />
         Back
@@ -117,7 +117,7 @@ export function ArtistDetailView({ onBack }: ArtistDetailViewProps) {
             priority
           />
         ) : (
-          <div className="size-[220px] rounded-full bg-gradient-brand flex items-center justify-center shrink-0 shadow-2xl text-6xl font-bold text-[#111111]">
+          <div className="size-[220px] rounded-full bg-gradient-brand flex items-center justify-center shrink-0 shadow-2xl text-6xl font-bold text-bg">
             {initials}
           </div>
         )}
@@ -125,17 +125,17 @@ export function ArtistDetailView({ onBack }: ArtistDetailViewProps) {
           <span className="text-xs font-bold uppercase tracking-[0.1em] text-muted mb-2">
             Artist
           </span>
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-3 tracking-tight balance-text">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-primary mb-3 tracking-tight balance-text">
             {artist.artistName}
           </h1>
-          <div className="flex items-center gap-2 text-sm text-white/70 mb-4">
+          <div className="flex items-center gap-2 text-sm text-primary/70 mb-4">
             <span>{artist.primaryGenreName}</span>
           </div>
           <button
             onClick={handlePlayArtist}
             disabled={!firstPlayableTrack}
             className={cn(
-              "flex items-center justify-center size-14 rounded-full bg-primary text-black hover:scale-105 transition-all shadow-glow-sm cursor-pointer border-0 disabled:opacity-50 disabled:cursor-not-allowed",
+              "flex items-center justify-center size-14 rounded-full bg-primary text-bg hover:scale-105 transition-all shadow-glow-sm cursor-pointer border-0 disabled:opacity-50 disabled:cursor-not-allowed",
             )}
           >
             <PlayIcon width={24} height={24} className="ml-1" />
@@ -145,7 +145,7 @@ export function ArtistDetailView({ onBack }: ArtistDetailViewProps) {
 
       {/* Tracklist */}
       <section className="flex flex-col gap-1 mt-4">
-        <h2 className="text-xl font-bold text-white tracking-[-0.01em] mb-3">Popular Tracks</h2>
+        <h2 className="text-xl font-bold text-primary tracking-[-0.01em] mb-3">Popular Tracks</h2>
         {tracks.map((track, i) => (
           <div key={track.trackId} className="flex items-center gap-3">
             <span className="w-6 text-sm text-muted text-right tabular-nums shrink-0">
