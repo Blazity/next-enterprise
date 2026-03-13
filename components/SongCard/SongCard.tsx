@@ -61,7 +61,7 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
   const { t } = useTranslation()
   const posthog = usePostHog()
   const { user } = useUser()
-  const { addRecentSong } = useMusicStore()
+  const { addRecentSong, recordListen } = useMusicStore()
   const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
   const playlistFeatureEnabled = playlistFeatureVariant === "on" || playlistFeatureVariant === true
   const canShowPlaylist = showAddToPlaylist && playlistFeatureEnabled
@@ -75,9 +75,10 @@ export function SongCard({ song, isPlaying = false, onPlay, variant, className, 
       was_playing: isPlaying,
     })
     
-    // Save to Recent Songs history if user is logged in
+    // Save to recent/listen history if user is logged in
     if (user?.id) {
       addRecentSong(user.id, song)
+      recordListen(user.id, song)
     }
     
     onPlay?.()

@@ -38,6 +38,56 @@ export async function removeRecentSong(clerkId: string, songId: string): Promise
   }
 }
 
+// --- Most Searched (DB-backed, frequency-based) ---
+
+export async function incrementSearchCount(clerkId: string, song: Song): Promise<void> {
+  try {
+    await fetch(`${BACKEND_URL}/api/most-searched`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clerk_id: clerkId, song }),
+    })
+  } catch {
+    // Best-effort
+  }
+}
+
+export async function fetchMostSearched(clerkId: string): Promise<{ song: Song; count: number }[]> {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/most-searched/${encodeURIComponent(clerkId)}`)
+    if (!res.ok) return []
+    const data = (await res.json()) as { songs: { song: Song; count: number }[] }
+    return data.songs
+  } catch {
+    return []
+  }
+}
+
+// --- Most Listened (DB-backed, frequency-based) ---
+
+export async function recordListen(clerkId: string, song: Song): Promise<void> {
+  try {
+    await fetch(`${BACKEND_URL}/api/most-listened`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clerk_id: clerkId, song }),
+    })
+  } catch {
+    // Best-effort
+  }
+}
+
+export async function fetchMostListened(clerkId: string): Promise<{ song: Song; count: number }[]> {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/most-listened/${encodeURIComponent(clerkId)}`)
+    if (!res.ok) return []
+    const data = (await res.json()) as { songs: { song: Song; count: number }[] }
+    return data.songs
+  } catch {
+    return []
+  }
+}
+
 // --- iTunes API ---
 
 export async function searchTracks(query: string, limit = 25): Promise<Song[]> {

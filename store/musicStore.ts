@@ -7,6 +7,10 @@ import {
   searchTracks,
   fetchSearchHistory as fetchSearchHistoryApi,
   saveRecentSong as saveRecentSongApi,
+  fetchMostSearched as fetchMostSearchedApi,
+  incrementSearchCount as incrementSearchCountApi,
+  fetchMostListened as fetchMostListenedApi,
+  recordListen as recordListenApi,
 } from "@/lib/services/itunesService"
 import { PLAY_STATE, type PlayState, type Song } from "@/types/music"
 
@@ -44,6 +48,8 @@ interface MusicStore {
   originalCollection: Song[]
   history: Song[]
   recentSongs: Song[]
+  mostSearched: { song: Song; count: number }[]
+  mostListened: { song: Song; count: number }[]
 
   setVolume: (volume: number) => void
   toggleMute: () => void
@@ -64,6 +70,10 @@ interface MusicStore {
   fetchSearchHistory: (clerkId: string) => Promise<void>
   addRecentSong: (clerkId: string, song: Song) => Promise<void>
   removeRecentSong: (clerkId: string, songId: string) => Promise<void>
+  fetchMostSearched: (clerkId: string) => Promise<void>
+  incrementSearchCount: (clerkId: string, song: Song) => Promise<void>
+  fetchMostListened: (clerkId: string) => Promise<void>
+  recordListen: (clerkId: string, song: Song) => Promise<void>
 }
 
 export const useMusicStore = create<MusicStore>((set, get) => ({
@@ -91,6 +101,8 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   originalCollection: [],
   history: [],
   recentSongs: [],
+  mostSearched: [],
+  mostListened: [],
 
   setVolume: (volume) => set({ volume, isMuted: volume === 0 }),
   toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
@@ -292,7 +304,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
     // Optimistically update local state FIRST (instant UI feedback)
     set((state) => {
       const filtered = state.recentSongs.filter((s) => s.id !== song.id)
-      return { recentSongs: [song, ...filtered].slice(0, 5) }
+      return { recentSongs: [song, ...filtered].slice(0, 10) }
     })
     // Fire-and-forget API call to persist to Redis (don't block UI)
     saveRecentSongApi(clerkId, song).catch(() => {})
@@ -307,5 +319,57 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
     import("@/lib/services/itunesService").then(({ removeRecentSong }) => {
       removeRecentSong(clerkId, songId).catch(() => {})
     })
+  },
+
+  fetchMostSearched: async (clerkId: string) => {
+    try {
+      const results = await fetchMostSearchedApi(clerkId)
+      set({ mostSearched: results })
+    } catch {
+      // Best-effort
+    }
+  },
+
+  incrementSearchCount: async (clerkId: string, song: Song) => {
+    if (!song?.id) return
+    // Optimistically update local count
+    set((state) => {
+      const existing = state.mostSearched.find((e) => e.song.id === song.id)
+      if (existing) {
+        return {
+          mostSearched: state.mostSearched
+            .map((e) => (e.song.id === song.id ? { ...e, count: e.count + 1 } : e))
+            .sort((a, b) => b.count - a.count),
+        }
+      }
+      return { mostSearched: [{ song, count: 1 }, ...state.mostSearched] }
+    })
+    incrementSearchCountApi(clerkId, song).catch(() => {})
+  },
+
+  fetchMostListened: async (clerkId: string) => {
+    try {
+      const results = await fetchMostListenedApi(clerkId)
+      set({ mostListened: results })
+    } catch {
+      // Best-effort
+    }
+  },
+
+  recordListen: async (clerkId: string, song: Song) => {
+    if (!song?.id) return
+    // Optimistically update local count
+    set((state) => {
+      const existing = state.mostListened.find((e) => e.song.id === song.id)
+      if (existing) {
+        return {
+          mostListened: state.mostListened
+            .map((e) => (e.song.id === song.id ? { ...e, count: e.count + 1 } : e))
+            .sort((a, b) => b.count - a.count),
+        }
+      }
+      return { mostListened: [{ song, count: 1 }, ...state.mostListened] }
+    })
+    recordListenApi(clerkId, song).catch(() => {})
   },
 }))

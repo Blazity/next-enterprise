@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo } from "react"
 
+import { useUser } from "@clerk/nextjs"
 import { AnimatePresence, motion } from "framer-motion"
 import { Loader2, SearchX, TrendingUp } from "lucide-react"
 import { useTranslation } from "react-i18next"
@@ -20,8 +21,13 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
 }
 
-export function TrendingList() {
+interface TrendingListProps {
+  hideWhenNoQuery?: boolean
+}
+
+export function TrendingList({ hideWhenNoQuery = false }: TrendingListProps) {
   const { t } = useTranslation()
+  const { user } = useUser()
   const {
     trendingSongs,
     searchQuery,
@@ -35,6 +41,7 @@ export function TrendingList() {
     isLoadingHome,
     homeError,
     fetchPopularContent,
+    incrementSearchCount,
   } = useMusicStore()
 
   useEffect(() => {
@@ -52,6 +59,11 @@ export function TrendingList() {
     const song = displayedSongs.find((s) => s.id === songId)
     if (!song) return
 
+    // If showing search results, track as a search play
+    if (searchQuery.trim() && user?.id) {
+      incrementSearchCount(user.id, song)
+    }
+
     if (currentlyPlaying?.id === songId) {
       togglePlay()
     } else {
@@ -60,6 +72,8 @@ export function TrendingList() {
   }
 
   const heading = searchQuery.trim() ? t("trending.resultsFor", { query: searchQuery }) : t("trending.title")
+
+  if (hideWhenNoQuery && !searchQuery.trim()) return null
 
   return (
     <section className="space-y-4">

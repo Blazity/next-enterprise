@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function SongsPage() {
   return (
     <div className="px-6 py-6 md:px-10 md:py-8">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-4xl">
         <SongsPageContent />
       </div>
     </div>

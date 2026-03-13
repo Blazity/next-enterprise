@@ -43,7 +43,7 @@ export default function SearchPage() {
           <RecentSongs />
         </motion.div>
         <motion.div variants={fadeUp}>
-          <TrendingList />
+          <TrendingList hideWhenNoQuery />
         </motion.div>
       </motion.div>
     </div>
