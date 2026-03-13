@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation"
 
 import { UserButton, useUser } from "@clerk/nextjs"
 import { motion } from "framer-motion"
-import { Disc3, Home, ListMusic, Mic2, Music2, Search, Share2 } from "lucide-react"
+import { Disc3, Home, LayoutGrid, ListMusic, Mic2, Music2, Search, Share2 } from "lucide-react"
 import { usePostHog } from "posthog-js/react"
 import { useTranslation } from "react-i18next"
 
@@ -39,7 +39,7 @@ const mainNav = [
 const mobileNav = [
   { href: "/", labelKey: "nav.home", Icon: Home },
   { href: "/search", labelKey: "nav.search", Icon: Search },
-  { href: "/recently-added", labelKey: "nav.recentlyAdded", Icon: Disc3 },
+  { href: "/genres", labelKey: "nav.genres", Icon: LayoutGrid },
   { href: "/artists", labelKey: "nav.artists", Icon: Mic2 },
   { href: "/songs", labelKey: "nav.songs", Icon: Music2 },
   { href: "/playlists", labelKey: "nav.playlists", Icon: ListMusic },
@@ -47,6 +47,7 @@ const mobileNav = [
 
 const libraryNav = [
   { href: "/recently-added", labelKey: "nav.recentlyAdded", Icon: Disc3 },
+  { href: "/genres", labelKey: "nav.genres", Icon: LayoutGrid },
   { href: "/artists", labelKey: "nav.artists", Icon: Mic2 },
   { href: "/songs", labelKey: "nav.songs", Icon: Music2 },
   { href: "/playlists", labelKey: "nav.playlists", Icon: ListMusic },
