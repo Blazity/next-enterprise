@@ -1,7 +1,9 @@
 "use client"
 
 import { useCallback, useEffect, useRef } from "react"
+
 import Image from "next/image"
+
 import { motion } from "framer-motion"
 import { ChevronDown, Repeat, Shuffle, SkipBack, SkipForward } from "lucide-react"
 import { useTranslation } from "react-i18next"

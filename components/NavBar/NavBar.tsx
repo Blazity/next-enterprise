@@ -1,18 +1,18 @@
 "use client"
 
+import { useEffect } from "react"
+
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-import { useEffect } from "react"
 
 import { UserButton, useUser } from "@clerk/nextjs"
 import { motion } from "framer-motion"
 import { Disc3, Home, ListMusic, Mic2, Music2, Search, Share2 } from "lucide-react"
 import { usePostHog } from "posthog-js/react"
-
-import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { useTranslation } from "react-i18next"
 
+import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { cn } from "@/lib/utils"
 import { usePlaylistStore } from "@/store/playlistStore"
 import { useShareLinkStore } from "@/store/shareLinkStore"

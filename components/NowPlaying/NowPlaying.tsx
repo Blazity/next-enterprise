@@ -9,9 +9,10 @@ import { Repeat, Shuffle, SkipBack, SkipForward, Volume2, VolumeX } from "lucide
 import { useTranslation } from "react-i18next"
 
 import { PlayButton } from "@/components/PlayButton/PlayButton"
-import { seekAudio, setAudioVolume } from "@/hooks/useAudioPlayer"
+import { seekAudio } from "@/hooks/useAudioPlayer"
 import { useMusicStore } from "@/store/musicStore"
 import { PLAY_STATE } from "@/types/music"
+
 import { ExpandedPlayer } from "./ExpandedPlayer"
 
 function formatTime(seconds: number): string {
@@ -69,10 +70,9 @@ export function NowPlaying() {
 
   useEffect(() => {
     const unsubscribe = useMusicStore.subscribe(
-      (state) => state.currentTime,
-      (time) => {
+      (state) => {
         if (progressBarRef.current && duration > 0) {
-          const prog = (time / duration) * 100
+          const prog = (state.currentTime / duration) * 100
           progressBarRef.current.style.width = `${prog}%`
         }
       }

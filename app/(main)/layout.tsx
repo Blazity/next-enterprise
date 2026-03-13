@@ -1,9 +1,9 @@
 "use client"
 
-import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 import { NavBar } from "@/components/NavBar/NavBar"
 import { NowPlaying } from "@/components/NowPlaying/NowPlaying"
 import { NowPlayingSpacer } from "@/components/NowPlaying/NowPlayingSpacer"
+import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 import { UserSync } from "@/components/UserSync/UserSync"
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {

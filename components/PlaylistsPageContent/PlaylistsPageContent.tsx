@@ -7,11 +7,10 @@ import Link from "next/link"
 import { useUser } from "@clerk/nextjs"
 import { AnimatePresence, motion } from "framer-motion"
 import { ListMusic, MoreHorizontal, Pencil, Plus, Share2, Trash2 } from "lucide-react"
-import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { useTranslation } from "react-i18next"
 
-import { ComingSoon } from "@/components/ComingSoon/ComingSoon"
 import { Spotlight } from "@/components/ui/spotlight"
+import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { cn } from "@/lib/utils"
 import { usePlaylistStore } from "@/store/playlistStore"
 
@@ -31,8 +30,6 @@ export function PlaylistsPageContent() {
   const playlistFeatureEnabled = playlistFeatureVariant === "on" || playlistFeatureVariant === true
   const { playlists, sharedPlaylists, isLoading, error, fetchPlaylists, fetchSharedPlaylists, createPlaylist, updatePlaylist, deletePlaylist } =
     usePlaylistStore()
-  const hasSharedPlaylists = sharedPlaylists.length > 0
-  const hasOwnedPlaylists = playlists.length > 0
 
   const [showCreate, setShowCreate] = useState(false)
   const [newName, setNewName] = useState("")

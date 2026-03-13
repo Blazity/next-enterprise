@@ -1,7 +1,9 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from "react"
-import { motion, useAnimationFrame, useMotionValue, useTransform } from "framer-motion"
+
+import { motion, useAnimationFrame, useMotionValue } from "framer-motion"
+
 import { cn } from "@/lib/utils"
 
 export const InfiniteMovingCards = ({
@@ -12,8 +14,8 @@ export const InfiniteMovingCards = ({
   pauseOnHover = true,
   className,
 }: {
-  items: any[]
-  renderItem: (item: any, idx: number) => React.ReactNode
+  items: unknown[]
+  renderItem: (item: unknown, idx: number) => React.ReactNode
   direction?: "left" | "right"
   speed?: "fast" | "normal" | "slow"
   pauseOnHover?: boolean
@@ -48,7 +50,7 @@ export const InfiniteMovingCards = ({
     if (pauseOnHover && (isHovered || isDragging)) return
     if (contentWidth === 0) return
 
-    let moveBy = (speedMultiplier * delta) / 1000
+    const moveBy = (speedMultiplier * delta) / 1000
     let newX = x.get() + moveBy
 
     // Loop the scrolling seamlessly

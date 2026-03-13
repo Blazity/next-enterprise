@@ -3,11 +3,11 @@
 import { useCallback, useState } from "react"
 
 import { Share2, X } from "lucide-react"
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 import { useTranslation } from "react-i18next"
 
 import { usePlaylistStore } from "@/store/playlistStore"
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 interface SharePlaylistDialogProps {
   playlistId: number

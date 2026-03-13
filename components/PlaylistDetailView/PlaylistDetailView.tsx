@@ -1,13 +1,14 @@
 "use client"
 
+import { useCallback, useEffect, useState } from "react"
+
 import Image from "next/image"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { useCallback, useEffect, useState } from "react"
 
 import { useUser } from "@clerk/nextjs"
-import { ArrowLeft, Check, Clock, Link2, ListMusic, Music, Search, Share2, Trash2, User } from "lucide-react"
 import { motion } from "framer-motion"
+import { ArrowLeft, Check, Clock, Link2, ListMusic, Music, Search, Share2, Trash2, User } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { SharePlaylistDialog } from "@/components/SharePlaylistDialog/SharePlaylistDialog"
