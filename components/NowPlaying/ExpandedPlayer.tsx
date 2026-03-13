@@ -23,7 +23,9 @@ function formatTime(seconds: number): string {
 export function ExpandedPlayer() {
   const { t } = useTranslation()
   const progressBarRef = useRef<HTMLDivElement>(null)
-  
+  const progressContainerRef = useRef<HTMLDivElement>(null)
+  const isDraggingProgress = useRef(false)
+
   const {
     currentlyPlaying,
     playState,
@@ -42,32 +44,58 @@ export function ExpandedPlayer() {
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0
 
-  const handleSeek = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (duration <= 0) return
-      const rect = e.currentTarget.getBoundingClientRect()
-      const fraction = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
+  const seekFromClientX = useCallback(
+    (clientX: number) => {
+      if (!progressContainerRef.current || duration <= 0) return
+      const rect = progressContainerRef.current.getBoundingClientRect()
+      const fraction = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
       seekAudio(fraction * duration)
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = `${fraction * 100}%`
+      }
     },
     [duration]
+  )
+
+  const handleProgressMouseDown = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation()
+      isDraggingProgress.current = true
+      seekFromClientX(e.clientX)
+      const onMove = (ev: MouseEvent) => { if (isDraggingProgress.current) seekFromClientX(ev.clientX) }
+      const onUp = () => {
+        isDraggingProgress.current = false
+        document.removeEventListener("mousemove", onMove)
+        document.removeEventListener("mouseup", onUp)
+      }
+      document.addEventListener("mousemove", onMove)
+      document.addEventListener("mouseup", onUp)
+    },
+    [seekFromClientX]
   )
 
   const handleProgressKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (duration <= 0) return
       const step = 5
-      if (e.key === "ArrowRight") seekAudio(Math.min(duration, currentTime + step))
-      else if (e.key === "ArrowLeft") seekAudio(Math.max(0, currentTime - step))
+      let newTime: number | null = null
+      if (e.key === "ArrowRight") newTime = Math.min(duration, currentTime + step)
+      else if (e.key === "ArrowLeft") newTime = Math.max(0, currentTime - step)
+      if (newTime !== null) {
+        seekAudio(newTime)
+        if (progressBarRef.current) {
+          progressBarRef.current.style.width = `${(newTime / duration) * 100}%`
+        }
+      }
     },
     [duration, currentTime]
   )
 
   useEffect(() => {
     const unsubscribe = useMusicStore.subscribe(
-      (state) => state.currentTime,
-      (time: number) => {
+      (state) => {
         if (progressBarRef.current && duration > 0) {
-          const prog = (time / duration) * 100
+          const prog = (state.currentTime / duration) * 100
           progressBarRef.current.style.width = `${prog}%`
         }
       }
@@ -149,22 +177,23 @@ export function ExpandedPlayer() {
         {/* Dedicated Progress Scrubber */}
         <div className="mb-4 w-full shrink-0">
           <div
-            className="group relative h-1.5 w-full cursor-pointer rounded-full bg-white/20 transition-all hover:h-2"
+            ref={progressContainerRef}
+            className="group relative h-1.5 w-full cursor-pointer rounded-full bg-white/20 transition-all hover:h-2 overflow-visible"
             role="slider"
             aria-label={t("player.progress")}
             aria-valuemin={0}
             aria-valuemax={Math.floor(duration)}
             aria-valuenow={Math.floor(currentTime)}
             tabIndex={0}
-            onClick={handleSeek}
+            onMouseDown={handleProgressMouseDown}
             onKeyDown={handleProgressKeyDown}
           >
             <div
               ref={progressBarRef}
-              className="absolute left-0 top-0 h-full rounded-full bg-white transition-none"
+              className="absolute left-0 top-0 h-full rounded-full bg-accent transition-none shadow-[4px_0_10px_3px_rgba(6,182,212,0.45)]"
               style={{ width: `${progress}%` }}
             >
-              <div className="absolute right-0 top-1/2 h-3 w-3 -translate-y-1/2 translate-x-1/2 rounded-full bg-white opacity-0 shadow-md transition-opacity group-hover:opacity-100" />
+              <div className="absolute right-0 top-1/2 h-3 w-3 -translate-y-1/2 translate-x-1/2 rounded-full bg-white shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
             </div>
           </div>
           <div className="mt-2 flex w-full justify-between text-xs font-medium text-white/50 tabular-nums">

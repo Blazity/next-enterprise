@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import Image from "next/image"
 
@@ -34,62 +34,62 @@ import { PLAY_STATE } from "@/types/music"
 
 const GENRES = [
   {
-    id: "pop", name: "Pop", term: "top pop hits 2025",
+    id: "pop", name: "Pop", genreId: "14",
     icon: Star, gradient: "from-pink-600/80 to-rose-500/80", shadow: "shadow-pink-500/25",
     photo: "1470229722913-7c0e2dbbafd3",
   },
   {
-    id: "hiphop", name: "Hip-Hop", term: "top hip hop rap 2025",
+    id: "hiphop", name: "Hip-Hop", genreId: "18",
     icon: Mic2, gradient: "from-purple-700/80 to-violet-600/80", shadow: "shadow-purple-500/25",
     photo: "1493225457124-a3eb161ffa5f",
   },
   {
-    id: "rock", name: "Rock", term: "top rock songs 2025",
+    id: "rock", name: "Rock", genreId: "21",
     icon: Guitar, gradient: "from-red-700/80 to-orange-600/80", shadow: "shadow-red-500/25",
     photo: "1501386761578-eac5c294458e",
   },
   {
-    id: "rnb", name: "R&B", term: "top rnb soul songs 2025",
+    id: "rnb", name: "R&B", genreId: "15",
     icon: Headphones, gradient: "from-blue-700/80 to-indigo-600/80", shadow: "shadow-blue-500/25",
     photo: "1415201364774-f6f0bb35f28f",
   },
   {
-    id: "electronic", name: "Electronic", term: "top electronic dance music 2025",
+    id: "electronic", name: "Electronic", genreId: "7",
     icon: Zap, gradient: "from-cyan-600/80 to-teal-500/80", shadow: "shadow-cyan-500/25",
     photo: "1571330735066-03aaa9429d89",
   },
   {
-    id: "country", name: "Country", term: "top country songs 2025",
+    id: "country", name: "Country", genreId: "6",
     icon: Radio, gradient: "from-amber-600/80 to-yellow-500/80", shadow: "shadow-amber-500/25",
     photo: "1486218119243-13301543a1b4",
   },
   {
-    id: "jazz", name: "Jazz", term: "top jazz songs best",
+    id: "jazz", name: "Jazz", genreId: "11",
     icon: Waves, gradient: "from-indigo-700/80 to-blue-600/80", shadow: "shadow-indigo-500/25",
     photo: "1510915361894-db8b60106cb1",
   },
   {
-    id: "latin", name: "Latin", term: "top latin hits reggaeton 2025",
+    id: "latin", name: "Latin", genreId: "12",
     icon: Globe, gradient: "from-green-600/80 to-emerald-500/80", shadow: "shadow-green-500/25",
     photo: "1504910182-33ad29e21a60",
   },
   {
-    id: "indie", name: "Indie", term: "top indie alternative songs 2025",
+    id: "indie", name: "Indie", genreId: "20",
     icon: Sparkles, gradient: "from-violet-700/80 to-fuchsia-600/80", shadow: "shadow-violet-500/25",
     photo: "1545245047-ca41c0b62ded",
   },
   {
-    id: "kpop", name: "K-Pop", term: "top kpop songs 2025",
+    id: "kpop", name: "K-Pop", genreId: "51",
     icon: Star, gradient: "from-fuchsia-600/80 to-pink-500/80", shadow: "shadow-fuchsia-500/25",
     photo: "1540575467063-178a50c2df87",
   },
   {
-    id: "metal", name: "Metal", term: "top metal songs heavy rock",
+    id: "metal", name: "Metal", genreId: "1153",
     icon: Guitar, gradient: "from-zinc-800/85 to-slate-700/85", shadow: "shadow-zinc-500/25",
     photo: "1516280440614-37939bbacd81",
   },
   {
-    id: "classical", name: "Classical", term: "top classical music orchestral",
+    id: "classical", name: "Classical", genreId: "5",
     icon: Music2, gradient: "from-stone-700/80 to-slate-600/80", shadow: "shadow-stone-500/25",
     photo: "1520523839897-bd0b52f945a0",
   },
@@ -188,10 +188,22 @@ export function GenresPageContent() {
   const { currentlyPlaying, playState, setPlayingTrack, togglePlay } = useMusicStore()
   const isPlaying = playState === PLAY_STATE.PLAYING
 
-  const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null)
+  const [selectedGenre, setSelectedGenre] = useState<Genre | null>(GENRES[0])
   const [songs, setSongs] = useState<Song[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const g = GENRES[0]
+    setIsLoading(true)
+    setError(null)
+    fetch(`/api/itunes/search?genreId=${g.genreId}&limit=20`)
+      .then((r) => { if (!r.ok) throw new Error("Failed"); return r.json() as Promise<ITunesSearchResponse> })
+      .then((data) => setSongs(data.results.filter((t) => t.previewUrl).map(mapITunesTrackToSong)))
+      .catch(() => setError("Failed to load songs. Try again."))
+      .finally(() => setIsLoading(false))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const loadGenre = async (genre: Genre) => {
     // Toggle off if clicking the same genre
@@ -207,7 +219,7 @@ export function GenresPageContent() {
     setSongs([])
 
     try {
-      const res = await fetch(`/api/itunes/search?term=${encodeURIComponent(genre.term)}&limit=20`)
+      const res = await fetch(`/api/itunes/search?genreId=${genre.genreId}&limit=20`)
       if (!res.ok) throw new Error("Failed")
       const data = (await res.json()) as ITunesSearchResponse
       const mapped = data.results.filter((t) => t.previewUrl).map(mapITunesTrackToSong)
@@ -344,17 +356,6 @@ export function GenresPageContent() {
         )}
       </AnimatePresence>
 
-      {/* Empty state — no genre selected yet */}
-      {!selectedGenre && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex flex-col items-center gap-3 py-10 text-center"
-        >
-          <Music2 size={32} className="text-white/15" />
-          <p className="text-sm text-white/28">Pick a genre to start listening</p>
-        </motion.div>
-      )}
     </div>
   )
 }

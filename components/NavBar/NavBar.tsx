@@ -12,7 +12,6 @@ import { Disc3, Home, LayoutGrid, ListMusic, Mic2, Music2, Search, Share2 } from
 import { usePostHog } from "posthog-js/react"
 import { useTranslation } from "react-i18next"
 
-import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { cn } from "@/lib/utils"
 import { usePlaylistStore } from "@/store/playlistStore"
 import { useShareLinkStore } from "@/store/shareLinkStore"
@@ -58,13 +57,10 @@ export function NavBar() {
   const { user } = useUser()
   const pathname = usePathname()
   const posthog = usePostHog()
-  const playlistFeatureVariant = useFeatureFlag("playlist-add-feature")
-  const playlistFeatureEnabled = playlistFeatureVariant === "on" || playlistFeatureVariant === true
   const { playlists, sharedPlaylists, fetchPlaylists, fetchSharedPlaylists } = usePlaylistStore()
   const { href: shareLinkHref, ownerName: shareLinkOwnerName } = useShareLinkStore()
   const hasSharedPlaylists = sharedPlaylists.length > 0
   const hasOwnedPlaylists = playlists.length > 0
-  const hasAnyPlaylists = hasOwnedPlaylists || hasSharedPlaylists
   const hasShareLinkPreview = !!shareLinkHref
 
   useEffect(() => {
@@ -75,34 +71,27 @@ export function NavBar() {
   }, [user?.id, fetchPlaylists, fetchSharedPlaylists])
 
   const captureNavClick = (href: string, section: "mobile" | "main" | "library") => {
-    posthog?.capture("nav_item_clicked", {
-      href,
-      section,
-      playlist_feature_variant: playlistFeatureVariant ?? "unknown",
-    })
+    posthog?.capture("nav_item_clicked", { href, section })
   }
 
-  const showPlaylistNav = playlistFeatureEnabled || hasAnyPlaylists
-  const playlistNavItem = showPlaylistNav
-    ? { 
-        href: "/playlists", 
-        labelKey: (playlistFeatureEnabled || hasOwnedPlaylists) ? "nav.playlists" as const : "share.sharedWithMe" as const, 
-        Icon: (playlistFeatureEnabled || hasOwnedPlaylists) ? ListMusic : Share2 
-      }
-    : null
+  const playlistNavItem = {
+    href: "/playlists",
+    labelKey: hasOwnedPlaylists ? "nav.playlists" as const : hasSharedPlaylists ? "share.sharedWithMe" as const : "nav.playlists" as const,
+    Icon: hasOwnedPlaylists || !hasSharedPlaylists ? ListMusic : Share2,
+  }
 
   const shareLinkNavItem =
     hasShareLinkPreview && shareLinkHref
       ? {
           href: shareLinkHref,
-        labelKey: shareLinkOwnerName ? ("share.navItem" as const) : ("share.navItemUnknown" as const),
+          labelKey: shareLinkOwnerName ? ("share.navItem" as const) : ("share.navItemUnknown" as const),
           labelParam: shareLinkOwnerName,
           Icon: Share2,
         }
       : null
 
   const resolveNav = (items: typeof libraryNav) => {
-    const resolved = items.flatMap((item) => (item.href === "/playlists" ? (playlistNavItem ? [playlistNavItem] : []) : [item]))
+    const resolved = items.flatMap((item) => (item.href === "/playlists" ? [playlistNavItem] : [item]))
     if (shareLinkNavItem) {
       resolved.push(shareLinkNavItem)
     }

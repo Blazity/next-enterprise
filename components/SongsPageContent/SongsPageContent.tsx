@@ -9,6 +9,7 @@ import { ChevronDown, ChevronUp, Headphones, LogIn, Music2, Pause, Play, Refresh
 
 import { SongCard } from "@/components/SongCard/SongCard"
 import { Spotlight } from "@/components/ui/spotlight"
+import { useFeatureFlag } from "@/hooks/useFeatureFlag"
 import { cn } from "@/lib/utils"
 import { fetchSongsBrowse } from "@/lib/services/itunesService"
 import { useMusicStore } from "@/store/musicStore"
@@ -184,6 +185,7 @@ function EmptyPersonalSection({
 
 export function SongsPageContent() {
   const { user } = useUser()
+  const personalSectionsEnabled = useFeatureFlag("most-searched-most-listened")
   const { currentlyPlaying, playState, setPlayingTrack, togglePlay, mostSearched, fetchMostSearched, mostListened, fetchMostListened } =
     useMusicStore()
   const isPlaying = playState === PLAY_STATE.PLAYING
@@ -369,7 +371,7 @@ export function SongsPageContent() {
       </motion.section>
 
       {/* ── Personal Sections ────────────────────────────────────────────────── */}
-      {user ? (
+      {user && personalSectionsEnabled ? (
         <>
           {/* Most Searched */}
           <motion.section
