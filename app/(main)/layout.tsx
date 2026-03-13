@@ -24,13 +24,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       />
       <UserSync />
       <NowPlaying />
-      
       <div className="flex h-screen flex-col overflow-hidden">
         <NowPlayingSpacer />
-        
         <div className="flex flex-1 overflow-hidden flex-col md:flex-row">
           <NavBar />
-          <main className="flex-1 overflow-y-auto overscroll-contain pb-20 md:pb-0">
+          <main className="flex-1 overflow-y-auto overscroll-contain pb-6 md:pb-0 relative">
             {children}
           </main>
         </div>

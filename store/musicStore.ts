@@ -39,6 +39,7 @@ interface MusicStore {
   isBuffering: boolean
   isShuffled: boolean
   isRepeating: boolean
+  isExpanded: boolean
   queue: Song[]
   originalCollection: Song[]
   history: Song[]
@@ -47,6 +48,8 @@ interface MusicStore {
   setVolume: (volume: number) => void
   toggleMute: () => void
   setBuffering: (isBuffering: boolean) => void
+  setExpanded: (isExpanded: boolean) => void
+  toggleExpanded: () => void
   setSearchQuery: (query: string) => void
   setPlayingTrack: (song: Song | null, collection?: Song[]) => void
   togglePlay: () => void
@@ -83,6 +86,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   isBuffering: false,
   isShuffled: false,
   isRepeating: false,
+  isExpanded: false,
   queue: [],
   originalCollection: [],
   history: [],
@@ -136,6 +140,9 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
     set((state) => ({
       playState: state.playState === PLAY_STATE.PLAYING ? PLAY_STATE.PAUSED : PLAY_STATE.PLAYING,
     })),
+
+  setExpanded: (isExpanded: boolean) => set({ isExpanded }),
+  toggleExpanded: () => set((state) => ({ isExpanded: !state.isExpanded })),
 
   setCurrentTime: (time) => set({ currentTime: time }),
   setDuration: (duration) => set({ duration }),
