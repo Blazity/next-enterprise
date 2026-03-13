@@ -3,18 +3,36 @@
 import { SearchX } from "lucide-react"
 import { TrackCard } from "components/TrackCard/TrackCard"
 import { TrackCardSkeleton } from "components/TrackCardSkeleton/TrackCardSkeleton"
+import { TrackTable } from "./TrackTable"
 import type { iTunesTrack } from "lib/itunes"
 
 interface TrackListProps {
-  tracks: iTunesTrack[]
+  tracks: (iTunesTrack & { addedAt?: string })[]
   currentTrackId: number | null
+  viewMode?: "grid" | "list"
   isPlaying: boolean
   onPlay: (track: iTunesTrack) => void
   onPause: () => void
   isLoading: boolean
+  likedSongIds?: number[]
+  onToggleLike?: (track: iTunesTrack) => void
+  onAddToPlaylist?: (track: iTunesTrack, playlistId: string) => void
+  playlists?: any[]
 }
 
-export function TrackList({ tracks, currentTrackId, isPlaying, onPlay, onPause, isLoading }: TrackListProps) {
+export function TrackList({ 
+  tracks, 
+  currentTrackId, 
+  viewMode = "grid",
+  isPlaying, 
+  onPlay, 
+  onPause, 
+  isLoading,
+  likedSongIds = [],
+  onToggleLike,
+  onAddToPlaylist,
+  playlists = []
+}: TrackListProps) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
@@ -26,6 +44,7 @@ export function TrackList({ tracks, currentTrackId, isPlaying, onPlay, onPause, 
   }
 
   if (tracks.length === 0) {
+    // ... (no changes to empty state)
     return (
       <div
         id="no-results"
@@ -37,6 +56,20 @@ export function TrackList({ tracks, currentTrackId, isPlaying, onPlay, onPause, 
         <h2 className="mb-2 text-xl font-semibold text-white">No audio waves found</h2>
         <p className="text-sm text-slate-400">Try a different search term to find the right vibe.</p>
       </div>
+    )
+  }
+
+  if (viewMode === "list") {
+    return (
+      <TrackTable
+        tracks={tracks}
+        currentTrackId={currentTrackId}
+        isPlaying={isPlaying}
+        onPlay={onPlay}
+        onPause={onPause}
+        likedSongIds={likedSongIds}
+        onToggleLike={onToggleLike}
+      />
     )
   }
 
@@ -53,6 +86,10 @@ export function TrackList({ tracks, currentTrackId, isPlaying, onPlay, onPause, 
           isCurrentTrack={currentTrackId === track.trackId}
           onPlay={onPlay}
           onPause={onPause}
+          isLiked={likedSongIds.includes(track.trackId)}
+          onToggleLike={onToggleLike}
+          onAddToPlaylist={onAddToPlaylist}
+          playlists={playlists}
         />
       ))}
     </div>

@@ -101,52 +101,46 @@ export function NowPlayingBar({
   return (
     <div
       id="now-playing-bar"
-      className="bg-aura-darker/80 fixed right-0 bottom-0 left-0 z-50 border-t border-white/10 text-white shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.5)] backdrop-blur-2xl"
+      className="bg-aura-bg border-t border-white/5 fixed right-0 bottom-0 left-0 z-[60] text-white shadow-[0_-20px_50px_rgba(0,0,0,0.8)] backdrop-blur-3xl"
     >
-      {/* Progress Bar (Clickable) */}
+      {/* Progress Bar */}
       <div
         ref={progressBarRef}
-        className="group relative h-1.5 w-full cursor-pointer bg-slate-800"
+        className="group relative h-1 w-full cursor-pointer bg-white/5"
         onClick={handleSeek}
       >
-        {/* Glow effect */}
         <div
-          className="from-aura-primary to-aura-secondary absolute inset-y-0 left-0 hidden bg-gradient-to-r opacity-50 blur-[2px] transition-all duration-200 group-hover:block"
-          style={{ width: `${progressPercent}%` }}
-        />
-        {/* Main fill */}
-        <div
-          className="from-aura-primary to-aura-secondary absolute inset-y-0 left-0 z-10 bg-gradient-to-r"
+          className="bg-aura-primary absolute inset-y-0 left-0 z-10 shadow-[0_0_15px_#ef5b1e]"
           style={{ width: `${progressPercent}%` }}
         >
-          {/* Knob */}
-          <div className="absolute top-1/2 right-0 h-3 w-3 -translate-y-1/2 rounded-full bg-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100" />
+          {/* Neon Knob */}
+          <div className="absolute top-1/2 right-0 h-4 w-4 -translate-y-1/2 rounded-full bg-white scale-0 group-hover:scale-100 transition-transform duration-200 border-2 border-aura-primary shadow-[0_0_10px_#ef5b1e]" />
         </div>
       </div>
 
-      <div className="mx-auto flex h-[88px] max-w-screen-2xl items-center justify-between px-4 py-3 sm:px-6">
-        {/* Track Info (Left) */}
-        <div className="flex min-w-0 flex-1 items-center gap-4 pr-4">
-          <div className="relative h-[56px] w-[56px] flex-shrink-0 overflow-hidden rounded-md border border-white/5 bg-slate-800 shadow-lg">
+      <div className="mx-auto flex h-[96px] max-w-screen-2xl items-center justify-between px-6 py-4">
+        {/* Track Info */}
+        <div className="flex min-w-0 flex-1 items-center gap-5">
+          <div className="relative h-[64px] w-[64px] flex-shrink-0 overflow-hidden rounded-xl border-2 border-white/5 shadow-2xl group cursor-pointer">
             {albumImage ? (
               <Image
                 src={albumImage.replace("100x100bb.jpg", "600x600bb.jpg")}
-                alt={`${track.collectionName} album art`}
+                alt={`${track.trackName} album art`}
                 fill
-                sizes="56px"
-                className="object-cover"
+                sizes="64px"
+                className="object-cover group-hover:scale-110 transition-transform duration-500"
               />
             ) : (
-              <div className="flex h-full items-center justify-center text-zinc-600">
-                <Music className="h-6 w-6" />
+              <div className="flex h-full items-center justify-center bg-aura-surface">
+                <Music className="h-6 w-6 text-aura-primary/50" />
               </div>
             )}
           </div>
           <div className="flex min-w-0 flex-col justify-center">
-            <p className="cursor-pointer truncate text-[15px] font-bold text-white hover:underline">
+            <p className="truncate text-base font-black tracking-tight text-white hover:text-aura-primary transition-colors cursor-pointer">
               {track.trackName}
             </p>
-            <p className="mt-0.5 cursor-pointer truncate text-[12px] text-slate-400 transition-colors hover:text-white hover:underline">
+            <p className="mt-1 truncate text-[11px] font-black uppercase tracking-[0.15em] text-aura-secondary/80">
               {artistNames}
             </p>
           </div>
@@ -154,7 +148,7 @@ export function NowPlayingBar({
 
         {/* Controls (Center) */}
         <div className="flex max-w-[400px] flex-1 flex-col items-center justify-center">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8 mb-2">
             <button
               onClick={onPrev}
               disabled={!hasPrev}
@@ -167,7 +161,7 @@ export function NowPlayingBar({
             <button
               id="now-playing-play-pause"
               onClick={onPlayPause}
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-black shadow-lg transition-all hover:scale-105 hover:bg-slate-100 active:scale-95"
+              className="flex h-14 w-14 items-center justify-center rounded-full bg-aura-primary text-white shadow-lg shadow-aura-primary/40 transition-all hover:scale-110 hover:bg-aura-accent active:scale-95"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? <Pause className="h-5 w-5 fill-current" /> : <Play className="ml-1 h-5 w-5 fill-current" />}
@@ -189,39 +183,21 @@ export function NowPlayingBar({
           </div>
         </div>
 
-        {/* Extra Controls (Right) */}
-        <div className="flex hidden flex-1 items-center justify-end gap-4 pl-4 sm:flex">
-          {/* iTunes Link */}
-          <a
-            href={track.trackViewUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-full border border-white/5 bg-white/5 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            <Apple className="h-3.5 w-3.5" />
-            <span>Apple Music</span>
-          </a>
-
-          {/* Volume Control */}
-          <div className="group flex w-32 items-center gap-2">
-            <button onClick={toggleMute} className="text-slate-400 transition-colors hover:text-white">
+        {/* Extra Controls */}
+        <div className="hidden lg:flex flex-1 items-center justify-end gap-6 pl-4">
+          <div className="group flex w-40 items-center gap-3 bg-white/5 p-2 px-4 rounded-full border border-white/5">
+            <button onClick={toggleMute} className="text-aura-secondary hover:text-white transition-colors">
               {isMuted || volume === 0 ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
             </button>
-            <div className="relative flex h-1.5 flex-1 items-center overflow-hidden rounded-full bg-slate-700 pr-[2px] pl-[2px] transition-all group-hover:h-2">
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={isMuted ? 0 : volume}
-                onChange={handleVolumeChange}
-                className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
-              />
-              <div
-                className="peer-hover:bg-aura-primary pointer-events-none h-1 rounded-full bg-white transition-all"
-                style={{ width: `${(isMuted ? 0 : volume) * 100}%` }}
-              />
-            </div>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={isMuted ? 0 : volume}
+              onChange={handleVolumeChange}
+              className="w-full h-1 accent-aura-primary cursor-pointer opacity-80 group-hover:opacity-100 transition-opacity"
+            />
           </div>
         </div>
       </div>
