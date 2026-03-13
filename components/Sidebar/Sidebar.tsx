@@ -1,8 +1,10 @@
-import { Home, Library, Heart, Plus, Music, Trash2 } from "lucide-react"
-import { useAuth } from "components/Providers/AuthProvider"
+import { Heart, Home, Library, Music, Plus, Trash2 } from "lucide-react"
 import { useEffect, useState } from "react"
-import { getPlaylists, deletePlaylist } from "lib/actions/playlists"
+
 import { CreatePlaylistModal } from "components/Playlist/CreatePlaylistModal"
+import { useAuth } from "components/Providers/AuthProvider"
+import { deletePlaylist, getPlaylists } from "lib/actions/playlists"
+import { Playlist } from "lib/types"
 
 interface SidebarProps {
   onSelectPlaylist?: (playlistId: string | "liked" | "library" | "home") => void
@@ -11,7 +13,7 @@ interface SidebarProps {
 
 export function Sidebar({ onSelectPlaylist, activeId }: SidebarProps) {
   const { user } = useAuth()
-  const [playlists, setPlaylists] = useState<any[]>([])
+  const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const fetchPlaylists = async () => {
@@ -19,7 +21,7 @@ export function Sidebar({ onSelectPlaylist, activeId }: SidebarProps) {
       setPlaylists([])
       return
     }
-    const data = await getPlaylists()
+    const data = await getPlaylists() as Playlist[]
     setPlaylists(data)
   }
 
@@ -134,7 +136,7 @@ export function Sidebar({ onSelectPlaylist, activeId }: SidebarProps) {
       <CreatePlaylistModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        onSuccess={(p) => {
+        onSuccess={(p: Playlist) => {
           fetchPlaylists()
           onSelectPlaylist?.(p.id)
         }} 

@@ -1,6 +1,6 @@
 "use client"
 
-import { Apple, Music, Pause, Play, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react"
+import { Music, Pause, Play, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import type { iTunesTrack } from "lib/itunes"

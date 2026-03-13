@@ -1,10 +1,13 @@
 "use client"
 
 import { SearchX } from "lucide-react"
+
 import { TrackCard } from "components/TrackCard/TrackCard"
 import { TrackCardSkeleton } from "components/TrackCardSkeleton/TrackCardSkeleton"
+import { iTunesTrack } from "lib/itunes"
+import { Playlist } from "lib/types"
+
 import { TrackTable } from "./TrackTable"
-import type { iTunesTrack } from "lib/itunes"
 
 interface TrackListProps {
   tracks: (iTunesTrack & { addedAt?: string })[]
@@ -17,7 +20,7 @@ interface TrackListProps {
   likedSongIds?: number[]
   onToggleLike?: (track: iTunesTrack) => void
   onAddToPlaylist?: (track: iTunesTrack, playlistId: string) => void
-  playlists?: any[]
+  playlists?: Playlist[]
 }
 
 export function TrackList({ 

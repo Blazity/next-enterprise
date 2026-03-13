@@ -1,9 +1,11 @@
 "use client"
 
-import Image from "next/image"
-import type { iTunesTrack } from "lib/itunes"
-import { MoreHorizontal, Plus, ListMusic, Heart } from "lucide-react"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
+import { Heart, ListMusic, Plus } from "lucide-react"
+import Image from "next/image"
+
+import { iTunesTrack } from "lib/itunes"
+import { Playlist } from "lib/types"
 
 interface TrackCardProps {
   track: iTunesTrack
@@ -14,7 +16,7 @@ interface TrackCardProps {
   isLiked?: boolean
   onToggleLike?: (track: iTunesTrack) => void
   onAddToPlaylist?: (track: iTunesTrack, playlistId: string) => void
-  playlists?: any[]
+  playlists?: Playlist[]
 }
 
 export function TrackCard({ 

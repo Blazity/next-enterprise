@@ -27,7 +27,7 @@ export function SearchBar({ onSearch, onClear, isLoading = false }: SearchBarPro
         if (newValue.trim().length > 0) {
           onSearch(newValue.trim())
         }
-      }, 300)
+      }, 500)
     },
     [onSearch]
   )

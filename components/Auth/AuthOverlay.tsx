@@ -1,8 +1,9 @@
 "use client"
 
+import { Loader2, Lock, Mail, X } from "lucide-react"
 import { useState } from "react"
+
 import { createClient } from "lib/supabase/client"
-import { X, Mail, Lock, Loader2 } from "lucide-react"
 
 interface AuthOverlayProps {
   isOpen: boolean
@@ -43,8 +44,9 @@ export function AuthOverlay({ isOpen, onClose }: AuthOverlayProps) {
         if (error) throw error
         onClose()
       }
-    } catch (err: any) {
-      setError(err.message || "An error occurred during authentication")
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "An error occurred during authentication"
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

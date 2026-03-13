@@ -1,17 +1,19 @@
 "use client"
 
-import { Flame, Music3, Search, Heart, Music, Play, Shuffle, Grid, List, Plus, User as UserIcon } from "lucide-react"
+import { Grid, Heart, List, Music, Play, Plus, Search, Shuffle, User as UserIcon } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
+
+import { AuthOverlay } from "components/Auth/AuthOverlay"
 import { NowPlayingBar } from "components/NowPlayingBar/NowPlayingBar"
+import { useAuth } from "components/Providers/AuthProvider"
+import { Sidebar } from "components/Sidebar/Sidebar"
 import { TopNav } from "components/TopNav/TopNav"
 import { TrackCard } from "components/TrackCard/TrackCard"
 import { TrackList } from "components/TrackList/TrackList"
-import { iTunesTrack } from "lib/itunes"
-import { useAuth } from "components/Providers/AuthProvider"
 import { getLikedSongs, toggleLikeSong } from "lib/actions/liked-songs"
-import { AuthOverlay } from "components/Auth/AuthOverlay"
-import { getPlaylistSongs, getPlaylists, addSongToPlaylist } from "lib/actions/playlists"
-import { Sidebar } from "components/Sidebar/Sidebar"
+import { addSongToPlaylist, getPlaylists, getPlaylistSongs } from "lib/actions/playlists"
+import { iTunesTrack } from "lib/itunes"
+import { LikedSong, Playlist } from "lib/types"
 
 const SUGGESTED_SEARCHES = ["Chill", "Workout", "Focus", "Party", "Pop", "Electronic"]
 
@@ -19,8 +21,8 @@ export default function AuraMusicPage() {
   const { user } = useAuth()
   const [tracks, setTracks] = useState<(iTunesTrack & { addedAt?: string })[]>([])
   const [recentlyPlayed, setRecentlyPlayed] = useState<iTunesTrack[]>([])
-  const [likedSongs, setLikedSongs] = useState<{ trackId: number; createdAt: string; trackData: iTunesTrack }[]>([])
-  const [playlists, setPlaylists] = useState<any[]>([])
+  const [likedSongs, setLikedSongs] = useState<LikedSong[]>([])
+  const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState("Top Hits")
   const [isAuthOpen, setIsAuthOpen] = useState(false)
@@ -58,7 +60,7 @@ export default function AuraMusicPage() {
     }
 
     try {
-      const res = await fetch(`/api/music/search?q=${encodeURIComponent(query)}`)
+      const res = await fetch(`http://localhost:4000/v1/music/search?q=${encodeURIComponent(query)}`)
       if (!res.ok) throw new Error("Search failed")
       const data = (await res.json()) as { tracks: iTunesTrack[] }
       setTracks(data.tracks)
@@ -84,7 +86,7 @@ export default function AuraMusicPage() {
       if (id === "liked") {
         setCurrentPlaylistName("Liked Songs")
         const songs = await getLikedSongs()
-        setPlaylistTracks(songs.map(s => ({ ...s.trackData, addedAt: s.createdAt })))
+        setPlaylistTracks(songs.map((s: LikedSong) => ({ ...s.trackData, addedAt: s.createdAt })))
       } else if (id === "library") {
         setCurrentPlaylistName("My Library")
         setPlaylistTracks([])
@@ -92,7 +94,7 @@ export default function AuraMusicPage() {
         const p = playlists.find(pl => pl.id === id)
         setCurrentPlaylistName(p?.name || "Playlist")
         const songs = await getPlaylistSongs(id)
-        setPlaylistTracks(songs)
+        setPlaylistTracks(songs as (iTunesTrack & { addedAt?: string })[])
       }
     } catch (err) {
       console.error("Failed to fetch tracks:", err)
@@ -110,7 +112,7 @@ export default function AuraMusicPage() {
       setSearchQuery("Top Hits")
       handleSearch("Top Hits")
     } else {
-      fetchPlaylistTracks(id as any)
+      fetchPlaylistTracks(id as string)
     }
   }, [fetchPlaylistTracks, handleSearch])
 
@@ -186,20 +188,28 @@ export default function AuraMusicPage() {
   }, [activePlaylistId, fetchPlaylistTracks, fetchInitialData])
 
   // ─── Inner Playlist Search ──────────────────────────────────────
+  const innerSearchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handlePlaylistSearch = useCallback(async (query: string) => {
+    if (innerSearchDebounceRef.current) {
+      clearTimeout(innerSearchDebounceRef.current)
+    }
+
     if (!query.trim()) {
       setPlaylistSearchTracks([])
       return
     }
-    try {
-      const res = await fetch(`/api/music/search?q=${encodeURIComponent(query)}`)
-      if (!res.ok) throw new Error("Search failed")
-      const data = (await res.json()) as { tracks: iTunesTrack[] }
-      setPlaylistSearchTracks(data.tracks)
-    } catch (err) {
-      console.error(err)
-    }
+
+    innerSearchDebounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`http://localhost:4000/v1/music/search?q=${encodeURIComponent(query)}`)
+        if (!res.ok) throw new Error("Search failed")
+        const data = (await res.json()) as { tracks: iTunesTrack[] }
+        setPlaylistSearchTracks(data.tracks)
+      } catch (err) {
+        console.error(err)
+      }
+    }, 500)
   }, [])
 
   // ─── LocalStorage ────────────────────────────────────────────────
@@ -243,7 +253,7 @@ export default function AuraMusicPage() {
     saveToRecent(track)
   }, [currentTrack, saveToRecent])
 
-  const handlePlayFromCard = useCallback((track: iTunesTrack, context: any) => {
+  const handlePlayFromCard = useCallback((track: iTunesTrack, context: "search" | "recent" | "playlist" | "library") => {
     setPlaybackContext(context)
     playTrack(track)
   }, [playTrack])
@@ -305,24 +315,6 @@ export default function AuraMusicPage() {
     }
   }, [activePlaylistId, tracks, playlistTracks, saveToRecent])
 
-  const handleShuffleAll = useCallback(() => {
-    const list = activePlaylistId === "home" ? tracks : playlistTracks
-    if (list.length > 0) {
-      const randomIndex = Math.floor(Math.random() * list.length)
-      const track = list[randomIndex]!
-      setCurrentTrack(track)
-      setIsPlaying(true)
-      setIsShuffle(true)
-      setPlaybackContext(activePlaylistId === "home" ? "search" : (activePlaylistId === "liked" ? "library" : "playlist"))
-      saveToRecent(track)
-      if (audioRef.current) {
-        audioRef.current.src = track.previewUrl
-        audioRef.current.play()
-      }
-    }
-  }, [activePlaylistId, tracks, playlistTracks, saveToRecent])
-
-  const isHomeView = activePlaylistId === "home" && !isSearching
 
   // ─── Render Helpers ──────────────────────────────────────────────
 
@@ -466,7 +458,7 @@ export default function AuraMusicPage() {
                 <Heart className="h-16 w-16 text-white fill-current" />
               </div>
               <h3 className="text-xl font-bold text-white mb-1">Liked Songs</h3>
-              <p className="text-slate-400 text-sm">{likedSongIds.length} tracks</p>
+              <p className="text-slate-400 text-sm">{likedSongIds.length} {likedSongIds.length === 1 ? "track" : "tracks"}</p>
             </div>
 
             {playlists.map((p) => (
@@ -479,7 +471,7 @@ export default function AuraMusicPage() {
                   <Music className="h-16 w-16 text-slate-600" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-1 truncate">{p.name}</h3>
-                <p className="text-slate-400 text-sm">{p.song_count} tracks</p>
+                <p className="text-slate-400 text-sm">{(p.trackCount ?? 0)} {(p.trackCount === 1) ? "track" : "tracks"}</p>
               </div>
             ))}
           </div>
@@ -505,7 +497,7 @@ export default function AuraMusicPage() {
             <div className="flex items-center gap-4 text-slate-400 font-medium whitespace-nowrap overflow-x-auto">
               <span className="flex items-center gap-1.5"><UserIcon size={14} className="text-aura-primary" /> {user?.email?.split('@')[0]}</span>
               <span className="w-1 h-1 rounded-full bg-slate-700" />
-              <span>{playlistTracks.length} tracks</span>
+              <span>{playlistTracks.length} {playlistTracks.length === 1 ? "track" : "tracks"}</span>
               <span className="w-1 h-1 rounded-full bg-slate-700" />
               <button 
                 onClick={() => setIsAddingSongs(!isAddingSongs)}

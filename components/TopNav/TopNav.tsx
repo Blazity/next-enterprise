@@ -1,7 +1,8 @@
-import { Music4, User as UserIcon, LogOut } from "lucide-react"
-import { useAuth } from "components/Providers/AuthProvider"
+import { Music4, User as UserIcon } from "lucide-react"
 import { useState } from "react"
+
 import { AuthOverlay } from "components/Auth/AuthOverlay"
+import { useAuth } from "components/Providers/AuthProvider"
 import { SearchBar } from "components/SearchBar/SearchBar"
 
 interface TopNavProps {

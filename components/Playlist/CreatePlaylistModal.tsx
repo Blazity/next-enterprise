@@ -1,14 +1,16 @@
 "use client"
 
 import * as Dialog from "@radix-ui/react-dialog"
-import { X, Plus } from "lucide-react"
+import { Plus, X } from "lucide-react"
 import { useState } from "react"
+
 import { createPlaylist } from "lib/actions/playlists"
+import { Playlist } from "lib/types"
 
 interface CreatePlaylistModalProps {
   isOpen: boolean
   onClose: () => void
-  onSuccess: (playlist: any) => void
+  onSuccess: (playlist: Playlist) => void
 }
 
 export function CreatePlaylistModal({ isOpen, onClose, onSuccess }: CreatePlaylistModalProps) {
@@ -22,7 +24,7 @@ export function CreatePlaylistModal({ isOpen, onClose, onSuccess }: CreatePlayli
 
     setIsSubmitting(true)
     try {
-      const playlist = await createPlaylist(name, description)
+      const playlist = await createPlaylist(name, description) as Playlist
       onSuccess(playlist)
       setName("")
       setDescription("")

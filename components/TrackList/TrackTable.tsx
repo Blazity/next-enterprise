@@ -1,8 +1,10 @@
 "use client"
 
-import { Play, Heart, Clock, Music } from "lucide-react"
-import type { iTunesTrack } from "lib/itunes"
 import { formatDistanceToNow } from "date-fns"
+import { Clock, Heart, Music, Play } from "lucide-react"
+import Image from "next/image"
+
+import { iTunesTrack } from "lib/itunes"
 
 interface TrackTableProps {
   tracks: (iTunesTrack & { addedAt?: string })[]
@@ -60,7 +62,7 @@ export function TrackTable({
                   <div className="flex items-center gap-4">
                     <div className="h-12 w-12 flex-shrink-0 rounded-lg bg-aura-surface border border-white/5 overflow-hidden relative shadow-lg">
                       {track.artworkUrl100 ? (
-                        <img src={track.artworkUrl100} alt={track.trackName} className="object-cover w-full h-full transition-transform group-hover:scale-110 duration-500" />
+                        <Image src={track.artworkUrl100} alt={track.trackName} fill sizes="48px" className="object-cover transition-transform group-hover:scale-110 duration-500" />
                       ) : (
                         <Music className="text-aura-primary/40 m-auto h-5 w-5" />
                       )}
