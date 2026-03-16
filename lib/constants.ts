@@ -1,6 +1,6 @@
 // App-level constants — non-iTunes, non-i18n
 
-export const ACTIVE_VIEWS = ["home", "search", "songs", "albums", "artists", "playlists", "album_detail", "artist_detail", "podcasts", "genres", "podcast_detail", "genre_detail"] as const
+export const ACTIVE_VIEWS = ["home", "search", "songs", "albums", "artists", "playlists", "liked-songs", "album_detail", "artist_detail", "podcasts", "genres", "podcast_detail", "genre_detail", "suggested"] as const
 export type ActiveView = (typeof ACTIVE_VIEWS)[number]
 
 // Typing placeholder animation speeds (ms)

@@ -53,6 +53,7 @@
   --animate-slide-up: slide-up 0.35s cubic-bezier(0.33, 1, 0.68, 1) both;
   --animate-fade-in-up: fade-in-up 0.4s cubic-bezier(0.33, 1, 0.68, 1) both;
   --animate-border-rotate: border-rotate 3s linear infinite;
+  --animate-marquee: marquee var(--marquee-duration, 10s) linear infinite;
 }
 
 :root {
@@ -169,6 +170,11 @@
 @keyframes border-rotate {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* Equalizer bar animations — used in EqualizerIcon and waveform visualizer */

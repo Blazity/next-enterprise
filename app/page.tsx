@@ -15,9 +15,11 @@ import { ArtistDetailView } from "components/ArtistDetailView/ArtistDetailView"
 import { DashboardShell } from "components/DashboardShell/DashboardShell"
 import { GenreDetailView } from "components/GenreDetailView/GenreDetailView"
 import { HomeContent } from "components/HomeContent/HomeContent"
+import { LikedSongsView } from "components/LikedSongsView/LikedSongsView"
 import { PlaylistsView } from "components/PlaylistsView/PlaylistsView"
 import { PodcastDetailView } from "components/PodcastDetailView/PodcastDetailView"
 import { SearchResults } from "components/SearchResults/SearchResults"
+import { SuggestedForYou } from "components/SuggestedForYou/SuggestedForYou"
 
 import { getSharedWithMe } from "lib/api/playlists"
 import { ACTIVE_VIEWS, type ActiveView, SEARCH_DEBOUNCE_MS } from "lib/constants"
@@ -111,7 +113,7 @@ function HomeContentWrapper() {
   }, [debouncedQuery])
 
   function handleNavClick(view: ActiveView, id?: string) {
-    if (view === "playlists") {
+    if (view === "playlists" || view === "liked-songs") {
       requireAuth(() => router.push(`/?view=${view}`, { scroll: false }))
       return
     }
@@ -141,6 +143,10 @@ function HomeContentWrapper() {
     >
       {activeView === "playlists" ? (
         <PlaylistsView />
+      ) : activeView === "liked-songs" ? (
+        <LikedSongsView />
+      ) : activeView === "suggested" ? (
+        <SuggestedForYou />
       ) : activeView === "album_detail" ? (
         <AlbumDetailView onBack={() => handleNavClick("albums")} />
       ) : activeView === "artist_detail" ? (

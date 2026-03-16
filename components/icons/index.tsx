@@ -492,3 +492,55 @@ export function PlusIcon({ className, width = 20, height = 20, strokeWidth = 2 }
     </svg>
   )
 }
+export function HeartIcon({ className, width = 20, height = 20, strokeWidth = 2 }: IconProps) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    </svg>
+  )
+}
+
+export function HeartFilledIcon({ className, width = 20, height = 20 }: IconProps) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+    </svg>
+  )
+}
+
+export function DotsHorizontalIcon({ className, width = 20, height = 20 }: IconProps) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <circle cx="5" cy="12" r="1.5" />
+      <circle cx="12" cy="12" r="1.5" />
+      <circle cx="19" cy="12" r="1.5" />
+    </svg>
+  )
+}
+
+export function QueueIcon({ className, width = 20, height = 20 }: IconProps) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M4 6h16v2H4zm4 5h12v2H8zm4 5h8v2h-8z" />
+    </svg>
+  )
+}
+
+
+export function SparklesIcon({ className, width = 20, height = 20 }: IconProps) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zm6 10l.75 2.25L21 15l-2.25.75L18 18l-.75-2.25L15 15l2.25-.75L18 12zm-10 6l.5 1.5L10 21l-1.5.5L8 20l-.5-1.5L6 18l1.5-.5L8 16l.5 1.5L10 18l-1.5.5z"/>
+    </svg>
+  )
+}
