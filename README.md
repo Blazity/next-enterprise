@@ -61,6 +61,7 @@ With this template you will get all the boilerplate features included:
 Easily deploy your Next.js app with [Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=github&utm_campaign=next-enterprise) by clicking the button below:
 
 [![Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/Blazity/next-enterprise)
+[![Deploy to PandaStack](https://dashboard.pandastack.io/deploy-button.svg)](https://dashboard.pandastack.io/deploy?repo=Blazity/next-enterprise&type=static&buildCmd=npm+run+build&outputDir=dist)
 
 #### Custom cloud infrastructure
 
