@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Morning Prayer",
+    "text": "Lord, let me rise with your light today.",
+    "audio": "/audio/morning.mp3"
+  },
+  {
+    "title": "Midday Prayer",
+    "text": "Keep me steady in my work and centered in you.",
+    "audio": "/audio/midday.mp3"
+  },
+  {
+    "title": "Evening Prayer",
+    "text": "Bring me rest and peace tonight.",
+    "audio": "/audio/evening.mp3"
+  }
+]
