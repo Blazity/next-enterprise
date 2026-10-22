@@ -115,7 +115,7 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.57.1",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.2.4",
+    "vitest": "^4.0.0",
     "webpack": "5.99.9"
   },
   "engines": {
